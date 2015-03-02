@@ -1,0 +1,24 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file>icons/cursor_b15.png</file>
+        <file>icons/cursor_b25.png</file>
+        <file>icons/cursor_b5.png</file>
+        <file>icons/cursor_eraser15.png</file>
+        <file>icons/cursor_eraser25.png</file>
+        <file>icons/cursor_eraser5.png</file>
+        <file>icons/cursor_f15.png</file>
+        <file>icons/cursor_f25.png</file>
+        <file>icons/cursor_f5.png</file>
+        <file>icons/editcopy.png</file>
+        <file>icons/editcut.png</file>
+        <file>icons/editpaste.png</file>
+        <file>icons/fileclose.png</file>
+        <file>icons/filenew.png</file>
+        <file>icons/fileopen.png</file>
+        <file>icons/filesave.png</file>
+        <file>icons/histo.png</file>
+        <file>icons/invert.png</file>
+        <file>icons/go.png</file>
+        <file>icons/add.png</file>
+    </qresource>
+</RCC>
