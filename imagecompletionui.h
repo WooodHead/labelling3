@@ -354,6 +354,10 @@ private slots:
     void redo();
     void undo();
 
+    void on_tableWidget_doubleClicked(const QModelIndex &index);
+
+    void cellDoubleClicked_(int, int);
+
 private:
     Searchdata searchdata1;
     classification class1;
@@ -365,6 +369,8 @@ private:
     bool copyFiles(QString fromDir,QString toDir,bool convertIfExits = false);
     bool importDB(const QString &path);
     bool exportDB(const QString &path);
+
+    void openImage(QString file);
 };
 
 

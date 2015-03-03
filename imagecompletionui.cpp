@@ -620,6 +620,8 @@ void ImageCompletionUI::createConnections()
     connect(_regionCompetitionDialog.radioLineWidthThin, SIGNAL(clicked()), this, SLOT(updateLineWidth()));
     connect(_regionCompetitionDialog.radioLineWidthMedium, SIGNAL(clicked()), this, SLOT(updateLineWidth()));
     connect(_regionCompetitionDialog.radioLineWidthThick, SIGNAL(clicked()), this, SLOT(updateLineWidth()));
+
+    connect(_leftWindow.tableWidget, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(cellDoubleClicked_(int, int)));
 }
 
 void ImageCompletionUI::setupBrush()
@@ -1019,8 +1021,32 @@ void	ImageCompletionUI::open()
 
 }
 
+// read all files in a directory
 void ImageCompletionUI::batchOpen()
 {
+    QFileDialog batchFileDialog;
+    batchFileDialog.setFileMode(QFileDialog::Directory);
+    batchFileDialog.setOption(QFileDialog::ShowDirsOnly);
+    batchFileDialog.setViewMode(QFileDialog::Detail);
+
+    QDir dir;
+
+    if(batchFileDialog.exec())
+    {
+        dir = batchFileDialog.selectedFiles()[0];
+        dir.setNameFilters(QStringList()<<"*.jpg"<<"*.png"<<"*.bmp"<<"*.jpeg");
+        QStringList fileList = dir.entryList(QDir::Files);
+        QString absolutePath = dir.absolutePath();
+
+        int k = 0;
+        foreach(QString file, fileList)
+        {
+            _leftWindow.tableWidget->setItem(k, 0, new QTableWidgetItem(file));
+            _leftWindow.tableWidget->setItem(k, 1, new QTableWidgetItem(absolutePath+"/"+file));
+            _leftWindow.tableWidget->setItem(k, 2, new QTableWidgetItem("N"));
+            k++;
+        }
+    }
 }
 
 
@@ -1893,7 +1919,7 @@ char* ImageCompletionUI::getNewLogString()
     if(_editImageViewer->Method() != -1)
     {
         char* temp = new char[1000];
-        sprintf(temp, "abcd: %.4fs", _editImageViewer->_seg_during);
+        sprintf(temp, "标注用时: %.4fs", _editImageViewer->_seg_during);
 
         return temp;
     }
@@ -2151,6 +2177,37 @@ bool ImageCompletionUI::exportDB(const QString &path)
     return true;
 }
 
+void ImageCompletionUI::openImage(QString fileName)
+{
+    if(!fileName.isEmpty())
+    {
+        if ( _editImageViewer->openImage(fileName) )
+        {
+            //statusBar()->showMessage(tr("abcd"), 2000);
+            _editImageViewer->repaint();
+            m_step = NONE;
+            updateLog();
+            //_regionCompetitionDialog.radioForeground->setEnabled(true);
+            //_regionCompetitionDialog.radioBackground->setEnabled(true);
+            //_regionCompetitionDialog.radioErazer->setEnabled(true);
+        }
+        else
+        {
+            _editImageViewer->close();
+            m_step = LOADFAILED;
+            _regionCompetitionDialog.radioForeground->setEnabled(false);
+            _regionCompetitionDialog.radioBackground->setEnabled(false);
+            _regionCompetitionDialog.radioErazer->setEnabled(false);
+            return;
+        }
+    }
+
+
+    int width = _editImageViewer->image().width();
+    int height = _editImageViewer->image().height();
+    this->setMinimumSize( width < 800 ? 800 : height, height < 600 ? 600 : height );
+}
+
 // 拷贝文件--zhyn
 bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIfExits)
 {
@@ -2275,3 +2332,14 @@ void ImageCompletionUI::exportData()
 }
 
 
+
+void ImageCompletionUI::on_tableWidget_doubleClicked(const QModelIndex &index)
+{
+
+}
+
+void ImageCompletionUI::cellDoubleClicked_(int row, int col)
+{
+    QString absolutePath = _leftWindow.tableWidget->item(row, 1)->text();
+    openImage(absolutePath);
+}
