@@ -77,6 +77,8 @@ void Login::login()
                 int no2 = query.record().indexOf("display_name");
                 _authority = query.value(no1).toString();
                 _display_name = query.value(no2).toString();
+
+                db.close();
                 return getDataForMainform();
             }
         }

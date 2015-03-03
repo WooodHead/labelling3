@@ -18,7 +18,9 @@ HEADERS += \
     classification.h \
     buttom.h \
     login.h \
-    global.h
+    global.h \
+    usermanagement.h \
+    useradd.h
 
 SOURCES += \
     ImageOperate.cpp \
@@ -34,7 +36,9 @@ SOURCES += \
     buttom.cpp \
     imagecompletionui.cpp \
     login.cpp \
-    global.cpp
+    global.cpp \
+    usermanagement.cpp \
+    useradd.cpp
 
 
 FORMS += \
@@ -47,7 +51,9 @@ FORMS += \
     searchdata.ui \
     classification.ui \
     buttom.ui \
-    login.ui
+    login.ui \
+    usermanagement.ui \
+    useradd.ui
 
 RESOURCES += \
     ImageCompletion.qrc

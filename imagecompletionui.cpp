@@ -6,6 +6,7 @@
 #include "interfaces.h"
 #include "ImageViewer.h"
 #include "connection.h"
+#include "usermanagement.h"
 
 //#include "Competition.h"
 
@@ -41,6 +42,8 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
     _RegionupdateBrushSize();
 
     setStrikeOptionsEnabled(false);
+
+    showData();
     k=-1;
 }
 
@@ -54,14 +57,15 @@ void	ImageCompletionUI::setupMainWindow()
     this->resize( 1024, 800 );
     this->setMinimumSize( QSize(1024, 0) );
     this->showMaximized();
-    this->setWindowTitle(tr("Ä¥Á£Í¼Ïñ±ê×¢"));
+    this->setWindowTitle(tr("ç£¨ç²’å›¾åƒæ ‡æ³¨"));
 }
 
 void	 ImageCompletionUI::createMenus()
 {
-    _menuFile = menuBar()->addMenu( tr("&ÎÄ¼ş") );
+    _menuFile = menuBar()->addMenu( tr("&æ–‡ä»¶") );
 
     _menuFile->addAction( _openAction );
+    _menuFile->addAction( _openBatchAction );
     _menuFile->addSeparator();
     _menuFile->addAction( _saveAction );
     _menuFile->addAction( _saveAsAction );
@@ -71,8 +75,8 @@ void	 ImageCompletionUI::createMenus()
     _menuFile->addSeparator();
     _menuFile->addAction( _exitAction );
 
-    _menuLabelling = menuBar()->addMenu( tr("&Í¼Ïñ±ê×¢") );
-    QMenu* submenu = _menuLabelling->addMenu( tr("±Ê»­±ê×¢") );
+    _menuLabelling = menuBar()->addMenu( tr("&å›¾åƒæ ‡æ³¨") );
+    QMenu* submenu = _menuLabelling->addMenu( tr("ç¬”ç”»æ ‡æ³¨") );
     submenu->addAction(_fgAction);
     submenu->addAction(_bgAction);
     submenu->addAction(_eraserAction);
@@ -82,10 +86,10 @@ void	 ImageCompletionUI::createMenus()
     _menuLabelling->addAction( _manualAction );
     _menuLabelling->addSeparator();
 
-    submenu = _menuLabelling->addMenu( tr("±Ê»­´ÖÏ¸") );
+    submenu = _menuLabelling->addMenu( tr("ç¬”ç”»ç²—ç»†") );
     for(int i = 0; i < 3; i++) submenu->addAction(_strikeThickness[i]);
 
-    submenu = _menuLabelling->addMenu( tr("ÏßÌõ´ÖÏ¸") );
+    submenu = _menuLabelling->addMenu( tr("çº¿æ¡ç²—ç»†") );
     for(int i = 0; i < 3; i++) submenu->addAction(_lineThickness[i]);
 
     _menuLabelling->addSeparator();
@@ -93,7 +97,7 @@ void	 ImageCompletionUI::createMenus()
     _menuLabelling->addAction(_saveMaskAction);
 
 
-    _menuData=menuBar()->addMenu(tr("&Êı¾İ¹ÜÀí"));
+    _menuData=menuBar()->addMenu(tr("&æ•°æ®ç®¡ç†"));
     _menuData->addAction(_searchAction);
     _menuData->addAction(_addtosqlAction);
     _menuData->addAction(_saveresultAction);
@@ -101,7 +105,7 @@ void	 ImageCompletionUI::createMenus()
     _menuData->addAction(_importDataAction);
 
     // user management
-    if(Global::Authority == 0) //admin
+    if(Global::Authority == "0") //admin
     {
         _menuUser = menuBar()->addMenu(tr("&ç”¨æˆ·ç®¡ç†"));
         _menuUser->addAction(_userManagementAction);
@@ -118,17 +122,21 @@ void	ImageCompletionUI::createActions()
     ////////////////////////////////////////////////////////////////////////////////////
     //   _openAction
     ////////////////////////////////////////////////////////////////////////////////////
-    _openAction = new QAction( tr("&´ò¿ª"), this );
+    _openAction = new QAction( tr("&æ‰“å¼€"), this );
     _openAction->setObjectName(tr("_openAction"));
     QIcon icon1;
     icon1.addPixmap(QPixmap(tr(":/new/prefix1/icons/fileopen.png")), QIcon::Normal, QIcon::Off);
     _openAction->setIcon(icon1);
     connect(_openAction, SIGNAL(triggered()), this, SLOT(open()));
 
+    _openBatchAction = new QAction( tr("&æ‰¹é‡æ‰“å¼€"), this );
+    _openBatchAction->setObjectName(tr("_openBatchAction"));
+    connect(_openBatchAction, SIGNAL(triggered()), this, SLOT(batchOpen()));
+
     ////////////////////////////////////////////////////////////////////////////////////
     //   _saveAction
     ////////////////////////////////////////////////////////////////////////////////////
-    _saveAction = new QAction( tr("&±£´æ"), this );
+    _saveAction = new QAction( tr("&ä¿å­˜"), this );
     _saveAction->setObjectName(tr("_saveAction"));
     QIcon icon2;
     icon2.addPixmap(QPixmap(tr(":/new/prefix1/icons/filesave.png")), QIcon::Normal, QIcon::Off);
@@ -138,7 +146,7 @@ void	ImageCompletionUI::createActions()
     ////////////////////////////////////////////////////////////////////////////////////
     //   _saveAsAction
     ////////////////////////////////////////////////////////////////////////////////////
-    _saveAsAction = new QAction(  tr("&Áí´æÎª"), this );
+    _saveAsAction = new QAction(  tr("&å¦å­˜ä¸º"), this );
     _saveAsAction->setObjectName(tr("_saveAsAction"));
     _saveAsAction->setIcon(icon2);
     connect(_saveAsAction, SIGNAL(triggered()), this, SLOT( saveAs() ));
@@ -146,14 +154,14 @@ void	ImageCompletionUI::createActions()
     ////////////////////////////////////////////////////////////////////////////////////
     //   _closeAction
     ////////////////////////////////////////////////////////////////////////////////////
-    _closeAction = new QAction( tr("¹Ø±Õ"), this );
+    _closeAction = new QAction( tr("å…³é—­"), this );
     _closeAction->setIcon( QIcon(":/new/prefix1/icons/fileclose.png") );
     connect( _closeAction, SIGNAL(triggered()), this, SLOT( close() ));
 
     ////////////////////////////////////////////////////////////////////////////////////
     //   _exitAction
     ////////////////////////////////////////////////////////////////////////////////////
-    _exitAction = new QAction( tr("ÍË³ö"), this );
+    _exitAction = new QAction( tr("é€€å‡º"), this );
     _exitAction->setObjectName(tr("_exitAction"));
     connect( _exitAction, SIGNAL(triggered()), this, SLOT(exitApp()) );
 
@@ -161,7 +169,7 @@ void	ImageCompletionUI::createActions()
     ////////////////////////////////////////////////////////////////////////////////////
     //   _searchAction
     ////////////////////////////////////////////////////////////////////////////////////
-    _searchAction = new QAction( tr("²éÑ¯"), this );
+    _searchAction = new QAction( tr("æŸ¥è¯¢"), this );
     _searchAction->setObjectName(tr("_searchAction"));
     _searchAction->setIcon( QIcon(":/new/prefix1/icons/histo.png") );
     connect( _searchAction, SIGNAL(triggered()), this, SLOT( search() ));
@@ -169,7 +177,7 @@ void	ImageCompletionUI::createActions()
     ////////////////////////////////////////////////////////////////////////////////////
     //   _addtosqlAction
     ////////////////////////////////////////////////////////////////////////////////////
-    _addtosqlAction = new QAction( tr("ÊôĞÔ·ÖÀà"), this );
+    _addtosqlAction = new QAction( tr("å±æ€§åˆ†ç±»"), this );
     _addtosqlAction->setObjectName(tr("_addtosqlAction"));
     _addtosqlAction->setIcon( QIcon(":/new/prefix1/icons/add.png") );
     connect( _addtosqlAction, SIGNAL(triggered()), this, SLOT( addtosql() ));
@@ -177,7 +185,7 @@ void	ImageCompletionUI::createActions()
     ////////////////////////////////////////////////////////////////////////////////////
     //   _saveresultAction
     ////////////////////////////////////////////////////////////////////////////////////
-    _saveresultAction = new QAction( tr("±£´æ±ê×¢½á¹û"), this );
+    _saveresultAction = new QAction( tr("ä¿å­˜æ ‡æ³¨ç»“æœ"), this );
     _saveresultAction->setObjectName(tr("_saveresultAction"));
     _saveresultAction->setIcon( QIcon(":/new/prefix1/icons/filesave.png") );
     connect( _saveresultAction, SIGNAL(triggered()), this, SLOT( savemarkresult() ));
@@ -185,7 +193,7 @@ void	ImageCompletionUI::createActions()
     ////////////////////////////////////////////////////////////////////////////////////
     //   _exportDataAction
     ////////////////////////////////////////////////////////////////////////////////////
-    _exportDataAction = new QAction(tr("ÅúÁ¿µ¼³öÊı¾İ"),this);
+    _exportDataAction = new QAction(tr("æ‰¹é‡å¯¼å‡ºæ•°æ®"),this);
     _exportDataAction->setObjectName(tr("_exportDataAction"));
     //    _exportDataAction->setIcon();
     connect(_exportDataAction,SIGNAL(triggered()),this,SLOT(exportData()));
@@ -193,7 +201,7 @@ void	ImageCompletionUI::createActions()
     ////////////////////////////////////////////////////////////////////////////////////
     //   _importDataAction
     ////////////////////////////////////////////////////////////////////////////////////
-    _importDataAction = new QAction(tr("ÅúÁ¿µ¼ÈëÊı¾İ"),this);
+    _importDataAction = new QAction(tr("æ‰¹é‡å¯¼å…¥æ•°æ®"),this);
     _importDataAction->setObjectName(tr("_importDataAction"));
     //    _importDataAction->setIcon();
     connect(_importDataAction,SIGNAL(triggered()),this,SLOT(importData()));
@@ -204,15 +212,15 @@ void	ImageCompletionUI::createActions()
     _strikeCombobox->setInsertPolicy(QComboBox::InsertAfterCurrent);
     _strikeCombobox->setObjectName( tr("_strikeCombox") );
     connect( _strikeCombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(strikeComboChanged(int)));
-    QStringList list = (QStringList() << "±Ê»­±ê×¢" << "Ç°¾°" << "±³¾°" << "ÏğÆ¤");
+    QStringList list = (QStringList() << "ç¬”ç”»æ ‡æ³¨" << "å‰æ™¯" << "èƒŒæ™¯" << "æ©¡çš®");
     _strikeCombobox->addItems(list);
 
     // Group 1
-    _fgAction = new QAction( tr("Ç°¾°"), this );
+    _fgAction = new QAction( tr("å‰æ™¯"), this );
     _fgAction->setCheckable(true);
-    _bgAction = new QAction( tr("±³¾°"), this );
+    _bgAction = new QAction( tr("èƒŒæ™¯"), this );
     _bgAction->setCheckable(true);
-    _eraserAction = new QAction( tr("ÏğÆ¤"), this );
+    _eraserAction = new QAction( tr("æ©¡çš®"), this );
     _eraserAction->setCheckable(true);
 
     QActionGroup *group = new QActionGroup(this);
@@ -221,13 +229,13 @@ void	ImageCompletionUI::createActions()
     group->addAction(_eraserAction);
     connect(group, SIGNAL(triggered(QAction*)), this, SLOT(strikeChangeTriggered(QAction*)));
 
-    _rectAction = new QAction( tr("¾ØĞÎ±ê×¢"), this );
+    _rectAction = new QAction( tr("çŸ©å½¢æ ‡æ³¨"), this );
     _rectAction->setCheckable(true);
 
-    _polygonAction = new QAction( tr("¶à±ßĞÎ±ê×¢"), this );
+    _polygonAction = new QAction( tr("å¤šè¾¹å½¢æ ‡æ³¨"), this );
     _polygonAction->setCheckable(true);
 
-    _manualAction = new QAction( tr("ÊÖ¹¤±ê×¢"), this );
+    _manualAction = new QAction( tr("æ‰‹å·¥æ ‡æ³¨"), this );
     _manualAction->setCheckable(true);
 
     QActionGroup *group2 = new QActionGroup(this);
@@ -236,26 +244,26 @@ void	ImageCompletionUI::createActions()
     group2->addAction(_manualAction);
     connect(group2, SIGNAL(triggered(QAction*)), this, SLOT(labellingMethodChanged(QAction*)));
 
-    _saveLabelResultAction = new QAction( tr("±£´æ±ê×¢Í¼Ïñ"), this );
+    _saveLabelResultAction = new QAction( tr("ä¿å­˜æ ‡æ³¨å›¾åƒ"), this );
     _saveLabelResultAction->setObjectName( tr("_saveLabelResultAction") );
     connect( _saveLabelResultAction, SIGNAL(triggered()), this, SLOT(saveLabelledResult()));
 
-    _saveMaskAction = new QAction( tr("±£´æÑÚÂë"), this );
+    _saveMaskAction = new QAction( tr("ä¿å­˜æ©ç "), this );
     _saveMaskAction->setObjectName( tr("_saveMaskAction") );
     connect( _saveMaskAction, SIGNAL(triggered()), this, SLOT(saveMask()) );
 
-    _redo = new QAction( tr("ÖØ×ö"), this );
+    _redo = new QAction( tr("é‡åš"), this );
     _redo->setObjectName( tr("_redo") );
     connect( _redo, SIGNAL(triggered()), this, SLOT(redo()) );
 
-    _undo = new QAction( tr("³·Ïú"), this );
+    _undo = new QAction( tr("æ’¤é”€"), this );
     _undo->setObjectName( tr("_undo") );
     connect( _undo, SIGNAL(triggered()), this, SLOT(undo()) );
 
     //
-    _strikeThickness[0] = new QAction( tr("Ï¸"), this );
-    _strikeThickness[1] = new QAction( tr("ÖĞ"), this );
-    _strikeThickness[2] = new QAction( tr("´Ö"), this );
+    _strikeThickness[0] = new QAction( tr("ç»†"), this );
+    _strikeThickness[1] = new QAction( tr("ä¸­"), this );
+    _strikeThickness[2] = new QAction( tr("ç²—"), this );
 
     QActionGroup *group3 = new QActionGroup(this);
     for(int i = 0; i < 3; i++)
@@ -265,9 +273,9 @@ void	ImageCompletionUI::createActions()
     }
     connect(group3, SIGNAL(triggered(QAction*)), this, SLOT(strikeThicknessChanged(QAction*)) );
 
-    _lineThickness[0] = new QAction( tr("Ï¸"), this );
-    _lineThickness[1] = new QAction( tr("ÖĞ"), this );
-    _lineThickness[2] = new QAction( tr("´Ö"), this );
+    _lineThickness[0] = new QAction( tr("ç»†"), this );
+    _lineThickness[1] = new QAction( tr("ä¸­"), this );
+    _lineThickness[2] = new QAction( tr("ç²—"), this );
     QActionGroup *group4 = new QActionGroup(this);
     for(int i = 0; i < 3; i++)
     {
@@ -280,28 +288,28 @@ void	ImageCompletionUI::createActions()
     _strikeThicknessCombobox->setInsertPolicy(QComboBox::InsertAfterCurrent);
     _strikeThicknessCombobox->setObjectName( tr("_strikeCombox") );
     connect( _strikeThicknessCombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(strikeThicknessComboboxChanged(int)));
-    list = (QStringList() << "±Ê»­´ÖÏ¸" << "Ï¸" << "ÖĞ" << "´Ö");
+    list = (QStringList() << "ç¬”ç”»ç²—ç»†" << "ç»†" << "ä¸­" << "ç²—");
     _strikeThicknessCombobox->addItems(list);
 
     _lineThicknessCombobox = new QComboBox;
     _lineThicknessCombobox->setInsertPolicy(QComboBox::InsertAfterCurrent);
     _lineThicknessCombobox->setObjectName( tr("_strikeCombox") );
     connect( _lineThicknessCombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(lineThicknessComboboxChanged(int)));
-    list = (QStringList() << "ÏßÌõ´ÖÏ¸" << "Ï¸" << "ÖĞ" << "´Ö");
+    list = (QStringList() << "çº¿æ¡ç²—ç»†" << "ç»†" << "ä¸­" << "ç²—");
     _lineThicknessCombobox->addItems(list);
 
     // user
-    if(Global::Authority == 0)
+    if(Global::Authority == "0")
     {
         _userManagementAction = new QAction( tr("ç”¨æˆ·ç®¡ç†"), this );
-        _userManagementAction->setObjectName(_userManagementAction);
+        _userManagementAction->setObjectName(tr("_userManagementAction"));
         connect( _userManagementAction, SIGNAL(triggered()), this, SLOT(userManagement()) );
     }
 }
 
 void	ImageCompletionUI::createToolBars()
 {
-    _editToolBar = addToolBar( tr("ÎÄ¼ş") );
+    _editToolBar = addToolBar( tr("æ–‡ä»¶") );
     _editToolBar->addAction( _openAction );
     _editToolBar->addAction( _saveAction );
     _editToolBar->addAction( _closeAction );
@@ -346,7 +354,7 @@ void	ImageCompletionUI::setupWidgets()
     _centralTabWidget = new QTabWidget( _centralwidget );
     _centralTabWidget->setObjectName( tr( "_centralTabWidget") );
 
-//    _centralTabWidget->setMaximumSize( QSize(width, height) );
+    //    _centralTabWidget->setMaximumSize( QSize(width, height) );
 
 
     QVBoxLayout *centralwigetLayout = new QVBoxLayout;
@@ -379,7 +387,7 @@ void	ImageCompletionUI::setupWidgets()
     _editImageViewer->setLineColor(Qt::yellow);
 
     _centralTabWidget->addTab( _editTab, QString("EditTab") );
-    _centralTabWidget->setTabText(_centralTabWidget->indexOf(_editTab), QApplication::translate("ImageCompletionUIClass", tr("Í¼Ïñ±ê×¢").toLocal8Bit().data(), 0));
+    _centralTabWidget->setTabText(_centralTabWidget->indexOf(_editTab), QApplication::translate("ImageCompletionUIClass", tr("å›¾åƒæ ‡æ³¨").toLocal8Bit().data(), 0));
 
     QPalette palette;
     QPalette palette1;
@@ -402,7 +410,7 @@ void	ImageCompletionUI::setupWidgets()
     ////////////////////////////////////////////////////////////////////////////////////
 
     // modified by zhyn
-    _rightOperationWidget = new QDockWidget(tr("¹¤¾ßÏä"),this );
+    _rightOperationWidget = new QDockWidget(tr("å·¥å…·ç®±"),this );
     _rightOperationWidget->setObjectName(tr("_rightOperationWidget"));
     _rightOperationWidget->setMaximumSize(QSize(0.2*width, height));
     _rightOperationWidget->setFloating(false);
@@ -415,7 +423,7 @@ void	ImageCompletionUI::setupWidgets()
     ////////////////////////////////////////////////////////////////////////////////////
     _operationStackedWidget = new QStackedWidget(_dockWidgetContents);
     _operationStackedWidget->setObjectName(tr("_operationStackedWidget"));
-//    _operationStackedWidget->setMinimumSize(QSize(221, 460));
+    //    _operationStackedWidget->setMinimumSize(QSize(221, 460));
     _operationStackedWidget->setFrameShape(QFrame::StyledPanel);
     _operationStackedWidget->setLineWidth(1);
 
@@ -423,17 +431,17 @@ void	ImageCompletionUI::setupWidgets()
     rightwidgetLayout->addWidget(_operationStackedWidget);
     _dockWidgetContents->setLayout(rightwidgetLayout);
 
-//    _objectCompletionPage = new QWidget(  );
-//    _objectCompletionPage->setObjectName(tr("_objectCompletionPage"));
-//    _operationStackedWidget->addWidget( _objectCompletionPage );
+    //    _objectCompletionPage = new QWidget(  );
+    //    _objectCompletionPage->setObjectName(tr("_objectCompletionPage"));
+    //    _operationStackedWidget->addWidget( _objectCompletionPage );
 
     _sceneCompletionPage = new QWidget(  );
     _sceneCompletionPage->setObjectName(tr("_sceneCompletionPage"));
     _operationStackedWidget->addWidget( _sceneCompletionPage );
 
-//    _videoCompletionPage = new QWidget(  );
-//    _videoCompletionPage->setObjectName(tr("_videoCompletionPage"));
-//    _operationStackedWidget->addWidget( _videoCompletionPage );
+    //    _videoCompletionPage = new QWidget(  );
+    //    _videoCompletionPage->setObjectName(tr("_videoCompletionPage"));
+    //    _operationStackedWidget->addWidget( _videoCompletionPage );
 
     _regionCompetitionPage = new QWidget(  );
     _regionCompetitionPage->setObjectName(tr("_regionCompetitionPage"));
@@ -447,18 +455,18 @@ void	ImageCompletionUI::setupWidgets()
     ////////////////////////////////////////////////////////////////////////////////////
     //		_objectCompletionPage
     ////////////////////////////////////////////////////////////////////////////////////
-//    _edgeDetectionButton = new QPushButton( _objectCompletionPage );
-//    _edgeDetectionButton->setText( tr("Edge Detection") );
+    //    _edgeDetectionButton = new QPushButton( _objectCompletionPage );
+    //    _edgeDetectionButton->setText( tr("Edge Detection") );
 
-//    _loadTemplateButton = new QPushButton( _objectCompletionPage );
-//    _loadTemplateButton->setText( tr("Load Template") );
-//    _shapeMatchButton = new QPushButton( _objectCompletionPage );
-//    _shapeMatchButton->setText( tr("Shape Match") );
+    //    _loadTemplateButton = new QPushButton( _objectCompletionPage );
+    //    _loadTemplateButton->setText( tr("Load Template") );
+    //    _shapeMatchButton = new QPushButton( _objectCompletionPage );
+    //    _shapeMatchButton->setText( tr("Shape Match") );
 
-//    QVBoxLayout *ocPageLayout = new QVBoxLayout( _objectCompletionPage );
-//    ocPageLayout->addWidget( _edgeDetectionButton );
-//    ocPageLayout->addWidget( _loadTemplateButton );
-//    ocPageLayout->addWidget( _shapeMatchButton );
+    //    QVBoxLayout *ocPageLayout = new QVBoxLayout( _objectCompletionPage );
+    //    ocPageLayout->addWidget( _edgeDetectionButton );
+    //    ocPageLayout->addWidget( _loadTemplateButton );
+    //    ocPageLayout->addWidget( _shapeMatchButton );
 
     _rightOperationWidget->setWidget(_dockWidgetContents);
     this->addDockWidget(static_cast<Qt::DockWidgetArea>(2), _rightOperationWidget);
@@ -478,7 +486,7 @@ void	ImageCompletionUI::setupWidgets()
     _logInformationString = new QString();
     _logWidget->setReadOnly(true);
 
-    _logWindowWidget = new QDockWidget(tr("¹¤×÷ÈÕÖ¾"),this)    ;
+    _logWindowWidget = new QDockWidget(tr("å·¥ä½œæ—¥å¿—"),this)    ;
     _logWindowWidget->setObjectName("_logWindowWidget");
     _logWindowWidget->setFeatures(QDockWidget::DockWidgetMovable);
     _logWindowWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -487,13 +495,13 @@ void	ImageCompletionUI::setupWidgets()
     _logWindowWidget->setMinimumHeight(0.28 * height);
     addDockWidget(Qt::RightDockWidgetArea,_logWindowWidget);
 
-//    this->setCentralWidget(_centralwidget);
+    //    this->setCentralWidget(_centralwidget);
 
 
     ////////////////////////////////////////////////////////////////////////////////////
     //   _leftWindowWidget
     ////////////////////////////////////////////////////////////////////////////////////
-    _leftWindowWidget = new QDockWidget(tr("µ±Ç°ĞÅÏ¢"),this );
+    _leftWindowWidget = new QDockWidget(tr("å½“å‰ä¿¡æ¯"),this );
     _leftWindowWidget->setObjectName(tr("_leftWindowWidget"));
     _leftWindowWidget->setFeatures(QDockWidget::DockWidgetMovable);
     _leftWindowWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -515,7 +523,7 @@ void	ImageCompletionUI::setupWidgets()
     _cornerWindowWidget->setObjectName(tr("_cornerWindowWidget"));
     _cornerWindowWidget->setFeatures(QDockWidget::DockWidgetMovable);
     _cornerWindowWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-//    _cornerWindowWidget->setMaximumSize(QSize(width, height));
+    //    _cornerWindowWidget->setMaximumSize(QSize(width, height));
     _cornerWindowWidget->setFloating(false);
     _cornerDockWindowContents = new QWidget( );
     _cornerDockWindowContents->setObjectName(tr("_leftDockWindowContents"));
@@ -528,12 +536,12 @@ void	ImageCompletionUI::setupWidgets()
     ////////////////////////////////////////////////////////////////////////////////////
 
     // modified by zhyn
-    _bottomWindowWidget = new QDockWidget(tr("Êı¾İ¿âĞÅÏ¢"),this );
+    _bottomWindowWidget = new QDockWidget(tr("æ•°æ®åº“ä¿¡æ¯"),this );
     _bottomWindowWidget->setObjectName(tr("_bottomWindowWidget"));
     _bottomWindowWidget->setFeatures(QDockWidget::DockWidgetMovable);
     _bottomWindowWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
-//    _bottomWindowWidget->setMaximumSize(QSize(width, 0.3*height));
-//    _bottomWindowWidget->setFloating(true);
+    //    _bottomWindowWidget->setMaximumSize(QSize(width, 0.3*height));
+    //    _bottomWindowWidget->setFloating(true);
     _bottomDockWindowContents = new QWidget( );
     _bottomDockWindowContents->setObjectName(tr("_bottomDockWindowContents"));
     _bottomWindow.setupUi(_bottomDockWindowContents);
@@ -551,24 +559,24 @@ void	ImageCompletionUI::setupWidgets()
     ////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////
 
-//    QVBoxLayout *centralLaytout = new QVBoxLayout( _centralwidget );
-//    QGridLayout *editTabLayout = new QGridLayout( _editTab );
-//    QVBoxLayout *leftLaytout = new QVBoxLayout();
-//    QVBoxLayout *rightLaytout = new QVBoxLayout( _dockWidgetContents );
+    //    QVBoxLayout *centralLaytout = new QVBoxLayout( _centralwidget );
+    //    QGridLayout *editTabLayout = new QGridLayout( _editTab );
+    //    QVBoxLayout *leftLaytout = new QVBoxLayout();
+    //    QVBoxLayout *rightLaytout = new QVBoxLayout( _dockWidgetContents );
 
-//    editTabLayout->addWidget( _editScrollArea );
-//    editTabLayout->setMargin( 1 );
+    //    editTabLayout->addWidget( _editScrollArea );
+    //    editTabLayout->setMargin( 1 );
 
-//    leftLaytout->addWidget( _centralTabWidget );
-//    leftLaytout->addWidget( _bottomWindowWidget );
+    //    leftLaytout->addWidget( _centralTabWidget );
+    //    leftLaytout->addWidget( _bottomWindowWidget );
 
-//    centralLaytout->addLayout( leftLaytout );
+    //    centralLaytout->addLayout( leftLaytout );
 
-//    rightLaytout->addWidget( _operationStackedWidget );
-//    rightLaytout->addWidget( _logWidget );
-//    //  rightLaytout->addWidget( _cornerWindowWidget );
-//    rightLaytout->setMargin( 2 );
-//    rightLaytout->setSpacing( 10 );
+    //    rightLaytout->addWidget( _operationStackedWidget );
+    //    rightLaytout->addWidget( _logWidget );
+    //    //  rightLaytout->addWidget( _cornerWindowWidget );
+    //    rightLaytout->setMargin( 2 );
+    //    rightLaytout->setSpacing( 10 );
 
 
     QPixmap pixmap(30,30);
@@ -639,174 +647,174 @@ void	ImageCompletionUI::open()
     _bottomWindow.dBTableWidget_8->clear();
     _bottomWindow.dBTableWidget_9->clear();
 
-    _bottomWindow.dBTableWidget_1->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    _bottomWindow.dBTableWidget_1->setItem(0,1,new QTableWidgetItem("»úºÅ"));
-    _bottomWindow.dBTableWidget_1->setItem(0,2,new QTableWidgetItem("»úĞÍ"));
-    _bottomWindow.dBTableWidget_1->setItem(0,3,new QTableWidgetItem("µ¥Î»±àºÅ"));
-    _bottomWindow.dBTableWidget_1->setItem(0,4,new QTableWidgetItem("·ÉĞĞĞ¡Ê±Êı"));
-    _bottomWindow.dBTableWidget_1->setItem(0,5,new QTableWidgetItem("ÔËĞĞ½×¶Î"));
-    _bottomWindow.dBTableWidget_1->setItem(0,6,new QTableWidgetItem("ĞŞÀí´ÎÊı"));
+    _bottomWindow.dBTableWidget_1->setItem(0,0,new QTableWidgetItem("åºå·"));
+    _bottomWindow.dBTableWidget_1->setItem(0,1,new QTableWidgetItem("æœºå·"));
+    _bottomWindow.dBTableWidget_1->setItem(0,2,new QTableWidgetItem("æœºå‹"));
+    _bottomWindow.dBTableWidget_1->setItem(0,3,new QTableWidgetItem("å•ä½ç¼–å·"));
+    _bottomWindow.dBTableWidget_1->setItem(0,4,new QTableWidgetItem("é£è¡Œå°æ—¶æ•°"));
+    _bottomWindow.dBTableWidget_1->setItem(0,5,new QTableWidgetItem("è¿è¡Œé˜¶æ®µ"));
+    _bottomWindow.dBTableWidget_1->setItem(0,6,new QTableWidgetItem("ä¿®ç†æ¬¡æ•°"));
 
-    _bottomWindow.dBTableWidget_2->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    _bottomWindow.dBTableWidget_2->setItem(0,1,new QTableWidgetItem("¶¯²¿¼ş±àºÅ"));
-    _bottomWindow.dBTableWidget_2->setItem(0,2,new QTableWidgetItem("¶¯²¿¼şĞÍºÅ"));
-    _bottomWindow.dBTableWidget_2->setItem(0,3,new QTableWidgetItem("¶¯²¿¼şÃû³Æ"));
-    _bottomWindow.dBTableWidget_2->setItem(0,4,new QTableWidgetItem("ÔËĞĞÊ±Êı"));
-    _bottomWindow.dBTableWidget_2->setItem(0,5,new QTableWidgetItem("ÔËĞĞ½×¶Î"));
-    _bottomWindow.dBTableWidget_2->setItem(0,6,new QTableWidgetItem("»úºÅ"));
-    _bottomWindow.dBTableWidget_2->setItem(0,7,new QTableWidgetItem("»úĞÍ"));
-    _bottomWindow.dBTableWidget_2->setItem(0,8,new QTableWidgetItem("¶¯²¿¼şÆğÊ¼ÈÕÆÚ"));
-    _bottomWindow.dBTableWidget_2->setItem(0,9,new QTableWidgetItem("¶¯²¿¼şÖÕÖ¹ÈÕÆÚ"));
+    _bottomWindow.dBTableWidget_2->setItem(0,0,new QTableWidgetItem("åºå·"));
+    _bottomWindow.dBTableWidget_2->setItem(0,1,new QTableWidgetItem("åŠ¨éƒ¨ä»¶ç¼–å·"));
+    _bottomWindow.dBTableWidget_2->setItem(0,2,new QTableWidgetItem("åŠ¨éƒ¨ä»¶å‹å·"));
+    _bottomWindow.dBTableWidget_2->setItem(0,3,new QTableWidgetItem("åŠ¨éƒ¨ä»¶åç§°"));
+    _bottomWindow.dBTableWidget_2->setItem(0,4,new QTableWidgetItem("è¿è¡Œæ—¶æ•°"));
+    _bottomWindow.dBTableWidget_2->setItem(0,5,new QTableWidgetItem("è¿è¡Œé˜¶æ®µ"));
+    _bottomWindow.dBTableWidget_2->setItem(0,6,new QTableWidgetItem("æœºå·"));
+    _bottomWindow.dBTableWidget_2->setItem(0,7,new QTableWidgetItem("æœºå‹"));
+    _bottomWindow.dBTableWidget_2->setItem(0,8,new QTableWidgetItem("åŠ¨éƒ¨ä»¶èµ·å§‹æ—¥æœŸ"));
+    _bottomWindow.dBTableWidget_2->setItem(0,9,new QTableWidgetItem("åŠ¨éƒ¨ä»¶ç»ˆæ­¢æ—¥æœŸ"));
 
-    _bottomWindow.dBTableWidget_3->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    _bottomWindow.dBTableWidget_3->setItem(0,1,new QTableWidgetItem("¶¯²¿¼şÎ¬ĞŞ±àºÅ"));
-    _bottomWindow.dBTableWidget_3->setItem(0,2,new QTableWidgetItem("¶¯²¿¼ş±àºÅ"));
-    _bottomWindow.dBTableWidget_3->setItem(0,3,new QTableWidgetItem("¶¯²¿¼şĞÍºÅ"));
-    _bottomWindow.dBTableWidget_3->setItem(0,4,new QTableWidgetItem("Î¬ĞŞÔ­Òò"));
-    _bottomWindow.dBTableWidget_3->setItem(0,5,new QTableWidgetItem("Î¬ĞŞÈÕÆÚ"));
-    _bottomWindow.dBTableWidget_3->setItem(0,6,new QTableWidgetItem("Î¬ĞŞ´ÎÊı"));
-    _bottomWindow.dBTableWidget_3->setItem(0,7,new QTableWidgetItem("Î¬ĞŞÖ´ĞĞµ¥Î»"));
-    _bottomWindow.dBTableWidget_3->setItem(0,8,new QTableWidgetItem("Î¬ĞŞÄÚÈİ"));
-    _bottomWindow.dBTableWidget_3->setItem(0,9,new QTableWidgetItem("Î¬ĞŞ»»¼şÇé¿ö"));
+    _bottomWindow.dBTableWidget_3->setItem(0,0,new QTableWidgetItem("åºå·"));
+    _bottomWindow.dBTableWidget_3->setItem(0,1,new QTableWidgetItem("åŠ¨éƒ¨ä»¶ç»´ä¿®ç¼–å·"));
+    _bottomWindow.dBTableWidget_3->setItem(0,2,new QTableWidgetItem("åŠ¨éƒ¨ä»¶ç¼–å·"));
+    _bottomWindow.dBTableWidget_3->setItem(0,3,new QTableWidgetItem("åŠ¨éƒ¨ä»¶å‹å·"));
+    _bottomWindow.dBTableWidget_3->setItem(0,4,new QTableWidgetItem("ç»´ä¿®åŸå› "));
+    _bottomWindow.dBTableWidget_3->setItem(0,5,new QTableWidgetItem("ç»´ä¿®æ—¥æœŸ"));
+    _bottomWindow.dBTableWidget_3->setItem(0,6,new QTableWidgetItem("ç»´ä¿®æ¬¡æ•°"));
+    _bottomWindow.dBTableWidget_3->setItem(0,7,new QTableWidgetItem("ç»´ä¿®æ‰§è¡Œå•ä½"));
+    _bottomWindow.dBTableWidget_3->setItem(0,8,new QTableWidgetItem("ç»´ä¿®å†…å®¹"));
+    _bottomWindow.dBTableWidget_3->setItem(0,9,new QTableWidgetItem("ç»´ä¿®æ¢ä»¶æƒ…å†µ"));
 
-    _bottomWindow.dBTableWidget_4->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,1,new QTableWidgetItem("ÓÍÑù±àºÅ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,2,new QTableWidgetItem("²ÉÑùµ¥Î»±àºÅ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,3,new QTableWidgetItem("»úĞÍ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,4,new QTableWidgetItem("»úºÅ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,5,new QTableWidgetItem("¼à¿Ø²¿¼şÃû³Æ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,6,new QTableWidgetItem("¼à¿Ø²¿¼ş±àºÅ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,7,new QTableWidgetItem("²ÉÑùµã±àºÅ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,8,new QTableWidgetItem("»¬ÓÍ¹¤×÷Ê±Êı"));
-    _bottomWindow.dBTableWidget_4->setItem(0,9,new QTableWidgetItem("»¬ÓÍÌí¼ÓÁ¿"));
-    _bottomWindow.dBTableWidget_4->setItem(0,10,new QTableWidgetItem("²ÉÑùÔ­Òò"));
-    _bottomWindow.dBTableWidget_4->setItem(0,11,new QTableWidgetItem("²ÉÑùµ¥Î»"));
-    _bottomWindow.dBTableWidget_4->setItem(0,12,new QTableWidgetItem("²ÉÑùÈË"));
-    _bottomWindow.dBTableWidget_4->setItem(0,13,new QTableWidgetItem("²ÉÑùÈÕÆÚ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,14,new QTableWidgetItem("²ÉÑùÊ±¼ä"));
-    _bottomWindow.dBTableWidget_4->setItem(0,15,new QTableWidgetItem("²ÉÑùÊ±»ú"));
-    _bottomWindow.dBTableWidget_4->setItem(0,16,new QTableWidgetItem("²ÉÑù·½Ê½"));
-    _bottomWindow.dBTableWidget_4->setItem(0,17,new QTableWidgetItem("²ÉÑùÁ¿"));
-    _bottomWindow.dBTableWidget_4->setItem(0,18,new QTableWidgetItem("²ÉÑùËµÃ÷"));
-    _bottomWindow.dBTableWidget_4->setItem(0,19,new QTableWidgetItem("ËÍÑùÈË"));
-    _bottomWindow.dBTableWidget_4->setItem(0,20,new QTableWidgetItem("ËÍÑùÈÕÆÚ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,21,new QTableWidgetItem("ËÍÑùÊ±¼ä"));
-    _bottomWindow.dBTableWidget_4->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,1,new QTableWidgetItem("ÓÍÑù±àºÅ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,2,new QTableWidgetItem("²ÉÑùµ¥Î»±àºÅ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,3,new QTableWidgetItem("»úĞÍ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,4,new QTableWidgetItem("»úºÅ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,5,new QTableWidgetItem("¼à¿Ø²¿¼şÃû³Æ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,6,new QTableWidgetItem("¼à¿Ø²¿¼ş±àºÅ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,7,new QTableWidgetItem("²ÉÑùµã±àºÅ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,8,new QTableWidgetItem("»¬ÓÍ¹¤×÷Ê±Êı"));
-    _bottomWindow.dBTableWidget_4->setItem(0,9,new QTableWidgetItem("»¬ÓÍÌí¼ÓÁ¿"));
-    _bottomWindow.dBTableWidget_4->setItem(0,10,new QTableWidgetItem("²ÉÑùÔ­Òò"));
-    _bottomWindow.dBTableWidget_4->setItem(0,11,new QTableWidgetItem("²ÉÑùµ¥Î»"));
-    _bottomWindow.dBTableWidget_4->setItem(0,12,new QTableWidgetItem("²ÉÑùÈË"));
-    _bottomWindow.dBTableWidget_4->setItem(0,13,new QTableWidgetItem("²ÉÑùÈÕÆÚ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,14,new QTableWidgetItem("²ÉÑùÊ±¼ä"));
-    _bottomWindow.dBTableWidget_4->setItem(0,15,new QTableWidgetItem("²ÉÑùÊ±»ú"));
-    _bottomWindow.dBTableWidget_4->setItem(0,16,new QTableWidgetItem("²ÉÑù·½Ê½"));
-    _bottomWindow.dBTableWidget_4->setItem(0,17,new QTableWidgetItem("²ÉÑùÁ¿"));
-    _bottomWindow.dBTableWidget_4->setItem(0,18,new QTableWidgetItem("²ÉÑùËµÃ÷"));
-    _bottomWindow.dBTableWidget_4->setItem(0,19,new QTableWidgetItem("ËÍÑùÈË"));
-    _bottomWindow.dBTableWidget_4->setItem(0,20,new QTableWidgetItem("ËÍÑùÈÕÆÚ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,21,new QTableWidgetItem("ËÍÑùÊ±¼ä"));
-    _bottomWindow.dBTableWidget_4->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,1,new QTableWidgetItem("ÓÍÑù±àºÅ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,2,new QTableWidgetItem("²ÉÑùµ¥Î»±àºÅ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,3,new QTableWidgetItem("»úĞÍ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,4,new QTableWidgetItem("»úºÅ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,5,new QTableWidgetItem("¼à¿Ø²¿¼şÃû³Æ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,6,new QTableWidgetItem("¼à¿Ø²¿¼ş±àºÅ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,7,new QTableWidgetItem("²ÉÑùµã±àºÅ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,8,new QTableWidgetItem("»¬ÓÍ¹¤×÷Ê±Êı"));
-    _bottomWindow.dBTableWidget_4->setItem(0,9,new QTableWidgetItem("»¬ÓÍÌí¼ÓÁ¿"));
-    _bottomWindow.dBTableWidget_4->setItem(0,10,new QTableWidgetItem("²ÉÑùÔ­Òò"));
-    _bottomWindow.dBTableWidget_4->setItem(0,11,new QTableWidgetItem("²ÉÑùµ¥Î»"));
-    _bottomWindow.dBTableWidget_4->setItem(0,12,new QTableWidgetItem("²ÉÑùÈË"));
-    _bottomWindow.dBTableWidget_4->setItem(0,13,new QTableWidgetItem("²ÉÑùÈÕÆÚ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,14,new QTableWidgetItem("²ÉÑùÊ±¼ä"));
-    _bottomWindow.dBTableWidget_4->setItem(0,15,new QTableWidgetItem("²ÉÑùÊ±»ú"));
-    _bottomWindow.dBTableWidget_4->setItem(0,16,new QTableWidgetItem("²ÉÑù·½Ê½"));
-    _bottomWindow.dBTableWidget_4->setItem(0,17,new QTableWidgetItem("²ÉÑùÁ¿"));
-    _bottomWindow.dBTableWidget_4->setItem(0,18,new QTableWidgetItem("²ÉÑùËµÃ÷"));
-    _bottomWindow.dBTableWidget_4->setItem(0,19,new QTableWidgetItem("ËÍÑùÈË"));
-    _bottomWindow.dBTableWidget_4->setItem(0,20,new QTableWidgetItem("ËÍÑùÈÕÆÚ"));
-    _bottomWindow.dBTableWidget_4->setItem(0,21,new QTableWidgetItem("ËÍÑùÊ±¼ä"));
+    _bottomWindow.dBTableWidget_4->setItem(0,0,new QTableWidgetItem("åºå·"));
+    _bottomWindow.dBTableWidget_4->setItem(0,1,new QTableWidgetItem("æ²¹æ ·ç¼–å·"));
+    _bottomWindow.dBTableWidget_4->setItem(0,2,new QTableWidgetItem("é‡‡æ ·å•ä½ç¼–å·"));
+    _bottomWindow.dBTableWidget_4->setItem(0,3,new QTableWidgetItem("æœºå‹"));
+    _bottomWindow.dBTableWidget_4->setItem(0,4,new QTableWidgetItem("æœºå·"));
+    _bottomWindow.dBTableWidget_4->setItem(0,5,new QTableWidgetItem("ç›‘æ§éƒ¨ä»¶åç§°"));
+    _bottomWindow.dBTableWidget_4->setItem(0,6,new QTableWidgetItem("ç›‘æ§éƒ¨ä»¶ç¼–å·"));
+    _bottomWindow.dBTableWidget_4->setItem(0,7,new QTableWidgetItem("é‡‡æ ·ç‚¹ç¼–å·"));
+    _bottomWindow.dBTableWidget_4->setItem(0,8,new QTableWidgetItem("æ»‘æ²¹å·¥ä½œæ—¶æ•°"));
+    _bottomWindow.dBTableWidget_4->setItem(0,9,new QTableWidgetItem("æ»‘æ²¹æ·»åŠ é‡"));
+    _bottomWindow.dBTableWidget_4->setItem(0,10,new QTableWidgetItem("é‡‡æ ·åŸå› "));
+    _bottomWindow.dBTableWidget_4->setItem(0,11,new QTableWidgetItem("é‡‡æ ·å•ä½"));
+    _bottomWindow.dBTableWidget_4->setItem(0,12,new QTableWidgetItem("é‡‡æ ·äºº"));
+    _bottomWindow.dBTableWidget_4->setItem(0,13,new QTableWidgetItem("é‡‡æ ·æ—¥æœŸ"));
+    _bottomWindow.dBTableWidget_4->setItem(0,14,new QTableWidgetItem("é‡‡æ ·æ—¶é—´"));
+    _bottomWindow.dBTableWidget_4->setItem(0,15,new QTableWidgetItem("é‡‡æ ·æ—¶æœº"));
+    _bottomWindow.dBTableWidget_4->setItem(0,16,new QTableWidgetItem("é‡‡æ ·æ–¹å¼"));
+    _bottomWindow.dBTableWidget_4->setItem(0,17,new QTableWidgetItem("é‡‡æ ·é‡"));
+    _bottomWindow.dBTableWidget_4->setItem(0,18,new QTableWidgetItem("é‡‡æ ·è¯´æ˜"));
+    _bottomWindow.dBTableWidget_4->setItem(0,19,new QTableWidgetItem("é€æ ·äºº"));
+    _bottomWindow.dBTableWidget_4->setItem(0,20,new QTableWidgetItem("é€æ ·æ—¥æœŸ"));
+    _bottomWindow.dBTableWidget_4->setItem(0,21,new QTableWidgetItem("é€æ ·æ—¶é—´"));
+    _bottomWindow.dBTableWidget_4->setItem(0,0,new QTableWidgetItem("åºå·"));
+    _bottomWindow.dBTableWidget_4->setItem(0,1,new QTableWidgetItem("æ²¹æ ·ç¼–å·"));
+    _bottomWindow.dBTableWidget_4->setItem(0,2,new QTableWidgetItem("é‡‡æ ·å•ä½ç¼–å·"));
+    _bottomWindow.dBTableWidget_4->setItem(0,3,new QTableWidgetItem("æœºå‹"));
+    _bottomWindow.dBTableWidget_4->setItem(0,4,new QTableWidgetItem("æœºå·"));
+    _bottomWindow.dBTableWidget_4->setItem(0,5,new QTableWidgetItem("ç›‘æ§éƒ¨ä»¶åç§°"));
+    _bottomWindow.dBTableWidget_4->setItem(0,6,new QTableWidgetItem("ç›‘æ§éƒ¨ä»¶ç¼–å·"));
+    _bottomWindow.dBTableWidget_4->setItem(0,7,new QTableWidgetItem("é‡‡æ ·ç‚¹ç¼–å·"));
+    _bottomWindow.dBTableWidget_4->setItem(0,8,new QTableWidgetItem("æ»‘æ²¹å·¥ä½œæ—¶æ•°"));
+    _bottomWindow.dBTableWidget_4->setItem(0,9,new QTableWidgetItem("æ»‘æ²¹æ·»åŠ é‡"));
+    _bottomWindow.dBTableWidget_4->setItem(0,10,new QTableWidgetItem("é‡‡æ ·åŸå› "));
+    _bottomWindow.dBTableWidget_4->setItem(0,11,new QTableWidgetItem("é‡‡æ ·å•ä½"));
+    _bottomWindow.dBTableWidget_4->setItem(0,12,new QTableWidgetItem("é‡‡æ ·äºº"));
+    _bottomWindow.dBTableWidget_4->setItem(0,13,new QTableWidgetItem("é‡‡æ ·æ—¥æœŸ"));
+    _bottomWindow.dBTableWidget_4->setItem(0,14,new QTableWidgetItem("é‡‡æ ·æ—¶é—´"));
+    _bottomWindow.dBTableWidget_4->setItem(0,15,new QTableWidgetItem("é‡‡æ ·æ—¶æœº"));
+    _bottomWindow.dBTableWidget_4->setItem(0,16,new QTableWidgetItem("é‡‡æ ·æ–¹å¼"));
+    _bottomWindow.dBTableWidget_4->setItem(0,17,new QTableWidgetItem("é‡‡æ ·é‡"));
+    _bottomWindow.dBTableWidget_4->setItem(0,18,new QTableWidgetItem("é‡‡æ ·è¯´æ˜"));
+    _bottomWindow.dBTableWidget_4->setItem(0,19,new QTableWidgetItem("é€æ ·äºº"));
+    _bottomWindow.dBTableWidget_4->setItem(0,20,new QTableWidgetItem("é€æ ·æ—¥æœŸ"));
+    _bottomWindow.dBTableWidget_4->setItem(0,21,new QTableWidgetItem("é€æ ·æ—¶é—´"));
+    _bottomWindow.dBTableWidget_4->setItem(0,0,new QTableWidgetItem("åºå·"));
+    _bottomWindow.dBTableWidget_4->setItem(0,1,new QTableWidgetItem("æ²¹æ ·ç¼–å·"));
+    _bottomWindow.dBTableWidget_4->setItem(0,2,new QTableWidgetItem("é‡‡æ ·å•ä½ç¼–å·"));
+    _bottomWindow.dBTableWidget_4->setItem(0,3,new QTableWidgetItem("æœºå‹"));
+    _bottomWindow.dBTableWidget_4->setItem(0,4,new QTableWidgetItem("æœºå·"));
+    _bottomWindow.dBTableWidget_4->setItem(0,5,new QTableWidgetItem("ç›‘æ§éƒ¨ä»¶åç§°"));
+    _bottomWindow.dBTableWidget_4->setItem(0,6,new QTableWidgetItem("ç›‘æ§éƒ¨ä»¶ç¼–å·"));
+    _bottomWindow.dBTableWidget_4->setItem(0,7,new QTableWidgetItem("é‡‡æ ·ç‚¹ç¼–å·"));
+    _bottomWindow.dBTableWidget_4->setItem(0,8,new QTableWidgetItem("æ»‘æ²¹å·¥ä½œæ—¶æ•°"));
+    _bottomWindow.dBTableWidget_4->setItem(0,9,new QTableWidgetItem("æ»‘æ²¹æ·»åŠ é‡"));
+    _bottomWindow.dBTableWidget_4->setItem(0,10,new QTableWidgetItem("é‡‡æ ·åŸå› "));
+    _bottomWindow.dBTableWidget_4->setItem(0,11,new QTableWidgetItem("é‡‡æ ·å•ä½"));
+    _bottomWindow.dBTableWidget_4->setItem(0,12,new QTableWidgetItem("é‡‡æ ·äºº"));
+    _bottomWindow.dBTableWidget_4->setItem(0,13,new QTableWidgetItem("é‡‡æ ·æ—¥æœŸ"));
+    _bottomWindow.dBTableWidget_4->setItem(0,14,new QTableWidgetItem("é‡‡æ ·æ—¶é—´"));
+    _bottomWindow.dBTableWidget_4->setItem(0,15,new QTableWidgetItem("é‡‡æ ·æ—¶æœº"));
+    _bottomWindow.dBTableWidget_4->setItem(0,16,new QTableWidgetItem("é‡‡æ ·æ–¹å¼"));
+    _bottomWindow.dBTableWidget_4->setItem(0,17,new QTableWidgetItem("é‡‡æ ·é‡"));
+    _bottomWindow.dBTableWidget_4->setItem(0,18,new QTableWidgetItem("é‡‡æ ·è¯´æ˜"));
+    _bottomWindow.dBTableWidget_4->setItem(0,19,new QTableWidgetItem("é€æ ·äºº"));
+    _bottomWindow.dBTableWidget_4->setItem(0,20,new QTableWidgetItem("é€æ ·æ—¥æœŸ"));
+    _bottomWindow.dBTableWidget_4->setItem(0,21,new QTableWidgetItem("é€æ ·æ—¶é—´"));
 
-    _bottomWindow.dBTableWidget_5->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    _bottomWindow.dBTableWidget_5->setItem(0,1,new QTableWidgetItem("ÓÍÑù±àºÅ"));
-    _bottomWindow.dBTableWidget_5->setItem(0,2,new QTableWidgetItem("¼ì²â·ÖÎöµ¥Î»Ãû³Æ"));
-    _bottomWindow.dBTableWidget_5->setItem(0,3,new QTableWidgetItem("ËÍ¼ìµ¥Î»"));
-    _bottomWindow.dBTableWidget_5->setItem(0,4,new QTableWidgetItem("ËÍ¼ìÔ­Òò"));
-    _bottomWindow.dBTableWidget_5->setItem(0,5,new QTableWidgetItem("ËÍÑùÈË"));
-    _bottomWindow.dBTableWidget_5->setItem(0,6,new QTableWidgetItem("ÊÕÓÍÑùÈÕÆÚ"));
-    _bottomWindow.dBTableWidget_5->setItem(0,7,new QTableWidgetItem("ÊÕÓÍÑùÈË"));
-    _bottomWindow.dBTableWidget_5->setItem(0,8,new QTableWidgetItem("ÎÛÈ¾¶È·ÖÎö·½·¨"));
-    _bottomWindow.dBTableWidget_5->setItem(0,9,new QTableWidgetItem("ÎÛÈ¾¶È·ÖÎöÈË"));
-    _bottomWindow.dBTableWidget_5->setItem(0,10,new QTableWidgetItem("ÎÛÈ¾¶È·ÖÎöÈÕÆÚ"));
-    _bottomWindow.dBTableWidget_5->setItem(0,11,new QTableWidgetItem("ÎÛÈ¾¶È·ÖÎöÉè±¸"));
-    _bottomWindow.dBTableWidget_5->setItem(0,12,new QTableWidgetItem("ÎÛÈ¾¶È·ÖÎö±¨¸æ±àºÅ"));
-    _bottomWindow.dBTableWidget_5->setItem(0,13,new QTableWidgetItem("¹âÆ×·ÖÎö·½·¨"));
-    _bottomWindow.dBTableWidget_5->setItem(0,14,new QTableWidgetItem("¹âÆ×·ÖÎöÈË"));
-    _bottomWindow.dBTableWidget_5->setItem(0,15,new QTableWidgetItem("¹âÆ×·ÖÎöÈÕÆÚ"));
-    _bottomWindow.dBTableWidget_5->setItem(0,16,new QTableWidgetItem("¹âÆ×·ÖÎöÉè±¸"));
-    _bottomWindow.dBTableWidget_5->setItem(0,17,new QTableWidgetItem("¹âÆ×·ÖÎö±¨¸æ±àºÅ"));
-    _bottomWindow.dBTableWidget_5->setItem(0,18,new QTableWidgetItem("ÌúÆ×·ÖÎö·½·¨"));
-    _bottomWindow.dBTableWidget_5->setItem(0,19,new QTableWidgetItem("ÌúÆ×·ÖÎöÈË"));
-    _bottomWindow.dBTableWidget_5->setItem(0,20,new QTableWidgetItem("ÌúÆ×·ÖÎöÈÕÆÚ"));
-    _bottomWindow.dBTableWidget_5->setItem(0,21,new QTableWidgetItem("ÌúÆ×·ÖÎöÉè±¸"));
-    _bottomWindow.dBTableWidget_5->setItem(0,22,new QTableWidgetItem("ÌúÆ×·ÖÎö±¨¸æ±àºÅ"));
-    _bottomWindow.dBTableWidget_5->setItem(0,23,new QTableWidgetItem("Àí»¯·ÖÎö·½·¨"));
-    _bottomWindow.dBTableWidget_5->setItem(0,24,new QTableWidgetItem("Àí»¯·ÖÎöÈË"));
-    _bottomWindow.dBTableWidget_5->setItem(0,25,new QTableWidgetItem("Àí»¯·ÖÎöÈÕÆÚ"));
-    _bottomWindow.dBTableWidget_5->setItem(0,26,new QTableWidgetItem("Àí»¯·ÖÎöÉè±¸"));
-    _bottomWindow.dBTableWidget_5->setItem(0,27,new QTableWidgetItem("Àí»¯·ÖÎö±¨¸æ±àºÅ"));
+    _bottomWindow.dBTableWidget_5->setItem(0,0,new QTableWidgetItem("åºå·"));
+    _bottomWindow.dBTableWidget_5->setItem(0,1,new QTableWidgetItem("æ²¹æ ·ç¼–å·"));
+    _bottomWindow.dBTableWidget_5->setItem(0,2,new QTableWidgetItem("æ£€æµ‹åˆ†æå•ä½åç§°"));
+    _bottomWindow.dBTableWidget_5->setItem(0,3,new QTableWidgetItem("é€æ£€å•ä½"));
+    _bottomWindow.dBTableWidget_5->setItem(0,4,new QTableWidgetItem("é€æ£€åŸå› "));
+    _bottomWindow.dBTableWidget_5->setItem(0,5,new QTableWidgetItem("é€æ ·äºº"));
+    _bottomWindow.dBTableWidget_5->setItem(0,6,new QTableWidgetItem("æ”¶æ²¹æ ·æ—¥æœŸ"));
+    _bottomWindow.dBTableWidget_5->setItem(0,7,new QTableWidgetItem("æ”¶æ²¹æ ·äºº"));
+    _bottomWindow.dBTableWidget_5->setItem(0,8,new QTableWidgetItem("æ±¡æŸ“åº¦åˆ†ææ–¹æ³•"));
+    _bottomWindow.dBTableWidget_5->setItem(0,9,new QTableWidgetItem("æ±¡æŸ“åº¦åˆ†æäºº"));
+    _bottomWindow.dBTableWidget_5->setItem(0,10,new QTableWidgetItem("æ±¡æŸ“åº¦åˆ†ææ—¥æœŸ"));
+    _bottomWindow.dBTableWidget_5->setItem(0,11,new QTableWidgetItem("æ±¡æŸ“åº¦åˆ†æè®¾å¤‡"));
+    _bottomWindow.dBTableWidget_5->setItem(0,12,new QTableWidgetItem("æ±¡æŸ“åº¦åˆ†ææŠ¥å‘Šç¼–å·"));
+    _bottomWindow.dBTableWidget_5->setItem(0,13,new QTableWidgetItem("å…‰è°±åˆ†ææ–¹æ³•"));
+    _bottomWindow.dBTableWidget_5->setItem(0,14,new QTableWidgetItem("å…‰è°±åˆ†æäºº"));
+    _bottomWindow.dBTableWidget_5->setItem(0,15,new QTableWidgetItem("å…‰è°±åˆ†ææ—¥æœŸ"));
+    _bottomWindow.dBTableWidget_5->setItem(0,16,new QTableWidgetItem("å…‰è°±åˆ†æè®¾å¤‡"));
+    _bottomWindow.dBTableWidget_5->setItem(0,17,new QTableWidgetItem("å…‰è°±åˆ†ææŠ¥å‘Šç¼–å·"));
+    _bottomWindow.dBTableWidget_5->setItem(0,18,new QTableWidgetItem("é“è°±åˆ†ææ–¹æ³•"));
+    _bottomWindow.dBTableWidget_5->setItem(0,19,new QTableWidgetItem("é“è°±åˆ†æäºº"));
+    _bottomWindow.dBTableWidget_5->setItem(0,20,new QTableWidgetItem("é“è°±åˆ†ææ—¥æœŸ"));
+    _bottomWindow.dBTableWidget_5->setItem(0,21,new QTableWidgetItem("é“è°±åˆ†æè®¾å¤‡"));
+    _bottomWindow.dBTableWidget_5->setItem(0,22,new QTableWidgetItem("é“è°±åˆ†ææŠ¥å‘Šç¼–å·"));
+    _bottomWindow.dBTableWidget_5->setItem(0,23,new QTableWidgetItem("ç†åŒ–åˆ†ææ–¹æ³•"));
+    _bottomWindow.dBTableWidget_5->setItem(0,24,new QTableWidgetItem("ç†åŒ–åˆ†æäºº"));
+    _bottomWindow.dBTableWidget_5->setItem(0,25,new QTableWidgetItem("ç†åŒ–åˆ†ææ—¥æœŸ"));
+    _bottomWindow.dBTableWidget_5->setItem(0,26,new QTableWidgetItem("ç†åŒ–åˆ†æè®¾å¤‡"));
+    _bottomWindow.dBTableWidget_5->setItem(0,27,new QTableWidgetItem("ç†åŒ–åˆ†ææŠ¥å‘Šç¼–å·"));
 
-    _bottomWindow.dBTableWidget_6->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    _bottomWindow.dBTableWidget_6->setItem(0,1,new QTableWidgetItem("ÌúÆ×Æ¬±àºÅ"));
-    _bottomWindow.dBTableWidget_6->setItem(0,2,new QTableWidgetItem("ÌúÆ×·ÖÎö±¨¸æ±àºÅ"));
-    _bottomWindow.dBTableWidget_6->setItem(0,3,new QTableWidgetItem("ÓÍÑù±àºÅ"));
-    _bottomWindow.dBTableWidget_6->setItem(0,4,new QTableWidgetItem("·ÖÎöÌúÆ×ÒÇĞÍºÅ"));
-    _bottomWindow.dBTableWidget_6->setItem(0,5,new QTableWidgetItem("ÌúÆ×Æ¬ÖÆÈ¡ÓÍÑùÏûºÄÁ¿"));
-    _bottomWindow.dBTableWidget_6->setItem(0,6,new QTableWidgetItem("ÌúÆ×Æ¬ÖÆÈ¡·½·¨"));
-    _bottomWindow.dBTableWidget_6->setItem(0,7,new QTableWidgetItem("ÌúÆ×Æ¬ÖÆÈ¡ÈË"));
+    _bottomWindow.dBTableWidget_6->setItem(0,0,new QTableWidgetItem("åºå·"));
+    _bottomWindow.dBTableWidget_6->setItem(0,1,new QTableWidgetItem("é“è°±ç‰‡ç¼–å·"));
+    _bottomWindow.dBTableWidget_6->setItem(0,2,new QTableWidgetItem("é“è°±åˆ†ææŠ¥å‘Šç¼–å·"));
+    _bottomWindow.dBTableWidget_6->setItem(0,3,new QTableWidgetItem("æ²¹æ ·ç¼–å·"));
+    _bottomWindow.dBTableWidget_6->setItem(0,4,new QTableWidgetItem("åˆ†æé“è°±ä»ªå‹å·"));
+    _bottomWindow.dBTableWidget_6->setItem(0,5,new QTableWidgetItem("é“è°±ç‰‡åˆ¶å–æ²¹æ ·æ¶ˆè€—é‡"));
+    _bottomWindow.dBTableWidget_6->setItem(0,6,new QTableWidgetItem("é“è°±ç‰‡åˆ¶å–æ–¹æ³•"));
+    _bottomWindow.dBTableWidget_6->setItem(0,7,new QTableWidgetItem("é“è°±ç‰‡åˆ¶å–äºº"));
 
-    _bottomWindow.dBTableWidget_7->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    _bottomWindow.dBTableWidget_7->setItem(0,1,new QTableWidgetItem("ÌúÆ×Í¼Æ¬±àºÅ"));
-    _bottomWindow.dBTableWidget_7->setItem(0,2,new QTableWidgetItem("ÌúÆ×Æ¬±àºÅ"));
-    _bottomWindow.dBTableWidget_7->setItem(0,3,new QTableWidgetItem("ÌúÆ×·ÖÎö±¨¸æ±àºÅ"));
-    _bottomWindow.dBTableWidget_7->setItem(0,4,new QTableWidgetItem("ÏÔÎ¢¾µĞÍºÅ"));
-    _bottomWindow.dBTableWidget_7->setItem(0,5,new QTableWidgetItem("Í¼Ïñ²É¼¯Æ÷ĞÍºÅ"));
-    _bottomWindow.dBTableWidget_7->setItem(0,6,new QTableWidgetItem("¹âÔ´ÀàĞÍ"));
-    _bottomWindow.dBTableWidget_7->setItem(0,7,new QTableWidgetItem("·Å´ó±¶Êı"));
-    _bottomWindow.dBTableWidget_7->setItem(0,8,new QTableWidgetItem("ÌúÆ×Í¼Æ¬²É¼¯ÇøÓò"));
-    _bottomWindow.dBTableWidget_7->setItem(0,9,new QTableWidgetItem("ÌúÆ×Í¼Æ¬²É¼¯ÈË"));
-    _bottomWindow.dBTableWidget_7->setItem(0,10,new QTableWidgetItem("ÌúÆ×Í¼Æ¬(Â·¾¶)"));
-    _bottomWindow.dBTableWidget_7->setItem(0,11,new QTableWidgetItem("ÌúÆ×Í¼Æ¬Ê¶±ğ·ÖÎöĞÅÏ¢"));
-    _bottomWindow.dBTableWidget_7->setItem(0,12,new QTableWidgetItem("ÌúÆ×Í¼Æ¬±êÊ¶·ûºÅ"));
+    _bottomWindow.dBTableWidget_7->setItem(0,0,new QTableWidgetItem("åºå·"));
+    _bottomWindow.dBTableWidget_7->setItem(0,1,new QTableWidgetItem("é“è°±å›¾ç‰‡ç¼–å·"));
+    _bottomWindow.dBTableWidget_7->setItem(0,2,new QTableWidgetItem("é“è°±ç‰‡ç¼–å·"));
+    _bottomWindow.dBTableWidget_7->setItem(0,3,new QTableWidgetItem("é“è°±åˆ†ææŠ¥å‘Šç¼–å·"));
+    _bottomWindow.dBTableWidget_7->setItem(0,4,new QTableWidgetItem("æ˜¾å¾®é•œå‹å·"));
+    _bottomWindow.dBTableWidget_7->setItem(0,5,new QTableWidgetItem("å›¾åƒé‡‡é›†å™¨å‹å·"));
+    _bottomWindow.dBTableWidget_7->setItem(0,6,new QTableWidgetItem("å…‰æºç±»å‹"));
+    _bottomWindow.dBTableWidget_7->setItem(0,7,new QTableWidgetItem("æ”¾å¤§å€æ•°"));
+    _bottomWindow.dBTableWidget_7->setItem(0,8,new QTableWidgetItem("é“è°±å›¾ç‰‡é‡‡é›†åŒºåŸŸ"));
+    _bottomWindow.dBTableWidget_7->setItem(0,9,new QTableWidgetItem("é“è°±å›¾ç‰‡é‡‡é›†äºº"));
+    _bottomWindow.dBTableWidget_7->setItem(0,10,new QTableWidgetItem("é“è°±å›¾ç‰‡(è·¯å¾„)"));
+    _bottomWindow.dBTableWidget_7->setItem(0,11,new QTableWidgetItem("é“è°±å›¾ç‰‡è¯†åˆ«åˆ†æä¿¡æ¯"));
+    _bottomWindow.dBTableWidget_7->setItem(0,12,new QTableWidgetItem("é“è°±å›¾ç‰‡æ ‡è¯†ç¬¦å·"));
 
-    _bottomWindow.dBTableWidget_8->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    _bottomWindow.dBTableWidget_8->setItem(0,1,new QTableWidgetItem("Ä¥Á£±àºÅ"));
-    _bottomWindow.dBTableWidget_8->setItem(0,2,new QTableWidgetItem("ÌúÆ×Í¼Æ¬±àºÅ"));
-    _bottomWindow.dBTableWidget_8->setItem(0,3,new QTableWidgetItem("ÌúÆ×Æ¬±àºÅ"));
-    _bottomWindow.dBTableWidget_8->setItem(0,4,new QTableWidgetItem("ÌúÆ×·ÖÎö±¨¸æ±àºÅ"));
-    _bottomWindow.dBTableWidget_8->setItem(0,5,new QTableWidgetItem("Ä¥Á£±ê×¢ÈË"));
-    _bottomWindow.dBTableWidget_8->setItem(0,6,new QTableWidgetItem("Ä¥Á£Í¼Æ¬£¨Â·¾¶£©"));
-    _bottomWindow.dBTableWidget_8->setItem(0,7,new QTableWidgetItem("Ä¥Á£²ÄÖÊ"));
-    _bottomWindow.dBTableWidget_8->setItem(0,8,new QTableWidgetItem("Ä¥Á£Î»ÖÃ"));
-    _bottomWindow.dBTableWidget_8->setItem(0,9,new QTableWidgetItem("Ä¥Á£³ß´ç"));
-    _bottomWindow.dBTableWidget_8->setItem(0,10,new QTableWidgetItem("Ä¥Á£ÖÜ³¤"));
-    _bottomWindow.dBTableWidget_8->setItem(0,11,new QTableWidgetItem("Ä¥Á£ĞÎ×´"));
-    _bottomWindow.dBTableWidget_8->setItem(0,12,new QTableWidgetItem("Ä¥Á£ÑÕÉ«"));
-    _bottomWindow.dBTableWidget_8->setItem(0,13,new QTableWidgetItem("Ä¥Á£±íÃæÎÆÀíÀàĞÍ"));
-    _bottomWindow.dBTableWidget_8->setItem(0,14,new QTableWidgetItem("Ä¥Á£Ä¥ËğÀàĞÍ"));
-    _bottomWindow.dBTableWidget_8->setItem(0,15,new QTableWidgetItem("Ä¥Á£ËğÉË²¿Î»"));
-    _bottomWindow.dBTableWidget_8->setItem(0,16,new QTableWidgetItem("Ä¥Á£Ä¥Ëğ»úÀí"));
-    _bottomWindow.dBTableWidget_8->setItem(0,17,new QTableWidgetItem("Ä¥Á£·´Ó³¹ÊÕÏĞÅÏ¢"));
-    _bottomWindow.dBTableWidget_8->setItem(0,18,new QTableWidgetItem("Ä¥Á£µäĞÍĞÔ"));
+    _bottomWindow.dBTableWidget_8->setItem(0,0,new QTableWidgetItem("åºå·"));
+    _bottomWindow.dBTableWidget_8->setItem(0,1,new QTableWidgetItem("ç£¨ç²’ç¼–å·"));
+    _bottomWindow.dBTableWidget_8->setItem(0,2,new QTableWidgetItem("é“è°±å›¾ç‰‡ç¼–å·"));
+    _bottomWindow.dBTableWidget_8->setItem(0,3,new QTableWidgetItem("é“è°±ç‰‡ç¼–å·"));
+    _bottomWindow.dBTableWidget_8->setItem(0,4,new QTableWidgetItem("é“è°±åˆ†ææŠ¥å‘Šç¼–å·"));
+    _bottomWindow.dBTableWidget_8->setItem(0,5,new QTableWidgetItem("ç£¨ç²’æ ‡æ³¨äºº"));
+    _bottomWindow.dBTableWidget_8->setItem(0,6,new QTableWidgetItem("ç£¨ç²’å›¾ç‰‡ï¼ˆè·¯å¾„ï¼‰"));
+    _bottomWindow.dBTableWidget_8->setItem(0,7,new QTableWidgetItem("ç£¨ç²’æè´¨"));
+    _bottomWindow.dBTableWidget_8->setItem(0,8,new QTableWidgetItem("ç£¨ç²’ä½ç½®"));
+    _bottomWindow.dBTableWidget_8->setItem(0,9,new QTableWidgetItem("ç£¨ç²’å°ºå¯¸"));
+    _bottomWindow.dBTableWidget_8->setItem(0,10,new QTableWidgetItem("ç£¨ç²’å‘¨é•¿"));
+    _bottomWindow.dBTableWidget_8->setItem(0,11,new QTableWidgetItem("ç£¨ç²’å½¢çŠ¶"));
+    _bottomWindow.dBTableWidget_8->setItem(0,12,new QTableWidgetItem("ç£¨ç²’é¢œè‰²"));
+    _bottomWindow.dBTableWidget_8->setItem(0,13,new QTableWidgetItem("ç£¨ç²’è¡¨é¢çº¹ç†ç±»å‹"));
+    _bottomWindow.dBTableWidget_8->setItem(0,14,new QTableWidgetItem("ç£¨ç²’ç£¨æŸç±»å‹"));
+    _bottomWindow.dBTableWidget_8->setItem(0,15,new QTableWidgetItem("ç£¨ç²’æŸä¼¤éƒ¨ä½"));
+    _bottomWindow.dBTableWidget_8->setItem(0,16,new QTableWidgetItem("ç£¨ç²’ç£¨æŸæœºç†"));
+    _bottomWindow.dBTableWidget_8->setItem(0,17,new QTableWidgetItem("ç£¨ç²’åæ˜ æ•…éšœä¿¡æ¯"));
+    _bottomWindow.dBTableWidget_8->setItem(0,18,new QTableWidgetItem("ç£¨ç²’å…¸å‹æ€§"));
 
     QSettings settings("ImageCompletion","ImageCompletion");
     QString initialPath = settings.value("lastImportPath", QVariant(QDir::homePath())).toString();
@@ -845,15 +853,15 @@ void	ImageCompletionUI::open()
     int width = _editImageViewer->image().width();
     int height = _editImageViewer->image().height();
     this->setMinimumSize( width < 800 ? 800 : height, height < 600 ? 600 : height );
-    QSqlDatabase db;//´´½¨Ò»¸öSQLÊı¾İ¿âÊµÀı
-    if(!createConnection(db))//µ÷ÓÃconnection.hÍ·ÎÄ¼şÖĞ¶¨ÒåµÄcreateConnectionº¯ÊıÁ¬½ÓÊı¾İ¿â
+    QSqlDatabase db;//åˆ›å»ºä¸€ä¸ªSQLæ•°æ®åº“å®ä¾‹
+    if(!createConnection(db))//è°ƒç”¨connection.hå¤´æ–‡ä»¶ä¸­å®šä¹‰çš„createConnectionå‡½æ•°è¿æ¥æ•°æ®åº“
     {
         QMessageBox::critical(0, qApp->tr("Cannot open database"),
                               qApp->tr("Unable to establish a database connection."),
                               QMessageBox::Cancel);
     }
 
-    QSqlQuery query;//²åÈëÊı¾İ¡¢²éÑ¯Êı¾İ¶¼ĞèÒªÏÈ½¨Á¢query
+    QSqlQuery query;//æ’å…¥æ•°æ®ã€æŸ¥è¯¢æ•°æ®éƒ½éœ€è¦å…ˆå»ºç«‹query
 
     QString SQL2="select equipmentinfo.*,movepartinfo.*,movepartrepairinfo.*,oilsampleinfo.*,oilanalyzeinfo.*,ferrographyinfo.*,ferrographypicinfo.*,abrasivemarkinfo.* from equipmentinfo,movepartinfo,movepartrepairinfo,oilsampleinfo,oilanalyzeinfo,ferrographyinfo,ferrographypicinfo,abrasivemarkinfo where equipmentinfo.planeid=movepartinfo.planeid and movepartinfo.movepartid=movepartrepairinfo.movepartid and movepartinfo.movepartid=oilsampleinfo.monitorpartid and oilsampleinfo.oilsampleid=oilanalyzeinfo.oilsampleid and oilsampleinfo.oilsampleid=ferrographyinfo.oilsampleid and ferrographyinfo.ferrographysheetid=ferrographypicinfo.ferrographysheetid and ferrographypicinfo.ferrographypicid=abrasivemarkinfo.ferrographypicid and ferrographypicinfo.ferrographypicpath=?";
     //QString SQL1="select * from ferrographypicinfo where ferrographypicpath=?";
@@ -1006,9 +1014,13 @@ void	ImageCompletionUI::open()
 
     _leftWindow.tableWidget->setItem(k,0,new QTableWidgetItem(wholefilename));
     //buttom1.show();
-    db.close();//¹Ø±ÕÊı¾İ¿â
+    db.close();//å…³é—­æ•°æ®åº“
 
 
+}
+
+void ImageCompletionUI::batchOpen()
+{
 }
 
 
@@ -1087,7 +1099,7 @@ void	ImageCompletionUI::savemarkresult()
 {
     //class1.show();
     QSqlDatabase db;
-    createConnection(db);//Á¬½ÓÊı¾İ¿â
+    createConnection(db);//è¿æ¥æ•°æ®åº“
     QSqlQuery query1;
     QSqlQuery query2;
     QSqlQuery query3;
@@ -1098,23 +1110,23 @@ void	ImageCompletionUI::savemarkresult()
     QSqlQuery query8;
 
     //update equipmentinfo
-    query1.prepare("update equipmentinfo set planeid=?,planetype=?,departid=?,runhour=?,runstage=?,repairtime=? where id=?");//¶ÔÊı¾İ¿âÖĞTuserÖĞ¶ÔÓ¦uidµÄÒ»Ìõ¼ÇÂ¼½øĞĞĞŞ¸Ä
-    query1.addBindValue(_bottomWindow.dBTableWidget_1->item(1,1)->data(Qt::DisplayRole).toString());//¶ÔÆäSQLÓï¾äÖĞµÄÃ¿Ò»Ïî½øĞĞ·ùÖµ²Ù×÷
+    query1.prepare("update equipmentinfo set planeid=?,planetype=?,departid=?,runhour=?,runstage=?,repairtime=? where id=?");//å¯¹æ•°æ®åº“ä¸­Tuserä¸­å¯¹åº”uidçš„ä¸€æ¡è®°å½•è¿›è¡Œä¿®æ”¹
+    query1.addBindValue(_bottomWindow.dBTableWidget_1->item(1,1)->data(Qt::DisplayRole).toString());//å¯¹å…¶SQLè¯­å¥ä¸­çš„æ¯ä¸€é¡¹è¿›è¡Œå¹…å€¼æ“ä½œ
     query1.addBindValue(_bottomWindow.dBTableWidget_1->item(1,2)->data(Qt::DisplayRole).toString());
     query1.addBindValue(_bottomWindow.dBTableWidget_1->item(1,3)->data(Qt::DisplayRole).toString());
     query1.addBindValue(_bottomWindow.dBTableWidget_1->item(1,4)->data(Qt::DisplayRole).toString());
     query1.addBindValue(_bottomWindow.dBTableWidget_1->item(1,5)->data(Qt::DisplayRole).toString());
     query1.addBindValue(_bottomWindow.dBTableWidget_1->item(1,6)->data(Qt::DisplayRole).toString());
     query1.addBindValue(_bottomWindow.dBTableWidget_1->item(1,0)->data(Qt::DisplayRole).toString());
-    if(!query1.exec())//ÈôSQLÓï¾äÃ»ÓĞÖ´ĞĞ£¬ÔòÌáÊ¾´íÎó
+    if(!query1.exec())//è‹¥SQLè¯­å¥æ²¡æœ‰æ‰§è¡Œï¼Œåˆ™æç¤ºé”™è¯¯
         QMessageBox::warning(this,tr("failed1"),tr("Modify error"),QMessageBox::Close);
     else{
         QMessageBox::warning(this,tr("success1"),tr("Modify success"),QMessageBox::Close);
     }
 
     //update movepartinfo
-    query2.prepare("update movepartinfo set movepartid=?,moveparttype=?,movepartname=?,runhour=?,runstage=?,planeid=?,planetype=?,startdate=?,enddate=? where id=?");//¶ÔÊı¾İ¿âÖĞTuserÖĞ¶ÔÓ¦uidµÄÒ»Ìõ¼ÇÂ¼½øĞĞĞŞ¸Ä
-    query2.addBindValue(_bottomWindow.dBTableWidget_2->item(1,1)->data(Qt::DisplayRole).toString());//¶ÔÆäSQLÓï¾äÖĞµÄÃ¿Ò»Ïî½øĞĞ·ùÖµ²Ù×÷
+    query2.prepare("update movepartinfo set movepartid=?,moveparttype=?,movepartname=?,runhour=?,runstage=?,planeid=?,planetype=?,startdate=?,enddate=? where id=?");//å¯¹æ•°æ®åº“ä¸­Tuserä¸­å¯¹åº”uidçš„ä¸€æ¡è®°å½•è¿›è¡Œä¿®æ”¹
+    query2.addBindValue(_bottomWindow.dBTableWidget_2->item(1,1)->data(Qt::DisplayRole).toString());//å¯¹å…¶SQLè¯­å¥ä¸­çš„æ¯ä¸€é¡¹è¿›è¡Œå¹…å€¼æ“ä½œ
     query2.addBindValue(_bottomWindow.dBTableWidget_2->item(1,2)->data(Qt::DisplayRole).toString());
     query2.addBindValue(_bottomWindow.dBTableWidget_2->item(1,3)->data(Qt::DisplayRole).toString());
     query2.addBindValue(_bottomWindow.dBTableWidget_2->item(1,4)->data(Qt::DisplayRole).toString());
@@ -1123,9 +1135,9 @@ void	ImageCompletionUI::savemarkresult()
     query2.addBindValue(_bottomWindow.dBTableWidget_2->item(1,7)->data(Qt::DisplayRole).toString());
     query2.addBindValue(_bottomWindow.dBTableWidget_2->item(1,8)->data(Qt::DisplayRole).toString());
     query2.addBindValue(_bottomWindow.dBTableWidget_2->item(1,9)->data(Qt::DisplayRole).toString());
-    //query2.addBindValue("F:/abrasivemarksystem/abrasivepic/"+wholefilename);//¿ÉÒÔ±£´æµ½±í8¶ÔÓ¦µÄÊı¾İ¿âµ±ÖĞ
+    //query2.addBindValue("F:/abrasivemarksystem/abrasivepic/"+wholefilename);//å¯ä»¥ä¿å­˜åˆ°è¡¨8å¯¹åº”çš„æ•°æ®åº“å½“ä¸­
     query2.addBindValue(_bottomWindow.dBTableWidget_2->item(1,0)->data(Qt::DisplayRole).toString());
-    if(!query2.exec())//ÈôSQLÓï¾äÃ»ÓĞÖ´ĞĞ£¬ÔòÌáÊ¾´íÎó
+    if(!query2.exec())//è‹¥SQLè¯­å¥æ²¡æœ‰æ‰§è¡Œï¼Œåˆ™æç¤ºé”™è¯¯
         QMessageBox::warning(this,tr("failed2"),tr("Modify error"),QMessageBox::Close);
     else{
         QMessageBox::warning(this,tr("success2"),tr("Modify success"),QMessageBox::Close);
@@ -1133,9 +1145,9 @@ void	ImageCompletionUI::savemarkresult()
 
 
     //update oilsampleinfo
-    query4.prepare("update oilsampleinfo set oilsampleid=?,sampledepartid=?,planetype=?,planeid=?,monitorpartname=?,monitorpartid=?,sampleid=?,oilworktime=?,oiladdition=?,samplereason=?,sampledepartname=?,samplestuff=?,sampledate=?,sampletime=?,samplesituation=?,samplemethod=?,samplevolume=?,sampleinstruction=?,sendstuff=?,senddate=?,sendtime=? where id=?");//¶ÔÊı¾İ¿âÖĞTuserÖĞ¶ÔÓ¦uidµÄÒ»Ìõ¼ÇÂ¼½øĞĞĞŞ¸Ä
+    query4.prepare("update oilsampleinfo set oilsampleid=?,sampledepartid=?,planetype=?,planeid=?,monitorpartname=?,monitorpartid=?,sampleid=?,oilworktime=?,oiladdition=?,samplereason=?,sampledepartname=?,samplestuff=?,sampledate=?,sampletime=?,samplesituation=?,samplemethod=?,samplevolume=?,sampleinstruction=?,sendstuff=?,senddate=?,sendtime=? where id=?");//å¯¹æ•°æ®åº“ä¸­Tuserä¸­å¯¹åº”uidçš„ä¸€æ¡è®°å½•è¿›è¡Œä¿®æ”¹
 
-    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,1)->data(Qt::DisplayRole).toString());//¶ÔÆäSQLÓï¾äÖĞµÄÃ¿Ò»Ïî½øĞĞ·ùÖµ²Ù×÷
+    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,1)->data(Qt::DisplayRole).toString());//å¯¹å…¶SQLè¯­å¥ä¸­çš„æ¯ä¸€é¡¹è¿›è¡Œå¹…å€¼æ“ä½œ
     query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,2)->data(Qt::DisplayRole).toString());
     query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,3)->data(Qt::DisplayRole).toString());
     query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,4)->data(Qt::DisplayRole).toString());
@@ -1144,7 +1156,7 @@ void	ImageCompletionUI::savemarkresult()
     query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,7)->data(Qt::DisplayRole).toString());
     query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,8)->data(Qt::DisplayRole).toString());
     query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,9)->data(Qt::DisplayRole).toString());
-    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,10)->data(Qt::DisplayRole).toString());//¶ÔÆäSQLÓï¾äÖĞµÄÃ¿Ò»Ïî½øĞĞ·ùÖµ²Ù×÷
+    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,10)->data(Qt::DisplayRole).toString());//å¯¹å…¶SQLè¯­å¥ä¸­çš„æ¯ä¸€é¡¹è¿›è¡Œå¹…å€¼æ“ä½œ
     query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,11)->data(Qt::DisplayRole).toString());
     query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,12)->data(Qt::DisplayRole).toString());
     query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,13)->data(Qt::DisplayRole).toString());
@@ -1158,7 +1170,7 @@ void	ImageCompletionUI::savemarkresult()
     query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,21)->data(Qt::DisplayRole).toString());
 
     query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,0)->data(Qt::DisplayRole).toString());
-    if(!query4.exec())//ÈôSQLÓï¾äÃ»ÓĞÖ´ĞĞ£¬ÔòÌáÊ¾´íÎó
+    if(!query4.exec())//è‹¥SQLè¯­å¥æ²¡æœ‰æ‰§è¡Œï¼Œåˆ™æç¤ºé”™è¯¯
         QMessageBox::warning(this,tr("failed4"),tr("Modify error"),QMessageBox::Close);
     else{
         QMessageBox::warning(this,tr("success4"),tr("Modify success"),QMessageBox::Close);
@@ -1166,8 +1178,8 @@ void	ImageCompletionUI::savemarkresult()
 
 
     //update oilanalyzeinfo
-    query5.prepare("update oilanalyzeinfo set oilsampleid=?,analyzedepartname=?,senddepart=?,sendreason=?,sendstuff=?,receivedate=?,receivestuff=?,contaminationanalyzemethod=?,contaminationanalyzestuff=?,contaminationanalyzedate=?,contaminationanalyzeequipment=?,contaminationanalyzereportid=?,spectroscopymethod=?,spectroscopystuff=?,spectroscopydate=?,spectroscopyequipment=?,spectroscopyreportid=?,ferrographymethod=?,ferrographystuff=?,ferrographydate=?,ferrographyequipment=?,ferrographyreportid=?,physicochemicalmethod=?,physicochemicalstuff=?,physicochemicaldate=?,physicochemicalequipment=?,physicochemicalreportid=? where id=?");//¶ÔÊı¾İ¿âÖĞTuserÖĞ¶ÔÓ¦uidµÄÒ»Ìõ¼ÇÂ¼½øĞĞĞŞ¸Ä
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,1)->data(Qt::DisplayRole).toString());//¶ÔÆäSQLÓï¾äÖĞµÄÃ¿Ò»Ïî½øĞĞ·ùÖµ²Ù×÷
+    query5.prepare("update oilanalyzeinfo set oilsampleid=?,analyzedepartname=?,senddepart=?,sendreason=?,sendstuff=?,receivedate=?,receivestuff=?,contaminationanalyzemethod=?,contaminationanalyzestuff=?,contaminationanalyzedate=?,contaminationanalyzeequipment=?,contaminationanalyzereportid=?,spectroscopymethod=?,spectroscopystuff=?,spectroscopydate=?,spectroscopyequipment=?,spectroscopyreportid=?,ferrographymethod=?,ferrographystuff=?,ferrographydate=?,ferrographyequipment=?,ferrographyreportid=?,physicochemicalmethod=?,physicochemicalstuff=?,physicochemicaldate=?,physicochemicalequipment=?,physicochemicalreportid=? where id=?");//å¯¹æ•°æ®åº“ä¸­Tuserä¸­å¯¹åº”uidçš„ä¸€æ¡è®°å½•è¿›è¡Œä¿®æ”¹
+    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,1)->data(Qt::DisplayRole).toString());//å¯¹å…¶SQLè¯­å¥ä¸­çš„æ¯ä¸€é¡¹è¿›è¡Œå¹…å€¼æ“ä½œ
     query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,2)->data(Qt::DisplayRole).toString());
     query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,3)->data(Qt::DisplayRole).toString());
     query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,4)->data(Qt::DisplayRole).toString());
@@ -1176,7 +1188,7 @@ void	ImageCompletionUI::savemarkresult()
     query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,7)->data(Qt::DisplayRole).toString());
     query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,8)->data(Qt::DisplayRole).toString());
     query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,9)->data(Qt::DisplayRole).toString());
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,10)->data(Qt::DisplayRole).toString());//¶ÔÆäSQLÓï¾äÖĞµÄÃ¿Ò»Ïî½øĞĞ·ùÖµ²Ù×÷
+    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,10)->data(Qt::DisplayRole).toString());//å¯¹å…¶SQLè¯­å¥ä¸­çš„æ¯ä¸€é¡¹è¿›è¡Œå¹…å€¼æ“ä½œ
     query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,11)->data(Qt::DisplayRole).toString());
     query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,12)->data(Qt::DisplayRole).toString());
     query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,13)->data(Qt::DisplayRole).toString());
@@ -1197,15 +1209,15 @@ void	ImageCompletionUI::savemarkresult()
 
     query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,0)->data(Qt::DisplayRole).toString());
 
-    if(!query5.exec())//ÈôSQLÓï¾äÃ»ÓĞÖ´ĞĞ£¬ÔòÌáÊ¾´íÎó
+    if(!query5.exec())//è‹¥SQLè¯­å¥æ²¡æœ‰æ‰§è¡Œï¼Œåˆ™æç¤ºé”™è¯¯
         QMessageBox::warning(this,tr("failed5"),tr("Modify error"),QMessageBox::Close);
     else{
         QMessageBox::warning(this,tr("success5"),tr("Modify success"),QMessageBox::Close);
     }
 
     //update ferrographyinfo
-    query6.prepare("update ferrographyinfo set ferrographysheetid=?,ferrographyreportid=?,oilsampleid=?,ferrographyanalyzertype=?,ferrographymakeoilconsumption=?,ferrographymakemethod=?,ferrographymakestuff=? where id=?");//¶ÔÊı¾İ¿âÖĞTuserÖĞ¶ÔÓ¦uidµÄÒ»Ìõ¼ÇÂ¼½øĞĞĞŞ¸Ä
-    query6.addBindValue(_bottomWindow.dBTableWidget_6->item(1,1)->data(Qt::DisplayRole).toString());//¶ÔÆäSQLÓï¾äÖĞµÄÃ¿Ò»Ïî½øĞĞ·ùÖµ²Ù×÷
+    query6.prepare("update ferrographyinfo set ferrographysheetid=?,ferrographyreportid=?,oilsampleid=?,ferrographyanalyzertype=?,ferrographymakeoilconsumption=?,ferrographymakemethod=?,ferrographymakestuff=? where id=?");//å¯¹æ•°æ®åº“ä¸­Tuserä¸­å¯¹åº”uidçš„ä¸€æ¡è®°å½•è¿›è¡Œä¿®æ”¹
+    query6.addBindValue(_bottomWindow.dBTableWidget_6->item(1,1)->data(Qt::DisplayRole).toString());//å¯¹å…¶SQLè¯­å¥ä¸­çš„æ¯ä¸€é¡¹è¿›è¡Œå¹…å€¼æ“ä½œ
     query6.addBindValue(_bottomWindow.dBTableWidget_6->item(1,2)->data(Qt::DisplayRole).toString());
     query6.addBindValue(_bottomWindow.dBTableWidget_6->item(1,3)->data(Qt::DisplayRole).toString());
     query6.addBindValue(_bottomWindow.dBTableWidget_6->item(1,4)->data(Qt::DisplayRole).toString());
@@ -1213,15 +1225,15 @@ void	ImageCompletionUI::savemarkresult()
     query6.addBindValue(_bottomWindow.dBTableWidget_6->item(1,6)->data(Qt::DisplayRole).toString());
     query6.addBindValue(_bottomWindow.dBTableWidget_6->item(1,7)->data(Qt::DisplayRole).toString());
     query6.addBindValue(_bottomWindow.dBTableWidget_6->item(1,0)->data(Qt::DisplayRole).toString());
-    if(!query6.exec())//ÈôSQLÓï¾äÃ»ÓĞÖ´ĞĞ£¬ÔòÌáÊ¾´íÎó
+    if(!query6.exec())//è‹¥SQLè¯­å¥æ²¡æœ‰æ‰§è¡Œï¼Œåˆ™æç¤ºé”™è¯¯
         QMessageBox::warning(this,tr("failed6"),tr("Modify error"),QMessageBox::Close);
     else{
         QMessageBox::warning(this,tr("success6"),tr("Modify success"),QMessageBox::Close);
     }
 
     //update ferrographypicinfo
-    query7.prepare("update ferrographypicinfo set ferrographypicid=?,ferrographysheetid=?,ferrographyreportid=?,microscopictype=?,imageacquisitiontype=?,lightsourcetype=?,magnification=?,imageacquisitionarea=?,imageacquisitionstuff=?,ferrographypicpath=?,imagerecognitioninfoanalysis=?,imagesymbol=? where id=?");//¶ÔÊı¾İ¿âÖĞTuserÖĞ¶ÔÓ¦uidµÄÒ»Ìõ¼ÇÂ¼½øĞĞĞŞ¸Ä
-    query7.addBindValue(_bottomWindow.dBTableWidget_7->item(1,1)->data(Qt::DisplayRole).toString());//¶ÔÆäSQLÓï¾äÖĞµÄÃ¿Ò»Ïî½øĞĞ·ùÖµ²Ù×÷
+    query7.prepare("update ferrographypicinfo set ferrographypicid=?,ferrographysheetid=?,ferrographyreportid=?,microscopictype=?,imageacquisitiontype=?,lightsourcetype=?,magnification=?,imageacquisitionarea=?,imageacquisitionstuff=?,ferrographypicpath=?,imagerecognitioninfoanalysis=?,imagesymbol=? where id=?");//å¯¹æ•°æ®åº“ä¸­Tuserä¸­å¯¹åº”uidçš„ä¸€æ¡è®°å½•è¿›è¡Œä¿®æ”¹
+    query7.addBindValue(_bottomWindow.dBTableWidget_7->item(1,1)->data(Qt::DisplayRole).toString());//å¯¹å…¶SQLè¯­å¥ä¸­çš„æ¯ä¸€é¡¹è¿›è¡Œå¹…å€¼æ“ä½œ
     query7.addBindValue(_bottomWindow.dBTableWidget_7->item(1,2)->data(Qt::DisplayRole).toString());
     query7.addBindValue(_bottomWindow.dBTableWidget_7->item(1,3)->data(Qt::DisplayRole).toString());
     query7.addBindValue(_bottomWindow.dBTableWidget_7->item(1,4)->data(Qt::DisplayRole).toString());
@@ -1234,9 +1246,9 @@ void	ImageCompletionUI::savemarkresult()
     query7.addBindValue(_bottomWindow.dBTableWidget_7->item(1,11)->data(Qt::DisplayRole).toString());
     //query7.addBindValue(_bottomWindow.dBTableWidget_7->item(1,12)->data(Qt::DisplayRole).toString());
     _bottomWindow.dBTableWidget_7->setItem(1,12,new QTableWidgetItem("Y"));
-    query7.addBindValue("Y");//Ä¬ÈÏ±ê×¢¹ıÁËÖ®ºó¶¼»áµã»÷±£´æ±ê×¢½á¹û½ø¶ø½«ÌúÆ×Æ¬±êÊ¶·ûºÅÉèÎªY
+    query7.addBindValue("Y");//é»˜è®¤æ ‡æ³¨è¿‡äº†ä¹‹åéƒ½ä¼šç‚¹å‡»ä¿å­˜æ ‡æ³¨ç»“æœè¿›è€Œå°†é“è°±ç‰‡æ ‡è¯†ç¬¦å·è®¾ä¸ºY
     query7.addBindValue(_bottomWindow.dBTableWidget_7->item(1,0)->data(Qt::DisplayRole).toString());
-    if(!query7.exec())//ÈôSQLÓï¾äÃ»ÓĞÖ´ĞĞ£¬ÔòÌáÊ¾´íÎó
+    if(!query7.exec())//è‹¥SQLè¯­å¥æ²¡æœ‰æ‰§è¡Œï¼Œåˆ™æç¤ºé”™è¯¯
         QMessageBox::warning(this,tr("failed7"),tr("Modify error"),QMessageBox::Close);
     else{
         QMessageBox::warning(this,tr("success7"),tr("Modify success"),QMessageBox::Close);
@@ -1245,18 +1257,18 @@ void	ImageCompletionUI::savemarkresult()
 
     //update abrasivemarkinfo
     query8.prepare("update abrasivemarkinfo set abrasiveid=?,ferrographypicid=?,ferrographysheetid=?,ferrographyreportid=?,abrasivemarkstuff=?,abrasivepicpath=?,abrasivematerial=?,abrasiveposition=?,abrasivesize=?,abrasivesperimeter=?,abrasiveshape=?,abrasivecolor=?,abrasivesurfacetexturetype=?,abrasiveweartype=?,abrasivedamagetype=?,abrasivemechanismtype=?,abrasivefaultinformationreflection=?,abrasivetypical=? where id=?");
-    query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,1)->data(Qt::DisplayRole).toString());//¶ÔÆäSQLÓï¾äÖĞµÄÃ¿Ò»Ïî½øĞĞ·ùÖµ²Ù×÷
+    query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,1)->data(Qt::DisplayRole).toString());//å¯¹å…¶SQLè¯­å¥ä¸­çš„æ¯ä¸€é¡¹è¿›è¡Œå¹…å€¼æ“ä½œ
     query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,2)->data(Qt::DisplayRole).toString());
     query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,3)->data(Qt::DisplayRole).toString());
     query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,4)->data(Qt::DisplayRole).toString());
     query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,5)->data(Qt::DisplayRole).toString());
     _bottomWindow.dBTableWidget_8->setItem(1,6,new QTableWidgetItem("F:/abrasivemarksystem/abrasivepic/"+wholefilename));
     //query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,6)->data(Qt::DisplayRole).toString());
-    query8.addBindValue("F:/abrasivemarksystem/abrasivepic/"+wholefilename);//Ä¬ÈÏ±ê×¢¹ıÁËÖ®ºó¶¼»áµã»÷±£´æ±ê×¢½á¹û£¬½ø¶ø½«±ê×¢µÃµ½µÄÄ¥Á£¶ÔÓ¦µÄÂ·¾¶´¢´æµ½Êı¾İ¿âÖĞ
+    query8.addBindValue("F:/abrasivemarksystem/abrasivepic/"+wholefilename);//é»˜è®¤æ ‡æ³¨è¿‡äº†ä¹‹åéƒ½ä¼šç‚¹å‡»ä¿å­˜æ ‡æ³¨ç»“æœï¼Œè¿›è€Œå°†æ ‡æ³¨å¾—åˆ°çš„ç£¨ç²’å¯¹åº”çš„è·¯å¾„å‚¨å­˜åˆ°æ•°æ®åº“ä¸­
     query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,7)->data(Qt::DisplayRole).toString());
     query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,8)->data(Qt::DisplayRole).toString());
     query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,9)->data(Qt::DisplayRole).toString());
-    query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,10)->data(Qt::DisplayRole).toString());//¶ÔÆäSQLÓï¾äÖĞµÄÃ¿Ò»Ïî½øĞĞ·ùÖµ²Ù×÷
+    query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,10)->data(Qt::DisplayRole).toString());//å¯¹å…¶SQLè¯­å¥ä¸­çš„æ¯ä¸€é¡¹è¿›è¡Œå¹…å€¼æ“ä½œ
     query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,11)->data(Qt::DisplayRole).toString());
     query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,12)->data(Qt::DisplayRole).toString());
     query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,13)->data(Qt::DisplayRole).toString());
@@ -1266,12 +1278,12 @@ void	ImageCompletionUI::savemarkresult()
     query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,17)->data(Qt::DisplayRole).toString());
     query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,18)->data(Qt::DisplayRole).toString());
     query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,0)->data(Qt::DisplayRole).toString());
-    if(!query8.exec())//ÈôSQLÓï¾äÃ»ÓĞÖ´ĞĞ£¬ÔòÌáÊ¾´íÎó
+    if(!query8.exec())//è‹¥SQLè¯­å¥æ²¡æœ‰æ‰§è¡Œï¼Œåˆ™æç¤ºé”™è¯¯
         QMessageBox::warning(this,tr("failed8"),tr("Modify error"),QMessageBox::Close);
     else{
         QMessageBox::warning(this,tr("success8"),tr("Modify success"),QMessageBox::Close);
     }
-    db.close();//¹Ø±ÕÊı¾İ¿â
+    db.close();//å…³é—­æ•°æ®åº“
     _leftWindow.tableWidget->setItem(k,2,new QTableWidgetItem("Y"));
 
 }
@@ -1319,6 +1331,54 @@ void ImageCompletionUI::updateLog()
         delete [] log_str;
         log_str = NULL;
     }
+}
+
+void ImageCompletionUI::showData()
+{
+    QSqlDatabase db;
+    if(!createConnection(db))
+    {
+        QMessageBox::critical(0, qApp->tr("Cannot open database"),
+                              qApp->tr("æ•°æ®åº“è¿æ¥å¤±è´¥!"),
+                              QMessageBox::Cancel);
+    }
+
+
+    bool ret;
+    QSqlRecord rec;
+
+    QString tableNames[8] = { "equipmentinfo", "movepartinfo", "movepartrepairinfo", "oilsampleinfo", "oilanalyzeinfo", "ferrographyinfo", "ferrographypicinfo", "abrasivemarkinfo" };
+
+    for(int k = 1; k <= 8; k++)
+    {
+        QSqlQuery query;
+        ret = query.exec(QString("select * from %1").arg(tableNames[k-1]));
+        rec = query.record();
+        if(ret)
+        {
+            int i = 0;
+            while(query.next())
+            {
+                for(int j=0; j<rec.count(); j++)
+                {
+                    switch(k)
+                    {
+                    case 1: _bottomWindow.dBTableWidget_1->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                    case 2: _bottomWindow.dBTableWidget_2->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                    case 3: _bottomWindow.dBTableWidget_3->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                    case 4: _bottomWindow.dBTableWidget_4->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                    case 5: _bottomWindow.dBTableWidget_5->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                    case 6: _bottomWindow.dBTableWidget_6->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                    case 7: _bottomWindow.dBTableWidget_7->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                    case 8: _bottomWindow.dBTableWidget_8->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                    }
+                }
+                i++;
+            }
+        }
+    }
+
+    db.close();
 }
 
 void ImageCompletionUI::loadLabelMap()
@@ -1679,8 +1739,8 @@ void ImageCompletionUI::scaling()
     _regionCompetitionDialog.sliderBasicOp->setMinimum(1);
     _regionCompetitionDialog.sliderBasicOp->setValue(10);
 
-    _regionCompetitionDialog.labelSliderLeft->setText(tr("abcd"));
-    _regionCompetitionDialog.labelSliderRight->setText(tr("abcd"));
+    _regionCompetitionDialog.labelSliderLeft->setText(tr("å°"));
+    _regionCompetitionDialog.labelSliderRight->setText(tr("å¤§"));
 }
 
 void ImageCompletionUI::brighting()
@@ -1689,8 +1749,8 @@ void ImageCompletionUI::brighting()
     _regionCompetitionDialog.sliderBasicOp->setMinimum(-100);
     _regionCompetitionDialog.sliderBasicOp->setValue(0);
 
-    _regionCompetitionDialog.labelSliderLeft->setText(tr("abcd"));
-    _regionCompetitionDialog.labelSliderRight->setText(tr("abcd"));
+    _regionCompetitionDialog.labelSliderLeft->setText(tr("æš—"));
+    _regionCompetitionDialog.labelSliderRight->setText(tr("äº®"));
 }
 
 void ImageCompletionUI::notColor()
@@ -1728,6 +1788,7 @@ void ImageCompletionUI::actionSliderReleased()
 
 void ImageCompletionUI::userManagement()
 {
+    (new UserManagement)->show();
 }
 
 bool ImageCompletionUI::maybeSave()
@@ -1932,12 +1993,12 @@ void ImageCompletionUI::undo()
 {
 }
 
-// ´ÓÎÄ¼şµ¼ÈëÊı¾İ--zhyn
+// ä»æ–‡ä»¶å¯¼å…¥æ•°æ®--zhyn
 bool ImageCompletionUI::importDB(const QString &path)
 {
     /**
-     *@brief ¶ÁÈ¡sqlÎÄ±¾ÄÚÈİ,²¢Ğ´ÈëÖÁÊı¾İ¿â
-     *@param path sqlÎÄ¼şÂ·¾¶
+     *@brief è¯»å–sqlæ–‡æœ¬å†…å®¹,å¹¶å†™å…¥è‡³æ•°æ®åº“
+     *@param path sqlæ–‡ä»¶è·¯å¾„
      */
     QMessageBox::warning(this,"warning","this is private function to import SQL Data",QMessageBox::Close);
     QSqlDatabase gAuthDB;
@@ -1953,7 +2014,7 @@ bool ImageCompletionUI::importDB(const QString &path)
     while(!in.atEnd())
     {
         QString sql=in.readLine();
-        // Í¨¹ı·ÖÎövalues(E'),ÅĞ¶ÏÊÇ·ñÓĞ¶ş½øÖÆÊı¾İ,ÈçÃ»ÓĞÖ±½ÓÔËĞĞsqlÓï¾ä,ÈçÓĞÔòĞèÒª½«16½øÖÆÎÄ±¾×ª»»ÎªblobÊı¾İ
+        // é€šè¿‡åˆ†ævalues(E'),åˆ¤æ–­æ˜¯å¦æœ‰äºŒè¿›åˆ¶æ•°æ®,å¦‚æ²¡æœ‰ç›´æ¥è¿è¡Œsqlè¯­å¥,å¦‚æœ‰åˆ™éœ€è¦å°†16è¿›åˆ¶æ–‡æœ¬è½¬æ¢ä¸ºblobæ•°æ®
         QRegExp reg("E'([0-9a-f]{1,})'");
 
         if(!sql.contains(reg))
@@ -1965,7 +2026,7 @@ bool ImageCompletionUI::importDB(const QString &path)
             int pos=0;
             QStringList bList;
 
-            // Ì½Ë÷ËùÓĞµÄblob×Ö¶Î
+            // æ¢ç´¢æ‰€æœ‰çš„blobå­—æ®µ
             while((pos=reg.indexIn(sql,pos))!=-1)
             {
                 bList.append(reg.cap(0));
@@ -1974,7 +2035,7 @@ bool ImageCompletionUI::importDB(const QString &path)
                 pos+=reg.matchedLength();
             }
 
-            // blob×Ö¶ÎÌî³äÕ¼Î»·û
+            // blobå­—æ®µå¡«å……å ä½ç¬¦
             foreach(QString key,bList)
             {
                 sql.replace(key,"?");
@@ -1982,12 +2043,12 @@ bool ImageCompletionUI::importDB(const QString &path)
 
             query.prepare(sql);
 
-            // °ó¶¨Õ¼Î»·ûÊı¾İ
+            // ç»‘å®šå ä½ç¬¦æ•°æ®
             for(int i=0;i<bList.size();i++)
             {
-                // È¥³ıE''
+                // å»é™¤E''
                 QString hexBlob=bList[i].mid(2,bList[i].size()-1);
-                // »¹Ô­16½øÖÆÊı¾İ
+                // è¿˜åŸ16è¿›åˆ¶æ•°æ®
                 QByteArray ba=QByteArray::fromHex(hexBlob.toLocal8Bit());
 
                 query.bindValue(i,ba);
@@ -1998,12 +2059,12 @@ bool ImageCompletionUI::importDB(const QString &path)
     return true;
 }
 
-// µ¼³öÊı¾İÊı¾İµ½ÎÄ¼ş--zhyn
+// å¯¼å‡ºæ•°æ®æ•°æ®åˆ°æ–‡ä»¶--zhyn
 bool ImageCompletionUI::exportDB(const QString &path)
 {
     /**
-     *@brief µ¼³öÊı¾İ¿âÊı¾İµ½ÎÄ¼şÖĞ
-     *@param path ÎÄ¼şÂ·¾¶
+     *@brief å¯¼å‡ºæ•°æ®åº“æ•°æ®åˆ°æ–‡ä»¶ä¸­
+     *@param path æ–‡ä»¶è·¯å¾„
      */
     //QMessageBox::warning(this,"warning","this is private function to export SQL Data",QMessageBox::Close);
 
@@ -2013,7 +2074,7 @@ bool ImageCompletionUI::exportDB(const QString &path)
 
     QStringList vList;
 
-    // ÁĞ³öÊı¾İ¿âËùÓĞÃû³Æ
+    // åˆ—å‡ºæ•°æ®åº“æ‰€æœ‰åç§°
     QStringList tables=gAuthDB.tables();
     foreach(QString table,tables)
     {
@@ -2024,10 +2085,10 @@ bool ImageCompletionUI::exportDB(const QString &path)
         QSqlRecord record=query.record();
         while(query.next())
         {
-            QString prefix=QString("insert into %1(").arg(table); // ¼ÇÂ¼ÊôĞÔ×Ö¶ÎÃû
-            QString suffix="values(";                             // ¼ÇÂ¼ÊôĞÔÖµ
+            QString prefix=QString("insert into %1(").arg(table); // è®°å½•å±æ€§å­—æ®µå
+            QString suffix="values(";                             // è®°å½•å±æ€§å€¼
 
-            // ±éÀúÊôĞÔ×Ö¶Î
+            // éå†å±æ€§å­—æ®µ
             for(int i=0;i<record.count();i++)
             {
                 QSqlField field=record.field(i);
@@ -2048,7 +2109,7 @@ bool ImageCompletionUI::exportDB(const QString &path)
                         suffix+="null";
                     }else
                     {
-                        suffix+=QString("E'%1'").arg(data.toHex().data()); // blobÊı¾İ°´16½øÖÆ¸ñÊ½µ¼³ö
+                        suffix+=QString("E'%1'").arg(data.toHex().data()); // blobæ•°æ®æŒ‰16è¿›åˆ¶æ ¼å¼å¯¼å‡º
                     }
                 }
                     break;
@@ -2071,7 +2132,7 @@ bool ImageCompletionUI::exportDB(const QString &path)
                     suffix+=")";
                 }
             }
-            // ×é×°sqlÓï¾ä insert into auth_test values(0,'hello',E'003f')
+            // ç»„è£…sqlè¯­å¥ insert into auth_test values(0,'hello',E'003f')
             QString iSql=QString("%1 %2;").arg(prefix).arg(suffix);
             vList.append(iSql);
         }
@@ -2080,7 +2141,7 @@ bool ImageCompletionUI::exportDB(const QString &path)
     QFile file(path);
     file.open(QIODevice::WriteOnly|QIODevice::Truncate);
 
-    // ½«sqlÓï¾äĞ´ÈëÎÄ¼ş
+    // å°†sqlè¯­å¥å†™å…¥æ–‡ä»¶
     QTextStream out(&file);
     foreach(QString line,vList)
     {
@@ -2090,37 +2151,37 @@ bool ImageCompletionUI::exportDB(const QString &path)
     return true;
 }
 
-// ¿½±´ÎÄ¼ş--zhyn
+// æ‹·è´æ–‡ä»¶--zhyn
 bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIfExits)
 {
     /**
-     *@brief ½«fromDirÎÄ¼ş¼ĞÄÚµÄÍ¼Æ¬ÎÄ¼ş£¬¿½±´µ½toDirÎÄ¼ş¼ĞÏÂ
-     *@param fromDir Í¼Æ¬ÎÄ¼şµÄÔ´Ä¿Â¼
-     *@param toDir   ¿½±´Í¼Æ¬ÎÄ¼şµÄÄ¿±êÄ¿Â¼
-     *@param convertIfExits ÊÇ·ñ¸²¸ÇÒÑ´æÔÚÎÄ¼ş±êÊ¶£¬Ä¬ÈÏÖµÊÇfalse
+     *@brief å°†fromDiræ–‡ä»¶å¤¹å†…çš„å›¾ç‰‡æ–‡ä»¶ï¼Œæ‹·è´åˆ°toDiræ–‡ä»¶å¤¹ä¸‹
+     *@param fromDir å›¾ç‰‡æ–‡ä»¶çš„æºç›®å½•
+     *@param toDir   æ‹·è´å›¾ç‰‡æ–‡ä»¶çš„ç›®æ ‡ç›®å½•
+     *@param convertIfExits æ˜¯å¦è¦†ç›–å·²å­˜åœ¨æ–‡ä»¶æ ‡è¯†ï¼Œé»˜è®¤å€¼æ˜¯false
      */
     QDir sourceDir(fromDir);
     QDir targetDir(toDir);
 
     if(!targetDir.exists())
     {
-        //< Èç¹ûÄ¿±êÄ¿Â¼²»´æÔÚ£¬Ôò½øĞĞ´´½¨
+        //< å¦‚æœç›®æ ‡ç›®å½•ä¸å­˜åœ¨ï¼Œåˆ™è¿›è¡Œåˆ›å»º
         if(!targetDir.mkdir(targetDir.absolutePath()))
             return false;
     }
 
     QFileInfoList fileInfoList = sourceDir.entryInfoList();
-    // ±éÀúËùÓĞÎÄ¼şĞÅÏ¢
+    // éå†æ‰€æœ‰æ–‡ä»¶ä¿¡æ¯
     foreach(QFileInfo fileInfo, fileInfoList)
     {
-        // È¥³ıµ±Ç°Ä¿Â¼ºÍ¸¸Ä¿Â¼
+        // å»é™¤å½“å‰ç›®å½•å’Œçˆ¶ç›®å½•
         if(fileInfo.fileName() == "." || fileInfo.fileName() == "..")
             continue;
-        // Êı¾İ¿âÎÄ¼ş´¦Àí
+        // æ•°æ®åº“æ–‡ä»¶å¤„ç†
         if(fileInfo.fileName().split(".")[1] == "sql")
             qDebug()<<fileInfo.fileName();
 
-        // µ±ÎªÄ¿Â¼Ê±£¬µİ¹éµÄ½øĞĞcopy
+        // å½“ä¸ºç›®å½•æ—¶ï¼Œé€’å½’çš„è¿›è¡Œcopy
         if(fileInfo.isDir())
         {
             if(!copyFiles(fileInfo.filePath(),
@@ -2129,12 +2190,12 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
                 return false;
         }
         else
-        {   //µ±ÔÊĞí¸²¸Ç²Ù×÷Ê±£¬½«¾ÉÎÄ¼ş½øĞĞÉ¾³ı²Ù×÷
+        {   //å½“å…è®¸è¦†ç›–æ“ä½œæ—¶ï¼Œå°†æ—§æ–‡ä»¶è¿›è¡Œåˆ é™¤æ“ä½œ
             if(convertIfExits && targetDir.exists(fileInfo.fileName()))
             {
                 targetDir.remove(fileInfo.fileName());
             }
-            // ½øĞĞÎÄ¼şcopy
+            // è¿›è¡Œæ–‡ä»¶copy
             if(!QFile::copy(fileInfo.filePath(),
                             targetDir.filePath(fileInfo.fileName()))){
                 return false;
@@ -2144,18 +2205,18 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
     return true;
 }
 
-// ÅúÁ¿Êı¾İµ¼Èë--zhyn
+// æ‰¹é‡æ•°æ®å¯¼å…¥--zhyn
 void ImageCompletionUI::importData()
 {
     QMessageBox::warning(this,"waring","this is slot of import data",QMessageBox::Close);
 }
 
-// ÅúÁ¿Êı¾İµ¼³ö--zhyn
+// æ‰¹é‡æ•°æ®å¯¼å‡º--zhyn
 void ImageCompletionUI::exportData()
 {
     //QMessageBox::warning(this,"warning","this is slot of export data",QMessageBox::Close);
 
-    QFileDialog *sourceDir = new QFileDialog(this,tr("Ñ¡ÔñÌúÆ×Í¼Æ¬Ä¿Â¼"),"","");
+    QFileDialog *sourceDir = new QFileDialog(this,tr("é€‰æ‹©é“è°±å›¾ç‰‡ç›®å½•"),"","");
     sourceDir->setFileMode(QFileDialog::DirectoryOnly);
     sourceDir->setViewMode(QFileDialog::Detail);
     QString sourcePath;
@@ -2168,7 +2229,7 @@ void ImageCompletionUI::exportData()
     else
         return;
 
-    QFileDialog *resultDir = new QFileDialog(this,tr("Ñ¡ÔñÄ¥Á£±ê×¢½á¹ûÄ¿Â¼"),"","");
+    QFileDialog *resultDir = new QFileDialog(this,tr("é€‰æ‹©ç£¨ç²’æ ‡æ³¨ç»“æœç›®å½•"),"","");
     resultDir->setFileMode(QFileDialog::DirectoryOnly);
     resultDir->setViewMode(QFileDialog::Detail);
     QString resultPath;
@@ -2181,7 +2242,7 @@ void ImageCompletionUI::exportData()
     else
         return;
 
-    QFileDialog *targetDir = new QFileDialog(this,tr("Ñ¡Ôñ´ò°ü´æµµÄ¿Â¼"),"","");
+    QFileDialog *targetDir = new QFileDialog(this,tr("é€‰æ‹©æ‰“åŒ…å­˜æ¡£ç›®å½•"),"","");
     targetDir->setFileMode(QFileDialog::DirectoryOnly);
     targetDir->setViewMode(QFileDialog::Detail);
     QString targetPath;
@@ -2201,15 +2262,16 @@ void ImageCompletionUI::exportData()
     QString resulttargetPath = targetPath + "\\resultFile";
     QString databackupFileName = targetPath + "\\databackup.sql";
 
-    // µ¼³öÊı¾İ¿âĞÅÏ¢
+    // å¯¼å‡ºæ•°æ®åº“ä¿¡æ¯
     /* edit code */
 
 
     if(this->copyFiles(sourcePath,sourcetargetPath)
             && this->copyFiles(resultPath,resulttargetPath)
             && this->exportDB(databackupFileName))
-        QMessageBox::warning(this,tr("ÅúÁ¿Êı¾İµ¼³öÌáÊ¾"),tr("ÅúÁ¿Êı¾İµ¼³ö³É¹¦"),QMessageBox::Close);
+        QMessageBox::warning(this,tr("æ‰¹é‡æ•°æ®å¯¼å‡ºæç¤º"),tr("æ‰¹é‡æ•°æ®å¯¼å‡ºæˆåŠŸ"),QMessageBox::Close);
     else
-        QMessageBox::warning(this,tr("ÅúÁ¿Êı¾İµ¼³öÌáÊ¾"),tr("ÅúÁ¿Êı¾İµ¼³öÊ§°Ü"),QMessageBox::Close);
+        QMessageBox::warning(this,tr("æ‰¹é‡æ•°æ®å¯¼å‡ºæç¤º"),tr("æ‰¹é‡æ•°æ®å¯¼å‡ºå¤±è´¥"),QMessageBox::Close);
 }
+
 

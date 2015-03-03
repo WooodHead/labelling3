@@ -6,84 +6,114 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>761</width>
-    <height>439</height>
+    <width>889</width>
+    <height>532</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QWidget" name="widget" native="true">
-   <property name="geometry">
-    <rect>
-     <x>-1</x>
-     <y>-1</y>
-     <width>761</width>
-     <height>441</height>
-    </rect>
-   </property>
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QTableView" name="tableView"/>
-    </item>
-    <item row="0" column="1">
-     <widget class="QWidget" name="widget_2" native="true">
-      <widget class="QPushButton" name="pushButton">
-       <property name="geometry">
-        <rect>
-         <x>15</x>
-         <y>9</y>
-         <width>85</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>添加用户</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_2">
-       <property name="geometry">
-        <rect>
-         <x>15</x>
-         <y>45</y>
-         <width>85</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>删除用户</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_3">
-       <property name="geometry">
-        <rect>
-         <x>15</x>
-         <y>81</y>
-         <width>85</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>修改用户</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButton_4">
-       <property name="geometry">
-        <rect>
-         <x>15</x>
-         <y>117</y>
-         <width>85</width>
-         <height>30</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>查询用户</string>
-       </property>
-      </widget>
-     </widget>
-    </item>
-   </layout>
-  </widget>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QWidget" name="widget" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QTableView" name="_userTableView">
+        <property name="minimumSize">
+         <size>
+          <width>543</width>
+          <height>413</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>543</width>
+          <height>413</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QWidget" name="widget_2" native="true">
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <layout class="QGridLayout" name="gridLayout_2">
+           <item row="0" column="0">
+            <widget class="QPushButton" name="_addUser">
+             <property name="text">
+              <string>添加用户</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QPushButton" name="_deleteUser">
+             <property name="text">
+              <string>删除用户</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QPushButton" name="_editUser">
+             <property name="text">
+              <string>修改用户</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QPushButton" name="_searchUser">
+             <property name="text">
+              <string>查询用户</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>274</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBox">
+           <property name="title">
+            <string>查询项</string>
+           </property>
+           <widget class="QLabel" name="label">
+            <property name="geometry">
+             <rect>
+              <x>40</x>
+              <y>70</y>
+              <width>66</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+        <zorder>groupBox</zorder>
+        <zorder>_editUser</zorder>
+        <zorder>_searchUser</zorder>
+        <zorder>_addUser</zorder>
+        <zorder>_deleteUser</zorder>
+        <zorder>verticalSpacer</zorder>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

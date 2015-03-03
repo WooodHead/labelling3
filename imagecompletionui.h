@@ -9,6 +9,7 @@
 #include <QDir>
 #include <QSqlRecord>
 #include <QSqlField>
+#include <QSqlTableModel>
 
 //#include "ui_imagecompletionui.h"
 #include "ui_SceneCompletionWidget.h"
@@ -208,6 +209,8 @@ private:
     QAction                             *_exportDataAction;
     QAction                             *_importDataAction;
 
+    QAction             *_openBatchAction;
+
     QComboBox           *_strikeCombobox;
     QComboBox           *_strikeThicknessCombobox;
     QComboBox           *_lineThicknessCombobox;
@@ -244,6 +247,8 @@ private:
     QColor _brush2_color;
     QColor _brush3_color;
 
+    void showData();
+
 protected:
 
     void			keyPressEvent(QKeyEvent *e);
@@ -254,7 +259,7 @@ private slots:
     //    the open file acction is triggered. (Menu File->Open or Toolbar->Open)
     ////////////////////////////////////////////////////////////////////////////////////
     void	open();
-
+    void    batchOpen();
     ////////////////////////////////////////////////////////////////////////////////////
     //    Save File slot. This function will be executed when
     //    the save file acction is triggered. (Menu File->Save or Toolbar->Save)

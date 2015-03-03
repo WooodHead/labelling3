@@ -2,6 +2,7 @@
 #define USERMANAGEMENT_H
 
 #include <QDialog>
+#include <QSqlTableModel>
 
 namespace Ui {
 class UserManagement;
@@ -15,8 +16,17 @@ public:
     explicit UserManagement(QWidget *parent = 0);
     ~UserManagement();
     
+private slots:
+    void on__deleteUser_clicked();
+
+    void on__addUser_clicked();
+
 private:
     Ui::UserManagement *ui;
+
+    QSqlTableModel *_model;
+
+    void initTableView();
 };
 
 #endif // USERMANAGEMENT_H
