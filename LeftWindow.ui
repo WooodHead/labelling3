@@ -19,174 +19,147 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QTabWidget" name="tabWidgetLeftWindow">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>241</width>
-     <height>481</height>
-    </rect>
-   </property>
-   <property name="toolTip">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;查询&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-   <property name="currentIndex">
-    <number>0</number>
-   </property>
-   <widget class="QWidget" name="tabImage">
-    <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;查询&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-    <property name="statusTip">
-     <string>查询</string>
-    </property>
-    <property name="accessibleName">
-     <string>查询</string>
-    </property>
-    <property name="autoFillBackground">
-     <bool>true</bool>
-    </property>
-    <attribute name="title">
-     <string>图谱</string>
-    </attribute>
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <widget class="QScrollArea" name="scrollArea">
-       <property name="widgetResizable">
-        <bool>true</bool>
-       </property>
-       <widget class="QWidget" name="scrollAreaWidgetContents">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>215</width>
-          <height>436</height>
-         </rect>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_2">
-         <item row="0" column="0">
-          <widget class="QTableWidget" name="tableWidget">
-           <row>
-            <property name="text">
-             <string>1</string>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string>2</string>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string>3</string>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string>4</string>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string>5</string>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string>6</string>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string>7</string>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string>8</string>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string>9</string>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string>10</string>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string>11</string>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string>12</string>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string>13</string>
-            </property>
-           </row>
-           <row>
-            <property name="text">
-             <string>14</string>
-            </property>
-           </row>
-           <column>
-            <property name="text">
-             <string>铁谱图片名称</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>铁谱图片路径</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>是否标注</string>
-            </property>
-           </column>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="tabSearch">
-    <attribute name="title">
-     <string>查询</string>
-    </attribute>
-    <widget class="QScrollArea" name="scrollAreaSearch">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>251</width>
-       <height>451</height>
-      </rect>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QTabWidget" name="tabWidgetLeftWindow">
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;查询&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
-     <property name="widgetResizable">
-      <bool>true</bool>
+     <property name="currentIndex">
+      <number>0</number>
      </property>
-     <widget class="QWidget" name="scrollAreaSearchWidgetContents">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>249</width>
-        <height>449</height>
-       </rect>
+     <widget class="QWidget" name="tabImage">
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;查询&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
-      <widget class="QTreeView" name="treeViewTabSearch">
+      <property name="statusTip">
+       <string>查询</string>
+      </property>
+      <property name="accessibleName">
+       <string>查询</string>
+      </property>
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
+      <attribute name="title">
+       <string>图谱</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QScrollArea" name="scrollArea">
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>189</width>
+            <height>407</height>
+           </rect>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_2">
+           <item row="0" column="0">
+            <widget class="QTableWidget" name="tableWidget">
+             <row>
+              <property name="text">
+               <string>1</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>2</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>3</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>4</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>5</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>6</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>7</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>8</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>9</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>10</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>11</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>12</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>13</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>14</string>
+              </property>
+             </row>
+             <column>
+              <property name="text">
+               <string>铁谱图片名称</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>铁谱图片路径</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>是否标注</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabSearch">
+      <attribute name="title">
+       <string>查询</string>
+      </attribute>
+      <widget class="QScrollArea" name="scrollAreaSearch">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -195,61 +168,84 @@
          <height>451</height>
         </rect>
        </property>
-       <property name="midLineWidth">
-        <number>1</number>
-       </property>
-       <property name="tabKeyNavigation">
+       <property name="widgetResizable">
         <bool>true</bool>
        </property>
+       <widget class="QWidget" name="scrollAreaSearchWidgetContents">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>249</width>
+          <height>449</height>
+         </rect>
+        </property>
+        <widget class="QTreeView" name="treeViewTabSearch">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>251</width>
+           <height>451</height>
+          </rect>
+         </property>
+         <property name="midLineWidth">
+          <number>1</number>
+         </property>
+         <property name="tabKeyNavigation">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </widget>
       </widget>
      </widget>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="tabClass">
-    <attribute name="title">
-     <string>分类</string>
-    </attribute>
-    <widget class="QScrollArea" name="scrollAreaClass">
-     <property name="geometry">
-      <rect>
-       <x>-20</x>
-       <y>0</y>
-       <width>271</width>
-       <height>451</height>
-      </rect>
-     </property>
-     <property name="widgetResizable">
-      <bool>true</bool>
-     </property>
-     <widget class="QWidget" name="scrollAreaClassWidgetContents">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>269</width>
-        <height>449</height>
-       </rect>
-      </property>
-      <widget class="QTreeView" name="treeViewTabClass">
+     <widget class="QWidget" name="tabClass">
+      <attribute name="title">
+       <string>分类</string>
+      </attribute>
+      <widget class="QScrollArea" name="scrollAreaClass">
        <property name="geometry">
         <rect>
          <x>-20</x>
          <y>0</y>
-         <width>291</width>
+         <width>271</width>
          <height>451</height>
         </rect>
        </property>
-       <property name="midLineWidth">
-        <number>1</number>
-       </property>
-       <property name="tabKeyNavigation">
+       <property name="widgetResizable">
         <bool>true</bool>
        </property>
+       <widget class="QWidget" name="scrollAreaClassWidgetContents">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>269</width>
+          <height>449</height>
+         </rect>
+        </property>
+        <widget class="QTreeView" name="treeViewTabClass">
+         <property name="geometry">
+          <rect>
+           <x>-20</x>
+           <y>0</y>
+           <width>291</width>
+           <height>451</height>
+          </rect>
+         </property>
+         <property name="midLineWidth">
+          <number>1</number>
+         </property>
+         <property name="tabKeyNavigation">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </widget>
       </widget>
      </widget>
     </widget>
-   </widget>
-  </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

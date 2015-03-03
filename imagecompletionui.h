@@ -177,6 +177,9 @@ private:
     QDockWidget         *_cornerWindowWidget;
     QWidget				*_cornerDockWindowContents;
 
+    QDockWidget         *_logWindowWidget;
+    QWidget             *_logDocWindowContents;
+
     QDockWidget			*_leftWindowWidget;
     QWidget				*_leftDockWindowContents;
 

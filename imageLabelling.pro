@@ -28,13 +28,14 @@ SOURCES += \
     PolyLine.cpp \
     MyPreference.cpp \
     ImageViewer.cpp \
-    imagecompletionui.cpp \
     LeftWindow.cpp \
     searchdata.cpp \
     classification.cpp \
     buttom.cpp \
+    imagecompletionui.cpp \
     login.cpp \
     global.cpp
+
 
 FORMS += \
     RegionCompetition.ui \
