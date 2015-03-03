@@ -26,11 +26,11 @@ SOURCES += \
     PolyLine.cpp \
     MyPreference.cpp \
     ImageViewer.cpp \
-    imagecompletionui.cpp \
     LeftWindow.cpp \
     searchdata.cpp \
     classification.cpp \
-    buttom.cpp
+    buttom.cpp \
+    imagecompletionui.cpp
 
 FORMS += \
     RegionCompetition.ui \
