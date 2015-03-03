@@ -92,7 +92,7 @@ void	 ImageCompletionUI::createMenus()
     _menuLabelling->addAction(_saveMaskAction);
 
     _menuWindow = menuBar()->addMenu( tr("&帮助") );
-	
+
     _menuData=menuBar()->addMenu(tr("&数据管理"));
     _menuData->addAction(_searchAction);
     _menuData->addAction(_addtosqlAction);
@@ -180,7 +180,7 @@ void	ImageCompletionUI::createActions()
     ////////////////////////////////////////////////////////////////////////////////////
     _exportDataAction = new QAction(tr("批量导出数据"),this);
     _exportDataAction->setObjectName(tr("_exportDataAction"));
-//    _exportDataAction->setIcon();
+    //    _exportDataAction->setIcon();
     connect(_exportDataAction,SIGNAL(triggered()),this,SLOT(exportData()));
 
     ////////////////////////////////////////////////////////////////////////////////////
@@ -188,7 +188,7 @@ void	ImageCompletionUI::createActions()
     ////////////////////////////////////////////////////////////////////////////////////
     _importDataAction = new QAction(tr("批量导入数据"),this);
     _importDataAction->setObjectName(tr("_importDataAction"));
-//    _importDataAction->setIcon();
+    //    _importDataAction->setIcon();
     connect(_importDataAction,SIGNAL(triggered()),this,SLOT(importData()));
 
     // Image Labelling
@@ -371,10 +371,10 @@ void	ImageCompletionUI::setupWidgets()
     palette1.setBrush(QPalette::Inactive, QPalette::Base, brush3);
     palette1.setBrush(QPalette::Disabled, QPalette::Base, brush2);
     /*_bottomListWidget->setPalette(palette1);
-	_bottomListWidget->setAutoFillBackground(true);
-	_bottomListWidget->setFrameShape(QFrame::StyledPanel);
-	_bottomListWidget->setMidLineWidth(0);
-	_bottomListWidget->setTabKeyNavigation(true);*/
+    _bottomListWidget->setAutoFillBackground(true);
+    _bottomListWidget->setFrameShape(QFrame::StyledPanel);
+    _bottomListWidget->setMidLineWidth(0);
+    _bottomListWidget->setTabKeyNavigation(true);*/
 
     _centralTabWidget->setPalette(palette);
 
@@ -789,7 +789,7 @@ void	ImageCompletionUI::open()
         // load the image file in the widget data structures and display the image //
         if ( _editImageViewer->openImage(fileName) )
         {
-            statusBar()->showMessage(tr("abcd"), 2000);
+            //statusBar()->showMessage(tr("abcd"), 2000);
             _editImageViewer->repaint();
             m_step = NONE;
             updateLog();
@@ -815,14 +815,11 @@ void	ImageCompletionUI::open()
     if(!createConnection(db))//调用connection.h头文件中定义的createConnection函数连接数据库
     {
         QMessageBox::critical(0, qApp->tr("Cannot open database"),
-                                      qApp->tr("Unable to establish a database connection."),
-                                      QMessageBox::Cancel);
+                              qApp->tr("Unable to establish a database connection."),
+                              QMessageBox::Cancel);
     }
-    /*QMessageBox::critical(0, fileName,
-                                  fileName,
-                                  QMessageBox::Cancel);*/
 
-   QSqlQuery query;//插入数据、查询数据都需要先建立query
+    QSqlQuery query;//插入数据、查询数据都需要先建立query
 
     QString SQL2="select equipmentinfo.*,movepartinfo.*,movepartrepairinfo.*,oilsampleinfo.*,oilanalyzeinfo.*,ferrographyinfo.*,ferrographypicinfo.*,abrasivemarkinfo.* from equipmentinfo,movepartinfo,movepartrepairinfo,oilsampleinfo,oilanalyzeinfo,ferrographyinfo,ferrographypicinfo,abrasivemarkinfo where equipmentinfo.planeid=movepartinfo.planeid and movepartinfo.movepartid=movepartrepairinfo.movepartid and movepartinfo.movepartid=oilsampleinfo.monitorpartid and oilsampleinfo.oilsampleid=oilanalyzeinfo.oilsampleid and oilsampleinfo.oilsampleid=ferrographyinfo.oilsampleid and ferrographyinfo.ferrographysheetid=ferrographypicinfo.ferrographysheetid and ferrographypicinfo.ferrographypicid=abrasivemarkinfo.ferrographypicid and ferrographypicinfo.ferrographypicpath=?";
     //QString SQL1="select * from ferrographypicinfo where ferrographypicpath=?";
@@ -1484,58 +1481,58 @@ void ImageCompletionUI::Excute()
 void	ImageCompletionUI::keyPressEvent(QKeyEvent *e)
 {
     /*int index = 0;
-	int labelCount = _regionCompetitionDialog.objNumCombo->currentIndex()+2;
-	switch (e->key()) 
-	{
-	case Qt::Key_A:
-		_centralTabWidget->setCurrentIndex(0);
-		break;
-	case Qt::Key_D:
-		_centralTabWidget->setCurrentIndex(1);
-		break;
-	case Qt::Key_W:
-		index = 0;
-		break;
-	case Qt::Key_S:
-		index = 1;
-		break;
-	case Qt::Key_0:
-		index = 0;
-		break;
-	case Qt::Key_1:
-		index = 1;
-		break;
-	case Qt::Key_2:
-		index = 2;
-		break;
-	case Qt::Key_3:
-		index = 3;
-		break;
-	case Qt::Key_4:
-		index = 4;
-		break;
-	case Qt::Key_5:
-		index = 5;
-		break;
-	case Qt::Key_6:
-		index = 6;
-		break;
-	case Qt::Key_7:
-		index = 7;
-		break;
-	case Qt::Key_8:
-		index = 8;
-		break;
-	case Qt::Key_9:
-		index = 9;
-		break;
-	}
-	if (index < labelCount)
-	{
-		_editImageViewer->changeObjectLabeling(index);
-		showLabelColor(index);	
-		_editImageViewer->updateLabelState();
-	}	*/
+    int labelCount = _regionCompetitionDialog.objNumCombo->currentIndex()+2;
+    switch (e->key())
+    {
+    case Qt::Key_A:
+        _centralTabWidget->setCurrentIndex(0);
+        break;
+    case Qt::Key_D:
+        _centralTabWidget->setCurrentIndex(1);
+        break;
+    case Qt::Key_W:
+        index = 0;
+        break;
+    case Qt::Key_S:
+        index = 1;
+        break;
+    case Qt::Key_0:
+        index = 0;
+        break;
+    case Qt::Key_1:
+        index = 1;
+        break;
+    case Qt::Key_2:
+        index = 2;
+        break;
+    case Qt::Key_3:
+        index = 3;
+        break;
+    case Qt::Key_4:
+        index = 4;
+        break;
+    case Qt::Key_5:
+        index = 5;
+        break;
+    case Qt::Key_6:
+        index = 6;
+        break;
+    case Qt::Key_7:
+        index = 7;
+        break;
+    case Qt::Key_8:
+        index = 8;
+        break;
+    case Qt::Key_9:
+        index = 9;
+        break;
+    }
+    if (index < labelCount)
+    {
+        _editImageViewer->changeObjectLabeling(index);
+        showLabelColor(index);
+        _editImageViewer->updateLabelState();
+    }	*/
 }
 
 
@@ -2005,17 +2002,17 @@ bool ImageCompletionUI::exportDB(const QString &path)
                     suffix+=QString("'%1'").arg(query.value(i).toString());
                     break;
                 case QVariant::ByteArray:
+                {
+                    prefix+=fieldName;
+                    QByteArray data=query.value(i).toByteArray();
+                    if(data.isNull())
                     {
-                        prefix+=fieldName;
-                        QByteArray data=query.value(i).toByteArray();
-                        if(data.isNull())
-                        {
-                            suffix+="null";
-                        }else
-                        {
-                            suffix+=QString("E'%1'").arg(data.toHex().data()); // blob数据按16进制格式导出
-                        }
+                        suffix+="null";
+                    }else
+                    {
+                        suffix+=QString("E'%1'").arg(data.toHex().data()); // blob数据按16进制格式导出
                     }
+                }
                     break;
                 default:
                     prefix+=fieldName;
@@ -2167,12 +2164,12 @@ void ImageCompletionUI::exportData()
     QString databackupFileName = targetPath + "\\databackup.sql";
 
     // 导出数据库信息
-      /* edit code */
+    /* edit code */
 
 
     if(this->copyFiles(sourcePath,sourcetargetPath)
-        && this->copyFiles(resultPath,resulttargetPath)
-        && this->exportDB(databackupFileName))
+            && this->copyFiles(resultPath,resulttargetPath)
+            && this->exportDB(databackupFileName))
         QMessageBox::warning(this,tr("批量数据导出提示"),tr("批量数据导出成功"),QMessageBox::Close);
     else
         QMessageBox::warning(this,tr("批量数据导出提示"),tr("批量数据导出失败"),QMessageBox::Close);

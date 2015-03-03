@@ -56,3 +56,6 @@ win32 {
             F:\vendor\opencv\build\x86\vc10\lib\opencv_imgproc242d.lib\
             F:\vendor\opencv\build\x86\vc10\lib\opencv_highgui242d.lib
 }
+
+OTHER_FILES += \
+    Config.ini

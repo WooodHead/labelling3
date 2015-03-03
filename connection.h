@@ -3,23 +3,52 @@
 #include <QMessageBox>
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QSettings>
+#include <QDebug>
+
+static QStringList mysqlSettings()
+{
+    QStringList values;
+
+    QSettings s("Config.ini", QSettings::IniFormat);
+    s.beginGroup("MYSQL");
+    QStringList childKeys = s.childKeys();
+
+    foreach(const QString &childKey, childKeys)
+    {
+        values << s.value(childKey).toString();
+    }
+
+    s.endGroup();
+
+    return values;
+}
+
 
 static bool createConnection(QSqlDatabase &db)
 {
-    db = QSqlDatabase::addDatabase("QMYSQL");
-    db.setHostName("localhost");
-    db.setDatabaseName("bookdata");
-    db.setUserName("root");
-    db.setPassword("a13011598286");
+    QStringList mysqlConfigs = mysqlSettings();
+    if(mysqlConfigs.isEmpty()) return false;
 
-    if (!db.open()) {
- /*       QMessageBox::critical(0, qApp->tr("Cannot open database"),
-                              qApp->tr("Unable to establish a database connection."),
-                              QMessageBox::Cancel);*/
+    db = QSqlDatabase::addDatabase("QMYSQL");
+
+    db.setHostName(mysqlConfigs[1]);
+    db.setDatabaseName(mysqlConfigs[0]);
+    db.setUserName(mysqlConfigs[3]);
+    db.setPassword(mysqlConfigs[2]);
+
+    if(db.isOpen())
+    {
+        db.close();
+    }
+
+    if(!db.open()){
         return false;
     }
+
     return true;
 }
+
 class helper
 {
 public:
