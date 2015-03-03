@@ -29,6 +29,7 @@ public:
 
 private slots:
     void login();
+    void loadDesign(QString strDesign = "default");
 
 signals:
     // signal emitted when login is clicked

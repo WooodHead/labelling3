@@ -18,7 +18,10 @@ Login::Login(QWidget *parent) :
 
     setWindowTitle( tr("用户登录") );
 
-    _authority = -1;
+    this->loadDesign("default");
+    this->setMinimumSize(this->size());
+    this->setMaximumSize(this->size());
+
 
     connect(ui->_login, SIGNAL(clicked()), this, SLOT(login()));
     connect(ui->_cancel, SIGNAL(clicked()), this, SLOT(close()));
@@ -92,5 +95,14 @@ void Login::getDataForMainform()
     (new ImageCompletionUI)->show();
     this->deleteLater();
 }
+
+void Login::loadDesign(QString strDesign)
+{
+    // set stylesheet
+    QFile file(QString("design/%1/Login/form.css").arg(strDesign));
+    file.open(QFile::ReadOnly);
+    this->ui->centralWidget->setStyleSheet(file.readAll());
+}
+
 
 
