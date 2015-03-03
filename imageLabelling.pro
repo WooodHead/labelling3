@@ -16,7 +16,9 @@ HEADERS += \
     searchdata.h \
     connection.h \
     classification.h \
-    buttom.h
+    buttom.h \
+    login.h \
+    global.h
 
 SOURCES += \
     ImageOperate.cpp \
@@ -30,7 +32,10 @@ SOURCES += \
     searchdata.cpp \
     classification.cpp \
     buttom.cpp \
-    imagecompletionui.cpp
+    imagecompletionui.cpp \
+    login.cpp \
+    global.cpp
+
 
 FORMS += \
     RegionCompetition.ui \
@@ -41,7 +46,8 @@ FORMS += \
     ButtomWindow.ui \
     searchdata.ui \
     classification.ui \
-    buttom.ui
+    buttom.ui \
+    login.ui
 
 RESOURCES += \
     ImageCompletion.qrc
@@ -58,4 +64,4 @@ win32 {
 }
 
 OTHER_FILES += \
-    Config.ini
+    imageLabelling.ini
