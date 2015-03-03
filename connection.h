@@ -6,36 +6,17 @@
 #include <QSettings>
 #include <QDebug>
 
-static QStringList mysqlSettings()
-{
-    QStringList values;
-
-    QSettings s("Config.ini", QSettings::IniFormat);
-    s.beginGroup("MYSQL");
-    QStringList childKeys = s.childKeys();
-
-    foreach(const QString &childKey, childKeys)
-    {
-        values << s.value(childKey).toString();
-    }
-
-    s.endGroup();
-
-    return values;
-}
-
+#include "global.h"
 
 static bool createConnection(QSqlDatabase &db)
 {
-    QStringList mysqlConfigs = mysqlSettings();
-    if(mysqlConfigs.isEmpty()) return false;
 
     db = QSqlDatabase::addDatabase("QMYSQL");
 
-    db.setHostName(mysqlConfigs[1]);
-    db.setDatabaseName(mysqlConfigs[0]);
-    db.setUserName(mysqlConfigs[3]);
-    db.setPassword(mysqlConfigs[2]);
+    db.setHostName(Global::Hostname);
+    db.setDatabaseName(Global::Database);
+    db.setUserName(Global::Username);
+    db.setPassword(Global::Passwd);
 
     if(db.isOpen())
     {

@@ -91,7 +91,6 @@ void	 ImageCompletionUI::createMenus()
     _menuLabelling->addAction(_saveLabelResultAction);
     _menuLabelling->addAction(_saveMaskAction);
 
-    _menuWindow = menuBar()->addMenu( tr("&帮助") );
 
     _menuData=menuBar()->addMenu(tr("&数据管理"));
     _menuData->addAction(_searchAction);
@@ -100,7 +99,7 @@ void	 ImageCompletionUI::createMenus()
     _menuData->addAction(_exportDataAction);
     _menuData->addAction(_importDataAction);
 
-
+    _menuWindow = menuBar()->addMenu( tr("&帮助") );
 }
 
 void	ImageCompletionUI::closeEvent( QCloseEvent *event )
