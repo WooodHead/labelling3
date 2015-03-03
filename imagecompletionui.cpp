@@ -99,6 +99,13 @@ void	 ImageCompletionUI::createMenus()
     _menuData->addAction(_exportDataAction);
     _menuData->addAction(_importDataAction);
 
+    // user management
+    if(Global::Authority == 0) //admin
+    {
+        _menuUser = menuBar()->addMenu(tr("&用户管理"));
+        _menuUser->addAction(_userManagementAction);
+    }
+
     _menuWindow = menuBar()->addMenu( tr("&帮助") );
 }
 
@@ -281,6 +288,14 @@ void	ImageCompletionUI::createActions()
     connect( _lineThicknessCombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(lineThicknessComboboxChanged(int)));
     list = (QStringList() << "线条粗细" << "细" << "中" << "粗");
     _lineThicknessCombobox->addItems(list);
+
+    // user
+    if(Global::Authority == 0)
+    {
+        _userManagementAction = new QAction( tr("用户管理"), this );
+        _userManagementAction->setObjectName(_userManagementAction);
+        connect( _userManagementAction, SIGNAL(triggered()), this, SLOT(userManagement()) );
+    }
 }
 
 void	ImageCompletionUI::createToolBars()
@@ -1689,6 +1704,10 @@ void ImageCompletionUI::actionSliderReleased()
     {
         // TODO
     }
+}
+
+void ImageCompletionUI::userManagement()
+{
 }
 
 bool ImageCompletionUI::maybeSave()

@@ -128,6 +128,7 @@ private:
     QMenu					*_menuWindow;
     QMenu					*_menuLabelling;
     QMenu					*_menuData;
+    QMenu                   *_menuUser;
 
 
     QToolBar				*_editToolBar;
@@ -218,6 +219,9 @@ private:
     QAction               *_saveLabelResultAction;
     QAction               *_saveMaskAction;
 
+    //user
+    QAction               *_userManagementAction;
+
     //
     QAction               *_strikeThickness[3];
 
@@ -287,6 +291,8 @@ private slots:
     void notColor();
 
     void actionSliderReleased();
+
+    void userManagement();
 
 private slots:
 
