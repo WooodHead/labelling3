@@ -350,7 +350,7 @@ void	ImageCompletionUI::setupWidgets()
     _editImageViewer->setLineColor(Qt::yellow);
 
     _centralTabWidget->addTab( _editTab, QString("EditTab") );
-    _centralTabWidget->setTabText(_centralTabWidget->indexOf(_editTab), QApplication::translate("ImageCompletionUIClass", QString("鏍囨敞鍖哄煙").toLocal8Bit().data(), 0));
+    _centralTabWidget->setTabText(_centralTabWidget->indexOf(_editTab), QApplication::translate("ImageCompletionUIClass", QString("图像标注").toLocal8Bit().data(), 0));
 
     ////////////////////////////////////////////////////////////////////////////////////
     //   _bottomListWidget
