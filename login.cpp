@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QSqlQuery>
 #include <QSqlRecord>
+#include <QSqlDatabase>
 
 #include "global.h"
 #include "connection.h"
@@ -76,7 +77,9 @@ void Login::login()
                 int no1 = query.record().indexOf("authority");
                 _authority = query.value(no1).toString();
 
+                QString connection = db.connectionName();
                 db.close();
+                QSqlDatabase::removeDatabase(connection);
                 return getDataForMainform();
             }
         }

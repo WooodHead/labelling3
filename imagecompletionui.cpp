@@ -1032,7 +1032,9 @@ void	ImageCompletionUI::open()
     _leftWindow.tableWidget->setItem(_cnt, 1, new QTableWidgetItem(fileName));
     _leftWindow.tableWidget->setItem(_cnt, 2, new QTableWidgetItem("N"));
 
+    QString connection = db.connectionName();
     db.close();//关闭数据库
+    QSqlDatabase::removeDatabase(connection);
 }
 
 // read all files in a directory
@@ -1328,7 +1330,10 @@ void	ImageCompletionUI::savemarkresult()
     else{
         QMessageBox::warning(this,tr("success8"),tr("Modify success"),QMessageBox::Close);
     }
-    db.close();//关闭数据库
+
+    QString connection = db.connectionName();
+    db.close();
+    QSqlDatabase::removeDatabase(connection);
 
     //_leftWindow.tableWidget->setItem(_cnt, 2, new QTableWidgetItem("Y"));
 }
@@ -1423,7 +1428,9 @@ void ImageCompletionUI::showData()
         }
     }
 
+    QString connection = db.connectionName();
     db.close();
+    QSqlDatabase::removeDatabase(connection);
 }
 
 void ImageCompletionUI::loadLabelMap()

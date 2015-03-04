@@ -18,12 +18,8 @@ static bool createConnection(QSqlDatabase &db)
     db.setUserName(Global::Username);
     db.setPassword(Global::Passwd);
 
-    if(db.isOpen())
+    if(!db.open())
     {
-        db.close();
-    }
-
-    if(!db.open()){
         return false;
     }
 
