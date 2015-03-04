@@ -129,8 +129,9 @@ void	ImageCompletionUI::createActions()
     _openAction->setIcon(icon1);
     connect(_openAction, SIGNAL(triggered()), this, SLOT(open()));
 
-    _openBatchAction = new QAction( tr("&批量打开"), this );
+    _openBatchAction = new QAction( tr("&打开(多)"), this );
     _openBatchAction->setObjectName(tr("_openBatchAction"));
+    _openBatchAction->setIcon(icon1);
     connect(_openBatchAction, SIGNAL(triggered()), this, SLOT(batchOpen()));
 
     ////////////////////////////////////////////////////////////////////////////////////
@@ -501,7 +502,7 @@ void	ImageCompletionUI::setupWidgets()
     ////////////////////////////////////////////////////////////////////////////////////
     //   _leftWindowWidget
     ////////////////////////////////////////////////////////////////////////////////////
-    _leftWindowWidget = new QDockWidget(tr("当前信息"),this );
+    _leftWindowWidget = new QDockWidget(tr(""),this );
     _leftWindowWidget->setObjectName(tr("_leftWindowWidget"));
     _leftWindowWidget->setFeatures(QDockWidget::DockWidgetMovable);
     _leftWindowWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -513,6 +514,10 @@ void	ImageCompletionUI::setupWidgets()
     _leftDockWindowContents->setObjectName(tr("_leftDockWindowContents"));
 
     _leftWindow.setupUi(_leftDockWindowContents);
+    _leftWindow.tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _leftWindow.tabWidgetLeftWindow->setTabText(0, tr("图谱信息"));
+    _leftWindow.tabWidgetLeftWindow->removeTab(1); //TODO: now remove these 2 tabs
+    _leftWindow.tabWidgetLeftWindow->removeTab(1);
     _leftWindowWidget->setWidget(_leftDockWindowContents);
     addDockWidget(Qt::LeftDockWidgetArea, _leftWindowWidget);
 
@@ -2346,6 +2351,9 @@ void ImageCompletionUI::on_tableWidget_doubleClicked(const QModelIndex &index)
 
 void ImageCompletionUI::cellDoubleClicked_(int row, int col)
 {
-    QString absolutePath = _leftWindow.tableWidget->item(row, 1)->text();
-    openImage(absolutePath);
+    if(_leftWindow.tableWidget->item(row, 1) != 0)
+    {
+        QString absolutePath = _leftWindow.tableWidget->item(row, 1)->text();
+        openImage(absolutePath);
+    }
 }
