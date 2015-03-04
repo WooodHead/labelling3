@@ -21,7 +21,8 @@ HEADERS += \
     global.h \
     usermanagement.h \
     useradd.h \
-    userinfo.h
+    userinfo.h \
+    advancesearchdlg.h
 
 SOURCES += \
     ImageOperate.cpp \
@@ -40,7 +41,8 @@ SOURCES += \
     global.cpp \
     usermanagement.cpp \
     useradd.cpp \
-    userinfo.cpp
+    userinfo.cpp \
+    advancesearchdlg.cpp
 
 
 FORMS += \
@@ -55,7 +57,8 @@ FORMS += \
     buttom.ui \
     login.ui \
     usermanagement.ui \
-    useradd.ui
+    useradd.ui \
+    advancesearchdlg.ui
 
 RESOURCES += \
     ImageCompletion.qrc

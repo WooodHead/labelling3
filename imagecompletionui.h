@@ -22,6 +22,7 @@
 #include "searchdata.h"
 #include "classification.h"
 #include "buttom.h"
+#include "advancesearchdlg.h"
 
 
 class QStackedWidget;
@@ -227,10 +228,8 @@ private:
 
     //user
     QAction               *_userManagementAction;
-
     //
     QAction               *_strikeThickness[3];
-
     //
     QAction               *_lineThickness[3];
 
@@ -359,7 +358,8 @@ private slots:
     void cellDoubleClicked_(int, int);
 
 private:
-    Searchdata searchdata1;
+    Searchdata *searchdata1;
+    AdvanceSearchDlg *advanceSearchDlg;
     classification class1;
     buttom buttom1;
     QString wholefilename;
