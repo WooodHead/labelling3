@@ -22,6 +22,7 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
     IsShowDetail = false;
 
     _editImageViewer = NULL;
+    _cnt = -1;
 
     createActions();
 
@@ -44,7 +45,6 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
     setStrikeOptionsEnabled(false);
 
     showData();
-    k=-1;
 }
 
 ImageCompletionUI::~ImageCompletionUI()
@@ -550,6 +550,15 @@ void	ImageCompletionUI::setupWidgets()
     _bottomDockWindowContents = new QWidget( );
     _bottomDockWindowContents->setObjectName(tr("_bottomDockWindowContents"));
     _bottomWindow.setupUi(_bottomDockWindowContents);
+    _bottomWindow.dBTableWidget_1->verticalHeader()->setHidden(true);
+    _bottomWindow.dBTableWidget_2->verticalHeader()->setHidden(true);
+    _bottomWindow.dBTableWidget_3->verticalHeader()->setHidden(true);
+    _bottomWindow.dBTableWidget_4->verticalHeader()->setHidden(true);
+    _bottomWindow.dBTableWidget_5->verticalHeader()->setHidden(true);
+    _bottomWindow.dBTableWidget_6->verticalHeader()->setHidden(true);
+    _bottomWindow.dBTableWidget_7->verticalHeader()->setHidden(true);
+    _bottomWindow.dBTableWidget_8->verticalHeader()->setHidden(true);
+    _bottomWindow.dBTableWidget_9->verticalHeader()->setHidden(true);
 
     _bottomWindowWidget->setWidget(_bottomDockWindowContents);
     addDockWidget(Qt::BottomDockWidgetArea, _bottomWindowWidget);
@@ -591,7 +600,7 @@ void	ImageCompletionUI::setupWidgets()
 
 void ImageCompletionUI::createStatusBar()
 {
-    statusBar()->showMessage(tr("abcd"));
+    statusBar()->showMessage(tr("已就绪"));
 }
 
 void ImageCompletionUI::createConnections()
@@ -643,8 +652,8 @@ void ImageCompletionUI::setupBrush()
 void	ImageCompletionUI::open()
 {
     close();
-    k++;
-    _bottomWindow.dBTableWidget_1->clear();
+
+    /*_bottomWindow.dBTableWidget_1->clear();
     _bottomWindow.dBTableWidget_2->clear();
     _bottomWindow.dBTableWidget_3->clear();
     _bottomWindow.dBTableWidget_4->clear();
@@ -821,30 +830,30 @@ void	ImageCompletionUI::open()
     _bottomWindow.dBTableWidget_8->setItem(0,15,new QTableWidgetItem("磨粒损伤部位"));
     _bottomWindow.dBTableWidget_8->setItem(0,16,new QTableWidgetItem("磨粒磨损机理"));
     _bottomWindow.dBTableWidget_8->setItem(0,17,new QTableWidgetItem("磨粒反映故障信息"));
-    _bottomWindow.dBTableWidget_8->setItem(0,18,new QTableWidgetItem("磨粒典型性"));
+    _bottomWindow.dBTableWidget_8->setItem(0,18,new QTableWidgetItem("磨粒典型性"));*/
 
     QSettings settings("ImageCompletion","ImageCompletion");
     QString initialPath = settings.value("lastImportPath", QVariant(QDir::homePath())).toString();
     if(initialPath.isEmpty())
+    {
         initialPath = QDir::homePath() + "/untitled";
+    }
 
     QString fileName;
-    fileName = QFileDialog::getOpenFileName( this, tr("abcd"), initialPath, tr("Images (*.png *.bmp *.jpg *.jpeg)") );
-    if (!fileName.isEmpty())
+    fileName = QFileDialog::getOpenFileName( this, tr("打开图像"), initialPath, tr("Images (*.png *.bmp *.jpg *.jpeg)") );
+    if(!fileName.isEmpty())
+    {
         settings.setValue("lastImportPath", QVariant(fileName));
-    // If the file name is not empty //
+    }
+
     if (!fileName.isEmpty())
     {
-        // load the image file in the widget data structures and display the image //
         if ( _editImageViewer->openImage(fileName) )
         {
-            //statusBar()->showMessage(tr("abcd"), 2000);
+            statusBar()->showMessage(tr("打开图像"), 2000);
             _editImageViewer->repaint();
             m_step = NONE;
             updateLog();
-            //_regionCompetitionDialog.radioForeground->setEnabled(true);
-            //_regionCompetitionDialog.radioBackground->setEnabled(true);
-            //_regionCompetitionDialog.radioErazer->setEnabled(true);
         }
         else
         {
@@ -860,32 +869,27 @@ void	ImageCompletionUI::open()
     int width = _editImageViewer->image().width();
     int height = _editImageViewer->image().height();
     this->setMinimumSize( width < 800 ? 800 : height, height < 600 ? 600 : height );
-    QSqlDatabase db;//创建一个SQL数据库实例
-    if(!createConnection(db))//调用connection.h头文件中定义的createConnection函数连接数据库
+
+    QSqlDatabase db;
+    if(!createConnection(db))
     {
-        QMessageBox::critical(0, qApp->tr("Cannot open database"),
-                              qApp->tr("Unable to establish a database connection."),
+        QMessageBox::critical(0, qApp->tr("打开数据库失败"),
+                              qApp->tr("无法创建数据库连接"),
                               QMessageBox::Cancel);
     }
 
-    QSqlQuery query;//插入数据、查询数据都需要先建立query
+    QSqlQuery query;
 
     QString SQL2="select equipmentinfo.*,movepartinfo.*,movepartrepairinfo.*,oilsampleinfo.*,oilanalyzeinfo.*,ferrographyinfo.*,ferrographypicinfo.*,abrasivemarkinfo.* from equipmentinfo,movepartinfo,movepartrepairinfo,oilsampleinfo,oilanalyzeinfo,ferrographyinfo,ferrographypicinfo,abrasivemarkinfo where equipmentinfo.planeid=movepartinfo.planeid and movepartinfo.movepartid=movepartrepairinfo.movepartid and movepartinfo.movepartid=oilsampleinfo.monitorpartid and oilsampleinfo.oilsampleid=oilanalyzeinfo.oilsampleid and oilsampleinfo.oilsampleid=ferrographyinfo.oilsampleid and ferrographyinfo.ferrographysheetid=ferrographypicinfo.ferrographysheetid and ferrographypicinfo.ferrographypicid=abrasivemarkinfo.ferrographypicid and ferrographypicinfo.ferrographypicpath=?";
-    //QString SQL1="select * from ferrographypicinfo where ferrographypicpath=?";
     query.prepare(SQL2);
     query.addBindValue(fileName);
-    wholefilename=fileName.section('/',3,4);
-    /*QMessageBox::critical(0, wholefilename,
-                                  wholefilename,
-                                  QMessageBox::Cancel);*/
+    _imageName = QFileInfo(fileName).fileName();
+
     if(query.exec())
     {
-        QMessageBox::warning(this,tr(""),tr("select sucessful"),QMessageBox::Close);
-    }
-    else  {
-        QMessageBox::warning(this,tr("failed"),tr("select error"),QMessageBox::Close);
     }
 
+    _cnt++;
 
     while(query.next())
     {
@@ -1015,15 +1019,20 @@ void	ImageCompletionUI::open()
         _bottomWindow.dBTableWidget_8->setItem(1,18,new QTableWidgetItem(query.value(116).toString()));
 
 
-        _leftWindow.tableWidget->setItem(k,1,new QTableWidgetItem(query.value(95).toString()));
-        _leftWindow.tableWidget->setItem(k,2,new QTableWidgetItem(query.value(97).toString()));
+        _leftWindow.tableWidget->setItem(_cnt, 1, new QTableWidgetItem(query.value(95).toString()));
+        _leftWindow.tableWidget->setItem(_cnt, 2, new QTableWidgetItem(query.value(97).toString()));
     }
 
-    _leftWindow.tableWidget->setItem(k,0,new QTableWidgetItem(wholefilename));
-    //buttom1.show();
+    if(_leftWindow.tableWidget->rowCount() <= _cnt+1)
+    {
+        _leftWindow.tableWidget->insertRow(_leftWindow.tableWidget->rowCount()-1);
+    }
+
+    _leftWindow.tableWidget->setItem(_cnt, 0, new QTableWidgetItem(_imageName));
+    _leftWindow.tableWidget->setItem(_cnt, 1, new QTableWidgetItem(fileName));
+    _leftWindow.tableWidget->setItem(_cnt, 2, new QTableWidgetItem("N"));
+
     db.close();//关闭数据库
-
-
 }
 
 // read all files in a directory
@@ -1043,13 +1052,18 @@ void ImageCompletionUI::batchOpen()
         QStringList fileList = dir.entryList(QDir::Files);
         QString absolutePath = dir.absolutePath();
 
-        int k = 0;
         foreach(QString file, fileList)
         {
-            _leftWindow.tableWidget->setItem(k, 0, new QTableWidgetItem(file));
-            _leftWindow.tableWidget->setItem(k, 1, new QTableWidgetItem(absolutePath+"/"+file));
-            _leftWindow.tableWidget->setItem(k, 2, new QTableWidgetItem("N"));
-            k++;
+            _cnt++;
+
+            if(_leftWindow.tableWidget->rowCount() <= _cnt+1)
+            {
+                _leftWindow.tableWidget->insertRow(_leftWindow.tableWidget->rowCount()-1);
+            }
+
+            _leftWindow.tableWidget->setItem(_cnt, 0, new QTableWidgetItem(file));
+            _leftWindow.tableWidget->setItem(_cnt, 1, new QTableWidgetItem(absolutePath+"/"+file));
+            _leftWindow.tableWidget->setItem(_cnt, 2, new QTableWidgetItem("N"));
         }
     }
 }
@@ -1058,7 +1072,7 @@ void ImageCompletionUI::batchOpen()
 
 void	ImageCompletionUI::save()
 {
-    QString filename = QFileDialog::getSaveFileName( this, "abcd", QDir::currentPath(), tr("abcd (*.bmp *.png *.jpg *.jpeg)") );
+    QString filename = QFileDialog::getSaveFileName( this, "保存图像", QDir::currentPath(), tr("图像 (*.bmp *.png *.jpg *.jpeg)") );
 
     if ( filename.isEmpty() )
     {
@@ -1293,9 +1307,9 @@ void	ImageCompletionUI::savemarkresult()
     query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,3)->data(Qt::DisplayRole).toString());
     query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,4)->data(Qt::DisplayRole).toString());
     query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,5)->data(Qt::DisplayRole).toString());
-    _bottomWindow.dBTableWidget_8->setItem(1,6,new QTableWidgetItem("F:/abrasivemarksystem/abrasivepic/"+wholefilename));
+    _bottomWindow.dBTableWidget_8->setItem(1,6,new QTableWidgetItem("F:/abrasivemarksystem/abrasivepic/"+_imageName));
     //query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,6)->data(Qt::DisplayRole).toString());
-    query8.addBindValue("F:/abrasivemarksystem/abrasivepic/"+wholefilename);//默认标注过了之后都会点击保存标注结果，进而将标注得到的磨粒对应的路径储存到数据库中
+    query8.addBindValue("F:/abrasivemarksystem/abrasivepic/"+_imageName);//默认标注过了之后都会点击保存标注结果，进而将标注得到的磨粒对应的路径储存到数据库中
     query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,7)->data(Qt::DisplayRole).toString());
     query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,8)->data(Qt::DisplayRole).toString());
     query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,9)->data(Qt::DisplayRole).toString());
@@ -1315,8 +1329,8 @@ void	ImageCompletionUI::savemarkresult()
         QMessageBox::warning(this,tr("success8"),tr("Modify success"),QMessageBox::Close);
     }
     db.close();//关闭数据库
-    _leftWindow.tableWidget->setItem(k,2,new QTableWidgetItem("Y"));
 
+    //_leftWindow.tableWidget->setItem(_cnt, 2, new QTableWidgetItem("Y"));
 }
 
 
@@ -1966,7 +1980,7 @@ void ImageCompletionUI::strikeChangeTriggered(QAction *a)
 void ImageCompletionUI::saveLabelledResult()
 {
 
-    _editImageViewer->saveLabelledResult(wholefilename);
+    _editImageViewer->saveLabelledResult(_imageName);
 }
 
 void ImageCompletionUI::saveUserLabels()
@@ -2188,13 +2202,9 @@ void ImageCompletionUI::openImage(QString fileName)
     {
         if ( _editImageViewer->openImage(fileName) )
         {
-            //statusBar()->showMessage(tr("abcd"), 2000);
             _editImageViewer->repaint();
             m_step = NONE;
             updateLog();
-            //_regionCompetitionDialog.radioForeground->setEnabled(true);
-            //_regionCompetitionDialog.radioBackground->setEnabled(true);
-            //_regionCompetitionDialog.radioErazer->setEnabled(true);
         }
         else
         {
@@ -2350,4 +2360,9 @@ void ImageCompletionUI::cellDoubleClicked_(int row, int col)
         QString absolutePath = _leftWindow.tableWidget->item(row, 1)->text();
         openImage(absolutePath);
     }
+}
+
+bool ImageCompletionUI::exist(QString absolutePath)
+{
+    if(absolutePath.isEmpty()) return false;
 }

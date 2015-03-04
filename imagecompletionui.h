@@ -362,8 +362,10 @@ private:
     Searchdata searchdata1;
     classification class1;
     buttom buttom1;
-    QString wholefilename;
-    int k;
+    QString _imageName;
+    int _cnt;
+
+    bool exist(QString absolutePath);
 
 private:
     bool copyFiles(QString fromDir,QString toDir,bool convertIfExits = false);
