@@ -12,3 +12,17 @@ AdvanceSearchDlg::~AdvanceSearchDlg()
 {
     delete ui;
 }
+
+void AdvanceSearchDlg::on_queryBtn_clicked()
+{
+
+}
+
+QString AdvanceSearchDlg::geneSql(QStringList conditionList, QString tableName)
+{
+    QString sql = "select * from ";
+    sql.append(tableName);
+    sql.append(" ");
+//    if(conditionList.isEmpty())
+
+}
