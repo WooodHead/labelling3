@@ -20,7 +20,8 @@ HEADERS += \
     login.h \
     global.h \
     usermanagement.h \
-    useradd.h
+    useradd.h \
+    userinfo.h
 
 SOURCES += \
     ImageOperate.cpp \
@@ -38,7 +39,8 @@ SOURCES += \
     login.cpp \
     global.cpp \
     usermanagement.cpp \
-    useradd.cpp
+    useradd.cpp \
+    userinfo.cpp
 
 
 FORMS += \

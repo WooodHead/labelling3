@@ -3,6 +3,10 @@
 
 #include <QDialog>
 #include <QSqlTableModel>
+#include <QSqlRecord>
+
+#include "useradd.h"
+#include "userinfo.h"
 
 namespace Ui {
 class UserManagement;
@@ -20,6 +24,15 @@ private slots:
     void on__deleteUser_clicked();
 
     void on__addUser_clicked();
+    // added by zhyn
+    void addUser(UserInfo *userInfo);
+    
+    void on__editUser_clicked();
+    
+    void modifyData();
+    
+signals:
+    void closeAddDialog();
 
 private:
     Ui::UserManagement *ui;
@@ -27,6 +40,10 @@ private:
     QSqlTableModel *_model;
 
     void initTableView();
+    // added by zhyn
+    UserAdd *_userAddDialog;
+    QSqlDatabase db;
+    QAction *modifyAction;
 };
 
 #endif // USERMANAGEMENT_H

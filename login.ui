@@ -100,6 +100,9 @@
       <verstretch>0</verstretch>
      </sizepolicy>
     </property>
+    <property name="echoMode">
+     <enum>QLineEdit::Password</enum>
+    </property>
    </widget>
    <widget class="QPushButton" name="_login">
     <property name="geometry">
@@ -140,6 +143,8 @@
     </property>
    </widget>
   </widget>
+  <zorder>centralWidget</zorder>
+  <zorder>_cancel</zorder>
  </widget>
  <resources/>
  <connections/>

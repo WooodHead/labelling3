@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>889</width>
-    <height>532</height>
+    <width>781</width>
+    <height>449</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -76,38 +76,34 @@
            <property name="sizeHint" stdset="0">
             <size>
              <width>20</width>
-             <height>274</height>
+             <height>40</height>
             </size>
            </property>
           </spacer>
          </item>
          <item>
           <widget class="QGroupBox" name="groupBox">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>300</height>
+            </size>
+           </property>
            <property name="title">
             <string>查询项</string>
            </property>
-           <widget class="QLabel" name="label">
-            <property name="geometry">
-             <rect>
-              <x>40</x>
-              <y>70</y>
-              <width>66</width>
-              <height>17</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-           </widget>
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>TextLabel</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
         </layout>
-        <zorder>groupBox</zorder>
-        <zorder>_editUser</zorder>
-        <zorder>_searchUser</zorder>
-        <zorder>_addUser</zorder>
-        <zorder>_deleteUser</zorder>
-        <zorder>verticalSpacer</zorder>
        </widget>
       </item>
      </layout>
