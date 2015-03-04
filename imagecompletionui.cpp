@@ -1150,7 +1150,13 @@ void	ImageCompletionUI::close()
 
 void	ImageCompletionUI::search()
 {
-    searchdata1.show();
+//   this->advanceSearchDlg = new advanceSearchDlg(this);
+//   this->advanceSearchDlg->show();
+//    this->searchdata1 = new Searchdata();
+//    searchdata1->show();
+//    searchdata1.show();
+    advanceSearchDlg = new AdvanceSearchDlg(this);
+    advanceSearchDlg->show();
 }
 
 void	ImageCompletionUI::addtosql()
