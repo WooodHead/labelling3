@@ -365,7 +365,8 @@ private:
     QString _imageName;
     int _cnt;
 
-    bool exist(QString absolutePath);
+    QString labelStatus(QString absolutePath);
+    void editImageProperties(QString fileName);
 
 private:
     bool copyFiles(QString fromDir,QString toDir,bool convertIfExits = false);

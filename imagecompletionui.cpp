@@ -7,6 +7,7 @@
 #include "ImageViewer.h"
 #include "connection.h"
 #include "usermanagement.h"
+#include "imageproperties.h"
 
 //#include "Competition.h"
 
@@ -841,8 +842,12 @@ void	ImageCompletionUI::open()
 
     QString fileName;
     fileName = QFileDialog::getOpenFileName( this, tr("打开图像"), initialPath, tr("Images (*.png *.bmp *.jpg *.jpeg)") );
+
+    if(fileName.isEmpty()) return;
+
     if(!fileName.isEmpty())
     {
+        _imageName = QFileInfo(fileName).fileName();
         settings.setValue("lastImportPath", QVariant(fileName));
     }
 
@@ -869,8 +874,23 @@ void	ImageCompletionUI::open()
     int width = _editImageViewer->image().width();
     int height = _editImageViewer->image().height();
     this->setMinimumSize( width < 800 ? 800 : height, height < 600 ? 600 : height );
+    _cnt++;
 
-    QSqlDatabase db;
+    QString status = this->labelStatus(fileName);
+    if(status == "N" || status == "Y")
+    {
+        //QMessageBox::information(0, tr("提示"), "图像已存在", QMessageBox::Ok);
+    }
+    else
+    {
+        QMessageBox::StandardButton reply = QMessageBox::information(0, tr("提示"), "此图像为新图像,是否要导入数据库?", QMessageBox::Ok | QMessageBox::Cancel);
+        if(reply == QMessageBox::Ok)
+        {
+            (new ImageProperties)->show();
+        }
+    }
+
+   /* QSqlDatabase db;
     if(!createConnection(db))
     {
         QMessageBox::critical(0, qApp->tr("打开数据库失败"),
@@ -883,13 +903,11 @@ void	ImageCompletionUI::open()
     QString SQL2="select equipmentinfo.*,movepartinfo.*,movepartrepairinfo.*,oilsampleinfo.*,oilanalyzeinfo.*,ferrographyinfo.*,ferrographypicinfo.*,abrasivemarkinfo.* from equipmentinfo,movepartinfo,movepartrepairinfo,oilsampleinfo,oilanalyzeinfo,ferrographyinfo,ferrographypicinfo,abrasivemarkinfo where equipmentinfo.planeid=movepartinfo.planeid and movepartinfo.movepartid=movepartrepairinfo.movepartid and movepartinfo.movepartid=oilsampleinfo.monitorpartid and oilsampleinfo.oilsampleid=oilanalyzeinfo.oilsampleid and oilsampleinfo.oilsampleid=ferrographyinfo.oilsampleid and ferrographyinfo.ferrographysheetid=ferrographypicinfo.ferrographysheetid and ferrographypicinfo.ferrographypicid=abrasivemarkinfo.ferrographypicid and ferrographypicinfo.ferrographypicpath=?";
     query.prepare(SQL2);
     query.addBindValue(fileName);
-    _imageName = QFileInfo(fileName).fileName();
+
 
     if(query.exec())
     {
     }
-
-    _cnt++;
 
     while(query.next())
     {
@@ -1021,7 +1039,7 @@ void	ImageCompletionUI::open()
 
         _leftWindow.tableWidget->setItem(_cnt, 1, new QTableWidgetItem(query.value(95).toString()));
         _leftWindow.tableWidget->setItem(_cnt, 2, new QTableWidgetItem(query.value(97).toString()));
-    }
+    }*/
 
     if(_leftWindow.tableWidget->rowCount() <= _cnt+1)
     {
@@ -1030,11 +1048,7 @@ void	ImageCompletionUI::open()
 
     _leftWindow.tableWidget->setItem(_cnt, 0, new QTableWidgetItem(_imageName));
     _leftWindow.tableWidget->setItem(_cnt, 1, new QTableWidgetItem(fileName));
-    _leftWindow.tableWidget->setItem(_cnt, 2, new QTableWidgetItem("N"));
-
-    QString connection = db.connectionName();
-    db.close();//关闭数据库
-    QSqlDatabase::removeDatabase(connection);
+    _leftWindow.tableWidget->setItem(_cnt, 2, new QTableWidgetItem(status == "Y" ? "Y" : "N"));
 }
 
 // read all files in a directory
@@ -1063,9 +1077,11 @@ void ImageCompletionUI::batchOpen()
                 _leftWindow.tableWidget->insertRow(_leftWindow.tableWidget->rowCount()-1);
             }
 
+            QString status = this->labelStatus(absolutePath);
+
             _leftWindow.tableWidget->setItem(_cnt, 0, new QTableWidgetItem(file));
             _leftWindow.tableWidget->setItem(_cnt, 1, new QTableWidgetItem(absolutePath+"/"+file));
-            _leftWindow.tableWidget->setItem(_cnt, 2, new QTableWidgetItem("N"));
+            _leftWindow.tableWidget->setItem(_cnt, 2, new QTableWidgetItem(status == "Y" ? "Y" : "N"));
         }
     }
 }
@@ -1505,72 +1521,6 @@ void ImageCompletionUI::_SceneupdateBrushSize()
 
     _editImageViewer->setBrushWidth( _brushSize );
 }
-
-
-//void ImageCompletionUI::updateLabelTree()
-//{
-//	for (int i = 0; i < items.count(); i++)
-//		delete items.value(i);
-//	items.clear();
-//	for (int i = 0; i < _regionCompetitionDialog.objNumCombo->currentIndex()+2; ++i)
-//	{
-//		QTreeWidgetItem* treeItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList(QString("%1").arg(i)));
-//		treeItem->setIcon(1, lableIcons.value(i));
-//		items.append(treeItem);
-//	}
-//	_regionCompetitionDialog.objTree->insertTopLevelItems(0, items);
-//}
-
-//void ImageCompletionUI::setLabelTree()
-//{
-//	for (int i = 0; i < items.count(); i++)
-//		delete items.value(i);
-//	items.clear();
-//	QTreeWidgetItem* treeItem0 = new QTreeWidgetItem((QTreeWidget*)0, QStringList(QString("background")));
-//	treeItem0->setIcon(1, lableIcons.value(0));
-//	items.append(treeItem0);
-//	QTreeWidgetItem* treeItem1 = new QTreeWidgetItem((QTreeWidget*)0, QStringList(QString("foreground")));
-//	treeItem1->setIcon(1, lableIcons.value(1));
-//	items.append(treeItem1);
-//	_regionCompetitionDialog.objTree->insertTopLevelItems(0, items);
-//}
-
-//void ImageCompletionUI::InitializeIcons()
-//{
-////	QStringList header;
-////	header << "Lable" << "Color";
-////	_regionCompetitionDialog.objTree->setHeaderLabels(header);
-////	_regionCompetitionDialog.objTree->setColumnWidth(0,50);
-////	_regionCompetitionDialog.objTree->setColumnWidth(1,10);
-////	QPixmap m_pixmap(16, 16);
-//	int* _color = colorTable;
-//	for (int i = 0; i < 10; i++)
-//	{
-//		m_pixmap.fill(QColor(_color[3*i], _color[3*i+1], _color[3*i+2]));
-//		QIcon icon(m_pixmap);
-//		lableIcons.append(icon);
-//	}
-//}
-
-//void ImageCompletionUI::showLabelColor(QTreeWidgetItem * curItem)
-//{
-//	QIcon icon = curItem->icon(1);
-//	//QRgb rgb = icon.pixmap(16, 16).toImage().pixel(0, 0);
-//	//QPixmap pixmap(30, 30);
-//	//pixmap.fill(rgb);
-//	//_regionCompetitionDialog.cur_Label->setPixmap(pixmap);
-//	m_step = MARKING;
-//	_editImageViewer->setPaintable( true );
-//}
-
-//void ImageCompletionUI::showLabelColor(int i)
-//{
-//	//QPixmap pixmap(30, 30);
-//	//pixmap.fill(qRgb(colorTable[3*i], colorTable[3*i+1], colorTable[3*i+2]));
-//	//_regionCompetitionDialog.cur_Label->setPixmap(pixmap);
-//	m_step = MARKING;
-//	_editImageViewer->setPaintable( true );
-//}
 
 void ImageCompletionUI::Excute()
 {
@@ -2212,6 +2162,20 @@ void ImageCompletionUI::openImage(QString fileName)
             _editImageViewer->repaint();
             m_step = NONE;
             updateLog();
+
+            QString status = this->labelStatus(fileName);
+            if(status == "N" || status == "Y")
+            {
+                //QMessageBox::information(0, tr("提示"), "图像已存在", QMessageBox::Ok);
+            }
+            else
+            {
+                QMessageBox::StandardButton reply = QMessageBox::information(0, tr("提示"), "此图像为新图像,是否要导入数据库?", QMessageBox::Ok | QMessageBox::Cancel);
+                if(reply == QMessageBox::Ok)
+                {
+                    (new ImageProperties)->show();
+                }
+            }
         }
         else
         {
@@ -2369,7 +2333,30 @@ void ImageCompletionUI::cellDoubleClicked_(int row, int col)
     }
 }
 
-bool ImageCompletionUI::exist(QString absolutePath)
+QString ImageCompletionUI::labelStatus(QString absolutePath)
 {
-    if(absolutePath.isEmpty()) return false;
+    if(absolutePath.isEmpty()) return "";
+
+    QSqlDatabase db;
+    if( createConnection(db) )
+    {
+        QSqlQuery query;
+        bool ret = query.exec(QString("select * from ferrographypicinfo"));
+        if(ret)
+        {
+            while(query.next())
+            {
+                if(absolutePath == query.value(10).toString())
+                {
+                    return query.value(12).toString();
+                }
+            }
+            return "";
+        }
+        else return "";
+    }
+}
+
+void ImageCompletionUI::editImageProperties(QString fileName)
+{
 }
