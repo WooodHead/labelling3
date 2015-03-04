@@ -362,8 +362,11 @@ private:
     AdvanceSearchDlg *advanceSearchDlg;
     classification class1;
     buttom buttom1;
-    QString wholefilename;
-    int k;
+    QString _imageName;
+    int _cnt;
+
+    QString labelStatus(QString absolutePath);
+    void editImageProperties(QString fileName);
 
 private:
     bool copyFiles(QString fromDir,QString toDir,bool convertIfExits = false);

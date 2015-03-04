@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QSqlQuery>
 #include <QSqlRecord>
+#include <QSqlDatabase>
 
 #include "global.h"
 #include "connection.h"
@@ -74,11 +75,11 @@ void Login::login()
             if(query.next())
             {
                 int no1 = query.record().indexOf("authority");
-                int no2 = query.record().indexOf("display_name");
                 _authority = query.value(no1).toString();
-                _display_name = query.value(no2).toString();
 
+                QString connection = db.connectionName();
                 db.close();
+                QSqlDatabase::removeDatabase(connection);
                 return getDataForMainform();
             }
         }
@@ -92,7 +93,6 @@ void Login::login()
 void Login::getDataForMainform()
 {
     Global::Authority = _authority;
-    Global::DisplayName = _display_name;
 
     (new ImageCompletionUI)->show();
     this->deleteLater();
