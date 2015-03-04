@@ -61,11 +61,8 @@ FORMS += \
     login.ui \
     usermanagement.ui \
     useradd.ui \
-<<<<<<< HEAD
-    imageproperties.ui
-=======
+    imageproperties.ui \
     advancesearchdlg.ui
->>>>>>> e14aed02861eb8498abf70956aadf62535664c48
 
 RESOURCES += \
     ImageCompletion.qrc
