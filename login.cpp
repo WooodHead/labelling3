@@ -74,9 +74,7 @@ void Login::login()
             if(query.next())
             {
                 int no1 = query.record().indexOf("authority");
-                int no2 = query.record().indexOf("display_name");
                 _authority = query.value(no1).toString();
-                _display_name = query.value(no2).toString();
 
                 db.close();
                 return getDataForMainform();
@@ -92,7 +90,6 @@ void Login::login()
 void Login::getDataForMainform()
 {
     Global::Authority = _authority;
-    Global::DisplayName = _display_name;
 
     (new ImageCompletionUI)->show();
     this->deleteLater();
