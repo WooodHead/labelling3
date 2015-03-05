@@ -386,18 +386,18 @@
               </item>
               <item>
                <widget class="QDateEdit" name="dateEdit_2">
-                <property name="displayFormat">
-                 <string>yyyy年/MM月/dd日</string>
-                </property>
-                <property name="calendarPopup">
-                 <bool>true</bool>
-                </property>
                 <property name="date">
                  <date>
                   <year>2014</year>
                   <month>1</month>
                   <day>1</day>
                  </date>
+                </property>
+                <property name="displayFormat">
+                 <string>yyyy年/MM月/dd日</string>
+                </property>
+                <property name="calendarPopup">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -2488,7 +2488,7 @@
        <item>
         <widget class="QPushButton" name="queryBtn">
          <property name="text">
-          <string>PushButton</string>
+          <string>查询</string>
          </property>
         </widget>
        </item>
@@ -2537,173 +2537,57 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_5">
       <item row="0" column="0">
-       <widget class="QTabWidget" name="tabWidget_2">
+       <widget class="QTabWidget" name="queryResultTabWidget">
         <property name="currentIndex">
-         <number>6</number>
+         <number>2</number>
         </property>
-        <widget class="QWidget" name="tab_3">
+        <property name="elideMode">
+         <enum>Qt::ElideNone</enum>
+        </property>
+        <widget class="QWidget" name="eqmInfoTab">
          <attribute name="title">
           <string>装备信息表</string>
          </attribute>
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0">
-           <widget class="QTableWidget" name="twLend">
-            <row>
-             <property name="text">
-              <string>1</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>2</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>3</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>4</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>5</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>6</string>
-             </property>
-            </row>
-            <column>
-             <property name="text">
-              <string>序号</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>机号</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>机型</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>单位编号</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>飞行小时数</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>运行阶段</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>修复次数</string>
-             </property>
-            </column>
+           <widget class="QTableView" name="eqmTableView">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
            </widget>
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="tab_4">
+        <widget class="QWidget" name="mpInfoTab">
          <attribute name="title">
           <string>动部件信息表</string>
          </attribute>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">
-           <widget class="QTableWidget" name="twLend_2">
-            <row>
-             <property name="text">
-              <string>1</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>2</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>3</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>4</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>5</string>
-             </property>
-            </row>
-            <row>
-             <property name="text">
-              <string>6</string>
-             </property>
-            </row>
-            <column>
-             <property name="text">
-              <string>序号</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>动部件编号</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>动部件型号</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>动部件名称</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>运行时数</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>运行阶段</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>机号</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>机型</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>动部件起始日期</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>动部件终止日期</string>
-             </property>
-            </column>
+           <widget class="QTableView" name="mpTableView">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="mprInfoTab">
+         <attribute name="title">
+          <string>动部件维修信息表</string>
+         </attribute>
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="0" column="0">
+           <widget class="QTableView" name="mprTableView">
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
            </widget>
           </item>
          </layout>
@@ -2918,101 +2802,6 @@
            </widget>
           </item>
          </layout>
-        </widget>
-        <widget class="QWidget" name="tab_6">
-         <attribute name="title">
-          <string>动部件维修信息表</string>
-         </attribute>
-         <widget class="QTableWidget" name="twLend_3">
-          <property name="geometry">
-           <rect>
-            <x>9</x>
-            <y>9</y>
-            <width>844</width>
-            <height>211</height>
-           </rect>
-          </property>
-          <row>
-           <property name="text">
-            <string>1</string>
-           </property>
-          </row>
-          <row>
-           <property name="text">
-            <string>2</string>
-           </property>
-          </row>
-          <row>
-           <property name="text">
-            <string>3</string>
-           </property>
-          </row>
-          <row>
-           <property name="text">
-            <string>4</string>
-           </property>
-          </row>
-          <row>
-           <property name="text">
-            <string>5</string>
-           </property>
-          </row>
-          <row>
-           <property name="text">
-            <string>6</string>
-           </property>
-          </row>
-          <column>
-           <property name="text">
-            <string>序号</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>动部件维修编号</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>动部件编号</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>动部件型号</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>维修原因</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>维修日期</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>维修次数</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>维修执行单位</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>维修内容</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>维修换件情况</string>
-           </property>
-          </column>
-         </widget>
         </widget>
         <widget class="QWidget" name="tab_8">
          <attribute name="title">
