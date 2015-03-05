@@ -23,6 +23,7 @@
 #include "classification.h"
 #include "buttom.h"
 #include "advancesearchdlg.h"
+#include "usermanagement.h"
 
 
 class QStackedWidget;
@@ -360,6 +361,7 @@ private slots:
 private:
     Searchdata *searchdata1;
     AdvanceSearchDlg *advanceSearchDlg;
+    UserManagement *userMangementDlg;
     classification class1;
     buttom buttom1;
     QString _imageName;

@@ -6,7 +6,6 @@
 #include "interfaces.h"
 #include "ImageViewer.h"
 #include "connection.h"
-#include "usermanagement.h"
 #include "imageproperties.h"
 
 //#include "Competition.h"
@@ -1796,7 +1795,10 @@ void ImageCompletionUI::actionSliderReleased()
 
 void ImageCompletionUI::userManagement()
 {
-    (new UserManagement)->show();
+//    (new UserManagement(this))->show();
+    userMangementDlg = new UserManagement(this);
+    userMangementDlg->setWindowFlags(userMangementDlg->windowFlags()&~Qt::WindowMinimizeButtonHint& ~Qt::WindowMaximizeButtonHint);
+    userMangementDlg->show();
 }
 
 bool ImageCompletionUI::maybeSave()
