@@ -28,6 +28,9 @@ private slots:
 private:
      QString generateSql(QMap<QString,QString> conditionMap,QStringList conditionField,QString tableName);
      void setModelHeaderData(QString tablename);
+     void createTableView();
+     void createTableNames();
+     void query();
 
 private:
     Ui::AdvanceSearchDlg *ui;
