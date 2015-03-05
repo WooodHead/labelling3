@@ -19,17 +19,16 @@ public:
     
 private slots:
     void on__cancel_clicked();
-
     void on__add_clicked();
+
     
-    //added by zhyn
 signals:
     void addUser(UserInfo *userInfo);
 
+
 private:
     Ui::UserAdd *ui;
-    //added by zhyn
-    UserInfo *userInfo;
+    UserInfo* getInfo();
 };
 
 #endif // USERADD_H

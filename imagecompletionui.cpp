@@ -106,7 +106,7 @@ void	 ImageCompletionUI::createMenus()
     _menuData->addAction(_importDataAction);
 
     // user management
-    if(Global::Authority == "0") //admin
+    if(Global::Authority == "1") //admin
     {
         _menuUser = menuBar()->addMenu(tr("&用户管理"));
         _menuUser->addAction(_userManagementAction);
@@ -301,7 +301,7 @@ void	ImageCompletionUI::createActions()
     _lineThicknessCombobox->addItems(list);
 
     // user
-    if(Global::Authority == "0")
+    if(Global::Authority == "1") //admin
     {
         _userManagementAction = new QAction( tr("用户管理"), this );
         _userManagementAction->setObjectName(tr("_userManagementAction"));
