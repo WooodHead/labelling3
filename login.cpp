@@ -68,7 +68,7 @@ void Login::login()
     {
         if(query.size() == 0)
         {
-            QMessageBox::warning(this,tr("失败"),tr("登录失败,用户名或密码不正确!"),QMessageBox::Close);
+            QMessageBox::warning(this, tr("失败"), tr("登录失败,用户名或密码不正确!"), QMessageBox::Close);
         }
         else
         {
