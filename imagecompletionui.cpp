@@ -1415,7 +1415,6 @@ void ImageCompletionUI::showData()
                               QMessageBox::Cancel);
     }
 
-
     bool ret;
     QSqlRecord rec;
 
