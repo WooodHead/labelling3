@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>981</width>
+    <width>1115</width>
     <height>401</height>
    </rect>
   </property>
@@ -23,11 +23,11 @@
       <attribute name="title">
        <string>装备信息</string>
       </attribute>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
-         <x>60</x>
-         <y>60</y>
+         <x>80</x>
+         <y>50</y>
          <width>562</width>
          <height>62</height>
         </rect>
@@ -41,7 +41,11 @@
          </widget>
         </item>
         <item row="0" column="1" colspan="2">
-         <widget class="QComboBox" name="comboBox"/>
+         <widget class="QComboBox" name="_comboBoxEquipPlaneID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="0" column="3">
          <widget class="QLabel" name="label_2">
@@ -49,9 +53,6 @@
            <string>机型</string>
           </property>
          </widget>
-        </item>
-        <item row="0" column="4" colspan="2">
-         <widget class="QComboBox" name="comboBox_2"/>
         </item>
         <item row="0" column="6">
          <widget class="QLabel" name="label_3">
@@ -61,7 +62,11 @@
          </widget>
         </item>
         <item row="0" column="7">
-         <widget class="QComboBox" name="comboBox_3"/>
+         <widget class="QComboBox" name="_comboBoxEquipUnitID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="1" column="0" colspan="2">
          <widget class="QLabel" name="label_4">
@@ -81,7 +86,11 @@
          </widget>
         </item>
         <item row="1" column="5">
-         <widget class="QComboBox" name="comboBox_4"/>
+         <widget class="QComboBox" name="_comboBoxEquipRuntime">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="1" column="6">
          <widget class="QLabel" name="label_6">
@@ -93,13 +102,20 @@
         <item row="1" column="7">
          <widget class="QLineEdit" name="lineEdit_2"/>
         </item>
+        <item row="0" column="5">
+         <widget class="QComboBox" name="_comboBoxEquipPlaneType">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
-         <x>180</x>
-         <y>230</y>
+         <x>250</x>
+         <y>170</y>
          <width>204</width>
          <height>68</height>
         </rect>
@@ -121,21 +137,6 @@
         </item>
        </layout>
       </widget>
-      <zorder>pushButton</zorder>
-      <zorder>pushButton_2</zorder>
-      <zorder>label</zorder>
-      <zorder>comboBox</zorder>
-      <zorder>label_2</zorder>
-      <zorder>comboBox_2</zorder>
-      <zorder>label_3</zorder>
-      <zorder>comboBox_3</zorder>
-      <zorder>label_4</zorder>
-      <zorder>lineEdit</zorder>
-      <zorder>label_5</zorder>
-      <zorder>comboBox_4</zorder>
-      <zorder>label_6</zorder>
-      <zorder>lineEdit_2</zorder>
-      <zorder>pushButton</zorder>
      </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
@@ -144,8 +145,8 @@
       <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
-         <x>310</x>
-         <y>250</y>
+         <x>340</x>
+         <y>200</y>
          <width>204</width>
          <height>68</height>
         </rect>
@@ -167,7 +168,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
          <x>60</x>
@@ -177,15 +178,12 @@
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_4">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_7">
-          <property name="text">
-           <string>动部件编号</string>
+        <item row="0" column="5" colspan="2">
+         <widget class="QComboBox" name="_comboBoxMovepartName">
+          <property name="editable">
+           <bool>true</bool>
           </property>
          </widget>
-        </item>
-        <item row="0" column="5" colspan="2">
-         <widget class="QComboBox" name="comboBox_6"/>
         </item>
         <item row="0" column="7" colspan="2">
          <widget class="QLabel" name="label_9">
@@ -195,7 +193,11 @@
          </widget>
         </item>
         <item row="0" column="9" colspan="2">
-         <widget class="QComboBox" name="comboBox_7"/>
+         <widget class="QComboBox" name="_comboBoxMovepartType">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="0" column="11">
          <widget class="QLabel" name="label_10">
@@ -215,7 +217,11 @@
          </widget>
         </item>
         <item row="1" column="2" colspan="2">
-         <widget class="QComboBox" name="comboBox_8"/>
+         <widget class="QComboBox" name="_comboBoxMovepartMohe">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="2" column="0" colspan="2">
          <widget class="QLabel" name="label_14">
@@ -225,7 +231,7 @@
          </widget>
         </item>
         <item row="2" column="2" colspan="2">
-         <widget class="QDateEdit" name="dateEdit"/>
+         <widget class="QDateEdit" name="_dateEditMovepartBegin"/>
         </item>
         <item row="1" column="4">
          <widget class="QLabel" name="label_12">
@@ -235,7 +241,11 @@
          </widget>
         </item>
         <item row="1" column="5" colspan="2">
-         <widget class="QComboBox" name="comboBox_9"/>
+         <widget class="QComboBox" name="_comboBoxMovepartPlaneID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="1" column="7" colspan="2">
          <widget class="QLabel" name="label_13">
@@ -245,7 +255,11 @@
          </widget>
         </item>
         <item row="1" column="9" colspan="2">
-         <widget class="QComboBox" name="comboBox_10"/>
+         <widget class="QComboBox" name="_comboBoxMovepartPlaneType">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="0" column="4">
          <widget class="QLabel" name="label_8">
@@ -254,18 +268,29 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="1" colspan="3">
-         <widget class="QComboBox" name="comboBox_5"/>
+        <item row="2" column="7" colspan="4">
+         <widget class="QDateEdit" name="_dateEditMovepartEnd"/>
         </item>
-        <item row="2" column="4" colspan="3">
+        <item row="0" column="2" colspan="2">
+         <widget class="QComboBox" name="_comboBoxMovepartID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" colspan="2">
+         <widget class="QLabel" name="label_7">
+          <property name="text">
+           <string>动部件编号</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="4" colspan="2">
          <widget class="QLabel" name="label_15">
           <property name="text">
            <string>动部件终止日期</string>
           </property>
          </widget>
-        </item>
-        <item row="2" column="7" colspan="4">
-         <widget class="QDateEdit" name="dateEdit_2"/>
         </item>
        </layout>
       </widget>
@@ -277,8 +302,8 @@
       <widget class="QWidget" name="layoutWidget_2">
        <property name="geometry">
         <rect>
-         <x>250</x>
-         <y>250</y>
+         <x>270</x>
+         <y>240</y>
          <width>204</width>
          <height>68</height>
         </rect>
@@ -300,11 +325,11 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
-         <x>60</x>
-         <y>50</y>
+         <x>70</x>
+         <y>40</y>
          <width>611</width>
          <height>161</height>
         </rect>
@@ -318,7 +343,11 @@
          </widget>
         </item>
         <item row="0" column="2">
-         <widget class="QComboBox" name="comboBox_11"/>
+         <widget class="QComboBox" name="_comboBoxMovepartServiceID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="0" column="3" colspan="3">
          <widget class="QLabel" name="label_17">
@@ -328,7 +357,11 @@
          </widget>
         </item>
         <item row="0" column="6">
-         <widget class="QComboBox" name="comboBox_12"/>
+         <widget class="QComboBox" name="_comboBoxMovepartServiceMovepartID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="0" column="7" colspan="2">
          <widget class="QLabel" name="label_18">
@@ -338,7 +371,11 @@
          </widget>
         </item>
         <item row="0" column="9" colspan="2">
-         <widget class="QComboBox" name="comboBox_13"/>
+         <widget class="QComboBox" name="_comboBoxMovepartServiceMovepartType">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_19">
@@ -355,7 +392,7 @@
          </widget>
         </item>
         <item row="2" column="2" colspan="2">
-         <widget class="QDateEdit" name="dateEdit_3"/>
+         <widget class="QDateEdit" name="_dateEditMovepartServiceDate"/>
         </item>
         <item row="2" column="4">
          <widget class="QLabel" name="label_21">
@@ -372,7 +409,11 @@
          </widget>
         </item>
         <item row="2" column="10">
-         <widget class="QComboBox" name="comboBox_14"/>
+         <widget class="QComboBox" name="_comboBoxMovepartServiceUnit">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="3" column="0">
          <widget class="QLabel" name="label_23">
@@ -433,7 +474,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
          <x>40</x>
@@ -458,7 +499,11 @@
          </widget>
         </item>
         <item row="0" column="5">
-         <widget class="QComboBox" name="comboBox_16"/>
+         <widget class="QComboBox" name="_comboBoxOilSampleUnitID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="0" column="7">
          <widget class="QLabel" name="label_27">
@@ -467,18 +512,12 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="9" colspan="2">
-         <widget class="QComboBox" name="comboBox_17"/>
-        </item>
         <item row="0" column="12">
          <widget class="QLabel" name="label_28">
           <property name="text">
            <string>机号</string>
           </property>
          </widget>
-        </item>
-        <item row="0" column="14" colspan="2">
-         <widget class="QComboBox" name="comboBox_18"/>
         </item>
         <item row="1" column="0" rowspan="2">
          <widget class="QLabel" name="label_29">
@@ -495,7 +534,11 @@
          </widget>
         </item>
         <item row="2" column="5">
-         <widget class="QComboBox" name="comboBox_20"/>
+         <widget class="QComboBox" name="_comboBoxOilSampleMonitorPartID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="2" column="7" colspan="3">
          <widget class="QLabel" name="label_31">
@@ -532,7 +575,11 @@
          </widget>
         </item>
         <item row="4" column="2">
-         <widget class="QComboBox" name="comboBox_22"/>
+         <widget class="QComboBox" name="_comboBoxOilSampleSampleUnit">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="4" column="7" colspan="2">
          <widget class="QLabel" name="label_37">
@@ -542,7 +589,7 @@
          </widget>
         </item>
         <item row="4" column="9" colspan="3">
-         <widget class="QDateEdit" name="dateEdit_4"/>
+         <widget class="QDateEdit" name="_dateEditOilSampleSampleDate"/>
         </item>
         <item row="4" column="12" colspan="2">
          <widget class="QLabel" name="label_38">
@@ -552,7 +599,7 @@
          </widget>
         </item>
         <item row="4" column="14" colspan="2">
-         <widget class="QTimeEdit" name="timeEdit"/>
+         <widget class="QTimeEdit" name="_timeEditOilSampleSampleTime"/>
         </item>
         <item row="5" column="0">
          <widget class="QLabel" name="label_39">
@@ -576,7 +623,11 @@
          </widget>
         </item>
         <item row="5" column="14" colspan="2">
-         <widget class="QComboBox" name="comboBox_25"/>
+         <widget class="QComboBox" name="_comboBoxOilSampleSendGuy">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="6" column="0">
          <widget class="QLabel" name="label_44">
@@ -586,19 +637,35 @@
          </widget>
         </item>
         <item row="0" column="2">
-         <widget class="QComboBox" name="comboBox_15"/>
+         <widget class="QComboBox" name="_comboBoxOilSampleID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="2" column="2">
-         <widget class="QComboBox" name="comboBox_19"/>
+         <widget class="QComboBox" name="_comboBoxOilSampleMonitorPart">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="5" column="2">
-         <widget class="QComboBox" name="comboBox_24"/>
+         <widget class="QComboBox" name="_comboBoxOilSampleSampleMethod">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="6" column="2" colspan="2">
-         <widget class="QDateEdit" name="dateEdit_5"/>
+         <widget class="QDateEdit" name="_dateEditOilSampleSendDate"/>
         </item>
         <item row="4" column="5">
-         <widget class="QComboBox" name="comboBox_23"/>
+         <widget class="QComboBox" name="_comboBoxOilSampleSampleGuy">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="5" column="5" colspan="2">
          <widget class="QLineEdit" name="lineEdit_11"/>
@@ -618,10 +685,14 @@
          </widget>
         </item>
         <item row="6" column="6">
-         <widget class="QTimeEdit" name="timeEdit_2"/>
+         <widget class="QTimeEdit" name="_timeEditOilSampleSendTime"/>
         </item>
         <item row="2" column="10">
-         <widget class="QComboBox" name="comboBox_21"/>
+         <widget class="QComboBox" name="_comboBoxOilSampleSamplePointID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="5" column="10" colspan="2">
          <widget class="QLineEdit" name="lineEdit_12"/>
@@ -629,7 +700,7 @@
         <item row="5" column="12" colspan="2">
          <widget class="QLabel" name="label_42">
           <property name="text">
-           <string>采样人</string>
+           <string>送样人</string>
           </property>
          </widget>
         </item>
@@ -643,6 +714,20 @@
           </property>
          </widget>
         </item>
+        <item row="0" column="10">
+         <widget class="QComboBox" name="_comboBoxOilSamplePlaneType">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="13">
+         <widget class="QComboBox" name="_comboBoxOilSamplePlaneID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </widget>
@@ -650,6 +735,398 @@
       <attribute name="title">
        <string>油样检测分析信息</string>
       </attribute>
+      <widget class="QWidget" name="layoutWidget_6">
+       <property name="geometry">
+        <rect>
+         <x>350</x>
+         <y>280</y>
+         <width>204</width>
+         <height>68</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_15">
+        <item row="0" column="0">
+         <widget class="QPushButton" name="pushButton_13">
+          <property name="text">
+           <string>保存</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QPushButton" name="pushButton_14">
+          <property name="text">
+           <string>取消</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>1495</width>
+         <height>261</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_14">
+        <item row="10" column="7">
+         <widget class="QComboBox" name="_comboBoxOilAnalyzeMentalEquip">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="6">
+         <widget class="QLabel" name="label_84">
+          <property name="text">
+           <string>铁谱分析设备</string>
+          </property>
+         </widget>
+        </item>
+        <item row="11" column="6">
+         <widget class="QLabel" name="label_89">
+          <property name="text">
+           <string>理化分析设备</string>
+          </property>
+         </widget>
+        </item>
+        <item row="11" column="4">
+         <widget class="QLabel" name="label_90">
+          <property name="text">
+           <string>理化分析日期</string>
+          </property>
+         </widget>
+        </item>
+        <item row="11" column="5">
+         <widget class="QDateEdit" name="_dateEditOilAnalyzeLihuaDate"/>
+        </item>
+        <item row="0" column="9">
+         <widget class="QComboBox" name="_comboBoxOilAnalyzeReceiveGuy">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="6">
+         <widget class="QLabel" name="label_68">
+          <property name="text">
+           <string>送样人</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="5">
+         <widget class="QComboBox" name="_comboBoxOilAnalyzeSendUnit">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="7">
+         <widget class="QComboBox" name="_comboBoxOilAnalyzeLightEquip">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="9">
+         <widget class="QComboBox" name="_comboBoxOilAnalyzeLightEquipID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="6">
+         <widget class="QLabel" name="label_79">
+          <property name="text">
+           <string>光谱分析设备</string>
+          </property>
+         </widget>
+        </item>
+        <item row="11" column="3">
+         <widget class="QComboBox" name="_comboBoxOilAnalyzeLihuaGuy">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="8">
+         <widget class="QLabel" name="label_70">
+          <property name="text">
+           <string>收油样人</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="5">
+         <widget class="QDateEdit" name="dateEditOilAnalyzeDate"/>
+        </item>
+        <item row="11" column="7">
+         <widget class="QComboBox" name="_comboBoxOilAnalyzeLihuaEquip">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="QLabel" name="label_66">
+          <property name="text">
+           <string>送检单位</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="5">
+         <widget class="QDateEdit" name="_dateEditOilAnalyzeLightDate"/>
+        </item>
+        <item row="6" column="2">
+         <widget class="QLabel" name="label_77">
+          <property name="text">
+           <string>光谱分析人</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="9">
+         <widget class="QComboBox" name="_comboBoxOilAnalyzePolluteReportID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="11" column="9">
+         <widget class="QComboBox" name="_comboBoxOilAnalyzeLihuaEquipID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="1">
+         <widget class="QComboBox" name="_comboBoxOilAnalyzeLightMethod">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="1">
+         <widget class="QComboBox" name="_comboBoxOilAnalyzeMentalMethod">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="7">
+         <widget class="QComboBox" name="_comboBoxOilAnalyzeSendGuy">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="8">
+         <widget class="QLabel" name="label_75">
+          <property name="text">
+           <string>污染度分析报告编号</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1" colspan="7">
+         <widget class="QLineEdit" name="lineEdit_16"/>
+        </item>
+        <item row="3" column="7">
+         <widget class="QComboBox" name="_comboBoxOilAnalyzePolluteLevelEquip">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="8">
+         <widget class="QLabel" name="label_69">
+          <property name="text">
+           <string>收油样日期</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="4">
+         <widget class="QLabel" name="label_73">
+          <property name="text">
+           <string>污染度分析日期</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QLabel" name="label_65">
+          <property name="text">
+           <string>检测分析单位名称</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="3">
+         <widget class="QComboBox" name="_comboBoxOilAnalyzeLightGuy">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="3">
+         <widget class="QComboBox" name="_comboBoxOilAnalyzePollutionLevelGuy">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QComboBox" name="_comboBoxOilAnalyzeUnitName">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="11" column="8">
+         <widget class="QLabel" name="label_88">
+          <property name="text">
+           <string>理化分析设备编号</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QComboBox" name="_comboBoxOilAnalyzePollutionLevelMethod">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="9">
+         <widget class="QComboBox" name="_comboBoxOilAnalyzeMentalEquipID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_64">
+          <property name="text">
+           <string>油样编号</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_67">
+          <property name="text">
+           <string>送检原因</string>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="5">
+         <widget class="QDateEdit" name="_dateEditOilAnalyzeMentalDate"/>
+        </item>
+        <item row="10" column="2">
+         <widget class="QLabel" name="label_82">
+          <property name="text">
+           <string>铁谱分析人</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="8">
+         <widget class="QLabel" name="label_80">
+          <property name="text">
+           <string>光谱分析设备编号</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="6">
+         <widget class="QLabel" name="label_74">
+          <property name="text">
+           <string>污染度分析设备</string>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="8">
+         <widget class="QLabel" name="label_85">
+          <property name="text">
+           <string>铁谱分析设备编号</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="9">
+         <widget class="QDateEdit" name="_dateEditOilAnalyzeReceiveDate"/>
+        </item>
+        <item row="11" column="1">
+         <widget class="QComboBox" name="_comboBoxOilAnalyzeLihuaMethod">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="4">
+         <widget class="QLabel" name="label_83">
+          <property name="text">
+           <string>铁谱分析日期</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="0">
+         <widget class="QLabel" name="label_76">
+          <property name="text">
+           <string>光谱分析方法</string>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="0">
+         <widget class="QLabel" name="label_81">
+          <property name="text">
+           <string>铁谱分析方法</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QLabel" name="label_72">
+          <property name="text">
+           <string>污染度分析人</string>
+          </property>
+         </widget>
+        </item>
+        <item row="11" column="2">
+         <widget class="QLabel" name="label_86">
+          <property name="text">
+           <string>理化分析人</string>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="3">
+         <widget class="QComboBox" name="_comboBoxOilAnalyzeMentalGuy">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="4">
+         <widget class="QLabel" name="label_78">
+          <property name="text">
+           <string>光谱分析日期</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QComboBox" name="_comboBoxOilAnalyzeOilSampleID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="11" column="0">
+         <widget class="QLabel" name="label_87">
+          <property name="text">
+           <string>理化分析方法</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_71">
+          <property name="text">
+           <string>污染度分析方法</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
      <widget class="QWidget" name="tab_6">
       <attribute name="title">
@@ -681,7 +1158,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
          <x>50</x>
@@ -699,7 +1176,11 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QComboBox" name="comboBox_26"/>
+         <widget class="QComboBox" name="_comboBoxMentalID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="0" column="2" colspan="2">
          <widget class="QLabel" name="label_46">
@@ -709,7 +1190,11 @@
          </widget>
         </item>
         <item row="0" column="4">
-         <widget class="QComboBox" name="comboBox_27"/>
+         <widget class="QComboBox" name="_comboBoxMentalReportID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="0" column="5">
          <widget class="QLabel" name="label_47">
@@ -719,7 +1204,11 @@
          </widget>
         </item>
         <item row="0" column="6" colspan="2">
-         <widget class="QComboBox" name="comboBox_28"/>
+         <widget class="QComboBox" name="_comboBoxMentalOilSampleID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="0" column="8">
          <widget class="QLabel" name="label_48">
@@ -729,7 +1218,14 @@
          </widget>
         </item>
         <item row="0" column="9">
-         <widget class="QComboBox" name="comboBox_29"/>
+         <widget class="QComboBox" name="_comboBoxMentalInstrumentType">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+          <property name="currentIndex">
+           <number>-1</number>
+          </property>
+         </widget>
         </item>
         <item row="1" column="0" colspan="2">
          <widget class="QLabel" name="label_49">
@@ -749,7 +1245,11 @@
          </widget>
         </item>
         <item row="1" column="9">
-         <widget class="QComboBox" name="comboBox_32"/>
+         <widget class="QComboBox" name="_comboBoxMentalGuy">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="1" column="8">
          <widget class="QLabel" name="label_51">
@@ -759,7 +1259,11 @@
          </widget>
         </item>
         <item row="1" column="5" colspan="3">
-         <widget class="QComboBox" name="comboBox_31"/>
+         <widget class="QComboBox" name="_comboBoxMentalMethod">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -794,11 +1298,11 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
          <x>70</x>
-         <y>60</y>
+         <y>40</y>
          <width>816</width>
          <height>128</height>
         </rect>
@@ -812,7 +1316,11 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QComboBox" name="comboBox_30"/>
+         <widget class="QComboBox" name="_comboBoxMentalSampleImageID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="0" column="2" colspan="2">
          <widget class="QLabel" name="label_53">
@@ -822,7 +1330,11 @@
          </widget>
         </item>
         <item row="0" column="4">
-         <widget class="QComboBox" name="comboBox_33"/>
+         <widget class="QComboBox" name="_comboBoxMentalSampleID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="0" column="5">
          <widget class="QLabel" name="label_54">
@@ -832,7 +1344,11 @@
          </widget>
         </item>
         <item row="0" column="6">
-         <widget class="QComboBox" name="comboBox_34"/>
+         <widget class="QComboBox" name="_comboBoxMentalSampleReportID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="0" column="7" colspan="2">
          <widget class="QLabel" name="label_55">
@@ -842,7 +1358,11 @@
          </widget>
         </item>
         <item row="0" column="9">
-         <widget class="QComboBox" name="comboBox_35"/>
+         <widget class="QComboBox" name="_comboBoxMentalSampleMicroType">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_56">
@@ -852,7 +1372,11 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QComboBox" name="comboBox_36"/>
+         <widget class="QComboBox" name="_comboBoxMentalSampleSamplerType">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="1" column="2" colspan="2">
          <widget class="QLabel" name="label_57">
@@ -862,7 +1386,11 @@
          </widget>
         </item>
         <item row="1" column="4">
-         <widget class="QComboBox" name="comboBox_37"/>
+         <widget class="QComboBox" name="_comboBoxMentalSampleLightType">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="1" column="5">
          <widget class="QLabel" name="label_58">
@@ -870,9 +1398,6 @@
            <string>放大倍数</string>
           </property>
          </widget>
-        </item>
-        <item row="1" column="6">
-         <widget class="QComboBox" name="comboBox_38"/>
         </item>
         <item row="1" column="7" colspan="2">
          <widget class="QLabel" name="label_59">
@@ -882,7 +1407,11 @@
          </widget>
         </item>
         <item row="1" column="9">
-         <widget class="QComboBox" name="comboBox_39"/>
+         <widget class="QComboBox" name="_comboBoxMentalSampleArea">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_60">
@@ -892,7 +1421,11 @@
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QComboBox" name="comboBox_40"/>
+         <widget class="QComboBox" name="_comboBoxMentalSampleGuy">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="2" column="2">
          <widget class="QLabel" name="label_61">
@@ -919,10 +1452,17 @@
          </widget>
         </item>
         <item row="3" column="1">
-         <widget class="QComboBox" name="comboBox_41"/>
+         <widget class="QComboBox" name="_comboBoxMentalSampleImageTag">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="2" column="3" colspan="3">
          <widget class="QLineEdit" name="lineEdit_14"/>
+        </item>
+        <item row="1" column="6">
+         <widget class="QLineEdit" name="lineEdit_21"/>
         </item>
        </layout>
       </widget>
@@ -931,11 +1471,411 @@
       <attribute name="title">
        <string>磨粒标注信息</string>
       </attribute>
+      <widget class="QWidget" name="layoutWidget_7">
+       <property name="geometry">
+        <rect>
+         <x>370</x>
+         <y>260</y>
+         <width>204</width>
+         <height>68</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_17">
+        <item row="0" column="0">
+         <widget class="QPushButton" name="pushButton_15">
+          <property name="text">
+           <string>保存</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QPushButton" name="pushButton_16">
+          <property name="text">
+           <string>取消</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>1051</width>
+         <height>220</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_16">
+        <item row="4" column="0" colspan="2">
+         <widget class="QLabel" name="label_97">
+          <property name="text">
+           <string>磨粒材质</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0" colspan="2">
+         <widget class="QLabel" name="label_101">
+          <property name="text">
+           <string>磨粒形状</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QComboBox" name="_comboBoxMoliID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QLabel" name="label_92">
+          <property name="text">
+           <string>铁谱图片编号</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="QComboBox" name="_comboBoxMoliImageID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="5">
+         <widget class="QLabel" name="label_93">
+          <property name="text">
+           <string>铁谱片编号</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QComboBox" name="_comboBoxMoliGuy">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="3">
+         <widget class="QLabel" name="label_96">
+          <property name="text">
+           <string>磨粒图片(路径)</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="4" colspan="6">
+         <widget class="QLineEdit" name="lineEdit_17">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="2">
+         <widget class="QComboBox" name="_comboBoxMoliProperty">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="2">
+         <widget class="QComboBox" name="_comboBoxMoliShape">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="0" colspan="2">
+         <widget class="QLabel" name="label_105">
+          <property name="text">
+           <string>磨粒损伤部位</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="2">
+         <widget class="QComboBox" name="_comboBoxMoliErodePart">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" colspan="2">
+         <widget class="QLabel" name="label_91">
+          <property name="text">
+           <string>磨粒编号</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0" colspan="2">
+         <widget class="QLabel" name="label_95">
+          <property name="text">
+           <string>磨粒标注人</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="3">
+         <widget class="QLabel" name="label_98">
+          <property name="text">
+           <string>磨粒位置</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="3">
+         <widget class="QLabel" name="label_102">
+          <property name="text">
+           <string>磨粒颜色</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="3">
+         <widget class="QLabel" name="label_106">
+          <property name="text">
+           <string>磨粒磨损机理</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="4">
+         <widget class="QComboBox" name="_comboBoxMoliPosition">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="4">
+         <widget class="QComboBox" name="_comboBoxMoliColor">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="4">
+         <widget class="QComboBox" name="_comboBoxMoliErodeReason">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="5">
+         <widget class="QLabel" name="label_99">
+          <property name="text">
+           <string>磨粒尺寸</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="5">
+         <widget class="QLabel" name="label_103">
+          <property name="text">
+           <string>磨粒表面纹理类型</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="5">
+         <widget class="QLabel" name="label_107">
+          <property name="text">
+           <string>磨粒反映故障信息</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="6">
+         <widget class="QComboBox" name="_comboBoxMoliPianID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="6">
+         <widget class="QLineEdit" name="lineEdit_18"/>
+        </item>
+        <item row="5" column="6">
+         <widget class="QComboBox" name="_comboBoxMoliSurface">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="6">
+         <widget class="QComboBox" name="_comboBoxMoliGivenInfo">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="7">
+         <widget class="QLabel" name="label_94">
+          <property name="text">
+           <string>铁谱分析报告编号</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="8">
+         <widget class="QComboBox" name="_comboBoxMoliReportID">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="7">
+         <widget class="QLabel" name="label_100">
+          <property name="text">
+           <string>磨粒周长</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="8">
+         <widget class="QLineEdit" name="lineEdit_19"/>
+        </item>
+        <item row="5" column="7">
+         <widget class="QLabel" name="label_104">
+          <property name="text">
+           <string>磨粒磨损类型</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="8">
+         <widget class="QComboBox" name="_comboBoxMoliErodeType">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="7">
+         <widget class="QLabel" name="label_108">
+          <property name="text">
+           <string>磨粒典型性</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="8">
+         <widget class="QComboBox" name="_comboBoxMoliTypical">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
      <widget class="QWidget" name="tab_8">
       <attribute name="title">
        <string>采样点信息</string>
       </attribute>
+      <widget class="QWidget" name="layoutWidget_8">
+       <property name="geometry">
+        <rect>
+         <x>260</x>
+         <y>170</y>
+         <width>204</width>
+         <height>68</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_19">
+        <item row="0" column="0">
+         <widget class="QPushButton" name="pushButton_17">
+          <property name="text">
+           <string>保存</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QPushButton" name="pushButton_18">
+          <property name="text">
+           <string>取消</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>80</x>
+         <y>50</y>
+         <width>587</width>
+         <height>62</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_18">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_109">
+          <property name="text">
+           <string>采样点编号</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QComboBox" name="comboBox_78">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QLabel" name="label_110">
+          <property name="text">
+           <string>装备名称</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QComboBox" name="comboBox_79">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4" colspan="2">
+         <widget class="QLabel" name="label_111">
+          <property name="text">
+           <string>装备编号(机号或动部件编号)</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="6">
+         <widget class="QComboBox" name="comboBox_80">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_112">
+          <property name="text">
+           <string>装备型号</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QComboBox" name="comboBox_81">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLabel" name="label_113">
+          <property name="text">
+           <string>采样方法</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QComboBox" name="comboBox_82">
+          <property name="editable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="4">
+         <widget class="QLabel" name="label_114">
+          <property name="text">
+           <string>采样注意事项</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="5" colspan="2">
+         <widget class="QLineEdit" name="lineEdit_20"/>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </widget>
    </item>
