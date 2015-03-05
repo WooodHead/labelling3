@@ -1,40 +1,50 @@
-#include "useradd.h"
-#include "ui_useradd.h"
+#include "useredit.h"
+#include "ui_useredit.h"
 
-#include "connection.h"
-
-#include <QSqlQuery>
 #include <QMessageBox>
 
-UserAdd::UserAdd(QWidget *parent) :
+useredit::useredit(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::UserAdd)
+    ui(new Ui::useredit)
 {
     ui->setupUi(this);
+    setWindowTitle(tr("编辑用户"));
     setModal(true);
-    
+
+    this->ui->_editUsername->setEnabled(false);
+
     ui->_authorityCombo->addItem(tr("普通用户"));
     ui->_authorityCombo->addItem(tr("管理员"));
- 
-    connect(this,SIGNAL(addUser(UserInfo*)),parent,SLOT(addUser(UserInfo*)));
+
+    connect(this->ui->_edit, SIGNAL(clicked()), this, SLOT(on_edit_clicked()));
+    connect(this,SIGNAL(editUser(UserInfo*)),parent,SLOT(editUser(UserInfo*)));
 }
 
-UserAdd::~UserAdd()
+useredit::~useredit()
 {
     delete ui;
 }
 
-void UserAdd::on__cancel_clicked()
+void useredit::showEdit(UserInfo *userInfo)
 {
-    close();
+    if(!userInfo) return;
+
+    show();
+
+    this->ui->_editUsername->setText( userInfo->getUserName() );
+    this->ui->_editEmail->setText(userInfo->getEmail());
+    this->ui->_editPhone->setText(userInfo->getTelePhone());
+    this->ui->_editPasswd->setText(userInfo->getPasword());
+    this->ui->_editConfirmPasswd->setText(userInfo->getPasword());
+    this->ui->_authorityCombo->setCurrentIndex(userInfo->getPriority());
 }
 
-void UserAdd::on__add_clicked()
+void useredit::on_edit_clicked()
 {
-    emit addUser(getInfo());
+    emit editUser(getInfo());
 }
 
-UserInfo *UserAdd::getInfo()
+UserInfo *useredit::getInfo()
 {
     QString username, passwd, confirmPasswd, email, phone, authority;
     int authority2;
@@ -79,4 +89,9 @@ UserInfo *UserAdd::getInfo()
     }
 
     return new UserInfo(username, passwd, email, phone, authority2);
+}
+
+void useredit::on__cancel_clicked()
+{
+    close();
 }
