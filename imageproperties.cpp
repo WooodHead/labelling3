@@ -122,7 +122,9 @@ void ImageProperties::load()
     ui->_comboBoxMentalSampleLightType->addItems(getItems(_models[6], 6));
     ui->_comboBoxMentalSampleArea->addItems(getItems(_models[6], 8));
     ui->_comboBoxMentalSampleGuy->addItems(getItems(_models[6], 9));
-    ui->_comboBoxMentalSampleImageTag->addItems(getItems(_models[6], 12));
+    QStringList list = QStringList() << "N" << "Y";
+    ui->_comboBoxMentalSampleImageTag->addItems(list);
+    ui->_comboBoxMentalSampleImageTag->setCurrentIndex(0);
 
     // model 7
     ui->_comboBoxMoliID->addItems(getItems(_models[7], 1));
@@ -293,51 +295,15 @@ bool ImageProperties::isValid()
         QMessageBox::warning(this, tr("提示"), tr("铁谱片编号不能为空!"), QMessageBox::Close);
         return false;
     }
+    return true;
 }
 
-void ImageProperties::on__buttonEquipCancel_clicked()
+void ImageProperties::showDlg(QString filename)
 {
-    close();
-}
+    show();
 
-void ImageProperties::on__buttonMovepartCancel_clicked()
-{
-    close();
-}
-
-void ImageProperties::on__buttonMovepartServiceCancel_clicked()
-{
-    close();
-}
-
-void ImageProperties::on__buttonOilSampleCancel_clicked()
-{
-    close();
-}
-
-void ImageProperties::on__buttonOilAnalyzeCancel_clicked()
-{
-    close();
-}
-
-void ImageProperties::on__buttonMentalCancel_clicked()
-{
-    close();
-}
-
-void ImageProperties::on__buttonMentalSampleCancel_clicked()
-{
-    close();
-}
-
-void ImageProperties::on__buttonMoliCancel_clicked()
-{
-    close();
-}
-
-void ImageProperties::on__buttonEquipSave_clicked()
-{
-
+    ui->_editMoliPath->setText(filename);
+    ui->_editMentalSamplePath->setText(filename);
 }
 
 void ImageProperties::on__buttonClose_clicked()
@@ -349,22 +315,20 @@ void ImageProperties::on__buttonSave_clicked()
 {
     if(!isValid()) return;
 
-
-    // 0
     _models[0]->insertRows(0, 1);
     _models[0]->setData(_models[0]->index(0, 1), ui->_comboBoxEquipPlaneID->currentText());
     _models[0]->setData(_models[0]->index(0, 2), ui->_comboBoxEquipPlaneType->currentText());
     _models[0]->setData(_models[0]->index(0, 3), ui->_comboBoxEquipUnitID->currentText());
-    _models[0]->setData(_models[0]->index(0, 4), ui->_editEquipHours->text().toInt());
+    _models[0]->setData(_models[0]->index(0, 4), ui->_editEquipHours->text());
     _models[0]->setData(_models[0]->index(0, 5), ui->_comboBoxEquipRuntime->currentText());
-    _models[0]->setData(_models[0]->index(0, 6), ui->_editServiceNumber->text().toInt());
+    _models[0]->setData(_models[0]->index(0, 6), ui->_editServiceNumber->text());
 
     // 1
     _models[1]->insertRows(0, 1);
     _models[1]->setData(_models[1]->index(0, 1), ui->_comboBoxMovepartID->currentText());
     _models[1]->setData(_models[1]->index(0, 2), ui->_comboBoxMovepartName->currentText());
     _models[1]->setData(_models[1]->index(0, 3), ui->_comboBoxMovepartType->currentText());
-    _models[1]->setData(_models[1]->index(0, 4), ui->_editMovepartHours->text().toInt());
+    _models[1]->setData(_models[1]->index(0, 4), ui->_editMovepartHours->text());
     _models[1]->setData(_models[1]->index(0, 5), ui->_comboBoxMovepartMohe->currentText());
     _models[1]->setData(_models[1]->index(0, 6), ui->_comboBoxMovepartPlaneID->currentText());
     _models[1]->setData(_models[1]->index(0, 7), ui->_comboBoxMovepartPlaneType->currentText());
@@ -392,7 +356,7 @@ void ImageProperties::on__buttonSave_clicked()
     _models[3]->setData(_models[3]->index(0, 5), ui->_comboBoxOilSampleMonitorPart->currentText());
     _models[3]->setData(_models[3]->index(0, 6), ui->_comboBoxOilSampleMonitorPartID->currentText());
     _models[3]->setData(_models[3]->index(0, 7), ui->_comboBoxOilSampleSamplePointID->currentText());
-    _models[3]->setData(_models[3]->index(0, 8), ui->_editOilSampleHours->text().toInt());
+    _models[3]->setData(_models[3]->index(0, 8), ui->_editOilSampleHours->text());
     _models[3]->setData(_models[3]->index(0, 9), ui->_editOilSampleMount->text());
     _models[3]->setData(_models[3]->index(0, 10), ui->_editOilSampleReason->text());
     _models[3]->setData(_models[3]->index(0, 11), ui->_comboBoxOilSampleSampleUnit->currentText());
@@ -471,6 +435,8 @@ void ImageProperties::on__buttonSave_clicked()
     _models[7]->setData(_models[7]->index(0, 3), ui->_comboBoxMoliPianID->currentText());
     _models[7]->setData(_models[7]->index(0, 4), ui->_comboBoxMoliReportID->currentText());
     _models[7]->setData(_models[7]->index(0, 5), ui->_comboBoxMoliGuy->currentText());
+
+
     _models[7]->setData(_models[7]->index(0, 6), ui->_editMoliPath->text());
     _models[7]->setData(_models[7]->index(0, 7), ui->_comboBoxMoliProperty->currentText());
     _models[7]->setData(_models[7]->index(0, 8), ui->_comboBoxMoliPosition->currentText());
@@ -486,15 +452,21 @@ void ImageProperties::on__buttonSave_clicked()
     _models[7]->setData(_models[7]->index(0, 18), ui->_comboBoxMoliTypical->currentText());
 
 
-
-
-    if(_models[0]->submitAll())
+    for(int i = 0; i < TABLE_N; i++)
     {
-        QMessageBox::warning(this, tr("提示"), tr("保存成功!"), QMessageBox::Close);
-    }
-    else
-    {
-        QMessageBox::warning(this, tr("提示"), tr("保存失败!"), QMessageBox::Close);
+        if(_models[i]->submitAll())
+        {
+           // emit Flush
+        }
+        else
+        {
+            qDebug() << i;
+            for(int k = 0; k < i; k++)
+            {
+                _models[k]->revertAll();
+            }
+            QMessageBox::warning(this, tr("提示"), tr("保存失败!"), QMessageBox::Close);
+        }
     }
 }
 

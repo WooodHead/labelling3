@@ -5,6 +5,7 @@
 #include <QSqlTableModel>
 #include <QSqlRecord>
 #include <QMessageBox>
+#include <QDebug>
 
 #define TABLE_N 8
 
@@ -21,24 +22,6 @@ public:
     ~ImageProperties();
     
 private slots:
-    void on__buttonEquipCancel_clicked();
-
-    void on__buttonMovepartCancel_clicked();
-
-    void on__buttonMovepartServiceCancel_clicked();
-
-    void on__buttonOilSampleCancel_clicked();
-
-    void on__buttonOilAnalyzeCancel_clicked();
-
-    void on__buttonMentalCancel_clicked();
-
-    void on__buttonMentalSampleCancel_clicked();
-
-    void on__buttonMoliCancel_clicked();
-
-    void on__buttonEquipSave_clicked();
-
     void on__buttonClose_clicked();
 
     void on__buttonSave_clicked();
@@ -67,6 +50,10 @@ private:
     QStringList getItems(QSqlTableModel* model, int col);
 
     bool isValid();
+    QString _filename;
+
+public:
+    void showDlg(QString filename);
 };
 
 #endif // IMAGEPROPERTIES_H
