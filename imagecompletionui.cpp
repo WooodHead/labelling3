@@ -24,6 +24,11 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
     _editImageViewer = NULL;
     _cnt = -1;
 
+    QFile file(":/style.qss");
+    file.open(QFile::ReadOnly);
+    QString styleSheet = QLatin1String(file.readAll());
+    setStyleSheet(styleSheet);
+
     createActions();
 
     setupMainWindow();
@@ -1048,6 +1053,11 @@ void	ImageCompletionUI::open()
     _leftWindow.tableWidget->setItem(_cnt, 0, new QTableWidgetItem(_imageName));
     _leftWindow.tableWidget->setItem(_cnt, 1, new QTableWidgetItem(fileName));
     _leftWindow.tableWidget->setItem(_cnt, 2, new QTableWidgetItem(status == "Y" ? "Y" : "N"));
+    QColor color = getColor(status);
+    for(int i = 0; i < _leftWindow.tableWidget->columnCount(); i++)
+    {
+        _leftWindow.tableWidget->item(_cnt, i)->setBackgroundColor(color);
+    }
 }
 
 // read all files in a directory
@@ -1081,11 +1091,14 @@ void ImageCompletionUI::batchOpen()
             _leftWindow.tableWidget->setItem(_cnt, 0, new QTableWidgetItem(file));
             _leftWindow.tableWidget->setItem(_cnt, 1, new QTableWidgetItem(absolutePath+"/"+file));
             _leftWindow.tableWidget->setItem(_cnt, 2, new QTableWidgetItem(status == "Y" ? "Y" : "N"));
+            QColor color = getColor(status);
+            for(int i = 0; i < _leftWindow.tableWidget->columnCount(); i++)
+            {
+                _leftWindow.tableWidget->item(_cnt, i)->setBackgroundColor(color);
+            }
         }
     }
 }
-
-
 
 void	ImageCompletionUI::save()
 {
@@ -2199,6 +2212,18 @@ void ImageCompletionUI::openImage(QString fileName)
     int width = _editImageViewer->image().width();
     int height = _editImageViewer->image().height();
     this->setMinimumSize( width < 800 ? 800 : height, height < 600 ? 600 : height );
+}
+
+QColor ImageCompletionUI::getColor(QString status)
+{
+    if(status == "Y")
+    {
+        return QColor(255, 255, 0);
+    }
+    else
+    {
+        return QColor(255, 0, 0);
+    }
 }
 
 // 拷贝文件--zhyn
