@@ -24,11 +24,6 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
     _editImageViewer = NULL;
     _cnt = -1;
 
-    QFile file(":/style.qss");
-    file.open(QFile::ReadOnly);
-    QString styleSheet = QLatin1String(file.readAll());
-    setStyleSheet(styleSheet);
-
     createActions();
 
     setupMainWindow();
