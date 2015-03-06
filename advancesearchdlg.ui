@@ -222,14 +222,14 @@
                </widget>
               </item>
               <item>
-               <widget class="QCheckBox" name="checkBox_98">
+               <widget class="QCheckBox" name="movepartIdChkBox">
                 <property name="text">
                  <string/>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit_11"/>
+               <widget class="QComboBox" name="movepartIdCbBox"/>
               </item>
              </layout>
             </item>
@@ -246,14 +246,14 @@
                </widget>
               </item>
               <item>
-               <widget class="QCheckBox" name="checkBox_99">
+               <widget class="QCheckBox" name="movepartNameChkBox">
                 <property name="text">
                  <string/>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit_12"/>
+               <widget class="QComboBox" name="movepartNameCbBox"/>
               </item>
              </layout>
             </item>
@@ -265,19 +265,19 @@
                  <string>动部件型号</string>
                 </property>
                 <property name="buddy">
-                 <cstring>checkBox_9</cstring>
+                 <cstring>movepartIdChkBox</cstring>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QCheckBox" name="checkBox_100">
+               <widget class="QCheckBox" name="movepartTypeChkBox">
                 <property name="text">
                  <string/>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit_98"/>
+               <widget class="QComboBox" name="movepartTypeCbBox"/>
               </item>
              </layout>
             </item>
@@ -289,19 +289,19 @@
                  <string>运行小时数</string>
                 </property>
                 <property name="buddy">
-                 <cstring>checkBox_10</cstring>
+                 <cstring>partrunHourChkBox</cstring>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QCheckBox" name="checkBox_101">
+               <widget class="QCheckBox" name="partrunHourChkBox">
                 <property name="text">
                  <string/>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit_99"/>
+               <widget class="QComboBox" name="partrunHourCbBox"/>
               </item>
              </layout>
             </item>
@@ -318,27 +318,14 @@
                </widget>
               </item>
               <item>
-               <widget class="QCheckBox" name="checkBox_102">
+               <widget class="QCheckBox" name="movepartStartDataChkBox">
                 <property name="text">
                  <string/>
                 </property>
                </widget>
               </item>
               <item>
-               <spacer name="horizontalSpacer_9">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item>
-               <widget class="QDateEdit" name="dateEdit_3">
+               <widget class="QDateEdit" name="movepartStartDateEdit">
                 <property name="displayFormat">
                  <string>yyyy年/MM月/dd日</string>
                 </property>
@@ -362,27 +349,14 @@
                </widget>
               </item>
               <item>
-               <widget class="QCheckBox" name="checkBox_103">
+               <widget class="QCheckBox" name="movepartEndDataChkBox">
                 <property name="text">
                  <string/>
                 </property>
                </widget>
               </item>
               <item>
-               <spacer name="horizontalSpacer_10">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item>
-               <widget class="QDateEdit" name="dateEdit_4">
+               <widget class="QDateEdit" name="movepartEndDateEdit">
                 <property name="date">
                  <date>
                   <year>2014</year>
@@ -2547,9 +2521,9 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_4">
+        <widget class="QPushButton" name="addtoBtn">
          <property name="text">
-          <string>PushButton</string>
+          <string>添加分类</string>
          </property>
         </widget>
        </item>
@@ -2579,7 +2553,7 @@
       <item row="0" column="0">
        <widget class="QTabWidget" name="queryResultTabWidget">
         <property name="currentIndex">
-         <number>2</number>
+         <number>3</number>
         </property>
         <property name="elideMode">
          <enum>Qt::ElideNone</enum>

@@ -10,6 +10,7 @@
 #include <QDebug>
 
 #include "connection.h"
+#include "propertynamedlg.h"
 
 namespace Ui {
 class AdvanceSearchDlg;
@@ -51,6 +52,32 @@ private slots:
      
      void on_repairTimeCbBox_currentIndexChanged(int index);
      
+     void on_addtoBtn_clicked();
+     
+     void on_movepartIdChkBox_clicked();
+     
+     void on_movepartIdCbBox_currentIndexChanged(int index);
+     
+     void on_movepartNameChkBox_clicked();
+     
+     void on_movepartNameCbBox_currentIndexChanged(int index);
+     
+     void on_movepartTypeChkBox_clicked();
+     
+     void on_movepartTypeCbBox_currentIndexChanged(int index);
+     
+     void on_partrunHourChkBox_clicked();
+     
+     void on_partrunHourCbBox_currentIndexChanged(int index);
+     
+     void on_movepartStartDateEdit_dateChanged(const QDate &date);
+     
+     void on_movepartStartDataChkBox_clicked();
+     
+     void on_movepartEndDateEdit_dateChanged(const QDate &date);
+     
+     void on_movepartEndDataChkBox_clicked();
+     
 private:
      QString generateSql(QMap<QString,QString> conditionMap,QStringList conditionField,QString tableName);
      void setModelHeaderData(QString tablename);
@@ -64,6 +91,8 @@ private:
     Ui::AdvanceSearchDlg *ui;
     
     QSqlDatabase db;
+    ProPertyNameDlg *ppnDlg;
+    QString propertyName;
     
     QMap<QString,QString> tableNames;
     QSqlQueryModel *_eqmInfoModel;
