@@ -885,7 +885,7 @@ void	ImageCompletionUI::open()
         QMessageBox::StandardButton reply = QMessageBox::information(0, tr("提示"), "此图像为新图像,是否要导入数据库?", QMessageBox::Ok | QMessageBox::Cancel);
         if(reply == QMessageBox::Ok)
         {
-            (new ImageProperties)->show();
+            (new ImageProperties)->showDlg(fileName);
         }
     }
 
@@ -1413,7 +1413,6 @@ void ImageCompletionUI::showData()
                               qApp->tr("数据库连接失败!"),
                               QMessageBox::Cancel);
     }
-
 
     bool ret;
     QSqlRecord rec;
@@ -2352,11 +2351,13 @@ QString ImageCompletionUI::labelStatus(QString absolutePath)
         bool ret = query.exec(QString("select * from ferrographypicinfo"));
         if(ret)
         {
+            int index = query.record().indexOf("ferrographypicpath");
             while(query.next())
             {
-                if(absolutePath == query.value(10).toString())
+                if(absolutePath == query.value(index).toString())
                 {
-                    return query.value(12).toString();
+                    index = query.record().indexOf("imagesymbol");
+                    return query.value(index).toString();
                 }
             }
             return "";

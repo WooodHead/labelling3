@@ -20,7 +20,7 @@
       <cursorShape>IBeamCursor</cursorShape>
      </property>
      <property name="currentIndex">
-      <number>7</number>
+      <number>8</number>
      </property>
      <widget class="QWidget" name="dBTab_1">
       <attribute name="title">
@@ -77,11 +77,6 @@
            <string>10</string>
           </property>
          </row>
-         <column>
-          <property name="text">
-           <string>序号</string>
-          </property>
-         </column>
          <column>
           <property name="text">
            <string>机号</string>
@@ -193,11 +188,6 @@
            <string>15</string>
           </property>
          </row>
-         <column>
-          <property name="text">
-           <string>序号</string>
-          </property>
-         </column>
          <column>
           <property name="text">
            <string>动部件编号</string>
@@ -326,11 +316,6 @@
          </row>
          <column>
           <property name="text">
-           <string>序号</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
            <string>动部件维修编号</string>
           </property>
          </column>
@@ -435,11 +420,6 @@
            <string>11</string>
           </property>
          </row>
-         <column>
-          <property name="text">
-           <string>序号</string>
-          </property>
-         </column>
          <column>
           <property name="text">
            <string>油样编号</string>
@@ -549,37 +529,13 @@
           <property name="text">
            <string/>
           </property>
-          <property name="textAlignment">
-           <set>AlignHCenter|AlignVCenter|AlignCenter</set>
-          </property>
-         </item>
-         <item row="0" column="1">
-          <property name="text">
-           <string/>
-          </property>
          </item>
          <item row="1" column="0">
           <property name="text">
            <string/>
           </property>
-          <property name="textAlignment">
-           <set>AlignHCenter|AlignVCenter|AlignCenter</set>
-          </property>
-         </item>
-         <item row="1" column="1">
-          <property name="text">
-           <string/>
-          </property>
          </item>
          <item row="2" column="0">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="textAlignment">
-           <set>AlignHCenter|AlignVCenter|AlignCenter</set>
-          </property>
-         </item>
-         <item row="2" column="1">
           <property name="text">
            <string/>
           </property>
@@ -655,11 +611,6 @@
            <string>12</string>
           </property>
          </row>
-         <column>
-          <property name="text">
-           <string>序号</string>
-          </property>
-         </column>
          <column>
           <property name="text">
            <string>油样编号</string>
@@ -883,11 +834,6 @@
          </row>
          <column>
           <property name="text">
-           <string>序号</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
            <string>铁谱片编号</string>
           </property>
          </column>
@@ -1007,11 +953,6 @@
            <string>15</string>
           </property>
          </row>
-         <column>
-          <property name="text">
-           <string>序号</string>
-          </property>
-         </column>
          <column>
           <property name="text">
            <string>铁谱图片编号</string>
@@ -1255,11 +1196,6 @@
          </row>
          <column>
           <property name="text">
-           <string>序号</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
            <string>磨粒编号</string>
           </property>
          </column>
@@ -1429,11 +1365,6 @@
            <string>15</string>
           </property>
          </row>
-         <column>
-          <property name="text">
-           <string>序号</string>
-          </property>
-         </column>
          <column>
           <property name="text">
            <string>采样点编号</string>
