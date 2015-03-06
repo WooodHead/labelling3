@@ -12,10 +12,15 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent) :
         QMessageBox::warning(this,tr("数据库提示"),tr("不能链接数据库"),QMessageBox::Close);
         return;
     }
+    createListWidget();
+    
+    connect(ui->tableListWidget,SIGNAL(currentRowChanged(int)),ui->conditionStackedWidget,SLOT(setCurrentIndex(int)));
     
     createTableNames();
     
     createTableView();
+    
+    initCbBox();
     
     query();
    
@@ -44,86 +49,111 @@ QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap,QStrin
     else
     {
         sql.append("where ");
-        int fieldIndex  = 0;
-        QString fieldName = conditionField.at(fieldIndex);
+        QString fieldName;
         QString fieldValue;
         QMap<QString,QString>::iterator it;
-        for(it = conditionMap.begin();it != conditionMap.end()-1;++it)
-        {
-            fieldName = it.key();
-            fieldValue = it.value();
-            sql.append(fieldName);
-            sql.append("=");
-            sql.append(fieldValue);
-            sql.append(" and ");
-        }
+        it = conditionMap.begin();
         fieldName = it.key();
         fieldValue = it.value();
         sql.append(fieldName);
-        sql.append("=");
+        sql.append("='");
         sql.append(fieldValue);
+        sql.append("'");
+        ++it;
+        for(;it != conditionMap.end(); ++it)
+        {
+            fieldName = it.key();
+            fieldValue = it.value();
+            sql.append(" and ");
+            sql.append(fieldName);
+            sql.append("='");
+            sql.append(fieldValue);
+            sql.append("'");
+        }
+        
         return sql;
     }
 }
+
 
 void AdvanceSearchDlg::query()
 {
     // 装备信息表
     QString eqmTableName = tableNames.value("EqmInfo");
-    QString eqmSql = generateSql(_equipmentinfoCdtMap,_equipmentinfoCdtField,eqmTableName);
+    QString eqmSql = generateSql(_eqmCdtMap,_eqmCdtField,eqmTableName);
     _eqmInfoModel->setQuery(eqmSql);
     setModelHeaderData("EqmInfo");
     qDebug()<<eqmSql;
     
     // 动部件信息表
     QString mpTableName = tableNames.value("MpInfo");
-    QString mpSql = generateSql(_movepartinfoCdtMap,_movepartinfoCdtField,mpTableName);
+    QString mpSql = generateSql(_mpCdtMap,_mpCdtField,mpTableName);
     _mpInfoModel->setQuery(mpSql);
     setModelHeaderData("MpInfo");
     qDebug()<<mpSql;
     
     // 动部件维修信息表
     QString mprTableName = tableNames.value("MprInfo");
-    QString mprSql = generateSql(_movepartrepairinfoCdtMap,_movepartrepairinfoCdtField,mprTableName);
+    QString mprSql = generateSql(_mprCdtMap,_mprCdtField,mprTableName);
     _mprInfoModel->setQuery(mprSql);
     setModelHeaderData("MprInfo");
     qDebug()<<mprSql;
     
     // 油样采集信息表
     QString oisTableName = tableNames.value("OisInfo");
-    QString oisSql = generateSql(_oilsampleinfoCdtMap,_oilsampleinfoCdtField,oisTableName);
+    QString oisSql = generateSql(_oisCdtMap,_oisCdtField,oisTableName);
     _oisInfoModel->setQuery(oisSql);
     setModelHeaderData("OisInfo");
     qDebug()<<oisSql;
     
     // 油样检测分析信息表
     QString oiaTableName = tableNames.value("OiaInfo");
-    QString oiaSql = generateSql(_oilanalyzeinfoCdtMap,_oilanalyzeinfoCdtField,oiaTableName);
+    QString oiaSql = generateSql(_oiaCdtMap,_oiaCdtField,oiaTableName);
     _oiaInfoModel->setQuery(oiaSql);
     setModelHeaderData("OiaInfo");
     qDebug()<<oiaSql;
     
     // 铁谱质谱信息表
     QString fegTableName = tableNames.value("FegInfo");
-    QString fegSql = generateSql(_ferrographyinfoCdtMap,_ferrographyinfoCdtField,fegTableName);
+    QString fegSql = generateSql(_fegCdtMap,_fegCdtField,fegTableName);
     _fegInfoModel->setQuery(fegSql);
     setModelHeaderData("FegInfo");
     qDebug()<<fegSql;
     
     // 铁谱图片采集信息表
     QString fegpTableName = tableNames.value("FegPInfo");
-    QString fegpSql = generateSql(_ferrographypicinfoCdtMap,_ferrographypicinfoCdtField,fegpTableName);
+    QString fegpSql = generateSql(_fegpCdtMap,_fegpCdtField,fegpTableName);
     _fegpInfoModel->setQuery(fegpSql);
     setModelHeaderData("FegPInfo");
     qDebug()<<fegpSql;
     
     // 磨粒标注信息表
     QString abmTableName = tableNames.value("AbmInfo");
-    QString abmSql = generateSql(_abrasivemarkinfoCdtMap,_abrasivemarkinfoCdtField,abmTableName);
+    QString abmSql = generateSql(_abmCdtMap,_abmCdtField,abmTableName);
     _abmInfoModel->setQuery(abmSql);
     setModelHeaderData("AbmInfo");
     qDebug()<<abmSql;
 }
+
+
+void AdvanceSearchDlg::createListWidget()
+{
+    ui->tableListWidget->insertItem(0,tr("装备信息表"));
+    ui->tableListWidget->insertItem(1,tr("动部件信息表"));
+    ui->tableListWidget->insertItem(2,tr("动部件维修信息表"));
+    ui->tableListWidget->insertItem(3,tr("油样采集信息表"));
+    ui->tableListWidget->insertItem(4,tr("油样检测分析表"));
+    ui->tableListWidget->insertItem(5,tr("铁谱图片采集信息表"));
+    ui->tableListWidget->insertItem(6,tr("铁谱制谱信息表"));
+    ui->tableListWidget->insertItem(7,tr("磨粒标注信息表"));
+    
+    ui->tableListWidget->setCurrentRow(0);
+//    ui->topWidget->setMaximumHeight(300);
+//    ui->tableListWidget->setMaximumHeight(250);
+//    ui->tableListWidget->setMaximumWidth(150);
+//    ui->conditionStackedWidget->setMaximumHeight(250);
+}
+
 
 void AdvanceSearchDlg::createTableNames()
 {
@@ -137,8 +167,11 @@ void AdvanceSearchDlg::createTableNames()
     tableNames.insert("OisInfo","oilsampleinfo");       // 油样采样信息表
 }
 
+
 void AdvanceSearchDlg::createTableView()
 {
+    ui->queryResultTabWidget->setCurrentIndex(0);
+    
     // 装备信息表
     _eqmInfoModel = new QSqlQueryModel;
     ui->eqmTableView->setModel(_eqmInfoModel);
@@ -203,6 +236,7 @@ void AdvanceSearchDlg::createTableView()
     ui->abmTableView->verticalHeader()->setVisible(false);
     ui->abmTableView->setAlternatingRowColors(true);
 }
+
 
 void AdvanceSearchDlg::setModelHeaderData(QString tablename)
 {
@@ -347,5 +381,338 @@ void AdvanceSearchDlg::setModelHeaderData(QString tablename)
         _oisInfoModel->setHeaderData(19,Qt::Horizontal,tr("送样人"));
         _oisInfoModel->setHeaderData(20,Qt::Horizontal,tr("送样日期"));
         _oisInfoModel->setHeaderData(21,Qt::Horizontal,tr("送样时间"));
+    }
+}
+
+
+void AdvanceSearchDlg::initCbBox()
+{
+    QSqlQuery query;
+    
+    query.exec("select * from equipmentinfo");
+    
+    while(query.next())
+    {
+        if(ui->planeidCbBox->findText(query.value(1).toString()) == -1)
+            ui->planeidCbBox->insertItem(-1,query.value(1).toString());
+        if(ui->planeTypeCbBox->findText(query.value(2).toString()) == -1)
+            ui->planeTypeCbBox->insertItem(-1,query.value(2).toString());
+        if(ui->departIdCbBox->findText(query.value(3).toString()) == -1)
+            ui->departIdCbBox->insertItem(-1,query.value(3).toString());
+        if(ui->runHourCbBox->findText(query.value(4).toString()) == -1)
+            ui->runHourCbBox->insertItem(-1,query.value(4).toString());
+        if(ui->runStageCbBox->findText(query.value(5).toString()))
+            ui->runStageCbBox->insertItem(-1,query.value(5).toString());
+        if(ui->repairTimeCbBox->findText(query.value(6).toString()))
+            ui->repairTimeCbBox->insertItem(-1,query.value(6).toString());
+    }
+    ui->planeidCbBox->setCurrentIndex(0);
+    
+    query.exec("select * from movepartinfo");
+    while(query.next())
+    {
+        if(ui->movepartIdCbBox->findText(query.value(1).toString()) == -1)
+            ui->movepartIdCbBox->insertItem(-1,query.value(1).toString());
+        if(ui->movepartNameCbBox->findText(query.value(3).toString()) == -1)
+            ui->movepartNameCbBox->insertItem(-1,query.value(3).toString());
+        if(ui->movepartTypeCbBox->findText(query.value(2).toString()) == -1)
+            ui->movepartTypeCbBox->insertItem(-1,query.value(2).toString());
+        if(ui->partrunHourCbBox->findText(query.value(4).toString()) == -1)
+            ui->partrunHourCbBox->insertItem(-1,query.value(4).toString());
+    }
+    
+}
+
+
+void AdvanceSearchDlg::on_PlaneIdChkBox_clicked()
+{
+    _eqmCdtMap.remove("planeid");
+    if(ui->PlaneIdChkBox->isChecked())
+    {   
+        QString text = ui->planeidCbBox->currentText();
+        _eqmCdtMap.insert("planeid",text);
+    }
+}
+
+
+void AdvanceSearchDlg::on_planeidCbBox_currentIndexChanged(int index)
+{
+    _eqmCdtMap.remove("planeid");
+    if(ui->PlaneIdChkBox->isChecked())
+    {   
+        QString text = ui->planeidCbBox->currentText();
+        _eqmCdtMap.insert("planeid",text);
+    }
+}
+
+
+void AdvanceSearchDlg::on_planeTypeChkBox_clicked()
+{
+    _eqmCdtMap.remove("planetype");
+    if(ui->planeTypeChkBox->isChecked())
+    {
+        QString text = ui->planeTypeCbBox->currentText();
+        _eqmCdtMap.insert("planetype",text);
+    }
+}
+
+
+void AdvanceSearchDlg::on_planeTypeCbBox_currentIndexChanged(int index)
+{
+    _eqmCdtMap.remove("planetype");
+    if(ui->planeTypeChkBox->isChecked())
+    {
+        QString text = ui->planeTypeCbBox->currentText();
+        _eqmCdtMap.insert("planetype",text);
+    }
+}
+
+
+void AdvanceSearchDlg::on_departIdChkBox_clicked()
+{
+    _eqmCdtMap.remove("departid");
+    if(ui->departIdChkBox->isChecked())
+    {
+        QString text = ui->departIdCbBox->currentText();
+        _eqmCdtMap.insert("departid",text);
+    }
+}
+
+
+void AdvanceSearchDlg::on_departIdCbBox_currentIndexChanged(int index)
+{
+    _eqmCdtMap.remove("departid");
+    if(ui->departIdChkBox->isChecked())
+    {
+        QString text = ui->departIdCbBox->currentText();
+        _eqmCdtMap.insert("departid",text);
+    }
+}
+
+
+void AdvanceSearchDlg::on_runHourChkBox_clicked()
+{
+    _eqmCdtMap.remove("runhour");
+    if(ui->runHourChkBox->isChecked())
+    {
+        QString text = ui->runHourCbBox->currentText();
+        _eqmCdtMap.insert("runhour",text);
+    }
+}
+
+
+void AdvanceSearchDlg::on_runHourCbBox_currentIndexChanged(int index)
+{
+    _eqmCdtMap.remove("runhour");
+    if(ui->runHourChkBox->isChecked())
+    {
+        QString text = ui->runHourCbBox->currentText();
+        _eqmCdtMap.insert("runhour",text);
+    }
+}
+
+
+void AdvanceSearchDlg::on_runStageChkBox_clicked()
+{
+    _eqmCdtMap.remove("runstage");
+    if(ui->runStageChkBox->isChecked())
+    {
+        QString text = ui->runStageCbBox->currentText();
+        _eqmCdtMap.insert("runstage",text);
+    }
+}
+
+
+void AdvanceSearchDlg::on_runStageCbBox_currentIndexChanged(int index)
+{
+    _eqmCdtMap.remove("runstage");
+    if(ui->runStageChkBox->isChecked())
+    {
+        QString text = ui->runStageCbBox->currentText();
+        _eqmCdtMap.insert("runstage",text);
+    }
+}
+
+
+void AdvanceSearchDlg::on_repairTimeChkBox_clicked()
+{
+    _eqmCdtMap.remove("repairtime");
+    if(ui->repairTimeChkBox->isChecked())
+    {
+        QString text = ui->repairTimeCbBox->currentText();
+        _eqmCdtMap.insert("repairtime",text);
+    }
+}
+
+
+void AdvanceSearchDlg::on_repairTimeCbBox_currentIndexChanged(int index)
+{
+    _eqmCdtMap.remove("repairtime");
+    if(ui->repairTimeChkBox->isChecked())
+    {
+        QString text = ui->repairTimeCbBox->currentText();
+        _eqmCdtMap.insert("repairtime",text);
+    }
+}
+
+
+void AdvanceSearchDlg::on_addtoBtn_clicked()
+{
+//    QDialog *propertyNameDlg = new QDialog(this);
+//    QLabel *nameLabel = new QLabel(tr("保存属性名"));
+//    QLineEdit *nameLineEdit = new QLineEdit;
+////    nameLabel.setBuddy(nameLineEdit);
+//    QHBoxLayout *dlgTopLayout = new QHBoxLayout;
+//    dlgTopLayout->addWidget(nameLabel);
+//    dlgTopLayout->addWidget(nameLineEdit);
+//    QPushButton *okButton = new QPushButton(tr("确定"));
+//    QPushButton *cancelButton = new QPushButton(tr("取消"));
+//    QHBoxLayout *dlgbottomLayout = new QHBoxLayout;
+//    dlgbottomLayout->addWidget(okButton);
+//    dlgbottomLayout->addWidget(cancelButton);
+//    QVBoxLayout *dlgMainLayout = new QVBoxLayout;
+//    dlgMainLayout->addLayout(dlgTopLayout);
+//    dlgMainLayout->addLayout(dlgbottomLayout);
+    
+//    propertyNameDlg->setLayout(dlgMainLayout);
+//    propertyNameDlg->show();
+    
+    QString eqmFields = "";
+    QString eqmValues = "";
+    QMap<QString,QString>::iterator it;
+    it = _eqmCdtMap.begin();
+    eqmFields.append(it.key());
+    eqmValues.append(it.value());
+    ++it;
+    for(;it != _eqmCdtMap.end();++it)
+    {
+        eqmFields.append("#");
+        eqmFields.append(it.key());
+        eqmValues.append("#");
+        eqmValues.append(it.value());
+    }
+    qDebug()<<eqmFields;
+    qDebug()<<eqmValues;
+}
+
+
+void AdvanceSearchDlg::on_movepartIdChkBox_clicked()
+{
+    _mpCdtMap.remove("movepartid");
+    if(ui->movepartIdChkBox->isChecked())
+    {
+        QString text = ui->movepartIdCbBox->currentText();
+        _mpCdtMap.insert("movepartid",text);
+    }
+}
+
+
+void AdvanceSearchDlg::on_movepartIdCbBox_currentIndexChanged(int index)
+{
+    _mpCdtMap.remove("movepartid");
+    if(ui->movepartIdChkBox->isChecked())
+    {
+        QString text = ui->movepartIdCbBox->currentText();
+        _mpCdtMap.insert("movepartid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_movepartNameChkBox_clicked()
+{
+    _mpCdtMap.remove("movepartname");
+    if(ui->movepartNameChkBox->isChecked())
+    {
+        QString text = ui->movepartNameCbBox->currentText();
+        _mpCdtMap.insert("movepartname",text);
+    }
+}
+
+void AdvanceSearchDlg::on_movepartNameCbBox_currentIndexChanged(int index)
+{
+    _mpCdtMap.remove("movepartname");
+    if(ui->movepartNameChkBox->isChecked())
+    {
+        QString text = ui->movepartNameCbBox->currentText();
+        _mpCdtMap.insert("movepartname",text);
+    }
+}
+
+void AdvanceSearchDlg::on_movepartTypeChkBox_clicked()
+{
+    _mpCdtMap.remove("moveparttype");
+    if(ui->movepartTypeChkBox->isChecked())
+    {
+        QString text = ui->movepartTypeCbBox->currentText();
+        _mpCdtMap.insert("moveparttype",text);
+    }
+}
+
+void AdvanceSearchDlg::on_movepartTypeCbBox_currentIndexChanged(int index)
+{
+    _mpCdtMap.remove("moveparttype");
+    if(ui->movepartTypeChkBox->isChecked())
+    {
+        QString text = ui->movepartTypeCbBox->currentText();
+        _mpCdtMap.insert("moveparttype",text);
+    }
+}
+
+void AdvanceSearchDlg::on_partrunHourChkBox_clicked()
+{
+    _mpCdtMap.remove("runhour");
+    if(ui->partrunHourChkBox->isChecked())
+    {
+        QString text = ui->partrunHourCbBox->currentText();
+        _mpCdtMap.insert("runhour",text);
+    }
+}
+
+void AdvanceSearchDlg::on_partrunHourCbBox_currentIndexChanged(int index)
+{
+    _mpCdtMap.remove("runhour");
+    if(ui->partrunHourChkBox->isChecked())
+    {
+        QString text = ui->partrunHourCbBox->currentText();
+        _mpCdtMap.insert("runhour",text);
+    }
+}
+
+void AdvanceSearchDlg::on_movepartStartDateEdit_dateChanged(const QDate &date)
+{
+    _mpCdtMap.remove("startdate");
+    if(ui->movepartStartDataChkBox->isChecked())
+    {
+        QString text = date.toString("yyyy-MM-dd");
+        _mpCdtMap.insert("startdate",text);
+    }
+}
+
+void AdvanceSearchDlg::on_movepartStartDataChkBox_clicked()
+{
+    _mpCdtMap.remove("startdate");
+    if(ui->movepartStartDataChkBox->isChecked())
+    {
+        QString text = ui->movepartStartDateEdit->date().toString("yyyy-MM-dd");
+        _mpCdtMap.insert("startdate",text);
+    }
+}
+
+void AdvanceSearchDlg::on_movepartEndDateEdit_dateChanged(const QDate &date)
+{
+    _mpCdtMap.remove("enddate");
+    if(ui->movepartEndDataChkBox->isChecked())
+    {
+        QString text = date.toString("yyyy-MM-dd");
+        _mpCdtMap.insert("enddate",text);
+    }
+}
+
+void AdvanceSearchDlg::on_movepartEndDataChkBox_clicked()
+{
+    _mpCdtMap.remove("enddate");
+    if(ui->movepartEndDataChkBox->isChecked())
+    {
+        QString text = ui->movepartEndDateEdit->date().toString("yyyy-MM-dd");
+        _mpCdtMap.insert("enddate",text);
     }
 }
