@@ -24,7 +24,8 @@ HEADERS += \
     userinfo.h \
     imageproperties.h \
     advancesearchdlg.h \
-    useredit.h
+    useredit.h \
+    propertynamedlg.h
 
 
 SOURCES += \
@@ -47,7 +48,8 @@ SOURCES += \
     userinfo.cpp \
     imageproperties.cpp \
     advancesearchdlg.cpp \
-    useredit.cpp
+    useredit.cpp \
+    propertynamedlg.cpp
 
 
 FORMS += \
@@ -65,7 +67,8 @@ FORMS += \
     useradd.ui \
     imageproperties.ui \
     advancesearchdlg.ui \
-    useredit.ui
+    useredit.ui \
+    propertynamedlg.ui
 
 RESOURCES += \
     ImageCompletion.qrc
