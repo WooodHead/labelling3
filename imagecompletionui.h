@@ -376,6 +376,7 @@ private:
     bool exportDB(const QString &path);
 
     void openImage(QString file);
+    QColor getColor(QString status);
 };
 
 

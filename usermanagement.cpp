@@ -57,12 +57,13 @@ void UserManagement::initTableView()
     ui->_userTableView->setAlternatingRowColors(true);
     ui->_userTableView->setSelectionBehavior(QTableView::SelectRows);
     ui->_userTableView->setSelectionMode(QTableView::SingleSelection);
-//    ui->_userTableView->resizeColumnsToContents();
     ui->_userTableView->resizeColumnToContents(0);
     ui->_userTableView->resizeColumnToContents(5);
     ui->_userTableView->resizeColumnToContents(2);
     ui->_userTableView->verticalHeader()->setVisible(false);
     ui->_userTableView->setEditTriggers(QTableView::NoEditTriggers);
+    ui->_userTableView->horizontalHeader()->setStyleSheet("QHeaderView::section{background:lightblue;}");
+    ui->_userTableView->horizontalHeader()->setHighlightSections(false);
 }
 
 UserInfo *UserManagement::getSelectedUserInfo()
