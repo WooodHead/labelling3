@@ -1,7 +1,6 @@
 # labelling3
 
-## ¿¿¿¿¿¿¿¿¿¿¿
-```
+## ÊôÐÔ±í```
 CREATE TABLE `propertyinfo` (
   `uid` int(10) NOT NULL DEFAULT '0',
   `propertyname` varchar(30) DEFAULT NULL,
