@@ -123,7 +123,139 @@ private:
     QMap<QString,QString> _mprCdtMap;          // dong bu jian wei xiu xin xi biao condition Map
     QMap<QString,QString> _oiaCdtMap;          // you yang fen xi xin xi biao condition Map
     QMap<QString,QString> _oisCdtMap;          // you yang xin xi biao condition Map
-
+    
+    enum{
+        eqm_planeid,
+        eqm_planetype,
+        eqm_deoartid,
+        eqm_runhour,
+        eqm_runstage,
+        eqm_repairtime
+    };
+    
+    enum{
+        mp_movepartid,
+        mp_moveparttype,
+        mp_movepartname,
+        mp_runhour,
+        mp_runstage,
+        mp_planeid,
+        mp_planetype,
+        mp_startdat,
+        mp_enddate
+    };
+    
+    enum{
+        mpr_movepartrepairid,
+        mpr_movepartid,
+        mpr_moveparttype,
+        mpr_repairreason,
+        mpr_repairdate,
+        mpr_repairtime,
+        mpr_repairdepart,
+        mpr_repaircontent,
+        mpr_repaircondition
+    };
+    
+    enum{
+        feg_ferrographysheetid,
+        feg_ferrographyreportid,
+        feg_oilsampleid,
+        feg_ferrographyanalyertype,
+        feg_ferrographymakeoilconsumption,
+        feg_ferrographymakemethod,
+        feg_ferrographymakestuff
+    };
+    
+    enum{
+        fegp_ferrographypicid,
+        fegp_ferrographysheetid,
+        fegp_ferrographyreportid,
+        fegp_microscopictype,
+        fegp_imageacquisitiontype,
+        fegp_lightsourcetype,
+        fegp_magnification,
+        fegp_imageacquisitionarea,
+        fegp_imageacquisitionstuff,
+        fegp_ferrographypicpath,
+        fegp_imagerecognitioninfoanalysis,
+        fegp_imagesymbol
+    };
+    
+    enum{
+        oia_oilsampleid,
+        oia_analyzedepartname,
+        oia_senddepart,
+        oia_sendreason,
+        oia_sendstuff,
+        oia_receivedate,
+        oia_receivestuff,
+        oia_contaminationanalyzemethod,
+        oia_contaminationanalyzestuff,
+        oia_contaminationanalyzedate,
+        oia_contaminationanalyzeequipment,
+        oia_contaminationanalyzereportid,
+        oia_spectroscopymethod,
+        oia_spectroscopystuff,
+        oia_spectroscopydate,
+        oia_spectroscopyequipment,
+        oia_spectroscopyreportid,
+        oia_ferrographymethod,
+        oia_ferrographystuff,
+        oia_ferrographydate,
+        oia_ferrographyequipment,
+        oia_ferrographyreportid,
+        oia_physicochemicalmethod,
+        oia_physicochemicalstuff,
+        oia_physicochemicaldate,
+        oia_physicochemicalequipment,
+        oia_physicochemicalreportid
+    };
+    
+    enum{
+        ois_oilsampleid,
+        ois_sampledepartid,
+        ois_planetype,
+        ois_planeid,
+        ois_monitorpartname,
+        ois_monitorpartid,
+        ois_sampleid,
+        ois_oilworktime,
+        ois_oiladdition,
+        ois_samplereason,
+        ois_sampledepartname,
+        ois_samplestuff,
+        ois_sampledate,
+        ois_sampletime,
+        ois_samplesituation,
+        ois_samplemethod,
+        ois_samplevolume,
+        ois_sampleinstruction,
+        ois_sendstuff,
+        ois_senddate,
+        ois_sendtime
+    };
+    
+    enum{
+        abm_abrasiveid,
+        abm_ferrographypicid,
+        abm_ferrographysheetid,
+        abm_ferrographyreportid,
+        abm_abrasivemarkstuff,
+        abm_abrasivepicpath,
+        abm_abrasivematerial,
+        abm_abrasiveposition,
+        abm_abrasivesize,
+        abm_abrasivesperimeter,
+        abm_abrasiveshape,
+        abm_abrasivecolor,
+        abm_abrasivesurfacetexturetype,
+        abm_abrasiveweartype,
+        abm_abrasivedamagetype,
+        abm_abrasivemechanismtype,
+        abm_abrasivefaultinformationreflection,
+        abm_abrasivetypical
+    };
 };
 
 #endif // ADVANCESEARCHDLG_H

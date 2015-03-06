@@ -250,145 +250,137 @@ void AdvanceSearchDlg::setModelHeaderData(QString tablename)
 {
     if(tablename == "EqmInfo")
     {
-//        _eqmInfoModel->setHeaderData(0,Qt::Horizontal,tr("序号"));
-        _eqmInfoModel->setHeaderData(0,Qt::Horizontal,tr("机号"));
-        _eqmInfoModel->setHeaderData(1,Qt::Horizontal,tr("机型"));
-        _eqmInfoModel->setHeaderData(2,Qt::Horizontal,tr("单位编号"));
-        _eqmInfoModel->setHeaderData(3,Qt::Horizontal,tr("飞行小时数"));
-        _eqmInfoModel->setHeaderData(4,Qt::Horizontal,tr("运行阶段"));
-        _eqmInfoModel->setHeaderData(5,Qt::Horizontal,tr("维修次数"));
+        _eqmInfoModel->setHeaderData(eqm_planeid,   Qt::Horizontal,tr("机号"));
+        _eqmInfoModel->setHeaderData(eqm_planetype, Qt::Horizontal,tr("机型"));
+        _eqmInfoModel->setHeaderData(eqm_deoartid,  Qt::Horizontal,tr("单位编号"));
+        _eqmInfoModel->setHeaderData(eqm_runhour,   Qt::Horizontal,tr("飞行小时数"));
+        _eqmInfoModel->setHeaderData(eqm_runstage,  Qt::Horizontal,tr("运行阶段"));
+        _eqmInfoModel->setHeaderData(eqm_repairtime,Qt::Horizontal,tr("维修次数"));
     }
     else if(tablename == "MpInfo")
     {
-//        _mpInfoModel->setHeaderData(0,Qt::Horizontal,tr("序号"));
-        _mpInfoModel->setHeaderData(0,Qt::Horizontal,tr("动部件编号"));
-        _mpInfoModel->setHeaderData(1,Qt::Horizontal,tr("动部件类型"));
-        _mpInfoModel->setHeaderData(2,Qt::Horizontal,tr("动部件名称"));
-        _mpInfoModel->setHeaderData(3,Qt::Horizontal,tr("运行时数"));
-        _mpInfoModel->setHeaderData(4,Qt::Horizontal,tr("运行阶段"));
-        _mpInfoModel->setHeaderData(5,Qt::Horizontal,tr("机号"));
-        _mpInfoModel->setHeaderData(6,Qt::Horizontal,tr("机型"));
-        _mpInfoModel->setHeaderData(7,Qt::Horizontal,tr("动部件开始日期"));
-        _mpInfoModel->setHeaderData(8,Qt::Horizontal,tr("动部件终止日期"));
+        _mpInfoModel->setHeaderData(mp_movepartid,  Qt::Horizontal,tr("动部件编号"));
+        _mpInfoModel->setHeaderData(mp_moveparttype,Qt::Horizontal,tr("动部件类型"));
+        _mpInfoModel->setHeaderData(mp_movepartname,Qt::Horizontal,tr("动部件名称"));
+        _mpInfoModel->setHeaderData(mp_runhour,     Qt::Horizontal,tr("运行时数"));
+        _mpInfoModel->setHeaderData(mp_runstage,    Qt::Horizontal,tr("运行阶段"));
+        _mpInfoModel->setHeaderData(mp_planeid,     Qt::Horizontal,tr("机号"));
+        _mpInfoModel->setHeaderData(mp_planetype,   Qt::Horizontal,tr("机型"));
+        _mpInfoModel->setHeaderData(mp_startdat,    Qt::Horizontal,tr("动部件开始日期"));
+        _mpInfoModel->setHeaderData(mp_enddate,     Qt::Horizontal,tr("动部件终止日期"));
     }
     else if(tablename == "MprInfo")
     {
-//        _mprInfoModel->setHeaderData(0,Qt::Horizontal,tr("序号"));
-        _mprInfoModel->setHeaderData(0,Qt::Horizontal,tr("动部件维修编号"));
-        _mprInfoModel->setHeaderData(1,Qt::Horizontal,tr("动部件编号"));
-        _mprInfoModel->setHeaderData(2,Qt::Horizontal,tr("动部件类型"));
-        _mprInfoModel->setHeaderData(3,Qt::Horizontal,tr("维修原因"));
-        _mprInfoModel->setHeaderData(4,Qt::Horizontal,tr("维修日期"));
-        _mprInfoModel->setHeaderData(5,Qt::Horizontal,tr("维修次数"));
-        _mprInfoModel->setHeaderData(6,Qt::Horizontal,tr("维修执行单位"));
-        _mprInfoModel->setHeaderData(7,Qt::Horizontal,tr("维修内容"));
-        _mprInfoModel->setHeaderData(8,Qt::Horizontal,tr("维修换件情况"));
+        _mprInfoModel->setHeaderData(mpr_movepartrepairid,Qt::Horizontal,tr("动部件维修编号"));
+        _mprInfoModel->setHeaderData(mpr_movepartid,      Qt::Horizontal,tr("动部件编号"));
+        _mprInfoModel->setHeaderData(mpr_moveparttype,    Qt::Horizontal,tr("动部件类型"));
+        _mprInfoModel->setHeaderData(mpr_repairreason,    Qt::Horizontal,tr("维修原因"));
+        _mprInfoModel->setHeaderData(mpr_repairdate,      Qt::Horizontal,tr("维修日期"));
+        _mprInfoModel->setHeaderData(mpr_repairtime,      Qt::Horizontal,tr("维修次数"));
+        _mprInfoModel->setHeaderData(mpr_repairdepart,    Qt::Horizontal,tr("维修执行单位"));
+        _mprInfoModel->setHeaderData(mpr_repaircontent,   Qt::Horizontal,tr("维修内容"));
+        _mprInfoModel->setHeaderData(mpr_repaircondition, Qt::Horizontal,tr("维修换件情况"));
     }
     else if(tablename == "AbmInfo")
     {
-//        _abmInfoModel->setHeaderData(0,Qt::Horizontal,tr("序号"));
-        _abmInfoModel->setHeaderData(0,Qt::Horizontal,tr("磨粒编号"));
-        _abmInfoModel->setHeaderData(1,Qt::Horizontal,tr("铁谱图片编号"));
-        _abmInfoModel->setHeaderData(2,Qt::Horizontal,tr("铁谱片编号"));
-        _abmInfoModel->setHeaderData(3,Qt::Horizontal,tr("铁谱分析报告编号"));
-        _abmInfoModel->setHeaderData(4,Qt::Horizontal,tr("磨粒标注人"));
-        _abmInfoModel->setHeaderData(5,Qt::Horizontal,tr("磨粒图片路径"));
-        _abmInfoModel->setHeaderData(6,Qt::Horizontal,tr("磨粒材质"));
-        _abmInfoModel->setHeaderData(7,Qt::Horizontal,tr("磨粒位置"));
-        _abmInfoModel->setHeaderData(8,Qt::Horizontal,tr("磨粒尺寸"));
-        _abmInfoModel->setHeaderData(9,Qt::Horizontal,tr("磨粒周长"));
-        _abmInfoModel->setHeaderData(10,Qt::Horizontal,tr("磨粒形状"));
-        _abmInfoModel->setHeaderData(11,Qt::Horizontal,tr("磨粒颜色"));
-        _abmInfoModel->setHeaderData(12,Qt::Horizontal,tr("磨粒表面纹理颜色"));
-        _abmInfoModel->setHeaderData(13,Qt::Horizontal,tr("磨粒磨损类型"));
-        _abmInfoModel->setHeaderData(14,Qt::Horizontal,tr("磨粒损伤类型"));
-        _abmInfoModel->setHeaderData(15,Qt::Horizontal,tr("磨粒磨损机理"));
-        _abmInfoModel->setHeaderData(16,Qt::Horizontal,tr("磨粒反映故障信息"));
-        _abmInfoModel->setHeaderData(17,Qt::Horizontal,tr("磨粒典型性"));
+        _abmInfoModel->setHeaderData(abm_abrasiveid,                        Qt::Horizontal,tr("磨粒编号"));
+        _abmInfoModel->setHeaderData(abm_ferrographypicid,                  Qt::Horizontal,tr("铁谱图片编号"));
+        _abmInfoModel->setHeaderData(abm_ferrographysheetid,                Qt::Horizontal,tr("铁谱片编号"));
+        _abmInfoModel->setHeaderData(abm_ferrographyreportid,               Qt::Horizontal,tr("铁谱分析报告编号"));
+        _abmInfoModel->setHeaderData(abm_abrasivemarkstuff,                 Qt::Horizontal,tr("磨粒标注人"));
+        _abmInfoModel->setHeaderData(abm_abrasivepicpath,                   Qt::Horizontal,tr("磨粒图片路径"));
+        _abmInfoModel->setHeaderData(abm_abrasivematerial,                  Qt::Horizontal,tr("磨粒材质"));
+        _abmInfoModel->setHeaderData(abm_abrasiveposition,                  Qt::Horizontal,tr("磨粒位置"));
+        _abmInfoModel->setHeaderData(abm_abrasivesize,                      Qt::Horizontal,tr("磨粒尺寸"));
+        _abmInfoModel->setHeaderData(abm_abrasivesperimeter,                Qt::Horizontal,tr("磨粒周长"));
+        _abmInfoModel->setHeaderData(abm_abrasiveshape,                     Qt::Horizontal,tr("磨粒形状"));
+        _abmInfoModel->setHeaderData(abm_abrasivecolor,                     Qt::Horizontal,tr("磨粒颜色"));
+        _abmInfoModel->setHeaderData(abm_abrasivesurfacetexturetype,        Qt::Horizontal,tr("磨粒表面纹理颜色"));
+        _abmInfoModel->setHeaderData(abm_abrasiveweartype,                  Qt::Horizontal,tr("磨粒磨损类型"));
+        _abmInfoModel->setHeaderData(abm_abrasivedamagetype,                Qt::Horizontal,tr("磨粒损伤类型"));
+        _abmInfoModel->setHeaderData(abm_abrasivemechanismtype,             Qt::Horizontal,tr("磨粒磨损机理"));
+        _abmInfoModel->setHeaderData(abm_abrasivefaultinformationreflection,Qt::Horizontal,tr("磨粒反映故障信息"));
+        _abmInfoModel->setHeaderData(abm_abrasivetypical,                   Qt::Horizontal,tr("磨粒典型性"));
     }
     else if(tablename == "FegInfo")
     {
-//        _fegInfoModel->setHeaderData(0,Qt::Horizontal,tr("序号"));
-        _fegInfoModel->setHeaderData(0,Qt::Horizontal,tr("铁谱片编号"));
-        _fegInfoModel->setHeaderData(1,Qt::Horizontal,tr("铁谱分析报告编号"));
-        _fegInfoModel->setHeaderData(2,Qt::Horizontal,tr("油样编号"));
-        _fegInfoModel->setHeaderData(3,Qt::Horizontal,tr("分析铁谱仪型号"));
-        _fegInfoModel->setHeaderData(4,Qt::Horizontal,tr("铁谱片制取油样消耗量"));
-        _fegInfoModel->setHeaderData(5,Qt::Horizontal,tr("铁谱片制取方法"));
-        _fegInfoModel->setHeaderData(6,Qt::Horizontal,tr("铁谱片制取人"));
+        _fegInfoModel->setHeaderData(feg_ferrographysheetid,           Qt::Horizontal,tr("铁谱片编号"));
+        _fegInfoModel->setHeaderData(feg_ferrographyreportid,          Qt::Horizontal,tr("铁谱分析报告编号"));
+        _fegInfoModel->setHeaderData(feg_oilsampleid,                  Qt::Horizontal,tr("油样编号"));
+        _fegInfoModel->setHeaderData(feg_ferrographyanalyertype,       Qt::Horizontal,tr("分析铁谱仪型号"));
+        _fegInfoModel->setHeaderData(feg_ferrographymakeoilconsumption,Qt::Horizontal,tr("铁谱片制取油样消耗量"));
+        _fegInfoModel->setHeaderData(feg_ferrographymakemethod,        Qt::Horizontal,tr("铁谱片制取方法"));
+        _fegInfoModel->setHeaderData(feg_ferrographymakestuff,         Qt::Horizontal,tr("铁谱片制取人"));
     }
     else if(tablename == "FegPInfo")
     {
-//        _fegpInfoModel->setHeaderData(0,Qt::Horizontal,tr("序号"));
-        _fegpInfoModel->setHeaderData(0,Qt::Horizontal,tr("铁谱图片编号"));
-        _fegpInfoModel->setHeaderData(1,Qt::Horizontal,tr("铁谱片编号"));
-        _fegpInfoModel->setHeaderData(2,Qt::Horizontal,tr("铁谱分析报告编号"));
-        _fegpInfoModel->setHeaderData(3,Qt::Horizontal,tr("显微镜型号"));
-        _fegpInfoModel->setHeaderData(4,Qt::Horizontal,tr("图像采集器型号"));
-        _fegpInfoModel->setHeaderData(5,Qt::Horizontal,tr("光源类型"));
-        _fegpInfoModel->setHeaderData(6,Qt::Horizontal,tr("放大倍数"));
-        _fegpInfoModel->setHeaderData(7,Qt::Horizontal,tr("铁谱图片采集区域"));
-        _fegpInfoModel->setHeaderData(8,Qt::Horizontal,tr("铁谱图片采集人"));
-        _fegpInfoModel->setHeaderData(9,Qt::Horizontal,tr("铁谱图片路径"));
-        _fegpInfoModel->setHeaderData(10,Qt::Horizontal,tr("铁谱图片识别分析信息"));
-        _fegpInfoModel->setHeaderData(11,Qt::Horizontal,tr("铁谱图片标识符号"));
+        _fegpInfoModel->setHeaderData(fegp_ferrographypicid,            Qt::Horizontal,tr("铁谱图片编号"));
+        _fegpInfoModel->setHeaderData(fegp_ferrographysheetid,          Qt::Horizontal,tr("铁谱片编号"));
+        _fegpInfoModel->setHeaderData(fegp_ferrographyreportid,         Qt::Horizontal,tr("铁谱分析报告编号"));
+        _fegpInfoModel->setHeaderData(fegp_microscopictype,             Qt::Horizontal,tr("显微镜型号"));
+        _fegpInfoModel->setHeaderData(fegp_imageacquisitiontype,        Qt::Horizontal,tr("图像采集器型号"));
+        _fegpInfoModel->setHeaderData(fegp_lightsourcetype,             Qt::Horizontal,tr("光源类型"));
+        _fegpInfoModel->setHeaderData(fegp_magnification,               Qt::Horizontal,tr("放大倍数"));
+        _fegpInfoModel->setHeaderData(fegp_imageacquisitionarea,        Qt::Horizontal,tr("铁谱图片采集区域"));
+        _fegpInfoModel->setHeaderData(fegp_imageacquisitionstuff,       Qt::Horizontal,tr("铁谱图片采集人"));
+        _fegpInfoModel->setHeaderData(fegp_ferrographypicpath,          Qt::Horizontal,tr("铁谱图片路径"));
+        _fegpInfoModel->setHeaderData(fegp_imagerecognitioninfoanalysis,Qt::Horizontal,tr("铁谱图片识别分析信息"));
+        _fegpInfoModel->setHeaderData(fegp_imagesymbol,                 Qt::Horizontal,tr("铁谱图片标识符号"));
         
     }
     else if(tablename == "OiaInfo")
     {
-//        _oiaInfoModel->setHeaderData(0,Qt::Horizontal,tr("序号"));
-        _oiaInfoModel->setHeaderData(0,Qt::Horizontal,tr("油样编号"));
-        _oiaInfoModel->setHeaderData(1,Qt::Horizontal,tr("检测分析单位名称"));
-        _oiaInfoModel->setHeaderData(2,Qt::Horizontal,tr("送检单位"));
-        _oiaInfoModel->setHeaderData(3,Qt::Horizontal,tr("送检原因"));
-        _oiaInfoModel->setHeaderData(4,Qt::Horizontal,tr("送检人"));
-        _oiaInfoModel->setHeaderData(5,Qt::Horizontal,tr("收油样日期"));
-        _oiaInfoModel->setHeaderData(6,Qt::Horizontal,tr("收油样人"));
-        _oiaInfoModel->setHeaderData(7,Qt::Horizontal,tr("污染度分析方法"));
-        _oiaInfoModel->setHeaderData(8,Qt::Horizontal,tr("污染度分析人"));
-        _oiaInfoModel->setHeaderData(9,Qt::Horizontal,tr("污染度分析日期"));
-        _oiaInfoModel->setHeaderData(10,Qt::Horizontal,tr("污染度分析设备"));
-        _oiaInfoModel->setHeaderData(11,Qt::Horizontal,tr("污染度分析报告编号"));
-        _oiaInfoModel->setHeaderData(12,Qt::Horizontal,tr("光谱分析方法"));
-        _oiaInfoModel->setHeaderData(13,Qt::Horizontal,tr("光谱分析人"));
-        _oiaInfoModel->setHeaderData(14,Qt::Horizontal,tr("光谱分析日期"));
-        _oiaInfoModel->setHeaderData(15,Qt::Horizontal,tr("光谱分析设备"));
-        _oiaInfoModel->setHeaderData(16,Qt::Horizontal,tr("光谱分析报告编号"));
-        _oiaInfoModel->setHeaderData(17,Qt::Horizontal,tr("铁谱分析方法"));
-        _oiaInfoModel->setHeaderData(18,Qt::Horizontal,tr("铁谱分析人"));
-        _oiaInfoModel->setHeaderData(19,Qt::Horizontal,tr("铁谱分析日期"));
-        _oiaInfoModel->setHeaderData(20,Qt::Horizontal,tr("铁谱分析设备"));
-        _oiaInfoModel->setHeaderData(21,Qt::Horizontal,tr("铁谱分析报告编号"));
-        _oiaInfoModel->setHeaderData(22,Qt::Horizontal,tr("理化分析方法"));
-        _oiaInfoModel->setHeaderData(23,Qt::Horizontal,tr("理化分析人"));
-        _oiaInfoModel->setHeaderData(24,Qt::Horizontal,tr("理化分析日期"));
-        _oiaInfoModel->setHeaderData(25,Qt::Horizontal,tr("理化分析设备"));
-        _oiaInfoModel->setHeaderData(26,Qt::Horizontal,tr("理化分析设备编号"));
+        _oiaInfoModel->setHeaderData(oia_oilsampleid,                  Qt::Horizontal,tr("油样编号"));
+        _oiaInfoModel->setHeaderData(oia_analyzedepartname,            Qt::Horizontal,tr("检测分析单位名称"));
+        _oiaInfoModel->setHeaderData(oia_senddepart,                   Qt::Horizontal,tr("送检单位"));
+        _oiaInfoModel->setHeaderData(oia_sendreason,                   Qt::Horizontal,tr("送检原因"));
+        _oiaInfoModel->setHeaderData(oia_sendstuff,                    Qt::Horizontal,tr("送检人"));
+        _oiaInfoModel->setHeaderData(oia_receivedate,                  Qt::Horizontal,tr("收油样日期"));
+        _oiaInfoModel->setHeaderData(oia_receivestuff,                 Qt::Horizontal,tr("收油样人"));
+        _oiaInfoModel->setHeaderData(oia_contaminationanalyzemethod,   Qt::Horizontal,tr("污染度分析方法"));
+        _oiaInfoModel->setHeaderData(oia_contaminationanalyzestuff,    Qt::Horizontal,tr("污染度分析人"));
+        _oiaInfoModel->setHeaderData(oia_contaminationanalyzedate,     Qt::Horizontal,tr("污染度分析日期"));
+        _oiaInfoModel->setHeaderData(oia_contaminationanalyzeequipment,Qt::Horizontal,tr("污染度分析设备"));
+        _oiaInfoModel->setHeaderData(oia_contaminationanalyzereportid, Qt::Horizontal,tr("污染度分析报告编号"));
+        _oiaInfoModel->setHeaderData(oia_spectroscopymethod,           Qt::Horizontal,tr("光谱分析方法"));
+        _oiaInfoModel->setHeaderData(oia_spectroscopystuff,            Qt::Horizontal,tr("光谱分析人"));
+        _oiaInfoModel->setHeaderData(oia_spectroscopydate,             Qt::Horizontal,tr("光谱分析日期"));
+        _oiaInfoModel->setHeaderData(oia_spectroscopyequipment,        Qt::Horizontal,tr("光谱分析设备"));
+        _oiaInfoModel->setHeaderData(oia_spectroscopyreportid,         Qt::Horizontal,tr("光谱分析报告编号"));
+        _oiaInfoModel->setHeaderData(oia_ferrographymethod,            Qt::Horizontal,tr("铁谱分析方法"));
+        _oiaInfoModel->setHeaderData(oia_ferrographystuff,             Qt::Horizontal,tr("铁谱分析人"));
+        _oiaInfoModel->setHeaderData(oia_ferrographydate,              Qt::Horizontal,tr("铁谱分析日期"));
+        _oiaInfoModel->setHeaderData(oia_ferrographyequipment,         Qt::Horizontal,tr("铁谱分析设备"));
+        _oiaInfoModel->setHeaderData(oia_ferrographyreportid,          Qt::Horizontal,tr("铁谱分析报告编号"));
+        _oiaInfoModel->setHeaderData(oia_physicochemicalmethod,        Qt::Horizontal,tr("理化分析方法"));
+        _oiaInfoModel->setHeaderData(oia_physicochemicalstuff,         Qt::Horizontal,tr("理化分析人"));
+        _oiaInfoModel->setHeaderData(oia_physicochemicaldate,          Qt::Horizontal,tr("理化分析日期"));
+        _oiaInfoModel->setHeaderData(oia_physicochemicalequipment,     Qt::Horizontal,tr("理化分析设备"));
+        _oiaInfoModel->setHeaderData(oia_physicochemicalreportid,      Qt::Horizontal,tr("理化分析设备编号"));
     }
     else if(tablename == "OisInfo")
     {
-//        _oisInfoModel->setHeaderData(0,Qt::Horizontal,tr("序号"));
-        _oisInfoModel->setHeaderData(0,Qt::Horizontal,tr("油样编号"));
-        _oisInfoModel->setHeaderData(1,Qt::Horizontal,tr("采样单位编号"));
-        _oisInfoModel->setHeaderData(2,Qt::Horizontal,tr("机型"));
-        _oisInfoModel->setHeaderData(3,Qt::Horizontal,tr("机号"));
-        _oisInfoModel->setHeaderData(4,Qt::Horizontal,tr("监控部件名称"));
-        _oisInfoModel->setHeaderData(5,Qt::Horizontal,tr("监控部件编号"));
-        _oisInfoModel->setHeaderData(6,Qt::Horizontal,tr("采样点编号"));
-        _oisInfoModel->setHeaderData(7,Qt::Horizontal,tr("滑油工作时数"));
-        _oisInfoModel->setHeaderData(8,Qt::Horizontal,tr("滑油添加量"));
-        _oisInfoModel->setHeaderData(9,Qt::Horizontal,tr("采样原因"));
-        _oisInfoModel->setHeaderData(10,Qt::Horizontal,tr("采样单位"));
-        _oisInfoModel->setHeaderData(11,Qt::Horizontal,tr("采样人"));
-        _oisInfoModel->setHeaderData(12,Qt::Horizontal,tr("采样日期"));
-        _oisInfoModel->setHeaderData(13,Qt::Horizontal,tr("采样时间"));
-        _oisInfoModel->setHeaderData(14,Qt::Horizontal,tr("采样时机"));
-        _oisInfoModel->setHeaderData(15,Qt::Horizontal,tr("采样方式"));
-        _oisInfoModel->setHeaderData(16,Qt::Horizontal,tr("采样量"));
-        _oisInfoModel->setHeaderData(17,Qt::Horizontal,tr("采样说明"));
-        _oisInfoModel->setHeaderData(18,Qt::Horizontal,tr("送样人"));
-        _oisInfoModel->setHeaderData(19,Qt::Horizontal,tr("送样日期"));
-        _oisInfoModel->setHeaderData(20,Qt::Horizontal,tr("送样时间"));
+        _oisInfoModel->setHeaderData(ois_oilsampleid,      Qt::Horizontal,tr("油样编号"));
+        _oisInfoModel->setHeaderData(ois_sampledepartid,   Qt::Horizontal,tr("采样单位编号"));
+        _oisInfoModel->setHeaderData(ois_planetype,        Qt::Horizontal,tr("机型"));
+        _oisInfoModel->setHeaderData(ois_planeid,          Qt::Horizontal,tr("机号"));
+        _oisInfoModel->setHeaderData(ois_monitorpartname,  Qt::Horizontal,tr("监控部件名称"));
+        _oisInfoModel->setHeaderData(ois_monitorpartid,    Qt::Horizontal,tr("监控部件编号"));
+        _oisInfoModel->setHeaderData(ois_sampleid,         Qt::Horizontal,tr("采样点编号"));
+        _oisInfoModel->setHeaderData(ois_oilworktime,      Qt::Horizontal,tr("滑油工作时数"));
+        _oisInfoModel->setHeaderData(ois_oiladdition,      Qt::Horizontal,tr("滑油添加量"));
+        _oisInfoModel->setHeaderData(ois_samplereason,     Qt::Horizontal,tr("采样原因"));
+        _oisInfoModel->setHeaderData(ois_sampledepartname, Qt::Horizontal,tr("采样单位"));
+        _oisInfoModel->setHeaderData(ois_samplestuff,      Qt::Horizontal,tr("采样人"));
+        _oisInfoModel->setHeaderData(ois_sampledate,       Qt::Horizontal,tr("采样日期"));
+        _oisInfoModel->setHeaderData(ois_sampletime,       Qt::Horizontal,tr("采样时间"));
+        _oisInfoModel->setHeaderData(ois_samplesituation,  Qt::Horizontal,tr("采样时机"));
+        _oisInfoModel->setHeaderData(ois_samplemethod,     Qt::Horizontal,tr("采样方式"));
+        _oisInfoModel->setHeaderData(ois_samplevolume,     Qt::Horizontal,tr("采样量"));
+        _oisInfoModel->setHeaderData(ois_sampleinstruction,Qt::Horizontal,tr("采样说明"));
+        _oisInfoModel->setHeaderData(ois_sendstuff,        Qt::Horizontal,tr("送样人"));
+        _oisInfoModel->setHeaderData(ois_senddate,         Qt::Horizontal,tr("送样日期"));
+        _oisInfoModel->setHeaderData(ois_sendtime,         Qt::Horizontal,tr("送样时间"));
     }
 }
 
@@ -400,36 +392,37 @@ void AdvanceSearchDlg::initCbBox()
     query.exec("select * from equipmentinfo");
     
     while(query.next())
-    {
-        if(ui->planeidCbBox->findText(query.value(1).toString()) == -1)
-            ui->planeidCbBox->insertItem(-1,query.value(1).toString());
-        if(ui->planeTypeCbBox->findText(query.value(2).toString()) == -1)
-            ui->planeTypeCbBox->insertItem(-1,query.value(2).toString());
-        if(ui->departIdCbBox->findText(query.value(3).toString()) == -1)
-            ui->departIdCbBox->insertItem(-1,query.value(3).toString());
-        if(ui->runHourCbBox->findText(query.value(4).toString()) == -1)
-            ui->runHourCbBox->insertItem(-1,query.value(4).toString());
-        if(ui->runStageCbBox->findText(query.value(5).toString()))
-            ui->runStageCbBox->insertItem(-1,query.value(5).toString());
-        if(ui->repairTimeCbBox->findText(query.value(6).toString()))
-            ui->repairTimeCbBox->insertItem(-1,query.value(6).toString());
+    { 
+        if(ui->planeidCbBox->findText(query.value(eqm_planeid).toString()) == -1)
+            ui->planeidCbBox->insertItem(-1,query.value(eqm_planeid).toString());
+        if(ui->planeTypeCbBox->findText(query.value(eqm_planetype).toString()) == -1)
+            ui->planeTypeCbBox->insertItem(-1,query.value(eqm_planetype).toString());
+        if(ui->departIdCbBox->findText(query.value(eqm_deoartid).toString()) == -1)
+            ui->departIdCbBox->insertItem(-1,query.value(eqm_deoartid).toString());
+        if(ui->runHourCbBox->findText(query.value(eqm_runhour).toString()) == -1)
+            ui->runHourCbBox->insertItem(-1,query.value(eqm_runhour).toString());
+        if(ui->runStageCbBox->findText(query.value(eqm_runstage).toString()) == -1)
+            ui->runStageCbBox->insertItem(-1,query.value(eqm_runstage).toString());
+        if(ui->repairTimeCbBox->findText(query.value(eqm_repairtime).toString()) == -1)
+            ui->repairTimeCbBox->insertItem(-1,query.value(eqm_repairtime).toString());
     }
     ui->planeidCbBox->setCurrentIndex(0);
     
     query.exec("select * from movepartinfo");
     while(query.next())
     {
-        if(ui->movepartIdCbBox->findText(query.value(1).toString()) == -1)
-            ui->movepartIdCbBox->insertItem(-1,query.value(1).toString());
-        if(ui->movepartNameCbBox->findText(query.value(3).toString()) == -1)
-            ui->movepartNameCbBox->insertItem(-1,query.value(3).toString());
-        if(ui->movepartTypeCbBox->findText(query.value(2).toString()) == -1)
-            ui->movepartTypeCbBox->insertItem(-1,query.value(2).toString());
-        if(ui->partrunHourCbBox->findText(query.value(4).toString()) == -1)
-            ui->partrunHourCbBox->insertItem(-1,query.value(4).toString());
+        if(ui->movepartIdCbBox->findText(query.value(mp_movepartid).toString()) == -1)
+            ui->movepartIdCbBox->insertItem(-1,query.value(mp_movepartid).toString());
+        if(ui->movepartNameCbBox->findText(query.value(mp_movepartname).toString()) == -1)
+            ui->movepartNameCbBox->insertItem(-1,query.value(mp_movepartname).toString());
+        if(ui->movepartTypeCbBox->findText(query.value(mp_moveparttype).toString()) == -1)
+            ui->movepartTypeCbBox->insertItem(-1,query.value(mp_moveparttype).toString());
+        if(ui->partrunHourCbBox->findText(query.value(mp_runhour).toString()) == -1)
+            ui->partrunHourCbBox->insertItem(-1,query.value(mp_runhour).toString());
     }
     
 }
+
 
 
 void AdvanceSearchDlg::on_PlaneIdChkBox_clicked()
@@ -441,6 +434,7 @@ void AdvanceSearchDlg::on_PlaneIdChkBox_clicked()
         _eqmCdtMap.insert("planeid",text);
     }
 }
+
 
 
 void AdvanceSearchDlg::on_planeidCbBox_currentIndexChanged(int index)
