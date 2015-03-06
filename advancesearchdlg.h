@@ -25,6 +25,8 @@ public:
     ~AdvanceSearchDlg();
     
 private slots:
+     void setpropertyName(QString propertyname);
+     
      void on_queryBtn_clicked();
 
      void on_PlaneIdChkBox_clicked();
@@ -35,8 +37,7 @@ private slots:
      
      void on_planeTypeCbBox_currentIndexChanged(int index);
      
-     void on_departIdChkBox_clicked();
-     
+     void on_departIdChkBox_clicked();  
      
      void on_departIdCbBox_currentIndexChanged(int index);
      

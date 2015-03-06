@@ -577,22 +577,207 @@ void AdvanceSearchDlg::on_addtoBtn_clicked()
 //    propertyNameDlg->setLayout(dlgMainLayout);
 //    propertyNameDlg->show();
     
-    QString eqmFields = "";
-    QString eqmValues = "";
-    QMap<QString,QString>::iterator it;
-    it = _eqmCdtMap.begin();
-    eqmFields.append(it.key());
-    eqmValues.append(it.value());
-    ++it;
-    for(;it != _eqmCdtMap.end();++it)
+    ppnDlg = new ProPertyNameDlg(this);
+    if(ppnDlg->exec()== QDialog::Accepted)
     {
-        eqmFields.append("#");
-        eqmFields.append(it.key());
-        eqmValues.append("#");
-        eqmValues.append(it.value());
+        qDebug()<<"Accept";
+        qDebug()<<this->propertyName;
+        
+        QString eqmFields = "";
+        QString eqmValues = "";
+        if(!_eqmCdtMap.isEmpty())
+        {
+            QMap<QString,QString>::iterator it;
+            it = _eqmCdtMap.begin();
+            eqmFields.append(it.key());
+            eqmValues.append(it.value());
+            ++it;
+            for(;it != _eqmCdtMap.end();++it)
+            {
+                eqmFields.append("#");
+                eqmFields.append(it.key());
+                eqmValues.append("#");
+                eqmValues.append(it.value());
+            }
+        }
+        
+        QString mpFields = "";
+        QString mpValues = "";
+        if(!_mpCdtMap.isEmpty())
+        {
+            QMap<QString,QString>::iterator it;
+            it = _mpCdtMap.begin();
+            mpFields.append(it.key());
+            mpValues.append(it.value());
+            ++it;
+            for(;it !=_mpCdtMap.end();++it)
+            {
+                mpFields.append("#");
+                mpValues.append("#");
+                mpFields.append(it.key());
+                mpValues.append(it.value());
+            }
+        }
+        
+        QString mprFields = "";
+        QString mprValues = "";
+        if(!_mprCdtMap.isEmpty())
+        {
+            QMap<QString,QString>::iterator it;
+            it = _mprCdtMap.begin();
+            mprFields.append(it.key());
+            mprValues.append(it.value());
+            ++it;
+            for(;it != _mprCdtMap.end();++it)
+            {
+                mprFields.append("#");
+                mprValues.append("#");
+                mprFields.append(it.key());
+                mprValues.append(it.value());
+            }
+        }
+        
+        QString fegFields = "";
+        QString fegValues = "";
+        if(!_fegCdtMap.isEmpty())
+        {
+            QMap<QString,QString>::iterator it;
+            it = _fegCdtMap.begin();
+            fegFields.append(it.key());
+            fegValues.append(it.value());
+            ++it;
+            for(;it!=_fegCdtMap.end();++it)
+            {
+                fegFields.append("#");
+                fegValues.append("#");
+                fegFields.append(it.key());
+                fegValues.append(it.value());
+            }
+        }
+        
+        QString fegpFields = "";
+        QString fegpValues = "";
+        if(!_fegpCdtMap.isEmpty())
+        {
+            QMap<QString,QString>::iterator it;
+            it = _fegpCdtMap.begin();
+            fegpFields.append(it.key());
+            fegpValues.append(it.value());
+            ++it;
+            for(;it != _fegpCdtMap.end();++it)
+            {
+                fegpFields.append("#");
+                fegpValues.append("#");
+                fegpFields.append(it.key());
+                fegpValues.append(it.value());
+            }
+        }
+        
+        QString oisFields = "";
+        QString oisValues = "";
+        if(!_oisCdtMap.isEmpty())
+        {
+            QMap<QString,QString>::iterator it;
+            it = _oisCdtMap.begin();
+            oisFields.append(it.key());
+            oisValues.append(it.value());
+            ++it;
+            for(;it!=_oisCdtMap.end();++it)
+            {
+                oisFields.append("#");
+                oisValues.append("#");
+                fegpFields.append(it.key());
+                fegpValues.append(it.value());
+            }
+        }
+        
+        QString oiaFields = "";
+        QString oiaValues = "";
+        if(!_oiaCdtMap.isEmpty())
+        {
+            QMap<QString,QString>::iterator it;
+            it = _oiaCdtMap.begin();
+            oiaFields.append(it.key());
+            oiaValues.append(it.value());
+            ++it;
+            for(;it!=_oiaCdtMap.end();++it)
+            {
+                oiaFields.append("#");
+                oisValues.append("#");
+                fegpFields.append(it.key());
+                fegpValues.append(it.value());
+            }
+        }
+        
+        QString abmFields = "";
+        QString abmValues = "";
+        if(!_abmCdtMap.isEmpty())
+        {
+            QMap<QString,QString>::iterator it;
+            it = _abmCdtMap.begin();
+            abmFields.append(it.key());
+            abmValues.append(it.value());
+            ++it;
+            for(;it != _abmCdtMap.end();++it)
+            {
+                abmFields.append("#");
+                abmValues.append("#");
+                abmFields.append(it.key());
+                abmValues.append(it.value());
+            }
+        }
+        
+        QSqlQuery query;
+        QString count;
+        query.exec("select count(*) from propertyinfo");
+        if(query.next())
+            count = query.value(0).toString();
+        qDebug()<<count;
+        QString propertySql = "insert into propertyinfo values(";
+        propertySql.append(count);
+        propertySql.append(",'");
+        propertySql.append(propertyName);
+        propertySql.append("','");
+        propertySql.append(eqmFields);
+        propertySql.append("','");
+        propertySql.append(eqmValues);
+        propertySql.append("','");
+        propertySql.append(mpFields);
+        propertySql.append("','");
+        propertySql.append(mpValues);
+        propertySql.append("','");
+        propertySql.append(mprFields);
+        propertySql.append("','");
+        propertySql.append(mprValues);
+        propertySql.append("','");
+        propertySql.append(fegFields);
+        propertySql.append("','");
+        propertySql.append(fegValues);
+        propertySql.append("','");
+        propertySql.append(fegpFields);
+        propertySql.append("','");
+        propertySql.append(fegpValues);
+        propertySql.append("','");
+        propertySql.append(oisFields);
+        propertySql.append("','");
+        propertySql.append(oisValues);
+        propertySql.append("','");
+        propertySql.append(oiaFields);
+        propertySql.append("','");
+        propertySql.append(oiaValues);
+        propertySql.append("','");
+        propertySql.append(abmFields);
+        propertySql.append("','");
+        propertySql.append(abmValues);
+        propertySql.append("')");
+        
+        if(query.exec(propertySql))
+            QMessageBox::warning(this,tr("提示"),tr("保存查询属性成功"),QMessageBox::Close);
+        else
+            QMessageBox::warning(this,tr("提示"),tr("保存查询属性失败"),QMessageBox::Close);
     }
-    qDebug()<<eqmFields;
-    qDebug()<<eqmValues;
+    else
+        qDebug()<<"Reject";
 }
 
 
@@ -715,4 +900,10 @@ void AdvanceSearchDlg::on_movepartEndDataChkBox_clicked()
         QString text = ui->movepartEndDateEdit->date().toString("yyyy-MM-dd");
         _mpCdtMap.insert("enddate",text);
     }
+}
+
+
+void AdvanceSearchDlg::setpropertyName(QString propertyname)
+{
+    this->propertyName = propertyname;
 }
