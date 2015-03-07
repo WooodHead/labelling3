@@ -8,6 +8,12 @@
 #include <QStringList>
 #include <QMap>
 #include <QDebug>
+#include <QDir>
+#include <QFileInfoList>
+#include <QFileInfo>
+#include <QSqlRecord>
+#include <QSqlField>
+#include <QFileDialog>
 
 #include "connection.h"
 #include "propertynamedlg.h"
@@ -79,6 +85,8 @@ private slots:
      
      void on_movepartEndDataChkBox_clicked();
      
+     void on_exportBtn_clicked();
+     
 private:
      QString generateSql(QMap<QString,QString> conditionMap,QStringList conditionField,QString tableName);
      void setModelHeaderData(QString tablename);
@@ -87,6 +95,11 @@ private:
      void createListWidget();
      void initCbBox();
      void query();
+     bool copyFiles(QString fromDir,QString toDir,bool convertIfExits);
+     bool exportDB(const QString &path);
+     bool importDB(const QString &path);
+     bool exportDB(const QSqlQueryModel *model,const QString &tablename,const QString &path);
+     bool importDB(const QSqlQueryModel &model);
 
 private:
     Ui::AdvanceSearchDlg *ui;

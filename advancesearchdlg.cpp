@@ -32,6 +32,232 @@ AdvanceSearchDlg::~AdvanceSearchDlg()
     db.close();
 }
 
+
+bool AdvanceSearchDlg::importDB(const QString &path)
+{
+    
+}
+
+
+bool AdvanceSearchDlg::exportDB(const QSqlQueryModel *model, const QString &tablename, const QString &path)
+{
+     QStringList vList;
+    int count = model->rowCount();
+    for(int i =0;i<count;++i)
+    {
+        QSqlRecord record = model->record(i);
+        QString prefix=QString("insert into %1(").arg(tablename); // 记录属性字段名
+        QString suffix="values(";                                 // 记录属性值
+        
+        // 遍历属性字段
+        for(int j=0;j<record.count();j++)
+        {
+            QSqlField field=record.field(j);
+            QString fieldName=field.name();
+
+            switch(field.type())
+            {
+            case QVariant::String:
+                prefix+=fieldName;
+                suffix+=QString("'%1'").arg(record.value(j).toString());
+                break;
+            case QVariant::ByteArray:
+            {
+                prefix+=fieldName;
+                QByteArray data=record.value(j).toByteArray();
+                if(data.isNull())
+                {
+                    suffix+="null";
+                }else
+                {
+                    suffix+=QString("E'%1'").arg(data.toHex().data()); // blob数据按16进制格式导出
+                }
+            }
+                break;
+            default:
+                prefix+=fieldName;
+                suffix+=record.value(j).toString();
+            }
+
+            if(record.count()==1)
+            {
+                prefix+=")";
+                suffix+=")";
+            }else if(j!=record.count()-1)
+            {
+                prefix+=",";
+                suffix+=",";
+            }else if(j==record.count()-1)
+            {
+                prefix+=")";
+                suffix+=")";
+            }
+        }
+        // 组装sql语句 insert into auth_test values(0,'hello',E'003f')
+        QString iSql=QString("%1 %2;").arg(prefix).arg(suffix);
+        vList.append(iSql);
+//        qDebug()<<iSql;
+    }
+    QFile file(path);
+    file.open(QIODevice::WriteOnly|QIODevice::Truncate);
+
+    // 将sql语句写入文件
+    QTextStream out(&file);
+    foreach(QString line,vList)
+    {
+        out<<line+"\n";
+    }
+    return true;
+}
+
+
+bool AdvanceSearchDlg::exportDB(const QString &path)
+{
+    /**
+     *@brief 导出数据库数据到文件中
+     *@param path 文件路径
+     */
+    //QMessageBox::warning(this,"warning","this is private function to export SQL Data",QMessageBox::Close);
+
+    QSqlDatabase gAuthDB;
+    if(!createConnection(gAuthDB))
+        return false;
+
+   QStringList vList;
+
+    // 列出数据库所有名称
+    QStringList tables=gAuthDB.tables();
+    foreach(QString table,tables)
+    {
+        QSqlQuery query(gAuthDB);
+        QString sql=QString("select * from %1").arg(table);
+        query.exec(sql);
+
+        QSqlRecord record=query.record();
+        while(query.next())
+        {
+            QString prefix=QString("insert into %1(").arg(table); // 记录属性字段名
+            QString suffix="values(";                             // 记录属性值
+
+            // 遍历属性字段
+            for(int i=0;i<record.count();i++)
+            {
+                QSqlField field=record.field(i);
+                QString fieldName=field.name();
+
+                switch(field.type())
+                {
+                case QVariant::String:
+                    prefix+=fieldName;
+                    suffix+=QString("'%1'").arg(query.value(i).toString());
+                    break;
+                case QVariant::ByteArray:
+                {
+                    prefix+=fieldName;
+                    QByteArray data=query.value(i).toByteArray();
+                    if(data.isNull())
+                    {
+                        suffix+="null";
+                    }else
+                    {
+                        suffix+=QString("E'%1'").arg(data.toHex().data()); // blob数据按16进制格式导出
+                    }
+                }
+                    break;
+                default:
+                    prefix+=fieldName;
+                    suffix+=query.value(i).toString();
+                }
+
+                if(record.count()==1)
+                {
+                    prefix+=")";
+                    suffix+=")";
+                }else if(i!=record.count()-1)
+                {
+                    prefix+=",";
+                    suffix+=",";
+                }else if(i==record.count()-1)
+                {
+                    prefix+=")";
+                    suffix+=")";
+                }
+            }
+            // 组装sql语句 insert into auth_test values(0,'hello',E'003f')
+            QString iSql=QString("%1 %2;").arg(prefix).arg(suffix);
+            vList.append(iSql);
+        }
+    }
+
+    QFile file(path);
+    file.open(QIODevice::WriteOnly|QIODevice::Truncate);
+
+    // 将sql语句写入文件
+    QTextStream out(&file);
+    foreach(QString line,vList)
+    {
+        out<<line+"\n";
+    }
+    gAuthDB.close();
+    return true;
+}
+
+
+
+bool AdvanceSearchDlg::copyFiles(QString fromDir, QString toDir, bool convertIfExits)
+{
+    /**
+     *@brief 将fromDir文件夹内的图片文件，拷贝到toDir文件夹下
+     *@param fromDir 图片文件的源目录
+     *@param toDir   拷贝图片文件的目标目录
+     *@param convertIfExits 是否覆盖已存在文件标识，默认值是false
+     */
+    QDir sourceDir(fromDir);
+    QDir targetDir(toDir);
+
+    if(!targetDir.exists())
+    {
+        //< 如果目标目录不存在，则进行创建
+        if(!targetDir.mkdir(targetDir.absolutePath()))
+            return false;
+    }
+
+    QFileInfoList fileInfoList = sourceDir.entryInfoList();
+    // 遍历所有文件信息
+    foreach(QFileInfo fileInfo, fileInfoList)
+    {
+        // 去除当前目录和父目录
+        if(fileInfo.fileName() == "." || fileInfo.fileName() == "..")
+            continue;
+        // 数据库文件处理
+        if(fileInfo.fileName().split(".")[1] == "sql")
+            qDebug()<<fileInfo.fileName();
+
+        // 当为目录时，递归的进行copy
+        if(fileInfo.isDir())
+        {
+            if(!copyFiles(fileInfo.filePath(),
+                          targetDir.filePath(fileInfo.fileName()),
+                          convertIfExits))
+                return false;
+        }
+        else
+        {   //当允许覆盖操作时，将旧文件进行删除操作
+            if(convertIfExits && targetDir.exists(fileInfo.fileName()))
+            {
+                targetDir.remove(fileInfo.fileName());
+            }
+            // 进行文件copy
+            if(!QFile::copy(fileInfo.filePath(),
+                            targetDir.filePath(fileInfo.fileName()))){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+
 void AdvanceSearchDlg::on_queryBtn_clicked()
 {
     query();
@@ -385,6 +611,7 @@ void AdvanceSearchDlg::setModelHeaderData(QString tablename)
 }
 
 
+
 void AdvanceSearchDlg::initCbBox()
 {
     QSqlQuery query;
@@ -434,7 +661,6 @@ void AdvanceSearchDlg::on_PlaneIdChkBox_clicked()
         _eqmCdtMap.insert("planeid",text);
     }
 }
-
 
 
 void AdvanceSearchDlg::on_planeidCbBox_currentIndexChanged(int index)
@@ -559,26 +785,7 @@ void AdvanceSearchDlg::on_repairTimeCbBox_currentIndexChanged(int index)
 
 
 void AdvanceSearchDlg::on_addtoBtn_clicked()
-{
-//    QDialog *propertyNameDlg = new QDialog(this);
-//    QLabel *nameLabel = new QLabel(tr("保存属性名"));
-//    QLineEdit *nameLineEdit = new QLineEdit;
-////    nameLabel.setBuddy(nameLineEdit);
-//    QHBoxLayout *dlgTopLayout = new QHBoxLayout;
-//    dlgTopLayout->addWidget(nameLabel);
-//    dlgTopLayout->addWidget(nameLineEdit);
-//    QPushButton *okButton = new QPushButton(tr("确定"));
-//    QPushButton *cancelButton = new QPushButton(tr("取消"));
-//    QHBoxLayout *dlgbottomLayout = new QHBoxLayout;
-//    dlgbottomLayout->addWidget(okButton);
-//    dlgbottomLayout->addWidget(cancelButton);
-//    QVBoxLayout *dlgMainLayout = new QVBoxLayout;
-//    dlgMainLayout->addLayout(dlgTopLayout);
-//    dlgMainLayout->addLayout(dlgbottomLayout);
-    
-//    propertyNameDlg->setLayout(dlgMainLayout);
-//    propertyNameDlg->show();
-    
+{   
     ppnDlg = new ProPertyNameDlg(this);
     if(ppnDlg->exec()== QDialog::Accepted)
     {
@@ -908,4 +1115,23 @@ void AdvanceSearchDlg::on_movepartEndDataChkBox_clicked()
 void AdvanceSearchDlg::setpropertyName(QString propertyname)
 {
     this->propertyName = propertyname;
+}
+
+
+void AdvanceSearchDlg::on_exportBtn_clicked()
+{
+    QString filename = QFileDialog::getSaveFileName(this,
+                                                    tr("保存导出数据"),
+                                                    tr("backup.sql"),
+                                                    tr("SqlFile(*.sql)"));
+    if(this->exportDB(_eqmInfoModel,"equipmentinfo",filename))
+        QMessageBox::warning(this,
+                             tr("提示"),
+                             tr("数据导出成功"),
+                             QMessageBox::Close);
+    else
+        QMessageBox::warning(this,
+                             tr("提示"),
+                             tr("数据导出失败"),
+                             QMessageBox::Close);
 }
