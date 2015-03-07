@@ -35,7 +35,58 @@ AdvanceSearchDlg::~AdvanceSearchDlg()
 
 bool AdvanceSearchDlg::importDB(const QString &path)
 {
+    QSqlQuery query(db);
+    QFile file(path);
+    file.open(QFile::ReadOnly);
+    int count = 0;
     
+    QTextStream in(&file);
+    while(!in.atEnd())
+    {
+        QString sql=in.readLine();
+        // 通过分析values(E'),判断是否有二进制数据,如没有直接运行sql语句,如有则需要将16进制文本转换为blob数据
+        QRegExp reg("E'([0-9a-f]{1,})'");
+
+        if(!sql.contains(reg))
+        {
+            if(query.exec(sql))
+                count ++;
+        }else
+        {
+            int pos=0;
+            QStringList bList;
+
+            // 探索所有的blob字段
+            while((pos=reg.indexIn(sql,pos))!=-1)
+            {
+                bList.append(reg.cap(0));
+
+                QString blob=reg.cap(1);
+                pos+=reg.matchedLength();
+            }
+
+            // blob字段填充占位符
+            foreach(QString key,bList)
+            {
+                sql.replace(key,"?");
+            }
+
+            query.prepare(sql);
+
+            // 绑定占位符数据
+            for(int i=0;i<bList.size();i++)
+            {
+                // 去除E''
+                QString hexBlob=bList[i].mid(2,bList[i].size()-1);
+                // 还原16进制数据
+                QByteArray ba=QByteArray::fromHex(hexBlob.toLocal8Bit());
+
+                query.bindValue(i,ba);
+            }
+            query.exec();
+        }
+    }
+    return true;
 }
 
 
@@ -110,97 +161,6 @@ bool AdvanceSearchDlg::exportDB(const QSqlQueryModel *model, const QString &tabl
     return true;
 }
 
-
-bool AdvanceSearchDlg::exportDB(const QString &path)
-{
-    /**
-     *@brief 导出数据库数据到文件中
-     *@param path 文件路径
-     */
-    //QMessageBox::warning(this,"warning","this is private function to export SQL Data",QMessageBox::Close);
-
-    QSqlDatabase gAuthDB;
-    if(!createConnection(gAuthDB))
-        return false;
-
-   QStringList vList;
-
-    // 列出数据库所有名称
-    QStringList tables=gAuthDB.tables();
-    foreach(QString table,tables)
-    {
-        QSqlQuery query(gAuthDB);
-        QString sql=QString("select * from %1").arg(table);
-        query.exec(sql);
-
-        QSqlRecord record=query.record();
-        while(query.next())
-        {
-            QString prefix=QString("insert into %1(").arg(table); // 记录属性字段名
-            QString suffix="values(";                             // 记录属性值
-
-            // 遍历属性字段
-            for(int i=0;i<record.count();i++)
-            {
-                QSqlField field=record.field(i);
-                QString fieldName=field.name();
-
-                switch(field.type())
-                {
-                case QVariant::String:
-                    prefix+=fieldName;
-                    suffix+=QString("'%1'").arg(query.value(i).toString());
-                    break;
-                case QVariant::ByteArray:
-                {
-                    prefix+=fieldName;
-                    QByteArray data=query.value(i).toByteArray();
-                    if(data.isNull())
-                    {
-                        suffix+="null";
-                    }else
-                    {
-                        suffix+=QString("E'%1'").arg(data.toHex().data()); // blob数据按16进制格式导出
-                    }
-                }
-                    break;
-                default:
-                    prefix+=fieldName;
-                    suffix+=query.value(i).toString();
-                }
-
-                if(record.count()==1)
-                {
-                    prefix+=")";
-                    suffix+=")";
-                }else if(i!=record.count()-1)
-                {
-                    prefix+=",";
-                    suffix+=",";
-                }else if(i==record.count()-1)
-                {
-                    prefix+=")";
-                    suffix+=")";
-                }
-            }
-            // 组装sql语句 insert into auth_test values(0,'hello',E'003f')
-            QString iSql=QString("%1 %2;").arg(prefix).arg(suffix);
-            vList.append(iSql);
-        }
-    }
-
-    QFile file(path);
-    file.open(QIODevice::WriteOnly|QIODevice::Truncate);
-
-    // 将sql语句写入文件
-    QTextStream out(&file);
-    foreach(QString line,vList)
-    {
-        out<<line+"\n";
-    }
-    gAuthDB.close();
-    return true;
-}
 
 
 
@@ -1133,5 +1093,25 @@ void AdvanceSearchDlg::on_exportBtn_clicked()
         QMessageBox::warning(this,
                              tr("提示"),
                              tr("数据导出失败"),
+                             QMessageBox::Close);
+}
+
+
+
+void AdvanceSearchDlg::on_importBtn_clicked()
+{
+    QString filename = QFileDialog::getOpenFileName(this,
+                                                    tr("导入数据"),
+                                                    tr(""),
+                                                    tr("SqlFile(*.sql)"));
+    if(this->importDB(filename))
+        QMessageBox::warning(this,
+                             tr("提示"),
+                             tr("数据导入成功"),
+                             QMessageBox::Close);
+    else
+        QMessageBox::warning(this,
+                             tr("提示"),
+                             tr("数据导入失败"),
                              QMessageBox::Close);
 }
