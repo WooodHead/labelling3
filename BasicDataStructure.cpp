@@ -97,6 +97,8 @@ char* getLabelMap(QImage* labelImage, int objNum)
 
 cv::Mat getLabelMap(QImage* labelImage)
 {
+    if( !labelImage ) return cv::Mat();
+
     cv::Mat mask;
     mask.create(labelImage->height(), labelImage->width(), CV_8UC1);
     mask.setTo(cv::GC_PR_BGD);

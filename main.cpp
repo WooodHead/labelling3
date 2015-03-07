@@ -22,8 +22,7 @@ int main(int argc, char *argv[])
 
     Global::initialize();
 
-    Login *loginDlg = new Login;
-    loginDlg->show();
+    (new Login)->show();
 
     return a.exec();
 }

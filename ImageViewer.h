@@ -73,16 +73,18 @@ public:
 	/////////////////////////////////////////////////////////////////////////
 	QImage*			RunRegionCompetition();
 	bool			saveLabelMap(const QString &fileName, const char *fileFormat = "BMP");
-    void            saveLabelledResult(QString wholefilename);
+    bool            saveLabelledResult(QString wholefilename, QString ext);
+    bool            saveAsLabelledResult();
     void            saveUserLabels();
-    void            saveMask();
+    bool            saveMask(QString path, QString ext);
+    bool            saveAsMask();
 	
 	//bool			openLabelImage(const QString &fileName);
 
 public:
 	void			imageScaling( double scaleFactor );
 	void			imageBrighting( double scaleFactor );
-	void			imageNotColor(double scaleFactor );
+    void			imageNotColor(double  );
 	void            setLineColor(QColor color) { _lineColor = color; }
 	QColor          getLineColor() const { return _lineColor; }
 	int				getLineThickness() const { return _lineThickness; }
@@ -131,7 +133,8 @@ private:
 
 	int             _labelType;
 
-	ImageCompletionUI*  mainWindow;
+    ImageCompletionUI*  _mainWindow;
+    bool _bDone;
 
 
 	//////////////////////////////////////////////////////////////////////////
@@ -153,16 +156,16 @@ private:
 
 	// plot rect
 	QPoint          _start_rect, _end_rect;
-	bool            _rect_drawing;
+    bool            _bRectDrawing;
 
 	// plot polygon
 	QList<QPoint>   _polygonPointList;
 	std::vector<cv::Point> _polygonPointList_cv; // Fix it
-	bool            _polygon_drawing;
-	bool			_polygon_end_drawing;
+    bool            _bPolygonDrawing;
+    bool			_bPolygonEndDrawing;
 
 public:
-	void getMainWindow(ImageCompletionUI* m_Window){this->mainWindow = m_Window;}
+    void getMainWindow(ImageCompletionUI* m_Window){this->_mainWindow = m_Window;}
 	void setMethod(int a){m_method = a;}
 	bool isUsePrior;
 	void setLabelType(int i) { _labelType = i;}
@@ -174,6 +177,8 @@ public:
 
     void redo();
     void undo();
+
+    void setDefaultCursor();
   
 public slots:
 	void				changeObjectLabeling(QTreeWidgetItem*); 

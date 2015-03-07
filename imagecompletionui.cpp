@@ -1,4 +1,3 @@
-
 #include <QtGui>
 #include <QPixmap>
 #include <QSqlQuery>
@@ -8,16 +7,13 @@
 #include "Connection.h"
 #include "ImageProperties.h"
 
-//#include "Competition.h"
-
 ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
     : QMainWindow(parent, flags)
 {
     //setupUi(this);
 
     _brushSize = 3;
-
-    m_step = NONE;
+    _step = NONE;
 
     IsShowDetail = false;
 
@@ -38,7 +34,7 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
 
     createConnections();
 
-    setupBrush();
+//    setupBrush();
 
     _RegionupdateBrushSize();
 
@@ -92,10 +88,9 @@ void	 ImageCompletionUI::createMenus()
     submenu = _menuLabelling->addMenu( tr("线条粗细") );
     for(int i = 0; i < 3; i++) submenu->addAction(_lineThickness[i]);
 
-    _menuLabelling->addSeparator();
-    _menuLabelling->addAction(_saveLabelResultAction);
-    _menuLabelling->addAction(_saveMaskAction);
-
+//    _menuLabelling->addSeparator();
+//    _menuLabelling->addAction(_saveLabelResultAction);
+//    _menuLabelling->addAction(_saveMaskAction);
 
     _menuData=menuBar()->addMenu(tr("&数据管理"));
     _menuData->addAction(_searchAction);
@@ -114,8 +109,7 @@ void	 ImageCompletionUI::createMenus()
     _menuWindow = menuBar()->addMenu( tr("&帮助") );
 }
 
-void	ImageCompletionUI::closeEvent( QCloseEvent *event )
-{}
+void	ImageCompletionUI::closeEvent( QCloseEvent */*event*/ ){}
 
 void	ImageCompletionUI::createActions()
 {
@@ -196,7 +190,6 @@ void	ImageCompletionUI::createActions()
     ////////////////////////////////////////////////////////////////////////////////////
     _exportDataAction = new QAction(tr("批量导出数据"),this);
     _exportDataAction->setObjectName(tr("_exportDataAction"));
-    //    _exportDataAction->setIcon();
     connect(_exportDataAction,SIGNAL(triggered()),this,SLOT(exportData()));
 
     ////////////////////////////////////////////////////////////////////////////////////
@@ -204,7 +197,6 @@ void	ImageCompletionUI::createActions()
     ////////////////////////////////////////////////////////////////////////////////////
     _importDataAction = new QAction(tr("批量导入数据"),this);
     _importDataAction->setObjectName(tr("_importDataAction"));
-    //    _importDataAction->setIcon();
     connect(_importDataAction,SIGNAL(triggered()),this,SLOT(importData()));
 
     // Image Labelling
@@ -245,13 +237,13 @@ void	ImageCompletionUI::createActions()
     group2->addAction(_manualAction);
     connect(group2, SIGNAL(triggered(QAction*)), this, SLOT(labellingMethodChanged(QAction*)));
 
-    _saveLabelResultAction = new QAction( tr("保存标注图像"), this );
-    _saveLabelResultAction->setObjectName( tr("_saveLabelResultAction") );
-    connect( _saveLabelResultAction, SIGNAL(triggered()), this, SLOT(saveLabelledResult()));
+//    _saveLabelResultAction = new QAction( tr("保存标注图像"), this );
+//    _saveLabelResultAction->setObjectName( tr("_saveLabelResultAction") );
+//    connect( _saveLabelResultAction, SIGNAL(triggered()), this, SLOT(saveLabelledResult()));
 
-    _saveMaskAction = new QAction( tr("保存掩码"), this );
-    _saveMaskAction->setObjectName( tr("_saveMaskAction") );
-    connect( _saveMaskAction, SIGNAL(triggered()), this, SLOT(saveMask()) );
+//    _saveMaskAction = new QAction( tr("保存掩码"), this );
+//    _saveMaskAction->setObjectName( tr("_saveMaskAction") );
+//    connect( _saveMaskAction, SIGNAL(triggered()), this, SLOT(saveMask()) );
 
     _redo = new QAction( tr("重做"), this );
     _redo->setObjectName( tr("_redo") );
@@ -355,9 +347,6 @@ void	ImageCompletionUI::setupWidgets()
     _centralTabWidget = new QTabWidget( _centralwidget );
     _centralTabWidget->setObjectName( tr( "_centralTabWidget") );
 
-    //    _centralTabWidget->setMaximumSize( QSize(width, height) );
-
-
     QVBoxLayout *centralwigetLayout = new QVBoxLayout;
     centralwigetLayout->addWidget(_centralTabWidget);
     centralwigetLayout->setAlignment(Qt::AlignCenter);
@@ -368,7 +357,6 @@ void	ImageCompletionUI::setupWidgets()
     ////////////////////////////////////////////////////////////////////////////////////
     _editTab = new QWidget();
     _editTab->setObjectName(tr("_editTab"));
-
 
     _editScrollArea = new QScrollArea(_editTab);
     _editScrollArea->setObjectName(tr("scrollArea"));
@@ -385,7 +373,7 @@ void	ImageCompletionUI::setupWidgets()
     _editScrollArea->setWidget( _editImageViewer );
     _editImageViewer->setObjectName(tr("_editImageViewer"));
     _editImageViewer->getMainWindow(this);
-    _editImageViewer->setLineColor(Qt::yellow);
+    _editImageViewer->setLineColor(QColor(colorTable[3], colorTable[4], colorTable[5]));
 
     _centralTabWidget->addTab( _editTab, QString("EditTab") );
     _centralTabWidget->setTabText(_centralTabWidget->indexOf(_editTab), QApplication::translate("ImageCompletionUIClass", tr("图像标注").toLocal8Bit().data(), 0));
@@ -401,16 +389,14 @@ void	ImageCompletionUI::setupWidgets()
     palette1.setBrush(QPalette::Inactive, QPalette::Base, brush3);
     palette1.setBrush(QPalette::Disabled, QPalette::Base, brush2);
 
-
     _centralTabWidget->setPalette(palette);
-    setCentralWidget(_centralwidget);        // add zhyn
+    setCentralWidget(_centralwidget);
     _centralTabWidget->setCurrentIndex(0);
 
     ////////////////////////////////////////////////////////////////////////////////////
     //   _rightOperationWidget
     ////////////////////////////////////////////////////////////////////////////////////
 
-    // modified by zhyn
     _rightOperationWidget = new QDockWidget(tr("工具箱"),this );
     _rightOperationWidget->setObjectName(tr("_rightOperationWidget"));
     _rightOperationWidget->setMaximumSize(QSize(0.2*width, height));
@@ -424,7 +410,6 @@ void	ImageCompletionUI::setupWidgets()
     ////////////////////////////////////////////////////////////////////////////////////
     _operationStackedWidget = new QStackedWidget(_dockWidgetContents);
     _operationStackedWidget->setObjectName(tr("_operationStackedWidget"));
-    //    _operationStackedWidget->setMinimumSize(QSize(221, 460));
     _operationStackedWidget->setFrameShape(QFrame::StyledPanel);
     _operationStackedWidget->setLineWidth(1);
 
@@ -432,17 +417,9 @@ void	ImageCompletionUI::setupWidgets()
     rightwidgetLayout->addWidget(_operationStackedWidget);
     _dockWidgetContents->setLayout(rightwidgetLayout);
 
-    //    _objectCompletionPage = new QWidget(  );
-    //    _objectCompletionPage->setObjectName(tr("_objectCompletionPage"));
-    //    _operationStackedWidget->addWidget( _objectCompletionPage );
-
     _sceneCompletionPage = new QWidget(  );
     _sceneCompletionPage->setObjectName(tr("_sceneCompletionPage"));
     _operationStackedWidget->addWidget( _sceneCompletionPage );
-
-    //    _videoCompletionPage = new QWidget(  );
-    //    _videoCompletionPage->setObjectName(tr("_videoCompletionPage"));
-    //    _operationStackedWidget->addWidget( _videoCompletionPage );
 
     _regionCompetitionPage = new QWidget(  );
     _regionCompetitionPage->setObjectName(tr("_regionCompetitionPage"));
@@ -453,21 +430,6 @@ void	ImageCompletionUI::setupWidgets()
     ////////////////////////////////////////////////////////////////////////////////////
     _sceneCompletionDialog.setupUi( _sceneCompletionPage );
     _regionCompetitionDialog.setupUi(_regionCompetitionPage);
-    ////////////////////////////////////////////////////////////////////////////////////
-    //		_objectCompletionPage
-    ////////////////////////////////////////////////////////////////////////////////////
-    //    _edgeDetectionButton = new QPushButton( _objectCompletionPage );
-    //    _edgeDetectionButton->setText( tr("Edge Detection") );
-
-    //    _loadTemplateButton = new QPushButton( _objectCompletionPage );
-    //    _loadTemplateButton->setText( tr("Load Template") );
-    //    _shapeMatchButton = new QPushButton( _objectCompletionPage );
-    //    _shapeMatchButton->setText( tr("Shape Match") );
-
-    //    QVBoxLayout *ocPageLayout = new QVBoxLayout( _objectCompletionPage );
-    //    ocPageLayout->addWidget( _edgeDetectionButton );
-    //    ocPageLayout->addWidget( _loadTemplateButton );
-    //    ocPageLayout->addWidget( _shapeMatchButton );
 
     _rightOperationWidget->setWidget(_dockWidgetContents);
     this->addDockWidget(static_cast<Qt::DockWidgetArea>(2), _rightOperationWidget);
@@ -495,9 +457,6 @@ void	ImageCompletionUI::setupWidgets()
     _logWindowWidget->setWidget(_logWidget);
     _logWindowWidget->setMinimumHeight(0.28 * height);
     addDockWidget(Qt::RightDockWidgetArea,_logWindowWidget);
-
-    //    this->setCentralWidget(_centralwidget);
-
 
     ////////////////////////////////////////////////////////////////////////////////////
     //   _leftWindowWidget
@@ -528,7 +487,6 @@ void	ImageCompletionUI::setupWidgets()
     _cornerWindowWidget->setObjectName(tr("_cornerWindowWidget"));
     _cornerWindowWidget->setFeatures(QDockWidget::DockWidgetMovable);
     _cornerWindowWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    //    _cornerWindowWidget->setMaximumSize(QSize(width, height));
     _cornerWindowWidget->setFloating(false);
     _cornerDockWindowContents = new QWidget( );
     _cornerDockWindowContents->setObjectName(tr("_leftDockWindowContents"));
@@ -540,13 +498,10 @@ void	ImageCompletionUI::setupWidgets()
     //   _bottomWindowWidget
     ////////////////////////////////////////////////////////////////////////////////////
 
-    // modified by zhyn
     _bottomWindowWidget = new QDockWidget(tr("数据库信息"),this );
     _bottomWindowWidget->setObjectName(tr("_bottomWindowWidget"));
     _bottomWindowWidget->setFeatures(QDockWidget::DockWidgetMovable);
     _bottomWindowWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
-    //    _bottomWindowWidget->setMaximumSize(QSize(width, 0.3*height));
-    //    _bottomWindowWidget->setFloating(true);
     _bottomDockWindowContents = new QWidget( );
     _bottomDockWindowContents->setObjectName(tr("_bottomDockWindowContents"));
     _bottomWindow.setupUi(_bottomDockWindowContents);
@@ -563,35 +518,8 @@ void	ImageCompletionUI::setupWidgets()
     _bottomWindowWidget->setWidget(_bottomDockWindowContents);
     addDockWidget(Qt::BottomDockWidgetArea, _bottomWindowWidget);
 
-    // add zhyn
     setCorner(Qt::BottomLeftCorner,Qt::LeftDockWidgetArea);
     setCorner(Qt::BottomRightCorner,Qt::RightDockWidgetArea);
-
-    ////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////
-    //   Layout
-    ////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////
-
-    //    QVBoxLayout *centralLaytout = new QVBoxLayout( _centralwidget );
-    //    QGridLayout *editTabLayout = new QGridLayout( _editTab );
-    //    QVBoxLayout *leftLaytout = new QVBoxLayout();
-    //    QVBoxLayout *rightLaytout = new QVBoxLayout( _dockWidgetContents );
-
-    //    editTabLayout->addWidget( _editScrollArea );
-    //    editTabLayout->setMargin( 1 );
-
-    //    leftLaytout->addWidget( _centralTabWidget );
-    //    leftLaytout->addWidget( _bottomWindowWidget );
-
-    //    centralLaytout->addLayout( leftLaytout );
-
-    //    rightLaytout->addWidget( _operationStackedWidget );
-    //    rightLaytout->addWidget( _logWidget );
-    //    //  rightLaytout->addWidget( _cornerWindowWidget );
-    //    rightLaytout->setMargin( 2 );
-    //    rightLaytout->setSpacing( 10 );
-
 
     QPixmap pixmap(30,30);
     pixmap.fill(_editImageViewer->getLineColor());
@@ -651,8 +579,6 @@ void ImageCompletionUI::setupBrush()
 
 void	ImageCompletionUI::open()
 {
-    close();
-
     /*_bottomWindow.dBTableWidget_1->clear();
     _bottomWindow.dBTableWidget_2->clear();
     _bottomWindow.dBTableWidget_3->clear();
@@ -832,7 +758,9 @@ void	ImageCompletionUI::open()
     _bottomWindow.dBTableWidget_8->setItem(0,17,new QTableWidgetItem("磨粒反映故障信息"));
     _bottomWindow.dBTableWidget_8->setItem(0,18,new QTableWidgetItem("磨粒典型性"));*/
 
-    QSettings settings("ImageCompletion","ImageCompletion");
+    close();
+
+    QSettings settings("ImageCompletion", "ImageCompletion");
     QString initialPath = settings.value("lastImportPath", QVariant(QDir::homePath())).toString();
     if(initialPath.isEmpty())
     {
@@ -840,47 +768,36 @@ void	ImageCompletionUI::open()
     }
 
     QString fileName;
-    fileName = QFileDialog::getOpenFileName( this, tr("打开图像"), initialPath, tr("Images (*.png *.bmp *.jpg *.jpeg)") );
-
+    fileName = QFileDialog::getOpenFileName( this, tr("打开图像"), initialPath, tr("图像 (*.png *.bmp *.jpg *.jpeg)") );
     if(fileName.isEmpty()) return;
 
-    if(!fileName.isEmpty())
-    {
-        _imageName = QFileInfo(fileName).fileName();
-        settings.setValue("lastImportPath", QVariant(fileName));
-    }
+    _imageName = QFileInfo(fileName).fileName();
+    settings.setValue("lastImportPath", QVariant(fileName));
 
-    if (!fileName.isEmpty())
+    if ( _editImageViewer->openImage(fileName) )
     {
-        if ( _editImageViewer->openImage(fileName) )
-        {
-            statusBar()->showMessage(tr("打开图像"), 2000);
-            _editImageViewer->repaint();
-            m_step = NONE;
-            updateLog();
-        }
-        else
-        {
-            _editImageViewer->close();
-            m_step = LOADFAILED;
-            _regionCompetitionDialog.radioForeground->setEnabled(false);
-            _regionCompetitionDialog.radioBackground->setEnabled(false);
-            _regionCompetitionDialog.radioErazer->setEnabled(false);
-            return;
-        }
+        statusBar()->showMessage(tr("打开图像"), 2000);
+        _editImageViewer->repaint();
+        _step = NONE;
+        updateLog();
+    }
+    else
+    {
+        _editImageViewer->close();
+        _step = LOADFAILED;
+        _regionCompetitionDialog.radioForeground->setEnabled(false);
+        _regionCompetitionDialog.radioBackground->setEnabled(false);
+        _regionCompetitionDialog.radioErazer->setEnabled(false);
+        return;
     }
 
     int width = _editImageViewer->image().width();
     int height = _editImageViewer->image().height();
     this->setMinimumSize( width < 800 ? 800 : height, height < 600 ? 600 : height );
-    _cnt++;
+
 
     QString status = this->labelStatus(fileName);
-    if(status == "N" || status == "Y")
-    {
-        //QMessageBox::information(0, tr("提示"), "图像已存在", QMessageBox::Ok);
-    }
-    else
+    if(status != "N" && status != "Y")
     {
         QMessageBox::StandardButton reply = QMessageBox::information(0, tr("提示"), "此图像为新图像,是否要导入数据库?", QMessageBox::Ok | QMessageBox::Cancel);
         if(reply == QMessageBox::Ok)
@@ -889,7 +806,7 @@ void	ImageCompletionUI::open()
         }
     }
 
-   /* QSqlDatabase db;
+    /* QSqlDatabase db;
     if(!createConnection(db))
     {
         QMessageBox::critical(0, qApp->tr("打开数据库失败"),
@@ -1040,6 +957,7 @@ void	ImageCompletionUI::open()
         _leftWindow.tableWidget->setItem(_cnt, 2, new QTableWidgetItem(query.value(97).toString()));
     }*/
 
+    _cnt++;
     if(_leftWindow.tableWidget->rowCount() <= _cnt+1)
     {
         _leftWindow.tableWidget->insertRow(_leftWindow.tableWidget->rowCount()-1);
@@ -1055,7 +973,6 @@ void	ImageCompletionUI::open()
     }
 }
 
-// read all files in a directory
 void ImageCompletionUI::batchOpen()
 {
     QFileDialog batchFileDialog;
@@ -1068,7 +985,7 @@ void ImageCompletionUI::batchOpen()
     if(batchFileDialog.exec())
     {
         dir = batchFileDialog.selectedFiles()[0];
-        dir.setNameFilters(QStringList()<<"*.jpg"<<"*.png"<<"*.bmp"<<"*.jpeg");
+        dir.setNameFilters(QStringList() << "*.jpg" << "*.png" << "*.bmp" << "*.jpeg");
         QStringList fileList = dir.entryList(QDir::Files);
         QString absolutePath = dir.absolutePath();
 
@@ -1097,47 +1014,48 @@ void ImageCompletionUI::batchOpen()
 
 void	ImageCompletionUI::save()
 {
-    QString filename = QFileDialog::getSaveFileName( this, "保存图像", QDir::currentPath(), tr("图像 (*.bmp *.png *.jpg *.jpeg)") );
+    if ( _imageName.isEmpty() ) return;
 
-    if ( filename.isEmpty() )
+    // Check Path
+    if(!QDir(Global::PathResult).exists())
     {
-        return;
+        QMessageBox::warning(this, tr("保存"), QString("请指定标注图像保存路径:%1").arg(QFileInfo(QApplication::instance()->applicationFilePath()).baseName() + ".ini"));
+    }
+    if(!QDir(Global::PathMask).exists())
+    {
+        QMessageBox::warning(this, tr("保存"), QString("请指定掩码图像保存路径:%1").arg(QFileInfo(QApplication::instance()->applicationFilePath()).baseName() + ".ini"));
     }
 
-    bool bSucessOrNot;
+    // Save
+    QString path = Global::PathResult.append(QFileInfo(_imageName).baseName());
+    if(!_editImageViewer->saveLabelledResult(path, Global::ExtResult))
+    {
+        QMessageBox::warning(this, tr("保存"), tr("保存标注图像失败"), QMessageBox::Close);
+    }
 
-    //if ( EDITVIEW == _centralTabWidget->currentIndex() )
-    //{
-    //	bSucessOrNot = _editImageViewer->saveLabelMap( filename );
-    //	if ( false == bSucessOrNot )
-    //	{
-    //		QMessageBox::information(this,"Error Saving",QString("Could not save to file: %1").arg(filename));
-    //	}
-    //}
+    path = Global::PathMask.append(QFileInfo(_imageName).baseName());
+    if(!_editImageViewer->saveMask(path, Global::ExtMask))
+    {
+        QMessageBox::warning(this, tr("保存"), tr("保存掩码图像失败"), QMessageBox::Close);
+    }
 
-    //if ( MASKVIEW == _centralTabWidget->currentIndex() )
-    //{
-    //	bSucessOrNot = _maskQImage->save( filename );
-    //	if ( false == bSucessOrNot )
-    //	{
-    //		QMessageBox::information(this,"Error Saving",QString("Could not save to file: %1").arg(filename));
-    //	}
-    //}
-
-    //if ( RESULTVIEW == _centralTabWidget->currentIndex() )
-    //{
-    //	bSucessOrNot = _resultQImage->save( filename );
-    //	if ( false == bSucessOrNot )
-    //	{
-    //		QMessageBox::information(this,"Error Saving",QString("Could not save to file: %1").arg(filename));
-    //	}
-    //}
-
+    //TODO: Sync Database
 }
 
 void	ImageCompletionUI::saveAs()
 {
+    if(_imageName.isEmpty()) return;
 
+    if(!_editImageViewer->saveAsLabelledResult())
+    {
+        QMessageBox::warning(this, tr("保存"), tr("保存标注图像失败"), QMessageBox::Close);
+    }
+    else if(!_editImageViewer->saveAsMask())
+    {
+        QMessageBox::warning(this, tr("保存"), tr("保存掩码图像失败"), QMessageBox::Close);
+    }
+
+    //TODO: Sync Database
 }
 
 void	ImageCompletionUI::close()
@@ -1152,16 +1070,19 @@ void	ImageCompletionUI::close()
     _regionCompetitionDialog.radioForeground->setChecked(false);
     _regionCompetitionDialog.radioBackground->setChecked(false);
     _regionCompetitionDialog.radioErazer->setChecked(false);
-    //_resultImageViewer->deleteImage();
+
+    uncheckMethods();
+
+    _editImageViewer->setDefaultCursor();
 }
 
 void	ImageCompletionUI::search()
 {
-//   this->advanceSearchDlg = new advanceSearchDlg(this);
-//   this->advanceSearchDlg->show();
-//    this->searchdata1 = new Searchdata();
-//    searchdata1->show();
-//    searchdata1.show();
+    //   this->advanceSearchDlg = new advanceSearchDlg(this);
+    //   this->advanceSearchDlg->show();
+    //    this->searchdata1 = new Searchdata();
+    //    searchdata1->show();
+    //    searchdata1.show();
     advanceSearchDlg = new AdvanceSearchDlg(this);
     advanceSearchDlg->show();
 }
@@ -1171,6 +1092,7 @@ void	ImageCompletionUI::addtosql()
     class1.show();
 
 }
+
 void	ImageCompletionUI::savemarkresult()
 {
     //class1.show();
@@ -1367,8 +1289,6 @@ void	ImageCompletionUI::savemarkresult()
     //_leftWindow.tableWidget->setItem(_cnt, 2, new QTableWidgetItem("Y"));
 }
 
-
-
 void ImageCompletionUI::saveLabelMap()
 {
     QString filename = QFileDialog::getSaveFileName( this, "Save Image As...", QDir::currentPath(), tr("Images (*.bmp)") );
@@ -1386,16 +1306,13 @@ void ImageCompletionUI::saveLabelMap()
 
 void ImageCompletionUI::updateLog()
 {
-    //char* log_str = getLogString();
     char* log_str = getNewLogString();
 
     if (log_str!=NULL)
     {
-        //int size = strlen(log_str);
+
         (*_logInformationString) = log_str;
         sprintf( log_str, "");
-        //_logWidget->AddItem( (*_logInformationString) );
-        //_logWidget->update();
         _logWidget->clear();
         QTextCursor cursor(_logWidget->textCursor());
         cursor.movePosition(QTextCursor::End);
@@ -1410,6 +1327,16 @@ void ImageCompletionUI::updateLog()
         delete [] log_str;
         log_str = NULL;
     }
+}
+
+void ImageCompletionUI::uncheckMethods()
+{
+    _regionCompetitionDialog.buttonGroup->setExclusive(false);
+    _regionCompetitionDialog.radioStrikeLabelling->setChecked(false);
+    _regionCompetitionDialog.radioRectLabelling->setChecked(false);
+    _regionCompetitionDialog.radioPolygonLabelling->setChecked(false);
+    _regionCompetitionDialog.radioManualLabelling->setChecked(false);
+    _regionCompetitionDialog.buttonGroup->setExclusive(true);
 }
 
 void ImageCompletionUI::showData()
@@ -1479,7 +1406,7 @@ void ImageCompletionUI::loadLabelMap()
         _editImageViewer->openLabelImage(fileName);
     }
 
-    m_step = MARKING;
+    _step = MARKING;
 }
 
 void ImageCompletionUI::switchModule()
@@ -1499,9 +1426,7 @@ void ImageCompletionUI::switchModule()
         _operationStackedWidget->setCurrentIndex(3);
         break;
     }
-
 }
-
 
 void ImageCompletionUI::_RegionupdateBrushSize()
 {
@@ -1537,7 +1462,7 @@ void ImageCompletionUI::_SceneupdateBrushSize()
 void ImageCompletionUI::Excute()
 {
 
-    if (m_step == LOADFAILED)
+    if (_step == LOADFAILED)
     {
         QMessageBox::warning( this, tr("RegionCompetition"), tr("Load Image Error\n"));
         return;
@@ -1586,62 +1511,7 @@ void ImageCompletionUI::Excute()
 
 }
 
-void	ImageCompletionUI::keyPressEvent(QKeyEvent *e)
-{
-    /*int index = 0;
-    int labelCount = _regionCompetitionDialog.objNumCombo->currentIndex()+2;
-    switch (e->key())
-    {
-    case Qt::Key_A:
-        _centralTabWidget->setCurrentIndex(0);
-        break;
-    case Qt::Key_D:
-        _centralTabWidget->setCurrentIndex(1);
-        break;
-    case Qt::Key_W:
-        index = 0;
-        break;
-    case Qt::Key_S:
-        index = 1;
-        break;
-    case Qt::Key_0:
-        index = 0;
-        break;
-    case Qt::Key_1:
-        index = 1;
-        break;
-    case Qt::Key_2:
-        index = 2;
-        break;
-    case Qt::Key_3:
-        index = 3;
-        break;
-    case Qt::Key_4:
-        index = 4;
-        break;
-    case Qt::Key_5:
-        index = 5;
-        break;
-    case Qt::Key_6:
-        index = 6;
-        break;
-    case Qt::Key_7:
-        index = 7;
-        break;
-    case Qt::Key_8:
-        index = 8;
-        break;
-    case Qt::Key_9:
-        index = 9;
-        break;
-    }
-    if (index < labelCount)
-    {
-        _editImageViewer->changeObjectLabeling(index);
-        showLabelColor(index);
-        _editImageViewer->updateLabelState();
-    }	*/
-}
+void	ImageCompletionUI::keyPressEvent(QKeyEvent */* e */){}
 
 
 void ImageCompletionUI::setStrikeOptionsEnabled(bool b)
@@ -1802,7 +1672,6 @@ void ImageCompletionUI::actionSliderReleased()
 
 void ImageCompletionUI::userManagement()
 {
-//    (new UserManagement(this))->show();
     userMangementDlg = new UserManagement(this);
     userMangementDlg->setWindowFlags(userMangementDlg->windowFlags()&~Qt::WindowMinimizeButtonHint& ~Qt::WindowMaximizeButtonHint);
     userMangementDlg->show();
@@ -1826,10 +1695,7 @@ void ImageCompletionUI::updateLineWidth()
 
 void ImageCompletionUI::strikeComboChanged(int index)
 {
-    if(index == 0)
-    {
-    }
-    else
+    if(index != 0)
     {
         _editImageViewer->setPaintable(true);
         _editImageViewer->setMethod(0);
@@ -1951,8 +1817,7 @@ void ImageCompletionUI::strikeChangeTriggered(QAction *a)
 
 void ImageCompletionUI::saveLabelledResult()
 {
-
-    _editImageViewer->saveLabelledResult(_imageName);
+    _editImageViewer->saveLabelledResult(_imageName, Global::ExtResult);
 }
 
 void ImageCompletionUI::saveUserLabels()
@@ -1962,7 +1827,7 @@ void ImageCompletionUI::saveUserLabels()
 
 void ImageCompletionUI::saveMask()
 {
-    _editImageViewer->saveMask();
+    _editImageViewer->saveAsMask();
 }
 
 void ImageCompletionUI::strikeThicknessChanged(QAction *a)
@@ -2175,15 +2040,11 @@ void ImageCompletionUI::openImage(QString fileName)
         if ( _editImageViewer->openImage(fileName) )
         {
             _editImageViewer->repaint();
-            m_step = NONE;
+            _step = NONE;
             updateLog();
 
             QString status = this->labelStatus(fileName);
-            if(status == "N" || status == "Y")
-            {
-                //QMessageBox::information(0, tr("提示"), "图像已存在", QMessageBox::Ok);
-            }
-            else
+            if(status != "N" || status != "Y")
             {
                 QMessageBox::StandardButton reply = QMessageBox::information(0, tr("提示"), "此图像为新图像,是否要导入数据库?", QMessageBox::Ok | QMessageBox::Cancel);
                 if(reply == QMessageBox::Ok)
@@ -2195,14 +2056,13 @@ void ImageCompletionUI::openImage(QString fileName)
         else
         {
             _editImageViewer->close();
-            m_step = LOADFAILED;
+            _step = LOADFAILED;
             _regionCompetitionDialog.radioForeground->setEnabled(false);
             _regionCompetitionDialog.radioBackground->setEnabled(false);
             _regionCompetitionDialog.radioErazer->setEnabled(false);
             return;
         }
     }
-
 
     int width = _editImageViewer->image().width();
     int height = _editImageViewer->image().height();
@@ -2213,11 +2073,11 @@ QColor ImageCompletionUI::getColor(QString status)
 {
     if(status == "Y")
     {
-        return QColor(255, 255, 0);
+        return Global::LabelledColor;
     }
     else
     {
-        return QColor(255, 0, 0);
+        return Global::UnLabelledColor;
     }
 }
 
@@ -2346,12 +2206,12 @@ void ImageCompletionUI::exportData()
 
 
 
-void ImageCompletionUI::on_tableWidget_doubleClicked(const QModelIndex &index)
+void ImageCompletionUI::on_tableWidget_doubleClicked(const QModelIndex & /* index */)
 {
 
 }
 
-void ImageCompletionUI::cellDoubleClicked_(int row, int col)
+void ImageCompletionUI::cellDoubleClicked_(int row, int /* col */)
 {
     if(_leftWindow.tableWidget->item(row, 1) != 0)
     {
@@ -2386,6 +2246,6 @@ QString ImageCompletionUI::labelStatus(QString absolutePath)
     }
 }
 
-void ImageCompletionUI::editImageProperties(QString fileName)
+void ImageCompletionUI::editImageProperties(QString /* fileName */)
 {
 }

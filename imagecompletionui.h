@@ -11,7 +11,6 @@
 #include <QSqlField>
 #include <QSqlTableModel>
 
-//#include "ui_imagecompletionui.h"
 #include "ui_SceneCompletionWidget.h"
 #include "ui_RegionCompetition.h"
 #include "PaintTools.h"
@@ -24,6 +23,7 @@
 #include "buttom.h"
 #include "advancesearchdlg.h"
 #include "UserManagement.h"
+#include "Global.h"
 
 
 class QStackedWidget;
@@ -110,6 +110,8 @@ public:
     void	setupBrush();
 
     void	updateLog();
+
+    void    uncheckMethods();
     ////////////////////////////////////////////////////////////////////////////////////
     //   The User Interface items automatically generated from the ui file
     ////////////////////////////////////////////////////////////////////////////////////
@@ -160,7 +162,7 @@ private:
     QTimer                  *_timer;
 
     QList<QIcon> lableIcons;
-    EDITSTEP m_step;
+    EDITSTEP _step;
     bool IsShowDetail;
     ////////////////////////////////////////////////////////////////////////////////////
     //   SceneCompletionWidget,

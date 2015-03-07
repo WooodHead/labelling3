@@ -1,6 +1,6 @@
 #include "searchdata.h"
 #include "ui_searchdata.h"
-#include "connection.h"
+#include "Connection.h"
 #include <QApplication>
 #include <QTableView>
 #include <QObject>

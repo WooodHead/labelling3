@@ -1,6 +1,6 @@
 #include "classification.h"
 #include "ui_classification.h"
-#include "connection.h"
+#include "Connection.h"
 #include <QApplication>
 #include <QTableView>
 #include <QObject>

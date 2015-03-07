@@ -2,6 +2,7 @@
 #define GLOBAL_H
 
 #include <QSettings>
+#include <QColor>
 
 class Global
 {
@@ -9,10 +10,21 @@ public:
     static QString Authority;
     static QString DisplayName;
 
+    // Database
     static QString Hostname;
     static QString Database;
     static QString Username;
     static QString Passwd;
+
+    // LeftWindow Color
+    static QColor  LabelledColor;
+    static QColor  UnLabelledColor;
+
+    // Path for Seg Results and Mask
+    static QString PathResult;
+    static QString PathMask;
+    static QString ExtResult;
+    static QString ExtMask;
 
     static void initialize();
 

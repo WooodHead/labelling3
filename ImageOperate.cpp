@@ -222,7 +222,7 @@ IplImage* QImageToIplImage( const QImage& qImage )
 
 	pIplImage->origin = IPL_ORIGIN_TL;
 
-	int row, col;
+    int row;
     QRgb rgb;
 	uchar* p_l;
 	uchar* p_r = (uchar*)pIplImage->imageData;
