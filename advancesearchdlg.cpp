@@ -1095,6 +1095,8 @@ void AdvanceSearchDlg::on_exportBtn_clicked()
                                                     tr("保存导出数据"),
                                                     tr("backup.sql"),
                                                     tr("SqlFile(*.sql)"));
+    if(filename.isEmpty())
+        return;
     if(this->exportDB(_eqmInfoModel,"equipmentinfo",filename))
         QMessageBox::warning(this,
                              tr("提示"),
@@ -1115,6 +1117,8 @@ void AdvanceSearchDlg::on_importBtn_clicked()
                                                     tr("导入数据"),
                                                     tr(""),
                                                     tr("SqlFile(*.sql)"));
+    if(filename.isEmpty())
+        return;
     if(this->importDB(filename))
         QMessageBox::warning(this,
                              tr("提示"),
