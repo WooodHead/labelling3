@@ -10,7 +10,7 @@ QString Global::DisplayName = "";
 QString Global::Database = "bookdata";
 QString Global::Hostname = "localhost";
 QString Global::Username = "root";
-QString Global::Passwd   = "123456";
+QString Global::Passwd   = "zxy082";
 
 QSettings* Global::settings = 0;
 bool Global::Init = false;
