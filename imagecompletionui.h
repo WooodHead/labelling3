@@ -23,7 +23,7 @@
 #include "classification.h"
 #include "buttom.h"
 #include "advancesearchdlg.h"
-#include "usermanagement.h"
+#include "UserManagement.h"
 
 
 class QStackedWidget;

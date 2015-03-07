@@ -5,8 +5,8 @@
 #include "imagecompletionui.h"
 #include "interfaces.h"
 #include "ImageViewer.h"
-#include "connection.h"
-#include "imageproperties.h"
+#include "Connection.h"
+#include "ImageProperties.h"
 
 //#include "Competition.h"
 

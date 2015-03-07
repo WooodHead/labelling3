@@ -6,7 +6,7 @@
 #include <QSettings>
 #include <QDebug>
 
-#include "global.h"
+#include "Global.h"
 
 static bool createConnection(QSqlDatabase &db)
 {

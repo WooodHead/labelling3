@@ -9,7 +9,7 @@
 #include <QMap>
 #include <QDebug>
 
-#include "connection.h"
+#include "Connection.h"
 #include "propertynamedlg.h"
 
 namespace Ui {

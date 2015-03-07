@@ -1,4 +1,4 @@
-#include "imageproperties.h"
+#include "ImageProperties.h"
 #include "ui_imageproperties.h"
 
 ImageProperties::ImageProperties(QWidget *parent) :
