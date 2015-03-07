@@ -89,6 +89,22 @@ private slots:
      
      void on_importBtn_clicked();
      
+     void on_movepartRepairIdChkBox_clicked();
+     
+     void on_movepartRepairIdCbBox_currentIndexChanged(int index);
+     
+     void on_repairDepartChkBox_clicked();
+     
+     void on_repairDepartCbBox_currentIndexChanged(int index);
+     
+     void on_repairrepairTimeChkBox_clicked();
+     
+     void on_repairrepairTimeCbBox_currentIndexChanged(int index);
+     
+     void on_repairDateDateEdit_dateChanged(const QDate &date);
+     
+     void on_repairDateChkBox_clicked();
+     
 private:
      QString generateSql(QMap<QString,QString> conditionMap,QStringList conditionField,QString tableName);
      void setModelHeaderData(QString tablename);

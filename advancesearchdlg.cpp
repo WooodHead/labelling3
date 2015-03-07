@@ -608,6 +608,16 @@ void AdvanceSearchDlg::initCbBox()
             ui->partrunHourCbBox->insertItem(-1,query.value(mp_runhour).toString());
     }
     
+    query.exec("select * from movepartrepairinfo");
+    while(query.next())
+    {
+        if(ui->movepartRepairIdCbBox->findText(query.value(mpr_movepartrepairid).toString()) == -1)
+            ui->movepartRepairIdCbBox->insertItem(-1,query.value(mpr_movepartrepairid).toString());
+        if(ui->repairDepartCbBox->findText(query.value(mpr_repairdepart).toString()) == -1)
+            ui->repairDepartCbBox->insertItem(-1,query.value(mpr_repairdepart).toString());
+        if(ui->repairrepairTimeCbBox->findText(query.value(mpr_repairtime).toString()) == -1)
+            ui->repairrepairTimeCbBox->insertItem(-1,query.value(mpr_repairtime).toString());
+    }
 }
 
 
@@ -1061,6 +1071,7 @@ void AdvanceSearchDlg::on_movepartEndDateEdit_dateChanged(const QDate &date)
     }
 }
 
+
 void AdvanceSearchDlg::on_movepartEndDataChkBox_clicked()
 {
     _mpCdtMap.remove("enddate");
@@ -1114,4 +1125,84 @@ void AdvanceSearchDlg::on_importBtn_clicked()
                              tr("提示"),
                              tr("数据导入失败"),
                              QMessageBox::Close);
+}
+
+void AdvanceSearchDlg::on_movepartRepairIdChkBox_clicked()
+{
+    _mprCdtMap.remove("movepartrepairid");
+    if(ui->movepartRepairIdChkBox->isChecked())
+    {
+        QString text = ui->movepartRepairIdCbBox->currentText();
+        _mprCdtMap.insert("movepartrepairid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_movepartRepairIdCbBox_currentIndexChanged(int index)
+{
+    _mprCdtMap.remove("movepartrepairid");
+    if(ui->movepartRepairIdChkBox->isChecked())
+    {
+        QString text = ui->movepartRepairIdCbBox->currentText();
+        _mprCdtMap.insert("movepartrepairid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_repairDepartChkBox_clicked()
+{
+    _mprCdtMap.remove("repairdepart");
+    if(ui->repairDepartChkBox->isChecked())
+    {
+        QString text = ui->repairDepartCbBox->currentText();
+        _mprCdtMap.insert("repairdepart",text);
+    }
+}
+
+void AdvanceSearchDlg::on_repairDepartCbBox_currentIndexChanged(int index)
+{
+    _mprCdtMap.remove("repairdepart");
+    if(ui->repairDepartChkBox->isChecked())
+    {
+        QString text = ui->repairDepartCbBox->currentText();
+        _mprCdtMap.insert("repairdepart",text);
+    }
+}
+
+void AdvanceSearchDlg::on_repairrepairTimeChkBox_clicked()
+{
+    _mprCdtMap.remove("repairtime");
+    if(ui->repairrepairTimeChkBox->isChecked())
+    {
+        QString text = ui->repairrepairTimeCbBox->currentText();
+        _mprCdtMap.insert("repairtime",text);
+    }
+}
+
+void AdvanceSearchDlg::on_repairrepairTimeCbBox_currentIndexChanged(int index)
+{
+    _mprCdtMap.remove("repairtime");
+    if(ui->repairrepairTimeChkBox->isChecked())
+    {
+        QString text = ui->repairrepairTimeCbBox->currentText();
+        _mprCdtMap.insert("repairtime",text);
+    }
+}
+
+void AdvanceSearchDlg::on_repairDateDateEdit_dateChanged(const QDate &date)
+{
+    _mprCdtMap.remove("repairdate");
+    if(ui->repairDateChkBox->isChecked())
+    {
+        QString text = date.toString("yyyy-MM-dd");
+        _mprCdtMap.insert("repairdate",text);
+    }
+}
+
+void AdvanceSearchDlg::on_repairDateChkBox_clicked()
+{
+    _mprCdtMap.remove("repairdate");
+    if(ui->repairDateChkBox->isChecked())
+    {
+        QString text = ui->repairDateDateEdit->date().toString("yyyy-MM-dd");
+        _mprCdtMap.insert("repairdate",text);
+    }
 }
