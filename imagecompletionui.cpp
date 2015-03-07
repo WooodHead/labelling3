@@ -1882,7 +1882,6 @@ bool ImageCompletionUI::importDB(const QString &path)
      *@brief 读取sql文本内容,并写入至数据库
      *@param path sql文件路径
      */
-    QMessageBox::warning(this,"warning","this is private function to import SQL Data",QMessageBox::Close);
     QSqlDatabase gAuthDB;
     if(!createConnection(gAuthDB))
         return false;
@@ -2137,15 +2136,72 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
 
 // 批量数据导入--zhyn
 void ImageCompletionUI::importData()
-{
-    QMessageBox::warning(this,"waring","this is slot of import data",QMessageBox::Close);
+{   
+    QFileDialog *packgeDir = new QFileDialog(this,tr("选择打包文件"),"","");
+    packgeDir->setFileMode(QFileDialog::DirectoryOnly);
+    packgeDir->setViewMode(QFileDialog::Detail);
+    
+    QString packgePath;
+    if(packgeDir->exec())
+    {
+        QStringList packgePaths = packgeDir->selectedFiles();
+        packgePath = packgePaths.at(0);
+    }
+    else
+        return;
+    QDir dir(packgePath);
+    QFileInfoList infoList = dir.entryInfoList();
+    QStringList fileNameList;
+    foreach(QFileInfo fileInfo,infoList)
+    {
+        if(fileInfo.fileName() == "." || fileInfo.fileName() == "..")
+            continue;
+        fileNameList.append(fileInfo.fileName());
+    }
+    if(!fileNameList.contains("resultFile") || !fileNameList.contains("sourceFile") || !fileNameList.contains("databackup.sql"))
+        QMessageBox::warning(this,tr("提示"),tr("打包文件受损"),QMessageBox::Close);
+    else
+    {
+        QFileDialog *targetDir = new QFileDialog(this,tr("选择打包恢复目录"),"","");
+        targetDir->setFileMode(QFileDialog::DirectoryOnly);
+        targetDir->setViewMode(QFileDialog::Detail);
+        QString targetPath;
+        if(targetDir->exec())
+        {
+            QStringList targetPaths = targetDir->selectedFiles();
+            targetPath  = targetPaths.at(0);
+        }
+        else
+            return;
+#ifdef Q_OS_WIN
+        QString sourcepackgePath = packgePath + "\\sourceFile";
+        QString resultpackgePath = packgePath + "\\resultFile";
+        QString databackupFileName = packgePath + "\\databackup.sql";
+        
+        QString sourcetargetPath = targetPath + "\\sourceFile";
+        QString resulttargetPath = targetPath + "\\resultFile";
+#endif
+        
+#ifdef Q_OS_LINUX
+        QString sourcepackgePath = packgePath + "/sourceFile";
+        QString resultpackgePath = packgePath + "/resultFile";
+        QString databackupFileName = packgePath + "/databackup.sql";
+        
+        QString sourcetargetPath = targetPath + "/sourceFile";
+        QString resulttargetPath = targetPath + "/resultFile";
+#endif
+        if(this->copyFiles(sourcepackgePath,sourcetargetPath) &&
+                this->copyFiles(resultpackgePath,resulttargetPath) &&
+                this->importDB(databackupFileName))
+            QMessageBox::warning(this,tr("提示"),tr("数据恢复成功"),QMessageBox::Close);
+        else
+            QMessageBox::warning(this,tr("提示"),tr("数据恢复失败"),QMessageBox::Close);
+    }
 }
 
 // 批量数据导出--zhyn
 void ImageCompletionUI::exportData()
 {
-    //QMessageBox::warning(this,"warning","this is slot of export data",QMessageBox::Close);
-
     QFileDialog *sourceDir = new QFileDialog(this,tr("选择铁谱图片目录"),"","");
     sourceDir->setFileMode(QFileDialog::DirectoryOnly);
     sourceDir->setViewMode(QFileDialog::Detail);
@@ -2187,10 +2243,17 @@ void ImageCompletionUI::exportData()
 
     if(resultPath.isEmpty() | resultPath.isEmpty()| targetPath.isEmpty())
         return;
-
+#ifdef Q_OS_WIN
     QString sourcetargetPath = targetPath + "\\sourceFile";
     QString resulttargetPath = targetPath + "\\resultFile";
     QString databackupFileName = targetPath + "\\databackup.sql";
+#endif
+    
+#ifdef Q_OS_LINUX
+    QString sourcetargetPath = targetPath + "/sourceFile";
+    QString resulttargetPath = targetPath + "/resultFile";
+    QString databackupFileName = targetPath + "/databackup.sql";
+#endif
 
     // 导出数据库信息
     /* edit code */

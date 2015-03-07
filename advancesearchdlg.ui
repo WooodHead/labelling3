@@ -22,7 +22,7 @@
      <item>
       <widget class="QStackedWidget" name="conditionStackedWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="page">
         <layout class="QHBoxLayout" name="horizontalLayout_106">
@@ -418,19 +418,19 @@
                  <string>动部件维修编号</string>
                 </property>
                 <property name="buddy">
-                 <cstring>checkBox_13</cstring>
+                 <cstring>movepartRepairIdChkBox</cstring>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QCheckBox" name="checkBox_13">
+               <widget class="QCheckBox" name="movepartRepairIdChkBox">
                 <property name="text">
                  <string/>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit_13"/>
+               <widget class="QComboBox" name="movepartRepairIdCbBox"/>
               </item>
              </layout>
             </item>
@@ -442,19 +442,19 @@
                  <string>维修执行单位  </string>
                 </property>
                 <property name="buddy">
-                 <cstring>checkBox_16</cstring>
+                 <cstring>repairDepartChkBox</cstring>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QCheckBox" name="checkBox_16">
+               <widget class="QCheckBox" name="repairDepartChkBox">
                 <property name="text">
                  <string/>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit_16"/>
+               <widget class="QComboBox" name="repairDepartCbBox"/>
               </item>
              </layout>
             </item>
@@ -466,19 +466,23 @@
                  <string>维  修  日  期</string>
                 </property>
                 <property name="buddy">
-                 <cstring>checkBox_14</cstring>
+                 <cstring>repairDateChkBox</cstring>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QCheckBox" name="checkBox_14">
+               <widget class="QCheckBox" name="repairDateChkBox">
                 <property name="text">
                  <string/>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit_14"/>
+               <widget class="QDateEdit" name="repairDateDateEdit">
+                <property name="displayFormat">
+                 <string>yyyy年/MM月/dd日</string>
+                </property>
+               </widget>
               </item>
              </layout>
             </item>
@@ -490,19 +494,19 @@
                  <string>维  修  次  数</string>
                 </property>
                 <property name="buddy">
-                 <cstring>checkBox_15</cstring>
+                 <cstring>repairrepairTimeChkBox</cstring>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QCheckBox" name="checkBox_15">
+               <widget class="QCheckBox" name="repairrepairTimeChkBox">
                 <property name="text">
                  <string/>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="lineEdit_15"/>
+               <widget class="QComboBox" name="repairrepairTimeCbBox"/>
               </item>
              </layout>
             </item>
@@ -2507,16 +2511,16 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="exportBtn">
          <property name="text">
-          <string>PushButton</string>
+          <string>导出查询</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_3">
+        <widget class="QPushButton" name="importBtn">
          <property name="text">
-          <string>PushButton</string>
+          <string>导入查询</string>
          </property>
         </widget>
        </item>
@@ -2553,7 +2557,7 @@
       <item row="0" column="0">
        <widget class="QTabWidget" name="queryResultTabWidget">
         <property name="currentIndex">
-         <number>3</number>
+         <number>2</number>
         </property>
         <property name="elideMode">
          <enum>Qt::ElideNone</enum>

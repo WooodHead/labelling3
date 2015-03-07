@@ -32,6 +32,192 @@ AdvanceSearchDlg::~AdvanceSearchDlg()
     db.close();
 }
 
+
+bool AdvanceSearchDlg::importDB(const QString &path)
+{
+    QSqlQuery query(db);
+    QFile file(path);
+    file.open(QFile::ReadOnly);
+    int count = 0;
+    
+    QTextStream in(&file);
+    while(!in.atEnd())
+    {
+        QString sql=in.readLine();
+        // 通过分析values(E'),判断是否有二进制数据,如没有直接运行sql语句,如有则需要将16进制文本转换为blob数据
+        QRegExp reg("E'([0-9a-f]{1,})'");
+
+        if(!sql.contains(reg))
+        {
+            if(query.exec(sql))
+                count ++;
+        }else
+        {
+            int pos=0;
+            QStringList bList;
+
+            // 探索所有的blob字段
+            while((pos=reg.indexIn(sql,pos))!=-1)
+            {
+                bList.append(reg.cap(0));
+
+                QString blob=reg.cap(1);
+                pos+=reg.matchedLength();
+            }
+
+            // blob字段填充占位符
+            foreach(QString key,bList)
+            {
+                sql.replace(key,"?");
+            }
+
+            query.prepare(sql);
+
+            // 绑定占位符数据
+            for(int i=0;i<bList.size();i++)
+            {
+                // 去除E''
+                QString hexBlob=bList[i].mid(2,bList[i].size()-1);
+                // 还原16进制数据
+                QByteArray ba=QByteArray::fromHex(hexBlob.toLocal8Bit());
+
+                query.bindValue(i,ba);
+            }
+            query.exec();
+        }
+    }
+    return true;
+}
+
+
+bool AdvanceSearchDlg::exportDB(const QSqlQueryModel *model, const QString &tablename, const QString &path)
+{
+     QStringList vList;
+    int count = model->rowCount();
+    for(int i =0;i<count;++i)
+    {
+        QSqlRecord record = model->record(i);
+        QString prefix=QString("insert into %1(").arg(tablename); // 记录属性字段名
+        QString suffix="values(";                                 // 记录属性值
+        
+        // 遍历属性字段
+        for(int j=0;j<record.count();j++)
+        {
+            QSqlField field=record.field(j);
+            QString fieldName=field.name();
+
+            switch(field.type())
+            {
+            case QVariant::String:
+                prefix+=fieldName;
+                suffix+=QString("'%1'").arg(record.value(j).toString());
+                break;
+            case QVariant::ByteArray:
+            {
+                prefix+=fieldName;
+                QByteArray data=record.value(j).toByteArray();
+                if(data.isNull())
+                {
+                    suffix+="null";
+                }else
+                {
+                    suffix+=QString("E'%1'").arg(data.toHex().data()); // blob数据按16进制格式导出
+                }
+            }
+                break;
+            default:
+                prefix+=fieldName;
+                suffix+=record.value(j).toString();
+            }
+
+            if(record.count()==1)
+            {
+                prefix+=")";
+                suffix+=")";
+            }else if(j!=record.count()-1)
+            {
+                prefix+=",";
+                suffix+=",";
+            }else if(j==record.count()-1)
+            {
+                prefix+=")";
+                suffix+=")";
+            }
+        }
+        // 组装sql语句 insert into auth_test values(0,'hello',E'003f')
+        QString iSql=QString("%1 %2;").arg(prefix).arg(suffix);
+        vList.append(iSql);
+//        qDebug()<<iSql;
+    }
+    QFile file(path);
+    file.open(QIODevice::WriteOnly|QIODevice::Truncate);
+
+    // 将sql语句写入文件
+    QTextStream out(&file);
+    foreach(QString line,vList)
+    {
+        out<<line+"\n";
+    }
+    return true;
+}
+
+
+
+
+bool AdvanceSearchDlg::copyFiles(QString fromDir, QString toDir, bool convertIfExits)
+{
+    /**
+     *@brief 将fromDir文件夹内的图片文件，拷贝到toDir文件夹下
+     *@param fromDir 图片文件的源目录
+     *@param toDir   拷贝图片文件的目标目录
+     *@param convertIfExits 是否覆盖已存在文件标识，默认值是false
+     */
+    QDir sourceDir(fromDir);
+    QDir targetDir(toDir);
+
+    if(!targetDir.exists())
+    {
+        //< 如果目标目录不存在，则进行创建
+        if(!targetDir.mkdir(targetDir.absolutePath()))
+            return false;
+    }
+
+    QFileInfoList fileInfoList = sourceDir.entryInfoList();
+    // 遍历所有文件信息
+    foreach(QFileInfo fileInfo, fileInfoList)
+    {
+        // 去除当前目录和父目录
+        if(fileInfo.fileName() == "." || fileInfo.fileName() == "..")
+            continue;
+        // 数据库文件处理
+        if(fileInfo.fileName().split(".")[1] == "sql")
+            qDebug()<<fileInfo.fileName();
+
+        // 当为目录时，递归的进行copy
+        if(fileInfo.isDir())
+        {
+            if(!copyFiles(fileInfo.filePath(),
+                          targetDir.filePath(fileInfo.fileName()),
+                          convertIfExits))
+                return false;
+        }
+        else
+        {   //当允许覆盖操作时，将旧文件进行删除操作
+            if(convertIfExits && targetDir.exists(fileInfo.fileName()))
+            {
+                targetDir.remove(fileInfo.fileName());
+            }
+            // 进行文件copy
+            if(!QFile::copy(fileInfo.filePath(),
+                            targetDir.filePath(fileInfo.fileName()))){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+
 void AdvanceSearchDlg::on_queryBtn_clicked()
 {
     query();
@@ -385,6 +571,7 @@ void AdvanceSearchDlg::setModelHeaderData(QString tablename)
 }
 
 
+
 void AdvanceSearchDlg::initCbBox()
 {
     QSqlQuery query;
@@ -421,6 +608,16 @@ void AdvanceSearchDlg::initCbBox()
             ui->partrunHourCbBox->insertItem(-1,query.value(mp_runhour).toString());
     }
     
+    query.exec("select * from movepartrepairinfo");
+    while(query.next())
+    {
+        if(ui->movepartRepairIdCbBox->findText(query.value(mpr_movepartrepairid).toString()) == -1)
+            ui->movepartRepairIdCbBox->insertItem(-1,query.value(mpr_movepartrepairid).toString());
+        if(ui->repairDepartCbBox->findText(query.value(mpr_repairdepart).toString()) == -1)
+            ui->repairDepartCbBox->insertItem(-1,query.value(mpr_repairdepart).toString());
+        if(ui->repairrepairTimeCbBox->findText(query.value(mpr_repairtime).toString()) == -1)
+            ui->repairrepairTimeCbBox->insertItem(-1,query.value(mpr_repairtime).toString());
+    }
 }
 
 
@@ -434,7 +631,6 @@ void AdvanceSearchDlg::on_PlaneIdChkBox_clicked()
         _eqmCdtMap.insert("planeid",text);
     }
 }
-
 
 
 void AdvanceSearchDlg::on_planeidCbBox_currentIndexChanged(int index)
@@ -559,26 +755,7 @@ void AdvanceSearchDlg::on_repairTimeCbBox_currentIndexChanged(int index)
 
 
 void AdvanceSearchDlg::on_addtoBtn_clicked()
-{
-//    QDialog *propertyNameDlg = new QDialog(this);
-//    QLabel *nameLabel = new QLabel(tr("保存属性名"));
-//    QLineEdit *nameLineEdit = new QLineEdit;
-////    nameLabel.setBuddy(nameLineEdit);
-//    QHBoxLayout *dlgTopLayout = new QHBoxLayout;
-//    dlgTopLayout->addWidget(nameLabel);
-//    dlgTopLayout->addWidget(nameLineEdit);
-//    QPushButton *okButton = new QPushButton(tr("确定"));
-//    QPushButton *cancelButton = new QPushButton(tr("取消"));
-//    QHBoxLayout *dlgbottomLayout = new QHBoxLayout;
-//    dlgbottomLayout->addWidget(okButton);
-//    dlgbottomLayout->addWidget(cancelButton);
-//    QVBoxLayout *dlgMainLayout = new QVBoxLayout;
-//    dlgMainLayout->addLayout(dlgTopLayout);
-//    dlgMainLayout->addLayout(dlgbottomLayout);
-    
-//    propertyNameDlg->setLayout(dlgMainLayout);
-//    propertyNameDlg->show();
-    
+{   
     ppnDlg = new ProPertyNameDlg(this);
     if(ppnDlg->exec()== QDialog::Accepted)
     {
@@ -894,6 +1071,7 @@ void AdvanceSearchDlg::on_movepartEndDateEdit_dateChanged(const QDate &date)
     }
 }
 
+
 void AdvanceSearchDlg::on_movepartEndDataChkBox_clicked()
 {
     _mpCdtMap.remove("enddate");
@@ -908,4 +1086,123 @@ void AdvanceSearchDlg::on_movepartEndDataChkBox_clicked()
 void AdvanceSearchDlg::setpropertyName(QString propertyname)
 {
     this->propertyName = propertyname;
+}
+
+
+void AdvanceSearchDlg::on_exportBtn_clicked()
+{
+    QString filename = QFileDialog::getSaveFileName(this,
+                                                    tr("保存导出数据"),
+                                                    tr("backup.sql"),
+                                                    tr("SqlFile(*.sql)"));
+    if(this->exportDB(_eqmInfoModel,"equipmentinfo",filename))
+        QMessageBox::warning(this,
+                             tr("提示"),
+                             tr("数据导出成功"),
+                             QMessageBox::Close);
+    else
+        QMessageBox::warning(this,
+                             tr("提示"),
+                             tr("数据导出失败"),
+                             QMessageBox::Close);
+}
+
+
+
+void AdvanceSearchDlg::on_importBtn_clicked()
+{
+    QString filename = QFileDialog::getOpenFileName(this,
+                                                    tr("导入数据"),
+                                                    tr(""),
+                                                    tr("SqlFile(*.sql)"));
+    if(this->importDB(filename))
+        QMessageBox::warning(this,
+                             tr("提示"),
+                             tr("数据导入成功"),
+                             QMessageBox::Close);
+    else
+        QMessageBox::warning(this,
+                             tr("提示"),
+                             tr("数据导入失败"),
+                             QMessageBox::Close);
+}
+
+void AdvanceSearchDlg::on_movepartRepairIdChkBox_clicked()
+{
+    _mprCdtMap.remove("movepartrepairid");
+    if(ui->movepartRepairIdChkBox->isChecked())
+    {
+        QString text = ui->movepartRepairIdCbBox->currentText();
+        _mprCdtMap.insert("movepartrepairid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_movepartRepairIdCbBox_currentIndexChanged(int index)
+{
+    _mprCdtMap.remove("movepartrepairid");
+    if(ui->movepartRepairIdChkBox->isChecked())
+    {
+        QString text = ui->movepartRepairIdCbBox->currentText();
+        _mprCdtMap.insert("movepartrepairid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_repairDepartChkBox_clicked()
+{
+    _mprCdtMap.remove("repairdepart");
+    if(ui->repairDepartChkBox->isChecked())
+    {
+        QString text = ui->repairDepartCbBox->currentText();
+        _mprCdtMap.insert("repairdepart",text);
+    }
+}
+
+void AdvanceSearchDlg::on_repairDepartCbBox_currentIndexChanged(int index)
+{
+    _mprCdtMap.remove("repairdepart");
+    if(ui->repairDepartChkBox->isChecked())
+    {
+        QString text = ui->repairDepartCbBox->currentText();
+        _mprCdtMap.insert("repairdepart",text);
+    }
+}
+
+void AdvanceSearchDlg::on_repairrepairTimeChkBox_clicked()
+{
+    _mprCdtMap.remove("repairtime");
+    if(ui->repairrepairTimeChkBox->isChecked())
+    {
+        QString text = ui->repairrepairTimeCbBox->currentText();
+        _mprCdtMap.insert("repairtime",text);
+    }
+}
+
+void AdvanceSearchDlg::on_repairrepairTimeCbBox_currentIndexChanged(int index)
+{
+    _mprCdtMap.remove("repairtime");
+    if(ui->repairrepairTimeChkBox->isChecked())
+    {
+        QString text = ui->repairrepairTimeCbBox->currentText();
+        _mprCdtMap.insert("repairtime",text);
+    }
+}
+
+void AdvanceSearchDlg::on_repairDateDateEdit_dateChanged(const QDate &date)
+{
+    _mprCdtMap.remove("repairdate");
+    if(ui->repairDateChkBox->isChecked())
+    {
+        QString text = date.toString("yyyy-MM-dd");
+        _mprCdtMap.insert("repairdate",text);
+    }
+}
+
+void AdvanceSearchDlg::on_repairDateChkBox_clicked()
+{
+    _mprCdtMap.remove("repairdate");
+    if(ui->repairDateChkBox->isChecked())
+    {
+        QString text = ui->repairDateDateEdit->date().toString("yyyy-MM-dd");
+        _mprCdtMap.insert("repairdate",text);
+    }
 }
