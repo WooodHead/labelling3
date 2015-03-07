@@ -1339,6 +1339,15 @@ void ImageCompletionUI::uncheckMethods()
     _regionCompetitionDialog.buttonGroup->setExclusive(true);
 }
 
+void ImageCompletionUI::uncheckStrikeOptions()
+{
+    _regionCompetitionDialog.buttonGroup_4->setExclusive(false);
+    _regionCompetitionDialog.radioForeground->setChecked(false);
+    _regionCompetitionDialog.radioBackground->setChecked(false);
+    _regionCompetitionDialog.radioErazer->setChecked(false);
+    _regionCompetitionDialog.buttonGroup_4->setExclusive(true);
+}
+
 void ImageCompletionUI::showData()
 {
     QSqlDatabase db;
@@ -1520,7 +1529,7 @@ void ImageCompletionUI::setStrikeOptionsEnabled(bool b)
     {
         _regionCompetitionDialog.buttonGroup_4->setExclusive(false);
         _regionCompetitionDialog.radioForeground->setChecked(false);
-        _regionCompetitionDialog.radioForeground->setChecked(false);
+        _regionCompetitionDialog.radioBackground->setChecked(false);
         _regionCompetitionDialog.radioErazer->setChecked(false);
         _regionCompetitionDialog.buttonGroup_4->setExclusive(true);
     }

@@ -71,7 +71,7 @@ protected:
     void	closeEvent(QCloseEvent *event);
 
 private:
-    void setStrikeOptionsEnabled(bool);
+
     bool maybeSave();
 
 public:
@@ -112,6 +112,8 @@ public:
     void	updateLog();
 
     void    uncheckMethods();
+    void    uncheckStrikeOptions();
+    void setStrikeOptionsEnabled(bool);
     ////////////////////////////////////////////////////////////////////////////////////
     //   The User Interface items automatically generated from the ui file
     ////////////////////////////////////////////////////////////////////////////////////

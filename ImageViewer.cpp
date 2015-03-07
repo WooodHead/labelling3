@@ -574,6 +574,7 @@ void ImageViewer::mouseReleaseEvent(QMouseEvent *event)
 
                     setImage(*_result_labelImage);
                     bPaintable = false;
+                    _mainWindow->uncheckStrikeOptions();
                 }
             }
             else if(_labelType == 1 && _bRectDrawing)
