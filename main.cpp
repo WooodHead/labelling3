@@ -5,8 +5,8 @@
 #include <QTextCodec>
 
 #include "imagecompletionui.h"
-#include "login.h"
-#include "global.h"
+#include "Login.h"
+#include "Global.h"
 
 #include "ui_SceneCompletionWidget.h"
 

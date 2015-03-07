@@ -3,7 +3,7 @@
 
 #include <QDialog>
 
-#include "userinfo.h"
+#include "UserInfo.h"
 
 namespace Ui {
 class useredit;

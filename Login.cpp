@@ -1,4 +1,4 @@
-#include "login.h"
+#include "Login.h"
 #include "ui_login.h"
 
 #include <QDialogButtonBox>
@@ -7,8 +7,8 @@
 #include <QSqlRecord>
 #include <QSqlDatabase>
 
-#include "global.h"
-#include "connection.h"
+#include "Global.h"
+#include "Connection.h"
 #include "imagecompletionui.h"
 
 Login::Login(QWidget *parent) :

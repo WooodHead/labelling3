@@ -1,7 +1,7 @@
-#include "useradd.h"
+#include "UserAdd.h"
 #include "ui_useradd.h"
 
-#include "connection.h"
+#include "Connection.h"
 
 #include <QSqlQuery>
 #include <QMessageBox>

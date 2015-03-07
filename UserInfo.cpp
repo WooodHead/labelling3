@@ -1,4 +1,4 @@
-#include "userinfo.h"
+#include "UserInfo.h"
 
 UserInfo::UserInfo()
 {

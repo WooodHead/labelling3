@@ -30,7 +30,7 @@
 
 #include "ImageOperate.h"
 //#include "Competition.h"
-#include "connection.h"
+#include "Connection.h"
 
 #include "imagecompletionui.h"
 

@@ -1,8 +1,8 @@
-#include "usermanagement.h"
+#include "UserManagement.h"
 #include "ui_usermanagement.h"
 
-#include "connection.h"
-#include "useradd.h"
+#include "Connection.h"
+#include "UserAdd.h"
 
 #include <QMessageBox>
 #include <QDebug>

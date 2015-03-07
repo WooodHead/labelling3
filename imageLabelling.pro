@@ -14,18 +14,18 @@ HEADERS += \
     imagecompletionui.h \
     LeftWindow.h \
     searchdata.h \
-    connection.h \
     classification.h \
     buttom.h \
-    login.h \
-    global.h \
-    usermanagement.h \
-    useradd.h \
-    userinfo.h \
-    imageproperties.h \
     advancesearchdlg.h \
-    useredit.h \
-    propertynamedlg.h
+    propertynamedlg.h \
+    ImageProperties.h \
+    Connection.h \
+    Login.h \
+    UserAdd.h \
+    UserEdit.h \
+    UserInfo.h \
+    UserManagement.h \
+    Global.h
 
 
 SOURCES += \
@@ -41,15 +41,15 @@ SOURCES += \
     classification.cpp \
     buttom.cpp \
     imagecompletionui.cpp \
-    login.cpp \
-    global.cpp \
-    usermanagement.cpp \
-    useradd.cpp \
-    userinfo.cpp \
-    imageproperties.cpp \
     advancesearchdlg.cpp \
-    useredit.cpp \
-    propertynamedlg.cpp
+    propertynamedlg.cpp \
+    ImageProperties.cpp \
+    Login.cpp \
+    UserAdd.cpp \
+    UserEdit.cpp \
+    UserInfo.cpp \
+    UserManagement.cpp \
+    Global.cpp
 
 
 FORMS += \

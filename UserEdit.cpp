@@ -1,4 +1,4 @@
-#include "useredit.h"
+#include "UserEdit.h"
 #include "ui_useredit.h"
 
 #include <QMessageBox>

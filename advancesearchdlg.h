@@ -15,7 +15,7 @@
 #include <QSqlField>
 #include <QFileDialog>
 
-#include "connection.h"
+#include "Connection.h"
 #include "propertynamedlg.h"
 
 namespace Ui {

@@ -5,9 +5,9 @@
 #include <QSqlTableModel>
 #include <QSqlRecord>
 
-#include "useradd.h"
-#include "userinfo.h"
-#include "useredit.h"
+#include "UserAdd.h"
+#include "UserInfo.h"
+#include "UserEdit.h"
 
 namespace Ui {
 class UserManagement;
