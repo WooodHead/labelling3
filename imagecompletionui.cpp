@@ -321,8 +321,8 @@ void	ImageCompletionUI::createToolBars()
     _editToolBar->addAction(_undo);
 
     _editToolBar->addSeparator();
-    _editToolBar->addAction(_saveLabelResultAction);
-    _editToolBar->addAction(_saveMaskAction);
+    //_editToolBar->addAction(_saveLabelResultAction);
+    //_editToolBar->addAction(_saveMaskAction);
 
     _editToolBar->addSeparator();
     _editToolBar->addWidget(_strikeThicknessCombobox);
