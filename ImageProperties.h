@@ -6,6 +6,7 @@
 #include <QSqlRecord>
 #include <QMessageBox>
 #include <QDebug>
+#include <QFile>
 
 #define TABLE_N 8
 
@@ -48,12 +49,18 @@ private:
     QSqlTableModel* _models[TABLE_N];
 
     QStringList getItems(QSqlTableModel* model, int col);
+    QStringList getItems(QSqlTableModel* model, QString fieldName);
 
     bool isValid();
     QString _filename;
 
+    QString _originalImagePath;
+    QString _resultImagePath;
+    QString _maskImagePath;
+
 public:
     void showDlg(QString filename);
+    void commitLabelledResult(QString resultImagePath, QString maskImagePath);
 };
 
 #endif // IMAGEPROPERTIES_H

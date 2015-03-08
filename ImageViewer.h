@@ -74,10 +74,10 @@ public:
 	QImage*			RunRegionCompetition();
 	bool			saveLabelMap(const QString &fileName, const char *fileFormat = "BMP");
     bool            saveLabelledResult(QString wholefilename, QString ext);
-    bool            saveAsLabelledResult();
+    bool            saveAsLabelledResult(QString &pathResult);
     void            saveUserLabels();
     bool            saveMask(QString path, QString ext);
-    bool            saveAsMask();
+    bool            saveAsMask(QString &pathMask);
 	
 	//bool			openLabelImage(const QString &fileName);
 

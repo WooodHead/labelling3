@@ -20,6 +20,9 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
     _editImageViewer = NULL;
     _cnt = -1;
 
+    _imageName = "";
+    _imagePath = "";
+
     createActions();
 
     setupMainWindow();
@@ -34,7 +37,7 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
 
     createConnections();
 
-//    setupBrush();
+    //    setupBrush();
 
     _RegionupdateBrushSize();
 
@@ -88,9 +91,9 @@ void	 ImageCompletionUI::createMenus()
     submenu = _menuLabelling->addMenu( tr("线条粗细") );
     for(int i = 0; i < 3; i++) submenu->addAction(_lineThickness[i]);
 
-//    _menuLabelling->addSeparator();
-//    _menuLabelling->addAction(_saveLabelResultAction);
-//    _menuLabelling->addAction(_saveMaskAction);
+    //    _menuLabelling->addSeparator();
+    //    _menuLabelling->addAction(_saveLabelResultAction);
+    //    _menuLabelling->addAction(_saveMaskAction);
 
     _menuData=menuBar()->addMenu(tr("&数据管理"));
     _menuData->addAction(_searchAction);
@@ -237,13 +240,13 @@ void	ImageCompletionUI::createActions()
     group2->addAction(_manualAction);
     connect(group2, SIGNAL(triggered(QAction*)), this, SLOT(labellingMethodChanged(QAction*)));
 
-//    _saveLabelResultAction = new QAction( tr("保存标注图像"), this );
-//    _saveLabelResultAction->setObjectName( tr("_saveLabelResultAction") );
-//    connect( _saveLabelResultAction, SIGNAL(triggered()), this, SLOT(saveLabelledResult()));
+    //    _saveLabelResultAction = new QAction( tr("保存标注图像"), this );
+    //    _saveLabelResultAction->setObjectName( tr("_saveLabelResultAction") );
+    //    connect( _saveLabelResultAction, SIGNAL(triggered()), this, SLOT(saveLabelledResult()));
 
-//    _saveMaskAction = new QAction( tr("保存掩码"), this );
-//    _saveMaskAction->setObjectName( tr("_saveMaskAction") );
-//    connect( _saveMaskAction, SIGNAL(triggered()), this, SLOT(saveMask()) );
+    //    _saveMaskAction = new QAction( tr("保存掩码"), this );
+    //    _saveMaskAction->setObjectName( tr("_saveMaskAction") );
+    //    connect( _saveMaskAction, SIGNAL(triggered()), this, SLOT(saveMask()) );
 
     _redo = new QAction( tr("重做"), this );
     _redo->setObjectName( tr("_redo") );
@@ -505,15 +508,6 @@ void	ImageCompletionUI::setupWidgets()
     _bottomDockWindowContents = new QWidget( );
     _bottomDockWindowContents->setObjectName(tr("_bottomDockWindowContents"));
     _bottomWindow.setupUi(_bottomDockWindowContents);
-    _bottomWindow.dBTableWidget_1->verticalHeader()->setHidden(true);
-    _bottomWindow.dBTableWidget_2->verticalHeader()->setHidden(true);
-    _bottomWindow.dBTableWidget_3->verticalHeader()->setHidden(true);
-    _bottomWindow.dBTableWidget_4->verticalHeader()->setHidden(true);
-    _bottomWindow.dBTableWidget_5->verticalHeader()->setHidden(true);
-    _bottomWindow.dBTableWidget_6->verticalHeader()->setHidden(true);
-    _bottomWindow.dBTableWidget_7->verticalHeader()->setHidden(true);
-    _bottomWindow.dBTableWidget_8->verticalHeader()->setHidden(true);
-    _bottomWindow.dBTableWidget_9->verticalHeader()->setHidden(true);
 
     _bottomWindowWidget->setWidget(_bottomDockWindowContents);
     addDockWidget(Qt::BottomDockWidgetArea, _bottomWindowWidget);
@@ -771,6 +765,7 @@ void	ImageCompletionUI::open()
     fileName = QFileDialog::getOpenFileName( this, tr("打开图像"), initialPath, tr("图像 (*.png *.bmp *.jpg *.jpeg)") );
     if(fileName.isEmpty()) return;
 
+    _imagePath = fileName;
     _imageName = QFileInfo(fileName).fileName();
     settings.setValue("lastImportPath", QVariant(fileName));
 
@@ -1016,6 +1011,8 @@ void	ImageCompletionUI::save()
 {
     if ( _imageName.isEmpty() ) return;
 
+    bool ret1, ret2;
+
     // Check Path
     if(!QDir(Global::PathResult).exists())
     {
@@ -1027,35 +1024,45 @@ void	ImageCompletionUI::save()
     }
 
     // Save
-    QString path = Global::PathResult.append(QFileInfo(_imageName).baseName());
-    if(!_editImageViewer->saveLabelledResult(path, Global::ExtResult))
+    QString pathResult = Global::PathResult.append(QFileInfo(_imageName).baseName());
+    if(!(ret1 = _editImageViewer->saveLabelledResult(pathResult, Global::ExtResult)))
     {
         QMessageBox::warning(this, tr("保存"), tr("保存标注图像失败"), QMessageBox::Close);
     }
 
-    path = Global::PathMask.append(QFileInfo(_imageName).baseName());
-    if(!_editImageViewer->saveMask(path, Global::ExtMask))
+    QString pathMask = Global::PathMask.append(QFileInfo(_imageName).baseName());
+    if(!(ret2 = _editImageViewer->saveMask(pathMask, Global::ExtMask)))
     {
         QMessageBox::warning(this, tr("保存"), tr("保存掩码图像失败"), QMessageBox::Close);
     }
 
     //TODO: Sync Database
+    if(ret1 && ret2)
+        syncLabelledImage(_imagePath, pathResult.append(".").append(Global::ExtResult),pathMask.append(".").append(Global::ExtMask));
+
+    showData();
 }
 
 void	ImageCompletionUI::saveAs()
 {
     if(_imageName.isEmpty()) return;
 
-    if(!_editImageViewer->saveAsLabelledResult())
+    QString pathResult, pathMask;
+    bool ret1, ret2;
+
+    if(!(ret1 = _editImageViewer->saveAsLabelledResult(pathResult)))
     {
         QMessageBox::warning(this, tr("保存"), tr("保存标注图像失败"), QMessageBox::Close);
     }
-    else if(!_editImageViewer->saveAsMask())
+    else if(!(ret2 = _editImageViewer->saveAsMask(pathMask)))
     {
         QMessageBox::warning(this, tr("保存"), tr("保存掩码图像失败"), QMessageBox::Close);
     }
 
     //TODO: Sync Database
+    if(ret1 && ret2) syncLabelledImage(_imagePath, pathResult, pathMask);
+
+    showData();
 }
 
 void	ImageCompletionUI::close()
@@ -1070,6 +1077,9 @@ void	ImageCompletionUI::close()
     _regionCompetitionDialog.radioForeground->setChecked(false);
     _regionCompetitionDialog.radioBackground->setChecked(false);
     _regionCompetitionDialog.radioErazer->setChecked(false);
+
+    _imageName = "";
+    _imagePath = "";
 
     uncheckMethods();
 
@@ -1312,7 +1322,7 @@ void ImageCompletionUI::updateLog()
     {
 
         (*_logInformationString) = log_str;
-        sprintf( log_str, "");
+        sprintf(log_str, "");
         _logWidget->clear();
         QTextCursor cursor(_logWidget->textCursor());
         cursor.movePosition(QTextCursor::End);
@@ -1350,6 +1360,8 @@ void ImageCompletionUI::uncheckStrikeOptions()
 
 void ImageCompletionUI::showData()
 {
+    clearBottomWindow();
+
     QSqlDatabase db;
     if(!createConnection(db))
     {
@@ -1377,14 +1389,47 @@ void ImageCompletionUI::showData()
                 {
                     switch(k)
                     {
-                    case 1: _bottomWindow.dBTableWidget_1->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
-                    case 2: _bottomWindow.dBTableWidget_2->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
-                    case 3: _bottomWindow.dBTableWidget_3->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
-                    case 4: _bottomWindow.dBTableWidget_4->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
-                    case 5: _bottomWindow.dBTableWidget_5->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
-                    case 6: _bottomWindow.dBTableWidget_6->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
-                    case 7: _bottomWindow.dBTableWidget_7->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
-                    case 8: _bottomWindow.dBTableWidget_8->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                    case 1:
+                    {
+                        if( j == 0 ) _bottomWindow.dBTableWidget_1->insertRow(_bottomWindow.dBTableWidget_1->rowCount());
+                        _bottomWindow.dBTableWidget_1->setItem(i, j, new QTableWidgetItem(query.value(j).toString()));
+                        break;
+                    }
+                    case 2:
+                    {
+                        if( j == 0 ) _bottomWindow.dBTableWidget_2->insertRow(_bottomWindow.dBTableWidget_2->rowCount());
+                        _bottomWindow.dBTableWidget_2->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                    }
+                    case 3:
+                    {
+                        if( j == 0 ) _bottomWindow.dBTableWidget_3->insertRow(_bottomWindow.dBTableWidget_3->rowCount());
+                        _bottomWindow.dBTableWidget_3->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                    }
+                    case 4:
+                    {
+                        if( j == 0 ) _bottomWindow.dBTableWidget_4->insertRow(_bottomWindow.dBTableWidget_4->rowCount());
+                        _bottomWindow.dBTableWidget_4->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                    }
+                    case 5:
+                    {
+                        if( j == 0 ) _bottomWindow.dBTableWidget_5->insertRow(_bottomWindow.dBTableWidget_5->rowCount());
+                        _bottomWindow.dBTableWidget_5->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                    }
+                    case 6:
+                    {
+                        if( j == 0 ) _bottomWindow.dBTableWidget_6->insertRow(_bottomWindow.dBTableWidget_6->rowCount());
+                        _bottomWindow.dBTableWidget_6->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                    }
+                    case 7:
+                    {
+                        if( j == 0 ) _bottomWindow.dBTableWidget_7->insertRow(_bottomWindow.dBTableWidget_7->rowCount());
+                        _bottomWindow.dBTableWidget_7->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                    }
+                    case 8:
+                    {
+                        if( j == 0 ) _bottomWindow.dBTableWidget_8->insertRow(_bottomWindow.dBTableWidget_8->rowCount());
+                        _bottomWindow.dBTableWidget_8->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                    }
                     }
                 }
                 i++;
@@ -1836,7 +1881,7 @@ void ImageCompletionUI::saveUserLabels()
 
 void ImageCompletionUI::saveMask()
 {
-    _editImageViewer->saveAsMask();
+    //_editImageViewer->saveAsMask();
 }
 
 void ImageCompletionUI::strikeThicknessChanged(QAction *a)
@@ -1882,6 +1927,7 @@ void ImageCompletionUI::redo()
 
 void ImageCompletionUI::undo()
 {
+    redo();
 }
 
 // 从文件导入数据--zhyn
@@ -2047,23 +2093,27 @@ void ImageCompletionUI::openImage(QString fileName)
     {
         if ( _editImageViewer->openImage(fileName) )
         {
+            _imagePath = fileName;
+            _imageName = QFileInfo(fileName).fileName();
+
             _editImageViewer->repaint();
             _step = NONE;
             updateLog();
 
             QString status = this->labelStatus(fileName);
-            if(status != "N" || status != "Y")
+            if(status != "N" && status != "Y")
             {
                 QMessageBox::StandardButton reply = QMessageBox::information(0, tr("提示"), "此图像为新图像,是否要导入数据库?", QMessageBox::Ok | QMessageBox::Cancel);
                 if(reply == QMessageBox::Ok)
                 {
-                    (new ImageProperties)->show();
+                    (new ImageProperties)->showDlg(fileName);
                 }
             }
         }
         else
         {
-            _editImageViewer->close();
+            //_editImageViewer->close();
+            close();
             _step = LOADFAILED;
             _regionCompetitionDialog.radioForeground->setEnabled(false);
             _regionCompetitionDialog.radioBackground->setEnabled(false);
@@ -2087,6 +2137,86 @@ QColor ImageCompletionUI::getColor(QString status)
     {
         return Global::UnLabelledColor;
     }
+}
+
+void ImageCompletionUI::syncLabelledImage(QString pathOriginal, QString pathResult, QString pathMask)
+{
+    if(pathResult.isEmpty() && pathMask.isEmpty()) return;
+
+    QSqlTableModel *_model = new QSqlTableModel;
+
+    _model->setTable("abrasivemarkinfo");
+    _model->setFilter(QString("abrasivepicpath = '%1'").arg(pathOriginal));
+
+    if(_model->select())
+    {
+        if(_model->rowCount() == 1)
+        {
+            QSqlRecord record = _model->record(0);
+
+            if(!pathResult.isEmpty())
+            {
+                QFile *file = new QFile(pathResult);
+                file->open(QIODevice::ReadOnly);
+                QByteArray data = file->readAll();
+                record.setValue("abrasiveResultData", data);
+            }
+
+            if(!pathMask.isEmpty())
+            {
+                QFile *file = new QFile(pathMask);
+                file->open(QIODevice::ReadOnly);
+                QByteArray data = file->readAll();
+                record.setValue("abrasiveMaskData", data);
+            }
+            _model->setRecord(0, record);
+        }
+
+        if(!_model->submitAll())
+        {
+            QMessageBox::warning(this, "保存", QString("保存数据库失败"), QMessageBox::Close);
+        }
+    }
+
+    _model->setTable("ferrographypicinfo");
+    _model->setFilter(QString("ferrographypicpath = '%1'").arg(pathOriginal));
+    if(_model->select())
+    {
+        if(_model->rowCount() == 1)
+        {
+            QSqlRecord record = _model->record(0);
+            record.setValue("imagesymbol", "Y");
+            _model->setRecord(0, record);
+        }
+
+        if(!_model->submitAll())
+        {
+            QMessageBox::warning(this, "保存", QString("保存数据库失败"), QMessageBox::Close);
+        }
+    }
+}
+
+void ImageCompletionUI::clearBottomWindow()
+{
+    while(_bottomWindow.dBTableWidget_1->rowCount() > 0) _bottomWindow.dBTableWidget_1->removeRow(0);
+    while(_bottomWindow.dBTableWidget_2->rowCount() > 0) _bottomWindow.dBTableWidget_2->removeRow(0);
+    while(_bottomWindow.dBTableWidget_3->rowCount() > 0) _bottomWindow.dBTableWidget_3->removeRow(0);
+    while(_bottomWindow.dBTableWidget_4->rowCount() > 0) _bottomWindow.dBTableWidget_4->removeRow(0);
+    while(_bottomWindow.dBTableWidget_5->rowCount() > 0) _bottomWindow.dBTableWidget_5->removeRow(0);
+    while(_bottomWindow.dBTableWidget_6->rowCount() > 0) _bottomWindow.dBTableWidget_6->removeRow(0);
+    while(_bottomWindow.dBTableWidget_7->rowCount() > 0) _bottomWindow.dBTableWidget_7->removeRow(0);
+    while(_bottomWindow.dBTableWidget_8->rowCount() > 0) _bottomWindow.dBTableWidget_8->removeRow(0);
+    while(_bottomWindow.dBTableWidget_9->rowCount() > 0) _bottomWindow.dBTableWidget_9->removeRow(0);
+
+    _bottomWindow.dBTableWidget_1->setRowCount(0);
+    _bottomWindow.dBTableWidget_2->setRowCount(0);
+    _bottomWindow.dBTableWidget_3->setRowCount(0);
+    _bottomWindow.dBTableWidget_4->setRowCount(0);
+    _bottomWindow.dBTableWidget_5->setRowCount(0);
+    _bottomWindow.dBTableWidget_6->setRowCount(0);
+    _bottomWindow.dBTableWidget_7->setRowCount(0);
+    _bottomWindow.dBTableWidget_8->setRowCount(0);
+    _bottomWindow.dBTableWidget_9->setRowCount(0);
 }
 
 // 拷贝文件--zhyn
@@ -2292,9 +2422,9 @@ void ImageCompletionUI::cellDoubleClicked_(int row, int /* col */)
     }
 }
 
-QString ImageCompletionUI::labelStatus(QString absolutePath)
+QString ImageCompletionUI::labelStatus(QString imagePath)
 {
-    if(absolutePath.isEmpty()) return "";
+    if(imagePath.isEmpty()) return "";
 
     QSqlDatabase db;
     if( createConnection(db) )
@@ -2306,7 +2436,7 @@ QString ImageCompletionUI::labelStatus(QString absolutePath)
             int index = query.record().indexOf("ferrographypicpath");
             while(query.next())
             {
-                if(absolutePath == query.value(index).toString())
+                if(imagePath == query.value(index).toString())
                 {
                     index = query.record().indexOf("imagesymbol");
                     return query.value(index).toString();

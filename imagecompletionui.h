@@ -369,6 +369,7 @@ private:
     classification class1;
     buttom buttom1;
     QString _imageName;
+    QString _imagePath;
     int _cnt;
 
     QString labelStatus(QString absolutePath);
@@ -381,6 +382,9 @@ private:
 
     void openImage(QString file);
     QColor getColor(QString status);
+
+    void syncLabelledImage(QString pathOriginal, QString pathResult, QString pathMask);
+    void clearBottomWindow();
 };
 
 

@@ -231,7 +231,7 @@ bool ImageViewer::saveLabelledResult(QString path, QString ext)
     return _result_labelImage->save(path, ext.toUtf8().constData());
 }
 
-bool ImageViewer::saveAsLabelledResult()
+bool ImageViewer::saveAsLabelledResult(QString &pathResult)
 {
     if(!_srcOcvImage) return false;
     if(!_displayImage) return false;
@@ -250,8 +250,14 @@ bool ImageViewer::saveAsLabelledResult()
     if(fDlg->exec() == QDialog::Accepted)
     {
         QString filename = fDlg->selectedFiles()[0];
-        return _result_labelImage->save(filename);
+        if(_result_labelImage->save(filename))
+        {
+            pathResult = filename;
+            return true;
+        }
+        else return false;
     }
+    else return true;
 }
 
 void ImageViewer::saveUserLabels()
@@ -268,7 +274,7 @@ bool ImageViewer::saveMask(QString path, QString ext)
     return IplImageToQImage(temp)->save(path, ext.toUtf8().constData());
 }
 
-bool ImageViewer::saveAsMask()
+bool ImageViewer::saveAsMask(QString &pathMask)
 {
     if(_mask.empty()) return false;
 
@@ -287,15 +293,29 @@ bool ImageViewer::saveAsMask()
         QString filename = fDlg->selectedFiles()[0];
         if(m_method == 0)
         {
-            return saveLabelMap(filename);
+            if(saveLabelMap(filename))
+            {
+                pathMask = filename;
+                return true;
+            }
+            else return false;
         }
         else
         {
             _mask = _mask * 255;
             IplImage* temp = new IplImage(_mask);
             QImage* temp2 = IplImageToQImage(temp);
-            return temp2->save(filename);
+            if(temp2->save(filename))
+            {
+                pathMask = filename;
+                return true;
+            }
+            else return false;
         }
+    }
+    else
+    {
+        return true;
     }
 }
 
