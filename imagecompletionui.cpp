@@ -99,7 +99,7 @@ void	 ImageCompletionUI::createMenus()
     _menuData=menuBar()->addMenu(tr("&数据管理"));
     _menuData->addAction(_searchAction);
     _menuData->addAction(_addtosqlAction);
-    _menuData->addAction(_saveresultAction);
+    //_menuData->addAction(_saveresultAction);
     _menuData->addAction(_exportDataAction);
     _menuData->addAction(_importDataAction);
 
