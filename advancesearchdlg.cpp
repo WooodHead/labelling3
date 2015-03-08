@@ -225,15 +225,16 @@ bool AdvanceSearchDlg::copyFiles(QString fromDir, QString toDir, bool convertIfE
             continue;
         // 数据库文件处理
         if(fileInfo.fileName().split(".")[1] == "sql")
-            qDebug()<<fileInfo.fileName();
+            continue;
 
         // 当为目录时，递归的进行copy
         if(fileInfo.isDir())
         {
-            if(!copyFiles(fileInfo.filePath(),
-                          targetDir.filePath(fileInfo.fileName()),
-                          convertIfExits))
-                return false;
+//            if(!copyFiles(fileInfo.filePath(),
+//                          targetDir.filePath(fileInfo.fileName()),
+//                          convertIfExits))
+//                return false;
+            continue;
         }
         else
         {   //当允许覆盖操作时，将旧文件进行删除操作
@@ -1176,13 +1177,39 @@ void AdvanceSearchDlg::on_exportBtn_clicked()
 
 void AdvanceSearchDlg::on_importBtn_clicked()
 {
+    
+    QFileDialog *packgeFileDlg = new QFileDialog(this,
+                                                tr("选择数据导入路径"),
+                                                tr(""),
+                                                tr(""));
+    packgeFileDlg->setFileMode(QFileDialog::DirectoryOnly);
+    
+    QString packgefilepath;
+    if(packgeFileDlg->exec())
+    {
+        QStringList packgefilepaths = packgeFileDlg->selectedFiles();
+        packgefilepath = packgefilepaths.at(0);
+    }
+    else
+        return;
+    
+    QString sqlfilepath = packgefilepath + "/";
+    QString sourceimgfrompath = packgefilepath + "/source/";
+    QString sourceimgtopath   = Global::PathImage;
+    QString resultimgfrompath = packgefilepath + "/result";
+    QString resultimgtopath   = Global::PathResult;
+    
     QString filename = QFileDialog::getOpenFileName(this,
                                                     tr("导入数据"),
-                                                    tr(""),
+                                                    sqlfilepath,
                                                     tr("SqlFile(*.sql)"));
     if(filename.isEmpty())
         return;
-    if(this->importDB(filename))
+    
+    
+    if(this->importDB(filename) && 
+            this->copyFiles(sourceimgfrompath,sourceimgtopath)&&
+            this->copyFiles(resultimgfrompath,resultimgtopath))
         QMessageBox::warning(this,
                              tr("提示"),
                              tr("数据导入成功"),
