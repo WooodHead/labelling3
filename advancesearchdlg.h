@@ -17,6 +17,7 @@
 
 #include "Connection.h"
 #include "propertynamedlg.h"
+#include "Global.h"
 
 namespace Ui {
 class AdvanceSearchDlg;
@@ -113,7 +114,8 @@ private:
      void createListWidget();
      void initCbBox();
      void query();
-     bool copyFiles(QString fromDir,QString toDir,bool convertIfExits);
+     bool copyFiles(QString fromDir,QString toDir,bool convertIfExits = false);
+     bool copyFiles(QString fromDir,QString toDir,QStringList filenames,bool convertIfExist = false);
      bool importDB(const QString &path);
      bool exportDB(const QSqlQueryModel *model,const QString &tablename,const QString &path);
      bool importDB(const QSqlQueryModel &model);

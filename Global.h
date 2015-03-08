@@ -21,6 +21,7 @@ public:
     static QColor  UnLabelledColor;
 
     // Path for Seg Results and Mask
+    static QString PathImage;
     static QString PathResult;
     static QString PathMask;
     static QString ExtResult;
