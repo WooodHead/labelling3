@@ -243,8 +243,11 @@ bool AdvanceSearchDlg::copyFiles(QString fromDir, QString toDir, bool convertIfE
                 targetDir.remove(fileInfo.fileName());
             }
             // 进行文件copy
-            if(!QFile::copy(fileInfo.filePath(),
-                            targetDir.filePath(fileInfo.fileName()))){
+            if(targetDir.exists(fileInfo.fileName()))
+                continue;
+            if(!QFile::copy(fileInfo.filePath(),targetDir.filePath(fileInfo.fileName())))
+            {
+                qDebug()<<"false";
                 return false;
             }
         }
@@ -1196,9 +1199,11 @@ void AdvanceSearchDlg::on_importBtn_clicked()
     QString sqlfilepath = packgefilepath + "/";
     QString sourceimgfrompath = packgefilepath + "/source/";
     QString sourceimgtopath   = Global::PathImage;
-    QString resultimgfrompath = packgefilepath + "/result";
+    QString resultimgfrompath = packgefilepath + "/result/";
     QString resultimgtopath   = Global::PathResult;
     
+//    qDebug()<<sourceimgfrompath;
+//    qDebug()<<resultimgfrompath;
     QString filename = QFileDialog::getOpenFileName(this,
                                                     tr("导入数据"),
                                                     sqlfilepath,
