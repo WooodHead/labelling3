@@ -146,6 +146,34 @@ private slots:
      
      void on_oilsampleidLineEdit_textChanged(const QString &arg1);
      
+     void on_samplesituationChkBox_clicked();
+
+     void on_samplesituationLineEdit_textChanged(const QString &arg1);
+
+     void on_sampleidChkBox_clicked();
+
+     void on_sampleidLineEdit_textChanged(const QString &arg1);
+
+     void on_samplemethodChkBox_clicked();
+
+     void on_samplemethodLineEdit_textChanged(const QString &arg1);
+
+     void on_sampledepartidChkBox_clicked();
+
+     void on_sampledepartidlineEdit_textChanged(const QString &arg1);
+
+     void on_sampledepartnameChkBox_clicked();
+
+     void on_sampledepartnameLineEdit_textChanged(const QString &arg1);
+
+     void on_sendstuffChkBox_clicked();
+
+     void on_sendstuffLineEdit_textChanged(const QString &arg1);
+
+     void on_senddateDateEdit_dateChanged(const QDate &date);
+
+     void on_sendtimeChkBox_clicked();
+
 private:
      QString generateSql(QMap<QString,QString> conditionMap,QStringList conditionField,QString tableName);
      void setModelHeaderData(QString tablename);

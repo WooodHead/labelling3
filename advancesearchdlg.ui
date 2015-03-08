@@ -357,18 +357,18 @@
               </item>
               <item>
                <widget class="QDateEdit" name="movepartEndDateEdit">
+                <property name="displayFormat">
+                 <string>yyyy年/MM月/dd日</string>
+                </property>
+                <property name="calendarPopup">
+                 <bool>true</bool>
+                </property>
                 <property name="date">
                  <date>
                   <year>2014</year>
                   <month>1</month>
                   <day>1</day>
                  </date>
-                </property>
-                <property name="displayFormat">
-                 <string>yyyy年/MM月/dd日</string>
-                </property>
-                <property name="calendarPopup">
-                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -560,10 +560,10 @@
          <widget class="QWidget" name="scrollAreaWidgetContents_2">
           <property name="geometry">
            <rect>
-            <x>-178</x>
+            <x>-69</x>
             <y>0</y>
-            <width>710</width>
-            <height>275</height>
+            <width>608</width>
+            <height>269</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_3">
@@ -885,14 +885,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_30">
+                 <widget class="QCheckBox" name="samplesituationChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_30"/>
+                 <widget class="QLineEdit" name="samplesituationLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -906,14 +906,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_23">
+                 <widget class="QCheckBox" name="sampleidChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_23"/>
+                 <widget class="QLineEdit" name="sampleidLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -927,14 +927,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_31">
+                 <widget class="QCheckBox" name="samplemethodChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_31"/>
+                 <widget class="QLineEdit" name="samplemethodLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -948,14 +948,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_18">
+                 <widget class="QCheckBox" name="sampledepartidChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_18"/>
+                 <widget class="QLineEdit" name="sampledepartidlineEdit"/>
                 </item>
                </layout>
               </item>
@@ -964,19 +964,19 @@
                 <item>
                  <widget class="QLabel" name="label_27">
                   <property name="text">
-                   <string>采样单位</string>
+                   <string>采样单位名称</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_26">
+                 <widget class="QCheckBox" name="sampledepartnameChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_26"/>
+                 <widget class="QLineEdit" name="sampledepartnameLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -990,14 +990,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_33">
+                 <widget class="QCheckBox" name="sendstuffChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_33"/>
+                 <widget class="QLineEdit" name="sendstuffLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -1011,14 +1011,21 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_34">
+                 <widget class="QCheckBox" name="senddateChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_34"/>
+                 <widget class="QDateEdit" name="senddateDateEdit">
+                  <property name="displayFormat">
+                   <string>yyyy年MM月dd日</string>
+                  </property>
+                  <property name="calendarPopup">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </item>
@@ -1041,8 +1048,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>975</width>
-              <height>285</height>
+              <width>768</width>
+              <height>277</height>
              </rect>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_105">
@@ -2118,8 +2125,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>693</width>
-              <height>285</height>
+              <width>546</width>
+              <height>226</height>
              </rect>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_33">

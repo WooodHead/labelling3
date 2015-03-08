@@ -1388,23 +1388,24 @@ void AdvanceSearchDlg::on_sampletimeTimeEdit_timeChanged(const QTime &date)
 
 void AdvanceSearchDlg::on_senddateChkBox_clicked()
 {
-    _oisCdtMap.remove("sendtime");
-    if(ui->sendtimeChkBox->isChecked())
+    _oisCdtMap.remove("senddate");
+    if(ui->senddateChkBox->isChecked())
     {
-        QString text = ui->sendtimeTimeEdit->time().toString("h:mm Ap");
-        _oisCdtMap.insert("sendtime",text);
+        QString text = ui->senddateDateEdit->date().toString("yyyy-MM-dd");
+        _oisCdtMap.insert("senddate",text);
     }
 }
 
-void AdvanceSearchDlg::on_sendtimeTimeEdit_timeChanged(const QTime &date)
+void AdvanceSearchDlg::on_senddateDateEdit_dateChanged(const QDate &date)
 {
-    _oisCdtMap.remove("sendtime");
-    if(ui->sendtimeChkBox->isChecked())
+    _oisCdtMap.remove("senddate");
+    if(ui->senddateChkBox->isChecked())
     {
-        QString text = ui->sendtimeTimeEdit->time().toString("h:mm Ap");
-        _oisCdtMap.insert("sendtime",text);
+        QString text = ui->senddateDateEdit->date().toString("yyyy-MM-dd");
+        _oisCdtMap.insert("senddate",text);
     }
 }
+
 
 void AdvanceSearchDlg::on_oiladditionChkBox_clicked()
 {
@@ -1503,5 +1504,148 @@ void AdvanceSearchDlg::on_oilsampleidLineEdit_textChanged(const QString &arg1)
     {
         QString text = ui->oilsampleidLineEdit->text();
         _oisCdtMap.insert("oilsampleid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_samplesituationChkBox_clicked()
+{
+    _oisCdtMap.remove("samplesituation");
+    if(ui->samplesituationChkBox->isChecked())
+    {
+        QString text = ui->samplesituationLineEdit->text();
+        _oisCdtMap.insert("samplesituation",text);
+    }
+}
+
+void AdvanceSearchDlg::on_samplesituationLineEdit_textChanged(const QString &arg1)
+{
+    _oisCdtMap.remove("samplesituation");
+    if(ui->samplesituationChkBox->isChecked())
+    {
+        QString text = ui->samplesituationLineEdit->text();
+        _oisCdtMap.insert("samplesituation",text);
+    }
+}
+
+void AdvanceSearchDlg::on_sampleidChkBox_clicked()
+{
+    _oisCdtMap.remove("sampleid");
+    if(ui->sampleidChkBox->isChecked())
+    {
+        QString text = ui->sampleidLineEdit->text();
+        _oisCdtMap.insert("sampleid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_sampleidLineEdit_textChanged(const QString &arg1)
+{
+    _oisCdtMap.remove("sampleid");
+    if(ui->sampleidChkBox->isChecked())
+    {
+        QString text = ui->sampleidLineEdit->text();
+        _oisCdtMap.insert("sampleid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_samplemethodChkBox_clicked()
+{
+    _oisCdtMap.remove("samplemethod");
+    if(ui->samplemethodChkBox->isChecked())
+    {
+        QString text = ui->samplemethodLineEdit->text();
+        _oisCdtMap.insert("samplemethod",text);
+    }
+}
+
+void AdvanceSearchDlg::on_samplemethodLineEdit_textChanged(const QString &arg1)
+{
+    _oisCdtMap.remove("samplemethod");
+    if(ui->samplemethodChkBox->isChecked())
+    {
+        QString text = ui->samplemethodLineEdit->text();
+        _oisCdtMap.insert("samplemethod",text);
+    }
+}
+
+void AdvanceSearchDlg::on_sampledepartidChkBox_clicked()
+{
+    _oisCdtMap.remove("sampledepartid");
+    if(ui->sampledepartidChkBox->isChecked())
+    {
+        QString text = ui->sampledepartidlineEdit->text();
+        _oisCdtMap.insert("sampledepartid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_sampledepartidlineEdit_textChanged(const QString &arg1)
+{
+    _oisCdtMap.remove("sampledepartid");
+    if(ui->sampledepartidChkBox->isChecked())
+    {
+        QString text = ui->sampledepartidlineEdit->text();
+        _oisCdtMap.insert("sampledepartid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_sampledepartnameChkBox_clicked()
+{
+    _oisCdtMap.remove("sampledepartname");
+    if(ui->sampledepartnameChkBox->isChecked())
+    {
+        QString text = ui->sampledepartnameLineEdit->text();
+        _oisCdtMap.insert("sampledepartname",text);
+    }
+}
+
+void AdvanceSearchDlg::on_sampledepartnameLineEdit_textChanged(const QString &arg1)
+{
+    _oisCdtMap.remove("sampledepartname");
+    if(ui->sampledepartnameChkBox->isChecked())
+    {
+        QString text = ui->sampledepartnameLineEdit->text();
+        _oisCdtMap.insert("sampledepartname",text);
+    }
+}
+
+void AdvanceSearchDlg::on_sendstuffChkBox_clicked()
+{
+    _oisCdtMap.remove("sendstuff");
+    if(ui->sendstuffChkBox->isChecked())
+    {
+        QString text = ui->sendstuffLineEdit->text();
+        _oisCdtMap.insert("sendstuff",text);
+    }
+}
+
+void AdvanceSearchDlg::on_sendstuffLineEdit_textChanged(const QString &arg1)
+{
+    _oisCdtMap.remove("sendstuff");
+    if(ui->sendstuffChkBox->isChecked())
+    {
+        QString text = ui->sendstuffLineEdit->text();
+        _oisCdtMap.insert("sendstuff",text);
+    }
+}
+
+
+
+void AdvanceSearchDlg::on_sendtimeChkBox_clicked()
+{
+    _oisCdtMap.remove("sendtime");
+    if(ui->sendtimeChkBox->isChecked())
+    {
+        QString text = ui->sendtimeTimeEdit->time().toString("h:mm Ap");
+        _oisCdtMap.insert("sendtime",text);
+    }
+}
+
+
+void AdvanceSearchDlg::on_sendtimeTimeEdit_timeChanged(const QTime &date)
+{
+    _oisCdtMap.remove("sendtime");
+    if(ui->sendtimeChkBox->isChecked())
+    {
+        QString text = ui->sendtimeTimeEdit->time().toString("h:mm Ap");
+        _oisCdtMap.insert("sendtime",text);
     }
 }
