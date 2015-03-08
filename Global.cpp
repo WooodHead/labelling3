@@ -13,6 +13,7 @@ QString Global::Hostname = "localhost";
 QString Global::Username = "root";
 QString Global::Passwd   = "zxy082";
 
+QString Global::PathImage = "";
 QString Global::PathMask = "";
 QString Global::PathResult = "";
 QString Global::ExtMask = "";
@@ -43,6 +44,7 @@ void Global::initialize()
     Global::Username = Global::settings->value("MYSQL/username", Global::Username).toString();
     Global::Passwd   = Global::settings->value("MYSQL/passwd", Global::Passwd).toString();
 
+    Global::PathImage = Global::settings->value("IMAGE/pathImage",Global::PathImage).toString();
     Global::PathMask = Global::settings->value("IMAGE/pathMask", Global::PathMask).toString();
     Global::PathResult = Global::settings->value("IMAGE/pathResult", Global::PathResult).toString();
 

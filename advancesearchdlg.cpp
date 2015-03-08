@@ -162,6 +162,40 @@ bool AdvanceSearchDlg::exportDB(const QSqlQueryModel *model, const QString &tabl
 }
 
 
+bool AdvanceSearchDlg::copyFiles(QString fromDir, QString toDir, QStringList filenames, bool convertIfExist)
+{
+    QDir sourceDir(fromDir);
+    QDir targetDir(toDir);
+
+    if(!targetDir.exists())
+    {
+        //< 如果目标目录不存在，则进行创建
+        if(!targetDir.mkdir(targetDir.absolutePath()))
+            return false;
+    }
+    if(fromDir == toDir)
+        return true;
+    foreach (QString filename, filenames) {
+        QString fromFullName = fromDir + filename;
+        QString toFullName   = toDir   + filename;
+        bool fromexist = sourceDir.exists(fromFullName);
+        if(!fromexist)
+        {
+            QString msg = "文件 " + filename + " 不存在，请检查文件与数据库一致"; 
+            QMessageBox::warning(this,tr("提示"),msg,QMessageBox::Close);
+            continue;
+        }
+        bool exist = targetDir.exists(toFullName);
+        if(exist)
+            if(convertIfExist)
+            {
+                targetDir.remove(toFullName);
+            }
+        if(!QFile::copy(fromFullName,toFullName))
+            return false;
+    }
+    return true;
+}
 
 
 bool AdvanceSearchDlg::copyFiles(QString fromDir, QString toDir, bool convertIfExits)
@@ -191,15 +225,16 @@ bool AdvanceSearchDlg::copyFiles(QString fromDir, QString toDir, bool convertIfE
             continue;
         // 数据库文件处理
         if(fileInfo.fileName().split(".")[1] == "sql")
-            qDebug()<<fileInfo.fileName();
+            continue;
 
         // 当为目录时，递归的进行copy
         if(fileInfo.isDir())
         {
-            if(!copyFiles(fileInfo.filePath(),
-                          targetDir.filePath(fileInfo.fileName()),
-                          convertIfExits))
-                return false;
+//            if(!copyFiles(fileInfo.filePath(),
+//                          targetDir.filePath(fileInfo.fileName()),
+//                          convertIfExits))
+//                return false;
+            continue;
         }
         else
         {   //当允许覆盖操作时，将旧文件进行删除操作
@@ -1091,13 +1126,42 @@ void AdvanceSearchDlg::setpropertyName(QString propertyname)
 
 void AdvanceSearchDlg::on_exportBtn_clicked()
 {
+    QFileDialog *packgeFileDlg = new QFileDialog(this,
+                                                 tr("选择保存路径"),
+                                                 tr(""),
+                                                 tr(""));
+    packgeFileDlg->setFileMode(QFileDialog::DirectoryOnly);
+    QString packgepath;
+    if(packgeFileDlg->exec())
+    {
+        QStringList packgepaths = packgeFileDlg->selectedFiles();
+        packgepath = packgepaths.at(0);
+    }
+    else
+        return;
+    QStringList imgFileNames;
+    int count = _fegpInfoModel->rowCount();
+    for(int i=0;i<count;++i)
+    {
+        QSqlRecord record = _fegpInfoModel->record(i);
+        QStringList templist = record.value(fegp_ferrographypicpath).toString().split("/");
+        imgFileNames.append(templist.at(templist.count()-1));
+    }
+    
+    QString sqlfilepath = packgepath + "/backup.sql";
+    QString sourceimgtopath = packgepath + "/source/";
+    QString resultimgtopath = packgepath + "/result/";
+    QString sourceimgfrompath = Global::PathImage;
+    QString resultimgfrompath = Global::PathResult;
     QString filename = QFileDialog::getSaveFileName(this,
                                                     tr("保存导出数据"),
-                                                    tr("backup.sql"),
+                                                    sqlfilepath,
                                                     tr("SqlFile(*.sql)"));
     if(filename.isEmpty())
         return;
-    if(this->exportDB(_eqmInfoModel,"equipmentinfo",filename))
+    if(this->exportDB(_eqmInfoModel,"equipmentinfo",filename) &&
+            this->copyFiles(sourceimgfrompath,sourceimgtopath,imgFileNames) &&
+            this->copyFiles(resultimgfrompath,resultimgtopath,imgFileNames))
         QMessageBox::warning(this,
                              tr("提示"),
                              tr("数据导出成功"),
@@ -1113,13 +1177,39 @@ void AdvanceSearchDlg::on_exportBtn_clicked()
 
 void AdvanceSearchDlg::on_importBtn_clicked()
 {
+    
+    QFileDialog *packgeFileDlg = new QFileDialog(this,
+                                                tr("选择数据导入路径"),
+                                                tr(""),
+                                                tr(""));
+    packgeFileDlg->setFileMode(QFileDialog::DirectoryOnly);
+    
+    QString packgefilepath;
+    if(packgeFileDlg->exec())
+    {
+        QStringList packgefilepaths = packgeFileDlg->selectedFiles();
+        packgefilepath = packgefilepaths.at(0);
+    }
+    else
+        return;
+    
+    QString sqlfilepath = packgefilepath + "/";
+    QString sourceimgfrompath = packgefilepath + "/source/";
+    QString sourceimgtopath   = Global::PathImage;
+    QString resultimgfrompath = packgefilepath + "/result";
+    QString resultimgtopath   = Global::PathResult;
+    
     QString filename = QFileDialog::getOpenFileName(this,
                                                     tr("导入数据"),
-                                                    tr(""),
+                                                    sqlfilepath,
                                                     tr("SqlFile(*.sql)"));
     if(filename.isEmpty())
         return;
-    if(this->importDB(filename))
+    
+    
+    if(this->importDB(filename) && 
+            this->copyFiles(sourceimgfrompath,sourceimgtopath)&&
+            this->copyFiles(resultimgfrompath,resultimgtopath))
         QMessageBox::warning(this,
                              tr("提示"),
                              tr("数据导入成功"),
