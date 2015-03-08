@@ -1202,8 +1202,6 @@ void AdvanceSearchDlg::on_importBtn_clicked()
     QString resultimgfrompath = packgefilepath + "/result/";
     QString resultimgtopath   = Global::PathResult;
     
-//    qDebug()<<sourceimgfrompath;
-//    qDebug()<<resultimgfrompath;
     QString filename = QFileDialog::getOpenFileName(this,
                                                     tr("导入数据"),
                                                     sqlfilepath,
@@ -1303,5 +1301,207 @@ void AdvanceSearchDlg::on_repairDateChkBox_clicked()
     {
         QString text = ui->repairDateDateEdit->date().toString("yyyy-MM-dd");
         _mprCdtMap.insert("repairdate",text);
+    }
+}
+
+void AdvanceSearchDlg::on_samplestuffChkBox_clicked()
+{
+    _oisCdtMap.remove("samplestuff");
+    if(ui->samplestuffChkBox->isChecked())
+    {
+        QString text = ui->samplestuffLineEdit->text();
+        _oisCdtMap.insert("samplestuff",text);
+    }
+}
+
+
+
+void AdvanceSearchDlg::on_samplestuffLineEdit_textChanged(const QString &arg1)
+{
+    _oisCdtMap.remove("samplestuff");
+    if(ui->samplestuffChkBox->isChecked())
+    {
+        QString text = ui->samplestuffLineEdit->text();
+        _oisCdtMap.insert("samplestuff",text);
+    }
+}
+
+void AdvanceSearchDlg::on_samplevolumeChkBox_clicked()
+{
+    _oisCdtMap.remove("samplevolume");
+    if(ui->samplevolumeChkBox->isChecked())
+    {
+        QString text = ui->samplevolumeLineEdit->text();
+        _oisCdtMap.insert("samplevolume",text);
+    }
+}
+
+void AdvanceSearchDlg::on_samplevolumeLineEdit_textChanged(const QString &arg1)
+{
+    _oisCdtMap.remove("samplevolume");
+    if(ui->samplevolumeChkBox->isChecked())
+    {
+        QString text = ui->samplevolumeLineEdit->text();
+        _oisCdtMap.insert("samplevolume",text);
+    }
+}
+
+void AdvanceSearchDlg::on_sampledataChkBox_clicked()
+{
+    _oisCdtMap.remove("sampledate");
+    if(ui->sampledataChkBox->isChecked())
+    {
+        QString text = ui->sampledateDateEdit->date().toString("yyyy-MM-dd");
+        _oisCdtMap.insert("sampledate",text);
+    }
+}
+
+void AdvanceSearchDlg::on_sampledateDateEdit_dateChanged(const QDate &date)
+{
+    _oisCdtMap.remove("sampledate");
+    if(ui->sampledataChkBox->isChecked())
+    {
+        QString text = ui->sampledateDateEdit->date().toString("yyyy-MM-dd");
+        _oisCdtMap.insert("sampledate",text);
+    }
+}
+
+void AdvanceSearchDlg::on_sampletimeChkBox_clicked()
+{
+    _oisCdtMap.remove("sampletime");
+    if(ui->sampletimeChkBox->isChecked())
+    {
+        QString text = ui->sampletimeTimeEdit->time().toString("h:mm AP");
+        _oisCdtMap.insert("sampletime",text);
+    }
+}
+
+void AdvanceSearchDlg::on_sampletimeTimeEdit_timeChanged(const QTime &date)
+{
+    _oisCdtMap.remove("sampletime");
+    if(ui->sampletimeChkBox->isChecked())
+    {
+        QString text = ui->sampletimeTimeEdit->time().toString("h:mm AP");
+        _oisCdtMap.insert("sampletime",text);
+    }
+}
+
+void AdvanceSearchDlg::on_senddateChkBox_clicked()
+{
+    _oisCdtMap.remove("sendtime");
+    if(ui->sendtimeChkBox->isChecked())
+    {
+        QString text = ui->sendtimeTimeEdit->time().toString("h:mm Ap");
+        _oisCdtMap.insert("sendtime",text);
+    }
+}
+
+void AdvanceSearchDlg::on_sendtimeTimeEdit_timeChanged(const QTime &date)
+{
+    _oisCdtMap.remove("sendtime");
+    if(ui->sendtimeChkBox->isChecked())
+    {
+        QString text = ui->sendtimeTimeEdit->time().toString("h:mm Ap");
+        _oisCdtMap.insert("sendtime",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oiladditionChkBox_clicked()
+{
+    _oisCdtMap.remove("oiladdition");
+    if(ui->oiladditionChkBox->isChecked())
+    {
+        QString text = ui->oiladditionLineEdit->text();
+        _oisCdtMap.insert("oiladdition",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oiladditionLineEdit_textChanged(const QString &arg1)
+{
+    _oisCdtMap.remove("oiladdition");
+    if(ui->oiladditionChkBox->isChecked())
+    {
+        QString text = ui->oiladditionLineEdit->text();
+        _oisCdtMap.insert("oiladdition",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oilworktimeChkBox_clicked()
+{
+    _oisCdtMap.remove("oilworktime");
+    if(ui->oilworktimeChkBox->isChecked())
+    {
+        QString text = ui->oilworktimeLineEdit->text();
+        _oisCdtMap.insert("oilworktime",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oilworktimeLineEdit_textChanged(const QString &arg1)
+{
+    _oisCdtMap.remove("oilworktime");
+    if(ui->oilworktimeChkBox->isChecked())
+    {
+        QString text = ui->oilworktimeLineEdit->text();
+        _oisCdtMap.insert("oilworktime",text);
+    }
+}
+
+void AdvanceSearchDlg::on_monitorpartidChkBox_clicked()
+{
+    _oisCdtMap.remove("monitorpartid");
+    if(ui->monitorpartidChkBox->isChecked())
+    {
+        QString text = ui->monitorpartidLineEdit->text();
+        _oisCdtMap.insert("monitorpartid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_monitorpartidLineEdit_textChanged(const QString &arg1)
+{
+    _oisCdtMap.remove("monitorpartid");
+    if(ui->monitorpartidChkBox->isChecked())
+    {
+        QString text = ui->monitorpartidLineEdit->text();
+        _oisCdtMap.insert("monitorpartid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_monitorpartnameChkBox_clicked()
+{
+    _oisCdtMap.remove("monitorpartname");
+    if(ui->monitorpartnameChkBox->isChecked())
+    {
+        QString text = ui->monitorpartnameLineEdit->text();
+        _oisCdtMap.insert("monitorpartname",text);
+    }
+}
+
+void AdvanceSearchDlg::on_monitorpartnameLineEdit_textChanged(const QString &arg1)
+{
+    _oisCdtMap.remove("monitorpartname");
+    if(ui->monitorpartnameChkBox->isChecked())
+    {
+        QString text = ui->monitorpartnameLineEdit->text();
+        _oisCdtMap.insert("monitorpartname",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oilsampleidChkBox_clicked()
+{
+    _oisCdtMap.remove("oilsampleid");
+    if(ui->oilsampleidChkBox->isChecked())
+    {
+        QString text = ui->oilsampleidLineEdit->text();
+        _oisCdtMap.insert("oilsampleid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oilsampleidLineEdit_textChanged(const QString &arg1)
+{
+    _oisCdtMap.remove("oilsampleid");
+    if(ui->oilsampleidChkBox->isChecked())
+    {
+        QString text = ui->oilsampleidLineEdit->text();
+        _oisCdtMap.insert("oilsampleid",text);
     }
 }

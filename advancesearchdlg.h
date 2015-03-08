@@ -106,6 +106,46 @@ private slots:
      
      void on_repairDateChkBox_clicked();
      
+     void on_samplestuffChkBox_clicked();
+     
+     void on_samplestuffLineEdit_textChanged(const QString &arg1);
+     
+     void on_samplevolumeChkBox_clicked();
+     
+     void on_samplevolumeLineEdit_textChanged(const QString &arg1);
+     
+     void on_sampledataChkBox_clicked();
+     
+     void on_sampledateDateEdit_dateChanged(const QDate &date);
+     
+     void on_sampletimeChkBox_clicked();
+     
+     void on_sampletimeTimeEdit_timeChanged(const QTime &date);
+     
+     void on_senddateChkBox_clicked();
+     
+     void on_sendtimeTimeEdit_timeChanged(const QTime &date);
+     
+     void on_oiladditionChkBox_clicked();
+     
+     void on_oiladditionLineEdit_textChanged(const QString &arg1);
+     
+     void on_oilworktimeChkBox_clicked();
+     
+     void on_oilworktimeLineEdit_textChanged(const QString &arg1);
+     
+     void on_monitorpartidChkBox_clicked();
+     
+     void on_monitorpartidLineEdit_textChanged(const QString &arg1);
+     
+     void on_monitorpartnameChkBox_clicked();
+     
+     void on_monitorpartnameLineEdit_textChanged(const QString &arg1);
+     
+     void on_oilsampleidChkBox_clicked();
+     
+     void on_oilsampleidLineEdit_textChanged(const QString &arg1);
+     
 private:
      QString generateSql(QMap<QString,QString> conditionMap,QStringList conditionField,QString tableName);
      void setModelHeaderData(QString tablename);

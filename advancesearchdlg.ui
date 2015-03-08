@@ -22,7 +22,7 @@
      <item>
       <widget class="QStackedWidget" name="conditionStackedWidget">
        <property name="currentIndex">
-        <number>2</number>
+        <number>3</number>
        </property>
        <widget class="QWidget" name="page">
         <layout class="QHBoxLayout" name="horizontalLayout_106">
@@ -482,6 +482,9 @@
                 <property name="displayFormat">
                  <string>yyyy年/MM月/dd日</string>
                 </property>
+                <property name="calendarPopup">
+                 <bool>true</bool>
+                </property>
                </widget>
               </item>
              </layout>
@@ -557,9 +560,9 @@
          <widget class="QWidget" name="scrollAreaWidgetContents_2">
           <property name="geometry">
            <rect>
-            <x>0</x>
+            <x>-178</x>
             <y>0</y>
-            <width>602</width>
+            <width>710</width>
             <height>275</height>
            </rect>
           </property>
@@ -577,7 +580,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_19">
+                 <widget class="QCheckBox" name="planetypeChBox">
                   <property name="text">
                    <string/>
                   </property>
@@ -619,14 +622,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_27">
+                 <widget class="QCheckBox" name="samplestuffChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_27"/>
+                 <widget class="QLineEdit" name="samplestuffLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -640,14 +643,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_32">
+                 <widget class="QCheckBox" name="samplevolumeChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_32"/>
+                 <widget class="QLineEdit" name="samplevolumeLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -661,14 +664,21 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_28">
+                 <widget class="QCheckBox" name="sampledataChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_28"/>
+                 <widget class="QDateEdit" name="sampledateDateEdit">
+                  <property name="displayFormat">
+                   <string>yyyy年/MM月/dd日</string>
+                  </property>
+                  <property name="calendarPopup">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </item>
@@ -682,14 +692,18 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_29">
+                 <widget class="QCheckBox" name="sampletimeChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_29"/>
+                 <widget class="QTimeEdit" name="sampletimeTimeEdit">
+                  <property name="calendarPopup">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </item>
@@ -722,14 +736,18 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_35">
+                 <widget class="QCheckBox" name="sendtimeChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_35"/>
+                 <widget class="QTimeEdit" name="sendtimeTimeEdit">
+                  <property name="calendarPopup">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </item>
@@ -743,14 +761,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_25">
+                 <widget class="QCheckBox" name="oiladditionChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_25"/>
+                 <widget class="QLineEdit" name="oiladditionLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -764,14 +782,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_24">
+                 <widget class="QCheckBox" name="oilworktimeChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_24"/>
+                 <widget class="QLineEdit" name="oilworktimeLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -785,14 +803,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_22">
+                 <widget class="QCheckBox" name="monitorpartidChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_22"/>
+                 <widget class="QLineEdit" name="monitorpartidLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -806,14 +824,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_21">
+                 <widget class="QCheckBox" name="monitorpartnameChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_21"/>
+                 <widget class="QLineEdit" name="monitorpartnameLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -827,14 +845,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_17">
+                 <widget class="QCheckBox" name="oilsampleidChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_17"/>
+                 <widget class="QLineEdit" name="oilsampleidLineEdit"/>
                 </item>
                </layout>
               </item>
