@@ -11,6 +11,8 @@ ImageProperties::ImageProperties(QWidget *parent) :
     ui->_labelResultImage->setFixedSize(100, 50);
     ui->_labelMaskImage->setFixedSize(100, 50);
 
+    connect(this, SIGNAL(flush()), parent, SLOT(flushBottom()));
+
     for(int i = 0; i < TABLE_N; i++ )
     {
         _models[i] = 0;
@@ -357,16 +359,16 @@ void ImageProperties::on__buttonSave_clicked()
             record.setValue("repairtime", ui->_editServiceNumber->text().toInt());
             _models[0]->setRecord(0, record);
         }
-    }
-    else
-    {
-        _models[0]->insertRows(0, 1);
-        _models[0]->setData(_models[0]->index(0, 0), ui->_comboBoxEquipPlaneID->currentText());
-        _models[0]->setData(_models[0]->index(0, 1), ui->_comboBoxEquipPlaneType->currentText());
-        _models[0]->setData(_models[0]->index(0, 2), ui->_comboBoxEquipUnitID->currentText());
-        _models[0]->setData(_models[0]->index(0, 3), ui->_editEquipHours->text().toInt());
-        _models[0]->setData(_models[0]->index(0, 4), ui->_comboBoxEquipRuntime->currentText());
-        _models[0]->setData(_models[0]->index(0, 5), ui->_editServiceNumber->text().toInt());
+        else if(_models[0]->rowCount() == 0)
+        {
+            _models[0]->insertRows(0, 1);
+            _models[0]->setData(_models[0]->index(0, 0), ui->_comboBoxEquipPlaneID->currentText());
+            _models[0]->setData(_models[0]->index(0, 1), ui->_comboBoxEquipPlaneType->currentText());
+            _models[0]->setData(_models[0]->index(0, 2), ui->_comboBoxEquipUnitID->currentText());
+            _models[0]->setData(_models[0]->index(0, 3), ui->_editEquipHours->text().toInt());
+            _models[0]->setData(_models[0]->index(0, 4), ui->_comboBoxEquipRuntime->currentText());
+            _models[0]->setData(_models[0]->index(0, 5), ui->_editServiceNumber->text().toInt());
+        }
     }
 
     // 1
@@ -387,19 +389,19 @@ void ImageProperties::on__buttonSave_clicked()
             record.setValue("enddate", ui->_dateEditMovepartEnd->text());
             _models[1]->setRecord(0, record);
         }
-    }
-    else
-    {
-        _models[1]->insertRows(0, 1);
-        _models[1]->setData(_models[1]->index(0, 0), ui->_comboBoxMovepartID->currentText());
-        _models[1]->setData(_models[1]->index(0, 1), ui->_comboBoxMovepartName->currentText());
-        _models[1]->setData(_models[1]->index(0, 2), ui->_comboBoxMovepartType->currentText());
-        _models[1]->setData(_models[1]->index(0, 3), ui->_editMovepartHours->text().toInt());
-        _models[1]->setData(_models[1]->index(0, 4), ui->_comboBoxMovepartMohe->currentText());
-        _models[1]->setData(_models[1]->index(0, 5), ui->_comboBoxMovepartPlaneID->currentText());
-        _models[1]->setData(_models[1]->index(0, 6), ui->_comboBoxMovepartPlaneType->currentText());
-        _models[1]->setData(_models[1]->index(0, 7), ui->_dateEditMovepartBegin->text());
-        _models[1]->setData(_models[1]->index(0, 8), ui->_dateEditMovepartEnd->text());
+        else if(_models[1]->rowCount() == 0)
+        {
+            _models[1]->insertRows(0, 1);
+            _models[1]->setData(_models[1]->index(0, 0), ui->_comboBoxMovepartID->currentText());
+            _models[1]->setData(_models[1]->index(0, 1), ui->_comboBoxMovepartName->currentText());
+            _models[1]->setData(_models[1]->index(0, 2), ui->_comboBoxMovepartType->currentText());
+            _models[1]->setData(_models[1]->index(0, 3), ui->_editMovepartHours->text().toInt());
+            _models[1]->setData(_models[1]->index(0, 4), ui->_comboBoxMovepartMohe->currentText());
+            _models[1]->setData(_models[1]->index(0, 5), ui->_comboBoxMovepartPlaneID->currentText());
+            _models[1]->setData(_models[1]->index(0, 6), ui->_comboBoxMovepartPlaneType->currentText());
+            _models[1]->setData(_models[1]->index(0, 7), ui->_dateEditMovepartBegin->text());
+            _models[1]->setData(_models[1]->index(0, 8), ui->_dateEditMovepartEnd->text());
+        }
     }
 
     // 2
@@ -420,20 +422,21 @@ void ImageProperties::on__buttonSave_clicked()
             record.setValue("repaircondition", ui->_editMovepartServiceInfo->text());
             _models[2]->setRecord(0, record);
         }
+        else if(_models[2]->rowCount() == 0)
+        {
+            _models[2]->insertRows(0, 1);
+            _models[2]->setData(_models[2]->index(0, 0), ui->_comboBoxMovepartServiceID->currentText());
+            _models[2]->setData(_models[2]->index(0, 1), ui->_comboBoxMovepartServiceMovepartID->currentText());
+            _models[2]->setData(_models[2]->index(0, 2), ui->_comboBoxMovepartServiceMovepartType->currentText());
+            _models[2]->setData(_models[2]->index(0, 3), ui->_editMovepartServiceReson->text());
+            _models[2]->setData(_models[2]->index(0, 4), ui->_dateEditMovepartServiceDate->text());
+            _models[2]->setData(_models[2]->index(0, 5), ui->_editMovepartServiceNumber->text().toInt());
+            _models[2]->setData(_models[2]->index(0, 6), ui->_comboBoxMovepartServiceUnit->currentText());
+            _models[2]->setData(_models[2]->index(0, 7), ui->_editMovepartServiceContent->text());
+            _models[2]->setData(_models[2]->index(0, 8), ui->_editMovepartServiceInfo->text());
+        }
     }
-    else
-    {
-        _models[2]->insertRows(0, 1);
-        _models[2]->setData(_models[2]->index(0, 0), ui->_comboBoxMovepartServiceID->currentText());
-        _models[2]->setData(_models[2]->index(0, 1), ui->_comboBoxMovepartServiceMovepartID->currentText());
-        _models[2]->setData(_models[2]->index(0, 2), ui->_comboBoxMovepartServiceMovepartType->currentText());
-        _models[2]->setData(_models[2]->index(0, 3), ui->_editMovepartServiceReson->text());
-        _models[2]->setData(_models[2]->index(0, 4), ui->_dateEditMovepartServiceDate->text());
-        _models[2]->setData(_models[2]->index(0, 5), ui->_editMovepartServiceNumber->text().toInt());
-        _models[2]->setData(_models[2]->index(0, 6), ui->_comboBoxMovepartServiceUnit->currentText());
-        _models[2]->setData(_models[2]->index(0, 7), ui->_editMovepartServiceContent->text());
-        _models[2]->setData(_models[2]->index(0, 8), ui->_editMovepartServiceInfo->text());
-    }
+
 
     // 3
     _models[3]->setFilter(QString("oilsampleid = '%1'").arg(ui->_comboBoxOilSampleID->currentText()));
@@ -465,32 +468,33 @@ void ImageProperties::on__buttonSave_clicked()
             record.setValue("sendtime", ui->_timeEditOilSampleSendTime->text());
             _models[3]->setRecord(0, record);
         }
+        else if(_models[3]->rowCount() == 0)
+        {
+            _models[3]->insertRows(0, 1);
+            _models[3]->setData(_models[3]->index(0, 0), ui->_comboBoxOilSampleID->currentText());
+            _models[3]->setData(_models[3]->index(0, 1), ui->_comboBoxOilSampleUnitID->currentText());
+            _models[3]->setData(_models[3]->index(0, 2), ui->_comboBoxOilSamplePlaneType->currentText());
+            _models[3]->setData(_models[3]->index(0, 3), ui->_comboBoxOilSamplePlaneID->currentText());
+            _models[3]->setData(_models[3]->index(0, 4), ui->_comboBoxOilSampleMonitorPart->currentText());
+            _models[3]->setData(_models[3]->index(0, 5), ui->_comboBoxOilSampleMonitorPartID->currentText());
+            _models[3]->setData(_models[3]->index(0, 6), ui->_comboBoxOilSampleSamplePointID->currentText());
+            _models[3]->setData(_models[3]->index(0, 7), ui->_editOilSampleHours->text());
+            _models[3]->setData(_models[3]->index(0, 8), ui->_editOilSampleMount->text().toInt());
+            _models[3]->setData(_models[3]->index(0, 9), ui->_editOilSampleReason->text());
+            _models[3]->setData(_models[3]->index(0, 10), ui->_comboBoxOilSampleSampleUnit->currentText());
+            _models[3]->setData(_models[3]->index(0, 11), ui->_comboBoxOilSampleSampleGuy->currentText());
+            _models[3]->setData(_models[3]->index(0, 12), ui->_dateEditOilSampleSampleDate->text());
+            _models[3]->setData(_models[3]->index(0, 13), ui->_timeEditOilSampleSampleTime->text());
+            _models[3]->setData(_models[3]->index(0, 14), ui->_comboBoxOilSampleSituation->currentText());
+            _models[3]->setData(_models[3]->index(0, 15), ui->_comboBoxOilSampleSampleMethod->currentText());
+            _models[3]->setData(_models[3]->index(0, 16), ui->_editOilSampleSampleMount->text().toInt());
+            _models[3]->setData(_models[3]->index(0, 17), ui->_editOilSampleInfo->text());
+            _models[3]->setData(_models[3]->index(0, 18), ui->_comboBoxOilSampleSendGuy->currentText());
+            _models[3]->setData(_models[3]->index(0, 19), ui->_dateEditOilSampleSendDate->text());
+            _models[3]->setData(_models[3]->index(0, 20), ui->_timeEditOilSampleSendTime->text());
+        }
     }
-    else
-    {
-        _models[3]->insertRows(0, 1);
-        _models[3]->setData(_models[3]->index(0, 0), ui->_comboBoxOilSampleID->currentText());
-        _models[3]->setData(_models[3]->index(0, 1), ui->_comboBoxOilSampleUnitID->currentText());
-        _models[3]->setData(_models[3]->index(0, 2), ui->_comboBoxOilSamplePlaneType->currentText());
-        _models[3]->setData(_models[3]->index(0, 3), ui->_comboBoxOilSamplePlaneID->currentText());
-        _models[3]->setData(_models[3]->index(0, 4), ui->_comboBoxOilSampleMonitorPart->currentText());
-        _models[3]->setData(_models[3]->index(0, 5), ui->_comboBoxOilSampleMonitorPartID->currentText());
-        _models[3]->setData(_models[3]->index(0, 6), ui->_comboBoxOilSampleSamplePointID->currentText());
-        _models[3]->setData(_models[3]->index(0, 7), ui->_editOilSampleHours->text());
-        _models[3]->setData(_models[3]->index(0, 8), ui->_editOilSampleMount->text().toInt());
-        _models[3]->setData(_models[3]->index(0, 9), ui->_editOilSampleReason->text());
-        _models[3]->setData(_models[3]->index(0, 10), ui->_comboBoxOilSampleSampleUnit->currentText());
-        _models[3]->setData(_models[3]->index(0, 11), ui->_comboBoxOilSampleSampleGuy->currentText());
-        _models[3]->setData(_models[3]->index(0, 12), ui->_dateEditOilSampleSampleDate->text());
-        _models[3]->setData(_models[3]->index(0, 13), ui->_timeEditOilSampleSampleTime->text());
-        _models[3]->setData(_models[3]->index(0, 14), ui->_comboBoxOilSampleSituation->currentText());
-        _models[3]->setData(_models[3]->index(0, 15), ui->_comboBoxOilSampleSampleMethod->currentText());
-        _models[3]->setData(_models[3]->index(0, 16), ui->_editOilSampleSampleMount->text().toInt());
-        _models[3]->setData(_models[3]->index(0, 17), ui->_editOilSampleInfo->text());
-        _models[3]->setData(_models[3]->index(0, 18), ui->_comboBoxOilSampleSendGuy->currentText());
-        _models[3]->setData(_models[3]->index(0, 19), ui->_dateEditOilSampleSendDate->text());
-        _models[3]->setData(_models[3]->index(0, 20), ui->_timeEditOilSampleSendTime->text());
-    }
+
     // 4
     _models[4]->setFilter(QString("oilsampleid = '%1'").arg(ui->_comboBoxOilAnalyzeOilSampleID->currentText()));
     if(_models[4]->select())
@@ -531,41 +535,42 @@ void ImageProperties::on__buttonSave_clicked()
 
             _models[4]->setRecord(0, record);
         }
+        else if(_models[4]->rowCount() == 0)
+        {
+            _models[4]->insertRows(0, 1);
+            _models[4]->setData(_models[4]->index(0, 0), ui->_comboBoxOilAnalyzeOilSampleID->currentText());
+            _models[4]->setData(_models[4]->index(0, 1), ui->_comboBoxOilAnalyzeUnitName->currentText());
+            _models[4]->setData(_models[4]->index(0, 2), ui->_comboBoxOilAnalyzeSendUnit->currentText());
+            _models[4]->setData(_models[4]->index(0, 3), ui->_editOilAnalyzeReason->text());
+            _models[4]->setData(_models[4]->index(0, 4), ui->_comboBoxOilAnalyzeSendGuy->currentText());
+            _models[4]->setData(_models[4]->index(0, 5), ui->_dateEditOilAnalyzeReceiveDate->text());
+            _models[4]->setData(_models[4]->index(0, 6), ui->_comboBoxOilAnalyzeReceiveGuy->currentText());
+            _models[4]->setData(_models[4]->index(0, 7), ui->_comboBoxOilAnalyzePollutionLevelMethod->currentText());
+            _models[4]->setData(_models[4]->index(0, 8), ui->_comboBoxOilAnalyzePollutionLevelGuy->currentText());
+            _models[4]->setData(_models[4]->index(0, 9), ui->_dateEditOilAnalyzePollutionDate->text());
+            _models[4]->setData(_models[4]->index(0, 10), ui->_comboBoxOilAnalyzePolluteLevelEquip->currentText());
+            _models[4]->setData(_models[4]->index(0, 11), ui->_comboBoxOilAnalyzePolluteReportID->currentText());
+
+            _models[4]->setData(_models[4]->index(0, 12), ui->_comboBoxOilAnalyzeLightMethod->currentText());
+            _models[4]->setData(_models[4]->index(0, 13), ui->_comboBoxOilAnalyzeLightGuy->currentText());
+            _models[4]->setData(_models[4]->index(0, 14), ui->_dateEditOilAnalyzeLightDate->text());
+            _models[4]->setData(_models[4]->index(0, 15), ui->_comboBoxOilAnalyzeLightEquip->currentText());
+            _models[4]->setData(_models[4]->index(0, 16), ui->_comboBoxOilAnalyzeLightEquipID->currentText());
+
+            _models[4]->setData(_models[4]->index(0, 17), ui->_comboBoxOilAnalyzeMentalMethod->currentText());
+            _models[4]->setData(_models[4]->index(0, 18), ui->_comboBoxOilAnalyzeMentalGuy->currentText());
+            _models[4]->setData(_models[4]->index(0, 19), ui->_dateEditOilAnalyzeMentalDate->text());
+            _models[4]->setData(_models[4]->index(0, 20), ui->_comboBoxOilAnalyzeMentalEquip->currentText());
+            _models[4]->setData(_models[4]->index(0, 21), ui->_comboBoxOilAnalyzeMentalEquipID->currentText());
+
+            _models[4]->setData(_models[4]->index(0, 22), ui->_comboBoxOilAnalyzeLihuaMethod->currentText());
+            _models[4]->setData(_models[4]->index(0, 23), ui->_comboBoxOilAnalyzeLihuaGuy->currentText());
+            _models[4]->setData(_models[4]->index(0, 24), ui->_dateEditOilAnalyzeLihuaDate->text());
+            _models[4]->setData(_models[4]->index(0, 25), ui->_comboBoxOilAnalyzeLihuaEquip->currentText());
+            _models[4]->setData(_models[4]->index(0, 26), ui->_comboBoxOilAnalyzeLihuaEquipID->currentText());
+        }
     }
-    else
-    {
-        _models[4]->insertRows(0, 1);
-        _models[4]->setData(_models[4]->index(0, 0), ui->_comboBoxOilAnalyzeOilSampleID->currentText());
-        _models[4]->setData(_models[4]->index(0, 1), ui->_comboBoxOilAnalyzeUnitName->currentText());
-        _models[4]->setData(_models[4]->index(0, 2), ui->_comboBoxOilAnalyzeSendUnit->currentText());
-        _models[4]->setData(_models[4]->index(0, 3), ui->_editOilAnalyzeReason->text());
-        _models[4]->setData(_models[4]->index(0, 4), ui->_comboBoxOilAnalyzeSendGuy->currentText());
-        _models[4]->setData(_models[4]->index(0, 5), ui->_dateEditOilAnalyzeReceiveDate->text());
-        _models[4]->setData(_models[4]->index(0, 6), ui->_comboBoxOilAnalyzeReceiveGuy->currentText());
-        _models[4]->setData(_models[4]->index(0, 7), ui->_comboBoxOilAnalyzePollutionLevelMethod->currentText());
-        _models[4]->setData(_models[4]->index(0, 8), ui->_comboBoxOilAnalyzePollutionLevelGuy->currentText());
-        _models[4]->setData(_models[4]->index(0, 9), ui->_dateEditOilAnalyzePollutionDate->text());
-        _models[4]->setData(_models[4]->index(0, 10), ui->_comboBoxOilAnalyzePolluteLevelEquip->currentText());
-        _models[4]->setData(_models[4]->index(0, 11), ui->_comboBoxOilAnalyzePolluteReportID->currentText());
 
-        _models[4]->setData(_models[4]->index(0, 12), ui->_comboBoxOilAnalyzeLightMethod->currentText());
-        _models[4]->setData(_models[4]->index(0, 13), ui->_comboBoxOilAnalyzeLightGuy->currentText());
-        _models[4]->setData(_models[4]->index(0, 14), ui->_dateEditOilAnalyzeLightDate->text());
-        _models[4]->setData(_models[4]->index(0, 15), ui->_comboBoxOilAnalyzeLightEquip->currentText());
-        _models[4]->setData(_models[4]->index(0, 16), ui->_comboBoxOilAnalyzeLightEquipID->currentText());
-
-        _models[4]->setData(_models[4]->index(0, 17), ui->_comboBoxOilAnalyzeMentalMethod->currentText());
-        _models[4]->setData(_models[4]->index(0, 18), ui->_comboBoxOilAnalyzeMentalGuy->currentText());
-        _models[4]->setData(_models[4]->index(0, 19), ui->_dateEditOilAnalyzeMentalDate->text());
-        _models[4]->setData(_models[4]->index(0, 20), ui->_comboBoxOilAnalyzeMentalEquip->currentText());
-        _models[4]->setData(_models[4]->index(0, 21), ui->_comboBoxOilAnalyzeMentalEquipID->currentText());
-
-        _models[4]->setData(_models[4]->index(0, 22), ui->_comboBoxOilAnalyzeLihuaMethod->currentText());
-        _models[4]->setData(_models[4]->index(0, 23), ui->_comboBoxOilAnalyzeLihuaGuy->currentText());
-        _models[4]->setData(_models[4]->index(0, 24), ui->_dateEditOilAnalyzeLihuaDate->text());
-        _models[4]->setData(_models[4]->index(0, 25), ui->_comboBoxOilAnalyzeLihuaEquip->currentText());
-        _models[4]->setData(_models[4]->index(0, 26), ui->_comboBoxOilAnalyzeLihuaEquipID->currentText());
-    }
     // 5
     _models[5]->setFilter(QString("ferrographysheetid = '%1'").arg(ui->_comboBoxMentalID->currentText()));
     if(_models[5]->select())
@@ -582,18 +587,19 @@ void ImageProperties::on__buttonSave_clicked()
             record.setValue("ferrographymakestuff", ui->_comboBoxMentalGuy->currentText());
             _models[5]->setRecord(0, record);
         }
+        else if(_models[5]->rowCount() == 0)
+        {
+            _models[5]->insertRows(0, 1);
+            _models[5]->setData(_models[5]->index(0, 0), ui->_comboBoxMentalID->currentText());
+            _models[5]->setData(_models[5]->index(0, 1), ui->_comboBoxMentalReportID->currentText());
+            _models[5]->setData(_models[5]->index(0, 2), ui->_comboBoxMentalOilSampleID->currentText());
+            _models[5]->setData(_models[5]->index(0, 3), ui->_comboBoxMentalInstrumentType->currentText());
+            _models[5]->setData(_models[5]->index(0, 4), ui->_editMentalMount->text());
+            _models[5]->setData(_models[5]->index(0, 5), ui->_comboBoxMentalMethod->currentText());
+            _models[5]->setData(_models[5]->index(0, 6), ui->_comboBoxMentalGuy->currentText());
+        }
     }
-    else
-    {
-        _models[5]->insertRows(0, 1);
-        _models[5]->setData(_models[5]->index(0, 0), ui->_comboBoxMentalID->currentText());
-        _models[5]->setData(_models[5]->index(0, 1), ui->_comboBoxMentalReportID->currentText());
-        _models[5]->setData(_models[5]->index(0, 2), ui->_comboBoxMentalOilSampleID->currentText());
-        _models[5]->setData(_models[5]->index(0, 3), ui->_comboBoxMentalInstrumentType->currentText());
-        _models[5]->setData(_models[5]->index(0, 4), ui->_editMentalMount->text());
-        _models[5]->setData(_models[5]->index(0, 5), ui->_comboBoxMentalMethod->currentText());
-        _models[5]->setData(_models[5]->index(0, 6), ui->_comboBoxMentalGuy->currentText());
-    }
+
     // 6
     _models[6]->setFilter(QString("ferrographypicid = '%1'").arg(ui->_comboBoxMentalSampleImageID->currentText()));
     if(_models[6]->select())
@@ -616,22 +622,22 @@ void ImageProperties::on__buttonSave_clicked()
             record.setValue("imagesymbol", ui->_comboBoxMentalSampleImageTag->currentText());
             _models[6]->setRecord(0, record);
         }
-    }
-    else
-    {
-        _models[6]->insertRows(0, 1);
-        _models[6]->setData(_models[6]->index(0, 0), ui->_comboBoxMentalSampleImageID->currentText());
-        _models[6]->setData(_models[6]->index(0, 1), ui->_comboBoxMentalSampleID->currentText());
-        _models[6]->setData(_models[6]->index(0, 2), ui->_comboBoxMentalSampleReportID->currentText());
-        _models[6]->setData(_models[6]->index(0, 3), ui->_comboBoxMentalSampleMicroType->currentText());
-        _models[6]->setData(_models[6]->index(0, 4), ui->_comboBoxMentalSampleSamplerType->currentText());
-        _models[6]->setData(_models[6]->index(0, 5), ui->_comboBoxMentalSampleLightType->currentText());
-        _models[6]->setData(_models[6]->index(0, 6), ui->_editMentalSampleEnlarger->text().toInt());
-        _models[6]->setData(_models[6]->index(0, 7), ui->_comboBoxMentalSampleArea->currentText());
-        _models[6]->setData(_models[6]->index(0, 8), ui->_comboBoxMentalSampleGuy->currentText());
-        _models[6]->setData(_models[6]->index(0, 9), ui->_editMentalSamplePath->text());
-        _models[6]->setData(_models[6]->index(0, 10), ui->_editMentalSampleAnalysis->text());
-        _models[6]->setData(_models[6]->index(0, 11), ui->_comboBoxMentalSampleImageTag->currentText());
+        else if(_models[6]->rowCount() == 0)
+        {
+            _models[6]->insertRows(0, 1);
+            _models[6]->setData(_models[6]->index(0, 0), ui->_comboBoxMentalSampleImageID->currentText());
+            _models[6]->setData(_models[6]->index(0, 1), ui->_comboBoxMentalSampleID->currentText());
+            _models[6]->setData(_models[6]->index(0, 2), ui->_comboBoxMentalSampleReportID->currentText());
+            _models[6]->setData(_models[6]->index(0, 3), ui->_comboBoxMentalSampleMicroType->currentText());
+            _models[6]->setData(_models[6]->index(0, 4), ui->_comboBoxMentalSampleSamplerType->currentText());
+            _models[6]->setData(_models[6]->index(0, 5), ui->_comboBoxMentalSampleLightType->currentText());
+            _models[6]->setData(_models[6]->index(0, 6), ui->_editMentalSampleEnlarger->text().toInt());
+            _models[6]->setData(_models[6]->index(0, 7), ui->_comboBoxMentalSampleArea->currentText());
+            _models[6]->setData(_models[6]->index(0, 8), ui->_comboBoxMentalSampleGuy->currentText());
+            _models[6]->setData(_models[6]->index(0, 9), ui->_editMentalSamplePath->text());
+            _models[6]->setData(_models[6]->index(0, 10), ui->_editMentalSampleAnalysis->text());
+            _models[6]->setData(_models[6]->index(0, 11), ui->_comboBoxMentalSampleImageTag->currentText());
+        }
     }
 
     // 7
@@ -671,36 +677,36 @@ void ImageProperties::on__buttonSave_clicked()
 
             _models[7]->setRecord(0, record);
         }
-    }
-    else
-    {
-        _models[7]->insertRows(0, 1);
-        _models[7]->setData(_models[7]->index(0, 0), ui->_comboBoxMoliID->currentText());
-        _models[7]->setData(_models[7]->index(0, 1), ui->_comboBoxMoliImageID->currentText());
-        _models[7]->setData(_models[7]->index(0, 2), ui->_comboBoxMoliPianID->currentText());
-        _models[7]->setData(_models[7]->index(0, 3), ui->_comboBoxMoliReportID->currentText());
-        _models[7]->setData(_models[7]->index(0, 4), ui->_comboBoxMoliGuy->currentText());
-
-        _models[7]->setData(_models[7]->index(0, 5), ui->_editMoliPath->text());
-        _models[7]->setData(_models[7]->index(0, 6), ui->_comboBoxMoliProperty->currentText());
-        _models[7]->setData(_models[7]->index(0, 7), ui->_comboBoxMoliPosition->currentText());
-        _models[7]->setData(_models[7]->index(0, 8), ui->_editMoliSize->text().toInt());
-        _models[7]->setData(_models[7]->index(0, 9), ui->_editMoliLength->text().toDouble());
-        _models[7]->setData(_models[7]->index(0, 10), ui->_comboBoxMoliShape->currentText());
-        _models[7]->setData(_models[7]->index(0, 11), ui->_comboBoxMoliColor->currentText());
-        _models[7]->setData(_models[7]->index(0, 12), ui->_comboBoxMoliSurface->currentText());
-        _models[7]->setData(_models[7]->index(0, 13), ui->_comboBoxMoliErodeType->currentText());
-        _models[7]->setData(_models[7]->index(0, 14), ui->_comboBoxMoliErodePart->currentText());
-        _models[7]->setData(_models[7]->index(0, 15), ui->_comboBoxMoliErodeReason->currentText());
-        _models[7]->setData(_models[7]->index(0, 16), ui->_comboBoxMoliGivenInfo->currentText());
-        _models[7]->setData(_models[7]->index(0, 17), ui->_comboBoxMoliTypical->currentText());
-
-        if(!_originalImagePath.isEmpty())
+        else if(_models[7]->rowCount() == 0)
         {
-            QFile *file = new QFile(_originalImagePath);
-            file->open(QIODevice::ReadOnly);
-            QByteArray data = file->readAll();
-            _models[7]->setData(_models[7]->index(0, 18), data);
+            _models[7]->insertRows(0, 1);
+            _models[7]->setData(_models[7]->index(0, 0), ui->_comboBoxMoliID->currentText());
+            _models[7]->setData(_models[7]->index(0, 1), ui->_comboBoxMoliImageID->currentText());
+            _models[7]->setData(_models[7]->index(0, 2), ui->_comboBoxMoliPianID->currentText());
+            _models[7]->setData(_models[7]->index(0, 3), ui->_comboBoxMoliReportID->currentText());
+            _models[7]->setData(_models[7]->index(0, 4), ui->_comboBoxMoliGuy->currentText());
+
+            _models[7]->setData(_models[7]->index(0, 5), ui->_editMoliPath->text());
+            _models[7]->setData(_models[7]->index(0, 6), ui->_comboBoxMoliProperty->currentText());
+            _models[7]->setData(_models[7]->index(0, 7), ui->_comboBoxMoliPosition->currentText());
+            _models[7]->setData(_models[7]->index(0, 8), ui->_editMoliSize->text().toInt());
+            _models[7]->setData(_models[7]->index(0, 9), ui->_editMoliLength->text().toDouble());
+            _models[7]->setData(_models[7]->index(0, 10), ui->_comboBoxMoliShape->currentText());
+            _models[7]->setData(_models[7]->index(0, 11), ui->_comboBoxMoliColor->currentText());
+            _models[7]->setData(_models[7]->index(0, 12), ui->_comboBoxMoliSurface->currentText());
+            _models[7]->setData(_models[7]->index(0, 13), ui->_comboBoxMoliErodeType->currentText());
+            _models[7]->setData(_models[7]->index(0, 14), ui->_comboBoxMoliErodePart->currentText());
+            _models[7]->setData(_models[7]->index(0, 15), ui->_comboBoxMoliErodeReason->currentText());
+            _models[7]->setData(_models[7]->index(0, 16), ui->_comboBoxMoliGivenInfo->currentText());
+            _models[7]->setData(_models[7]->index(0, 17), ui->_comboBoxMoliTypical->currentText());
+
+            if(!_originalImagePath.isEmpty())
+            {
+                QFile *file = new QFile(_originalImagePath);
+                file->open(QIODevice::ReadOnly);
+                QByteArray data = file->readAll();
+                _models[7]->setData(_models[7]->index(0, 18), data);
+            }
         }
     }
 
@@ -718,6 +724,9 @@ void ImageProperties::on__buttonSave_clicked()
         }
     }
     QMessageBox::warning(this, tr("提示"), tr("保存成功!"), QMessageBox::Close);
+
+    emit flush();
+
     close();
 }
 

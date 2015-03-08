@@ -891,6 +891,12 @@ void ImageViewer::imageScaling( double scaleFactor )
     _ocvImage = cvCreateImage(sz, _srcOcvImage->depth, _srcOcvImage->nChannels);
     cvResize(_srcOcvImage, _ocvImage, CV_INTER_CUBIC );
 
+    _labelMapImage = new QImage(_ocvImage->width, _ocvImage->height, QImage::Format_ARGB32);
+    QImage _alphaImage(_ocvImage->width, _ocvImage->height, QImage::Format_Indexed8);
+    _alphaImage.fill(255);
+    _labelMapImage->setAlphaChannel(_alphaImage);
+    _labelMapImage->fill(qRgb(0, 0, 0));
+
     QImage *image;
     image = IplImageToQImage( _ocvImage );
 
