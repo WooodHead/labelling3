@@ -25,6 +25,8 @@
 #include "UserManagement.h"
 #include "Global.h"
 
+#define DELETE(ptr) if(ptr) { delete ptr; ptr = 0; }
+
 
 class QStackedWidget;
 class QListWidget;
@@ -383,8 +385,14 @@ private:
     void openImage(QString file);
     QColor getColor(QString status);
 
-    void syncLabelledImage(QString pathOriginal, QString pathResult, QString pathMask);
+    bool syncLabelledImage(QString pathOriginal, QString pathResult, QString pathMask);
     void clearBottomWindow();
+    QImage loadLabelledResult(QString file);
+    void setBackgroundColor(QString path, QColor color);
+    void setImageState(QString path, QString state);
+
+private slots:
+    void flushBottom();
 };
 
 

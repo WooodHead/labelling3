@@ -58,6 +58,9 @@ private:
     QString _resultImagePath;
     QString _maskImagePath;
 
+signals:
+    void flush();
+
 public:
     void showDlg(QString filename);
     void commitLabelledResult(QString resultImagePath, QString maskImagePath);

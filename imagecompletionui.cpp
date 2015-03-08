@@ -1,6 +1,7 @@
 #include <QtGui>
 #include <QPixmap>
 #include <QSqlQuery>
+#include <QSqlError>
 #include "imagecompletionui.h"
 #include "interfaces.h"
 #include "ImageViewer.h"
@@ -573,185 +574,6 @@ void ImageCompletionUI::setupBrush()
 
 void	ImageCompletionUI::open()
 {
-    /*_bottomWindow.dBTableWidget_1->clear();
-    _bottomWindow.dBTableWidget_2->clear();
-    _bottomWindow.dBTableWidget_3->clear();
-    _bottomWindow.dBTableWidget_4->clear();
-    _bottomWindow.dBTableWidget_5->clear();
-    _bottomWindow.dBTableWidget_6->clear();
-    _bottomWindow.dBTableWidget_7->clear();
-    _bottomWindow.dBTableWidget_8->clear();
-    _bottomWindow.dBTableWidget_9->clear();
-
-    _bottomWindow.dBTableWidget_1->setItem(0,0,new QTableWidgetItem("序号"));
-    _bottomWindow.dBTableWidget_1->setItem(0,1,new QTableWidgetItem("机号"));
-    _bottomWindow.dBTableWidget_1->setItem(0,2,new QTableWidgetItem("机型"));
-    _bottomWindow.dBTableWidget_1->setItem(0,3,new QTableWidgetItem("单位编号"));
-    _bottomWindow.dBTableWidget_1->setItem(0,4,new QTableWidgetItem("飞行小时数"));
-    _bottomWindow.dBTableWidget_1->setItem(0,5,new QTableWidgetItem("运行阶段"));
-    _bottomWindow.dBTableWidget_1->setItem(0,6,new QTableWidgetItem("修理次数"));
-
-    _bottomWindow.dBTableWidget_2->setItem(0,0,new QTableWidgetItem("序号"));
-    _bottomWindow.dBTableWidget_2->setItem(0,1,new QTableWidgetItem("动部件编号"));
-    _bottomWindow.dBTableWidget_2->setItem(0,2,new QTableWidgetItem("动部件型号"));
-    _bottomWindow.dBTableWidget_2->setItem(0,3,new QTableWidgetItem("动部件名称"));
-    _bottomWindow.dBTableWidget_2->setItem(0,4,new QTableWidgetItem("运行时数"));
-    _bottomWindow.dBTableWidget_2->setItem(0,5,new QTableWidgetItem("运行阶段"));
-    _bottomWindow.dBTableWidget_2->setItem(0,6,new QTableWidgetItem("机号"));
-    _bottomWindow.dBTableWidget_2->setItem(0,7,new QTableWidgetItem("机型"));
-    _bottomWindow.dBTableWidget_2->setItem(0,8,new QTableWidgetItem("动部件起始日期"));
-    _bottomWindow.dBTableWidget_2->setItem(0,9,new QTableWidgetItem("动部件终止日期"));
-
-    _bottomWindow.dBTableWidget_3->setItem(0,0,new QTableWidgetItem("序号"));
-    _bottomWindow.dBTableWidget_3->setItem(0,1,new QTableWidgetItem("动部件维修编号"));
-    _bottomWindow.dBTableWidget_3->setItem(0,2,new QTableWidgetItem("动部件编号"));
-    _bottomWindow.dBTableWidget_3->setItem(0,3,new QTableWidgetItem("动部件型号"));
-    _bottomWindow.dBTableWidget_3->setItem(0,4,new QTableWidgetItem("维修原因"));
-    _bottomWindow.dBTableWidget_3->setItem(0,5,new QTableWidgetItem("维修日期"));
-    _bottomWindow.dBTableWidget_3->setItem(0,6,new QTableWidgetItem("维修次数"));
-    _bottomWindow.dBTableWidget_3->setItem(0,7,new QTableWidgetItem("维修执行单位"));
-    _bottomWindow.dBTableWidget_3->setItem(0,8,new QTableWidgetItem("维修内容"));
-    _bottomWindow.dBTableWidget_3->setItem(0,9,new QTableWidgetItem("维修换件情况"));
-
-    _bottomWindow.dBTableWidget_4->setItem(0,0,new QTableWidgetItem("序号"));
-    _bottomWindow.dBTableWidget_4->setItem(0,1,new QTableWidgetItem("油样编号"));
-    _bottomWindow.dBTableWidget_4->setItem(0,2,new QTableWidgetItem("采样单位编号"));
-    _bottomWindow.dBTableWidget_4->setItem(0,3,new QTableWidgetItem("机型"));
-    _bottomWindow.dBTableWidget_4->setItem(0,4,new QTableWidgetItem("机号"));
-    _bottomWindow.dBTableWidget_4->setItem(0,5,new QTableWidgetItem("监控部件名称"));
-    _bottomWindow.dBTableWidget_4->setItem(0,6,new QTableWidgetItem("监控部件编号"));
-    _bottomWindow.dBTableWidget_4->setItem(0,7,new QTableWidgetItem("采样点编号"));
-    _bottomWindow.dBTableWidget_4->setItem(0,8,new QTableWidgetItem("滑油工作时数"));
-    _bottomWindow.dBTableWidget_4->setItem(0,9,new QTableWidgetItem("滑油添加量"));
-    _bottomWindow.dBTableWidget_4->setItem(0,10,new QTableWidgetItem("采样原因"));
-    _bottomWindow.dBTableWidget_4->setItem(0,11,new QTableWidgetItem("采样单位"));
-    _bottomWindow.dBTableWidget_4->setItem(0,12,new QTableWidgetItem("采样人"));
-    _bottomWindow.dBTableWidget_4->setItem(0,13,new QTableWidgetItem("采样日期"));
-    _bottomWindow.dBTableWidget_4->setItem(0,14,new QTableWidgetItem("采样时间"));
-    _bottomWindow.dBTableWidget_4->setItem(0,15,new QTableWidgetItem("采样时机"));
-    _bottomWindow.dBTableWidget_4->setItem(0,16,new QTableWidgetItem("采样方式"));
-    _bottomWindow.dBTableWidget_4->setItem(0,17,new QTableWidgetItem("采样量"));
-    _bottomWindow.dBTableWidget_4->setItem(0,18,new QTableWidgetItem("采样说明"));
-    _bottomWindow.dBTableWidget_4->setItem(0,19,new QTableWidgetItem("送样人"));
-    _bottomWindow.dBTableWidget_4->setItem(0,20,new QTableWidgetItem("送样日期"));
-    _bottomWindow.dBTableWidget_4->setItem(0,21,new QTableWidgetItem("送样时间"));
-    _bottomWindow.dBTableWidget_4->setItem(0,0,new QTableWidgetItem("序号"));
-    _bottomWindow.dBTableWidget_4->setItem(0,1,new QTableWidgetItem("油样编号"));
-    _bottomWindow.dBTableWidget_4->setItem(0,2,new QTableWidgetItem("采样单位编号"));
-    _bottomWindow.dBTableWidget_4->setItem(0,3,new QTableWidgetItem("机型"));
-    _bottomWindow.dBTableWidget_4->setItem(0,4,new QTableWidgetItem("机号"));
-    _bottomWindow.dBTableWidget_4->setItem(0,5,new QTableWidgetItem("监控部件名称"));
-    _bottomWindow.dBTableWidget_4->setItem(0,6,new QTableWidgetItem("监控部件编号"));
-    _bottomWindow.dBTableWidget_4->setItem(0,7,new QTableWidgetItem("采样点编号"));
-    _bottomWindow.dBTableWidget_4->setItem(0,8,new QTableWidgetItem("滑油工作时数"));
-    _bottomWindow.dBTableWidget_4->setItem(0,9,new QTableWidgetItem("滑油添加量"));
-    _bottomWindow.dBTableWidget_4->setItem(0,10,new QTableWidgetItem("采样原因"));
-    _bottomWindow.dBTableWidget_4->setItem(0,11,new QTableWidgetItem("采样单位"));
-    _bottomWindow.dBTableWidget_4->setItem(0,12,new QTableWidgetItem("采样人"));
-    _bottomWindow.dBTableWidget_4->setItem(0,13,new QTableWidgetItem("采样日期"));
-    _bottomWindow.dBTableWidget_4->setItem(0,14,new QTableWidgetItem("采样时间"));
-    _bottomWindow.dBTableWidget_4->setItem(0,15,new QTableWidgetItem("采样时机"));
-    _bottomWindow.dBTableWidget_4->setItem(0,16,new QTableWidgetItem("采样方式"));
-    _bottomWindow.dBTableWidget_4->setItem(0,17,new QTableWidgetItem("采样量"));
-    _bottomWindow.dBTableWidget_4->setItem(0,18,new QTableWidgetItem("采样说明"));
-    _bottomWindow.dBTableWidget_4->setItem(0,19,new QTableWidgetItem("送样人"));
-    _bottomWindow.dBTableWidget_4->setItem(0,20,new QTableWidgetItem("送样日期"));
-    _bottomWindow.dBTableWidget_4->setItem(0,21,new QTableWidgetItem("送样时间"));
-    _bottomWindow.dBTableWidget_4->setItem(0,0,new QTableWidgetItem("序号"));
-    _bottomWindow.dBTableWidget_4->setItem(0,1,new QTableWidgetItem("油样编号"));
-    _bottomWindow.dBTableWidget_4->setItem(0,2,new QTableWidgetItem("采样单位编号"));
-    _bottomWindow.dBTableWidget_4->setItem(0,3,new QTableWidgetItem("机型"));
-    _bottomWindow.dBTableWidget_4->setItem(0,4,new QTableWidgetItem("机号"));
-    _bottomWindow.dBTableWidget_4->setItem(0,5,new QTableWidgetItem("监控部件名称"));
-    _bottomWindow.dBTableWidget_4->setItem(0,6,new QTableWidgetItem("监控部件编号"));
-    _bottomWindow.dBTableWidget_4->setItem(0,7,new QTableWidgetItem("采样点编号"));
-    _bottomWindow.dBTableWidget_4->setItem(0,8,new QTableWidgetItem("滑油工作时数"));
-    _bottomWindow.dBTableWidget_4->setItem(0,9,new QTableWidgetItem("滑油添加量"));
-    _bottomWindow.dBTableWidget_4->setItem(0,10,new QTableWidgetItem("采样原因"));
-    _bottomWindow.dBTableWidget_4->setItem(0,11,new QTableWidgetItem("采样单位"));
-    _bottomWindow.dBTableWidget_4->setItem(0,12,new QTableWidgetItem("采样人"));
-    _bottomWindow.dBTableWidget_4->setItem(0,13,new QTableWidgetItem("采样日期"));
-    _bottomWindow.dBTableWidget_4->setItem(0,14,new QTableWidgetItem("采样时间"));
-    _bottomWindow.dBTableWidget_4->setItem(0,15,new QTableWidgetItem("采样时机"));
-    _bottomWindow.dBTableWidget_4->setItem(0,16,new QTableWidgetItem("采样方式"));
-    _bottomWindow.dBTableWidget_4->setItem(0,17,new QTableWidgetItem("采样量"));
-    _bottomWindow.dBTableWidget_4->setItem(0,18,new QTableWidgetItem("采样说明"));
-    _bottomWindow.dBTableWidget_4->setItem(0,19,new QTableWidgetItem("送样人"));
-    _bottomWindow.dBTableWidget_4->setItem(0,20,new QTableWidgetItem("送样日期"));
-    _bottomWindow.dBTableWidget_4->setItem(0,21,new QTableWidgetItem("送样时间"));
-
-    _bottomWindow.dBTableWidget_5->setItem(0,0,new QTableWidgetItem("序号"));
-    _bottomWindow.dBTableWidget_5->setItem(0,1,new QTableWidgetItem("油样编号"));
-    _bottomWindow.dBTableWidget_5->setItem(0,2,new QTableWidgetItem("检测分析单位名称"));
-    _bottomWindow.dBTableWidget_5->setItem(0,3,new QTableWidgetItem("送检单位"));
-    _bottomWindow.dBTableWidget_5->setItem(0,4,new QTableWidgetItem("送检原因"));
-    _bottomWindow.dBTableWidget_5->setItem(0,5,new QTableWidgetItem("送样人"));
-    _bottomWindow.dBTableWidget_5->setItem(0,6,new QTableWidgetItem("收油样日期"));
-    _bottomWindow.dBTableWidget_5->setItem(0,7,new QTableWidgetItem("收油样人"));
-    _bottomWindow.dBTableWidget_5->setItem(0,8,new QTableWidgetItem("污染度分析方法"));
-    _bottomWindow.dBTableWidget_5->setItem(0,9,new QTableWidgetItem("污染度分析人"));
-    _bottomWindow.dBTableWidget_5->setItem(0,10,new QTableWidgetItem("污染度分析日期"));
-    _bottomWindow.dBTableWidget_5->setItem(0,11,new QTableWidgetItem("污染度分析设备"));
-    _bottomWindow.dBTableWidget_5->setItem(0,12,new QTableWidgetItem("污染度分析报告编号"));
-    _bottomWindow.dBTableWidget_5->setItem(0,13,new QTableWidgetItem("光谱分析方法"));
-    _bottomWindow.dBTableWidget_5->setItem(0,14,new QTableWidgetItem("光谱分析人"));
-    _bottomWindow.dBTableWidget_5->setItem(0,15,new QTableWidgetItem("光谱分析日期"));
-    _bottomWindow.dBTableWidget_5->setItem(0,16,new QTableWidgetItem("光谱分析设备"));
-    _bottomWindow.dBTableWidget_5->setItem(0,17,new QTableWidgetItem("光谱分析报告编号"));
-    _bottomWindow.dBTableWidget_5->setItem(0,18,new QTableWidgetItem("铁谱分析方法"));
-    _bottomWindow.dBTableWidget_5->setItem(0,19,new QTableWidgetItem("铁谱分析人"));
-    _bottomWindow.dBTableWidget_5->setItem(0,20,new QTableWidgetItem("铁谱分析日期"));
-    _bottomWindow.dBTableWidget_5->setItem(0,21,new QTableWidgetItem("铁谱分析设备"));
-    _bottomWindow.dBTableWidget_5->setItem(0,22,new QTableWidgetItem("铁谱分析报告编号"));
-    _bottomWindow.dBTableWidget_5->setItem(0,23,new QTableWidgetItem("理化分析方法"));
-    _bottomWindow.dBTableWidget_5->setItem(0,24,new QTableWidgetItem("理化分析人"));
-    _bottomWindow.dBTableWidget_5->setItem(0,25,new QTableWidgetItem("理化分析日期"));
-    _bottomWindow.dBTableWidget_5->setItem(0,26,new QTableWidgetItem("理化分析设备"));
-    _bottomWindow.dBTableWidget_5->setItem(0,27,new QTableWidgetItem("理化分析报告编号"));
-
-    _bottomWindow.dBTableWidget_6->setItem(0,0,new QTableWidgetItem("序号"));
-    _bottomWindow.dBTableWidget_6->setItem(0,1,new QTableWidgetItem("铁谱片编号"));
-    _bottomWindow.dBTableWidget_6->setItem(0,2,new QTableWidgetItem("铁谱分析报告编号"));
-    _bottomWindow.dBTableWidget_6->setItem(0,3,new QTableWidgetItem("油样编号"));
-    _bottomWindow.dBTableWidget_6->setItem(0,4,new QTableWidgetItem("分析铁谱仪型号"));
-    _bottomWindow.dBTableWidget_6->setItem(0,5,new QTableWidgetItem("铁谱片制取油样消耗量"));
-    _bottomWindow.dBTableWidget_6->setItem(0,6,new QTableWidgetItem("铁谱片制取方法"));
-    _bottomWindow.dBTableWidget_6->setItem(0,7,new QTableWidgetItem("铁谱片制取人"));
-
-    _bottomWindow.dBTableWidget_7->setItem(0,0,new QTableWidgetItem("序号"));
-    _bottomWindow.dBTableWidget_7->setItem(0,1,new QTableWidgetItem("铁谱图片编号"));
-    _bottomWindow.dBTableWidget_7->setItem(0,2,new QTableWidgetItem("铁谱片编号"));
-    _bottomWindow.dBTableWidget_7->setItem(0,3,new QTableWidgetItem("铁谱分析报告编号"));
-    _bottomWindow.dBTableWidget_7->setItem(0,4,new QTableWidgetItem("显微镜型号"));
-    _bottomWindow.dBTableWidget_7->setItem(0,5,new QTableWidgetItem("图像采集器型号"));
-    _bottomWindow.dBTableWidget_7->setItem(0,6,new QTableWidgetItem("光源类型"));
-    _bottomWindow.dBTableWidget_7->setItem(0,7,new QTableWidgetItem("放大倍数"));
-    _bottomWindow.dBTableWidget_7->setItem(0,8,new QTableWidgetItem("铁谱图片采集区域"));
-    _bottomWindow.dBTableWidget_7->setItem(0,9,new QTableWidgetItem("铁谱图片采集人"));
-    _bottomWindow.dBTableWidget_7->setItem(0,10,new QTableWidgetItem("铁谱图片(路径)"));
-    _bottomWindow.dBTableWidget_7->setItem(0,11,new QTableWidgetItem("铁谱图片识别分析信息"));
-    _bottomWindow.dBTableWidget_7->setItem(0,12,new QTableWidgetItem("铁谱图片标识符号"));
-
-    _bottomWindow.dBTableWidget_8->setItem(0,0,new QTableWidgetItem("序号"));
-    _bottomWindow.dBTableWidget_8->setItem(0,1,new QTableWidgetItem("磨粒编号"));
-    _bottomWindow.dBTableWidget_8->setItem(0,2,new QTableWidgetItem("铁谱图片编号"));
-    _bottomWindow.dBTableWidget_8->setItem(0,3,new QTableWidgetItem("铁谱片编号"));
-    _bottomWindow.dBTableWidget_8->setItem(0,4,new QTableWidgetItem("铁谱分析报告编号"));
-    _bottomWindow.dBTableWidget_8->setItem(0,5,new QTableWidgetItem("磨粒标注人"));
-    _bottomWindow.dBTableWidget_8->setItem(0,6,new QTableWidgetItem("磨粒图片（路径）"));
-    _bottomWindow.dBTableWidget_8->setItem(0,7,new QTableWidgetItem("磨粒材质"));
-    _bottomWindow.dBTableWidget_8->setItem(0,8,new QTableWidgetItem("磨粒位置"));
-    _bottomWindow.dBTableWidget_8->setItem(0,9,new QTableWidgetItem("磨粒尺寸"));
-    _bottomWindow.dBTableWidget_8->setItem(0,10,new QTableWidgetItem("磨粒周长"));
-    _bottomWindow.dBTableWidget_8->setItem(0,11,new QTableWidgetItem("磨粒形状"));
-    _bottomWindow.dBTableWidget_8->setItem(0,12,new QTableWidgetItem("磨粒颜色"));
-    _bottomWindow.dBTableWidget_8->setItem(0,13,new QTableWidgetItem("磨粒表面纹理类型"));
-    _bottomWindow.dBTableWidget_8->setItem(0,14,new QTableWidgetItem("磨粒磨损类型"));
-    _bottomWindow.dBTableWidget_8->setItem(0,15,new QTableWidgetItem("磨粒损伤部位"));
-    _bottomWindow.dBTableWidget_8->setItem(0,16,new QTableWidgetItem("磨粒磨损机理"));
-    _bottomWindow.dBTableWidget_8->setItem(0,17,new QTableWidgetItem("磨粒反映故障信息"));
-    _bottomWindow.dBTableWidget_8->setItem(0,18,new QTableWidgetItem("磨粒典型性"));*/
-
     close();
 
     QSettings settings("ImageCompletion", "ImageCompletion");
@@ -797,7 +619,19 @@ void	ImageCompletionUI::open()
         QMessageBox::StandardButton reply = QMessageBox::information(0, tr("提示"), "此图像为新图像,是否要导入数据库?", QMessageBox::Ok | QMessageBox::Cancel);
         if(reply == QMessageBox::Ok)
         {
-            (new ImageProperties)->showDlg(fileName);
+            (new ImageProperties(this))->showDlg(fileName);
+        }
+    }
+    else if( status == "Y" )
+    {
+        QImage image = this->loadLabelledResult(fileName);
+        if(!image.isNull())
+        {
+            _editImageViewer->setImage(image);
+        }
+        else
+        {
+            QMessageBox::warning(0, tr("提示"), "加载标注结果图像失败,自动显示原始图像", QMessageBox::Ok | QMessageBox::Cancel);
         }
     }
 
@@ -968,6 +802,46 @@ void	ImageCompletionUI::open()
     }
 }
 
+void ImageCompletionUI::openImage(QString fileName)
+{
+    if(!fileName.isEmpty())
+    {
+        if ( _editImageViewer->openImage(fileName) )
+        {
+            _imagePath = fileName;
+            _imageName = QFileInfo(fileName).fileName();
+
+            _editImageViewer->repaint();
+            _step = NONE;
+            updateLog();
+
+            QString status = this->labelStatus(fileName);
+            if(status != "N" && status != "Y")
+            {
+                QMessageBox::StandardButton reply = QMessageBox::information(0, tr("提示"), "此图像为新图像,是否要导入数据库?", QMessageBox::Ok | QMessageBox::Cancel);
+                if(reply == QMessageBox::Ok)
+                {
+                    (new ImageProperties(this))->showDlg(fileName);
+                }
+            }
+        }
+        else
+        {
+            //_editImageViewer->close();
+            close();
+            _step = LOADFAILED;
+            _regionCompetitionDialog.radioForeground->setEnabled(false);
+            _regionCompetitionDialog.radioBackground->setEnabled(false);
+            _regionCompetitionDialog.radioErazer->setEnabled(false);
+            return;
+        }
+    }
+
+    int width = _editImageViewer->image().width();
+    int height = _editImageViewer->image().height();
+    this->setMinimumSize( width < 800 ? 800 : height, height < 600 ? 600 : height );
+}
+
 void ImageCompletionUI::batchOpen()
 {
     QFileDialog batchFileDialog;
@@ -1024,13 +898,13 @@ void	ImageCompletionUI::save()
     }
 
     // Save
-    QString pathResult = Global::PathResult.append(QFileInfo(_imageName).baseName());
+    QString pathResult = Global::PathResult.append(QFileInfo(_imageName).baseName()).append(".").append(Global::ExtResult);
     if(!(ret1 = _editImageViewer->saveLabelledResult(pathResult, Global::ExtResult)))
     {
         QMessageBox::warning(this, tr("保存"), tr("保存标注图像失败"), QMessageBox::Close);
     }
 
-    QString pathMask = Global::PathMask.append(QFileInfo(_imageName).baseName());
+    QString pathMask = Global::PathMask.append(QFileInfo(_imageName).baseName()).append(".").append(Global::ExtMask);
     if(!(ret2 = _editImageViewer->saveMask(pathMask, Global::ExtMask)))
     {
         QMessageBox::warning(this, tr("保存"), tr("保存掩码图像失败"), QMessageBox::Close);
@@ -1038,9 +912,43 @@ void	ImageCompletionUI::save()
 
     //TODO: Sync Database
     if(ret1 && ret2)
-        syncLabelledImage(_imagePath, pathResult.append(".").append(Global::ExtResult),pathMask.append(".").append(Global::ExtMask));
+    {
+        bool ret = syncLabelledImage(_imagePath, pathResult, pathMask);
 
-    showData();
+        if(ret)
+        {
+            setImageState(_imagePath, "Y");
+            setBackgroundColor(_imagePath,  this->getColor("Y"));
+            showData();
+        }
+    }
+}
+
+void ImageCompletionUI::setBackgroundColor(QString path, QColor color)
+{
+    for(int i = 0; i < _leftWindow.tableWidget->rowCount(); i++)
+    {
+        if(_leftWindow.tableWidget->item(i, 1)->text() == path)
+        {
+            for(int j = 0; j < _leftWindow.tableWidget->columnCount(); j++)
+            {
+                _leftWindow.tableWidget->item(i, j)->setBackgroundColor( color );
+            }
+            return;
+        }
+    }
+}
+
+void ImageCompletionUI::setImageState(QString path, QString state)
+{
+    for(int i = 0; i < _leftWindow.tableWidget->rowCount(); i++)
+    {
+        if(_leftWindow.tableWidget->item(i, 1)->text() == path)
+        {
+            _leftWindow.tableWidget->item(i, 2)->setText(state);
+            return;
+        }
+    }
 }
 
 void	ImageCompletionUI::saveAs()
@@ -1060,9 +968,15 @@ void	ImageCompletionUI::saveAs()
     }
 
     //TODO: Sync Database
-    if(ret1 && ret2) syncLabelledImage(_imagePath, pathResult, pathMask);
-
-    showData();
+    if(ret1 && ret2)
+    {
+        if(syncLabelledImage(_imagePath, pathResult, pathMask))
+        {
+            setImageState(_imagePath, "Y");
+            setBackgroundColor(_imagePath,  this->getColor("Y"));
+            showData();
+        }
+    }
 }
 
 void	ImageCompletionUI::close()
@@ -2087,45 +2001,7 @@ bool ImageCompletionUI::exportDB(const QString &path)
     return true;
 }
 
-void ImageCompletionUI::openImage(QString fileName)
-{
-    if(!fileName.isEmpty())
-    {
-        if ( _editImageViewer->openImage(fileName) )
-        {
-            _imagePath = fileName;
-            _imageName = QFileInfo(fileName).fileName();
 
-            _editImageViewer->repaint();
-            _step = NONE;
-            updateLog();
-
-            QString status = this->labelStatus(fileName);
-            if(status != "N" && status != "Y")
-            {
-                QMessageBox::StandardButton reply = QMessageBox::information(0, tr("提示"), "此图像为新图像,是否要导入数据库?", QMessageBox::Ok | QMessageBox::Cancel);
-                if(reply == QMessageBox::Ok)
-                {
-                    (new ImageProperties)->showDlg(fileName);
-                }
-            }
-        }
-        else
-        {
-            //_editImageViewer->close();
-            close();
-            _step = LOADFAILED;
-            _regionCompetitionDialog.radioForeground->setEnabled(false);
-            _regionCompetitionDialog.radioBackground->setEnabled(false);
-            _regionCompetitionDialog.radioErazer->setEnabled(false);
-            return;
-        }
-    }
-
-    int width = _editImageViewer->image().width();
-    int height = _editImageViewer->image().height();
-    this->setMinimumSize( width < 800 ? 800 : height, height < 600 ? 600 : height );
-}
 
 QColor ImageCompletionUI::getColor(QString status)
 {
@@ -2139,9 +2015,9 @@ QColor ImageCompletionUI::getColor(QString status)
     }
 }
 
-void ImageCompletionUI::syncLabelledImage(QString pathOriginal, QString pathResult, QString pathMask)
+bool ImageCompletionUI::syncLabelledImage(QString pathOriginal, QString pathResult, QString pathMask)
 {
-    if(pathResult.isEmpty() && pathMask.isEmpty()) return;
+    if(pathResult.isEmpty() && pathMask.isEmpty()) return false;
 
     QSqlTableModel *_model = new QSqlTableModel;
 
@@ -2150,6 +2026,7 @@ void ImageCompletionUI::syncLabelledImage(QString pathOriginal, QString pathResu
 
     if(_model->select())
     {
+        qDebug() << _model->rowCount();
         if(_model->rowCount() == 1)
         {
             QSqlRecord record = _model->record(0);
@@ -2157,9 +2034,13 @@ void ImageCompletionUI::syncLabelledImage(QString pathOriginal, QString pathResu
             if(!pathResult.isEmpty())
             {
                 QFile *file = new QFile(pathResult);
-                file->open(QIODevice::ReadOnly);
-                QByteArray data = file->readAll();
-                record.setValue("abrasiveResultData", data);
+                if(file->open(QIODevice::ReadOnly))
+                {
+                    QByteArray data = file->readAll();
+                    file->close();
+                    qDebug() << data.length();
+                    record.setValue("abrasiveResultData", data);
+                }
             }
 
             if(!pathMask.isEmpty())
@@ -2167,15 +2048,24 @@ void ImageCompletionUI::syncLabelledImage(QString pathOriginal, QString pathResu
                 QFile *file = new QFile(pathMask);
                 file->open(QIODevice::ReadOnly);
                 QByteArray data = file->readAll();
+                file->close();
                 record.setValue("abrasiveMaskData", data);
             }
+
+            record.setValue("abrasiveResultExt", QFileInfo(pathResult).suffix());
+            record.setValue("abrasiveMaskExt", QFileInfo(pathMask).suffix());
+
             _model->setRecord(0, record);
         }
 
         if(!_model->submitAll())
         {
+            _model->revertAll();
             QMessageBox::warning(this, "保存", QString("保存数据库失败"), QMessageBox::Close);
+            return false;
         }
+
+        qDebug() << _model->lastError().text();
     }
 
     _model->setTable("ferrographypicinfo");
@@ -2191,9 +2081,12 @@ void ImageCompletionUI::syncLabelledImage(QString pathOriginal, QString pathResu
 
         if(!_model->submitAll())
         {
+            _model->revertAll();
             QMessageBox::warning(this, "保存", QString("保存数据库失败"), QMessageBox::Close);
+            return false;
         }
     }
+    return true;
 }
 
 void ImageCompletionUI::clearBottomWindow()
@@ -2217,6 +2110,32 @@ void ImageCompletionUI::clearBottomWindow()
     _bottomWindow.dBTableWidget_7->setRowCount(0);
     _bottomWindow.dBTableWidget_8->setRowCount(0);
     _bottomWindow.dBTableWidget_9->setRowCount(0);
+}
+
+QImage ImageCompletionUI::loadLabelledResult(QString file)
+{
+    QPixmap image;
+    QSqlTableModel *model = new QSqlTableModel;
+
+    model->setTable("abrasivemarkinfo");
+    model->setFilter(QString("abrasivepicpath = '%1'").arg(file));
+    if(model->select() && model->rowCount() == 1)
+    {
+        QSqlRecord record = model->record(0);
+
+        QByteArray arr = record.value("abrasiveResultData").toByteArray();
+        QString suffix = record.value("abrasiveResultExt").toString();
+        image.loadFromData(arr, suffix.toUtf8().constData());
+    }
+
+    DELETE(model);
+
+    return image.toImage();
+}
+
+void ImageCompletionUI::flushBottom()
+{
+    showData();
 }
 
 // 拷贝文件--zhyn
