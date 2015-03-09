@@ -20,5 +20,6 @@
         <file>icons/invert.png</file>
         <file>icons/go.png</file>
         <file>icons/add.png</file>
+        <file>icons/login.png</file>
     </qresource>
 </RCC>

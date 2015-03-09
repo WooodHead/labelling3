@@ -20,13 +20,13 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+   <item row="1" column="0">
     <widget class="QTabWidget" name="tabWidgetLeftWindow">
      <property name="toolTip">
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;查询&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tabImage">
       <property name="toolTip">
@@ -56,7 +56,7 @@
             <x>0</x>
             <y>0</y>
             <width>199</width>
-            <height>410</height>
+            <height>377</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_2">
@@ -164,8 +164,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>251</width>
-         <height>451</height>
+         <width>276</width>
+         <height>401</height>
         </rect>
        </property>
        <property name="widgetResizable">
@@ -176,8 +176,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>249</width>
-          <height>449</height>
+          <width>274</width>
+          <height>399</height>
          </rect>
         </property>
         <widget class="QTreeView" name="treeViewTabSearch">
@@ -185,8 +185,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>251</width>
-           <height>451</height>
+           <width>256</width>
+           <height>401</height>
           </rect>
          </property>
          <property name="midLineWidth">
@@ -243,6 +243,13 @@
        </widget>
       </widget>
      </widget>
+    </widget>
+   </item>
+   <item row="0" column="0" alignment="Qt::AlignLeft">
+    <widget class="QPushButton" name="pushButton">
+     <property name="text">
+      <string>简易查询</string>
+     </property>
     </widget>
    </item>
   </layout>

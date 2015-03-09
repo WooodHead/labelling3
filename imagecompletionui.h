@@ -10,6 +10,7 @@
 #include <QSqlRecord>
 #include <QSqlField>
 #include <QSqlTableModel>
+#include <QSqlDatabase>
 
 #include "ui_SceneCompletionWidget.h"
 #include "ui_RegionCompetition.h"
@@ -24,8 +25,9 @@
 #include "advancesearchdlg.h"
 #include "UserManagement.h"
 #include "Global.h"
+#include "QtAwesome/QtAwesome/QtAwesome.h"
 
-#define DELETE(ptr) if(ptr) { delete ptr; ptr = 0; }
+#define DELETEPTR(ptr) if(ptr) { delete ptr; ptr = 0; }
 
 
 class QStackedWidget;
@@ -390,6 +392,8 @@ private:
     QImage loadLabelledResult(QString file);
     void setBackgroundColor(QString path, QColor color);
     void setImageState(QString path, QString state);
+
+    QtAwesome* _awesome;
 
 private slots:
     void flushBottom();

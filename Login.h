@@ -14,6 +14,7 @@ class Login : public QDialog
 public:
     explicit Login(QWidget *parent = 0);
     ~Login();
+
     
 private:
     Ui::Login *ui;
@@ -23,6 +24,15 @@ private:
     QString _passwd;
     QString _authority;
     QString _display_name;
+
+    bool _moving;
+    QPoint _pos;
+    QPoint _dpos;
+    QPoint _mousePos;
+
+    void	mouseMoveEvent ( QMouseEvent * event );
+    void	mousePressEvent ( QMouseEvent * event );
+    void	mouseReleaseEvent ( QMouseEvent * event );
 
 public:
     void getDataForMainform();

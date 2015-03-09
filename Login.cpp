@@ -17,11 +17,30 @@ Login::Login(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    setWindowTitle( tr("用户登录") );
+    _moving = false;
 
-    this->loadDesign("default");
+    setWindowTitle( tr("用户登录") );
+    setWindowFlags(Qt::Dialog | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
+
+    //this->loadDesign("default");
     this->setMinimumSize(this->size());
     this->setMaximumSize(this->size());
+
+    ui->_icon->resize(30, 30);
+    ui->_icon->setStyleSheet("background: url(:/new/prefix1/icons/login.png);");
+
+    ui->_editUsername->setPlaceholderText("用户名");
+    ui->_editUsername->setStyleSheet("border: 3px solid #eee;height: 30px;");
+
+    ui->_editPasswd->setPlaceholderText("密码");
+    ui->_editPasswd->setStyleSheet("border: 3px solid #eee;height: 30px;");
+
+    ui->_login->setFocus();
+    ui->_login->setStyleSheet("padding:5px 0;border:0px;background-color: #26b9a5;color:white;");
+    ui->_cancel->setStyleSheet("padding:5px 0;border:0px;background-color: #26b9a5;color:white;");
+
+    ui->_login->setAutoDefault(false);
+    ui->_cancel->setAutoDefault(false);
 
 
     connect(ui->_login, SIGNAL(clicked()), this, SLOT(login()));
@@ -31,6 +50,28 @@ Login::Login(QWidget *parent) :
 Login::~Login()
 {
     delete ui;
+}
+
+void Login::mouseMoveEvent(QMouseEvent *event)
+{
+    if(_moving)
+    {
+        this->move(event->globalPos() - _dpos);
+    }
+}
+
+void Login::mousePressEvent(QMouseEvent *event)
+{
+    _moving = true;
+
+    _pos = this->pos();
+    _mousePos = event->globalPos();
+    _dpos = _mousePos - _pos;
+}
+
+void Login::mouseReleaseEvent(QMouseEvent *event)
+{
+    _moving = false;
 }
 
 void Login::login()
@@ -52,9 +93,10 @@ void Login::login()
     QSqlDatabase db;
     if(!createConnection(db))
     {
-        QMessageBox::critical(0, qApp->tr("Cannot open database"),
+        QMessageBox::critical(0, qApp->tr("提示"),
                               qApp->tr("数据库连接失败!"),
                               QMessageBox::Cancel);
+        return;
     }
 
     QString sql = "select * from user where name = ? and passwd = ?";

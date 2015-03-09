@@ -714,7 +714,6 @@ void ImageProperties::on__buttonSave_clicked()
     {
         if(!_models[i]->submitAll())
         {
-            qDebug() << i;
             for(int k = 0; k < i; k++)
             {
                 _models[k]->revertAll();

@@ -25,7 +25,8 @@ HEADERS += \
     UserEdit.h \
     UserInfo.h \
     UserManagement.h \
-    Global.h
+    Global.h \
+    SimplifiedSearch.h
 
 
 SOURCES += \
@@ -49,7 +50,8 @@ SOURCES += \
     UserEdit.cpp \
     UserInfo.cpp \
     UserManagement.cpp \
-    Global.cpp
+    Global.cpp \
+    SimplifiedSearch.cpp
 
 
 FORMS += \
@@ -68,7 +70,8 @@ FORMS += \
     imageproperties.ui \
     advancesearchdlg.ui \
     useredit.ui \
-    propertynamedlg.ui
+    propertynamedlg.ui \
+    SimplifiedSearch.ui
 
 RESOURCES += \
     ImageCompletion.qrc
@@ -86,3 +89,6 @@ win32 {
 
 OTHER_FILES += \
     imageLabelling.ini
+
+include(QtAwesome/QtAwesome/QtAwesome.pri)
+QMAKE_CXXFLAGS += -std=c++0x

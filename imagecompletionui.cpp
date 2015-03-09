@@ -8,6 +8,7 @@
 #include "Connection.h"
 #include "ImageProperties.h"
 
+
 ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
     : QMainWindow(parent, flags)
 {
@@ -24,6 +25,9 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
     _imageName = "";
     _imagePath = "";
 
+    _awesome = new QtAwesome(this);
+    _awesome->initFontAwesome();
+
     createActions();
 
     setupMainWindow();
@@ -38,13 +42,17 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
 
     createConnections();
 
-    //    setupBrush();
+    //setupBrush();
 
     _RegionupdateBrushSize();
 
     setStrikeOptionsEnabled(false);
 
     showData();
+
+    qDebug() <<"11";
+
+    qDebug() <<"22";
 }
 
 ImageCompletionUI::~ImageCompletionUI()
@@ -124,12 +132,12 @@ void	ImageCompletionUI::createActions()
     _openAction->setObjectName(tr("_openAction"));
     QIcon icon1;
     icon1.addPixmap(QPixmap(tr(":/new/prefix1/icons/fileopen.png")), QIcon::Normal, QIcon::Off);
-    _openAction->setIcon(icon1);
+    _openAction->setIcon(_awesome->icon( fa::file ));
     connect(_openAction, SIGNAL(triggered()), this, SLOT(open()));
 
     _openBatchAction = new QAction( tr("&打开(多)"), this );
     _openBatchAction->setObjectName(tr("_openBatchAction"));
-    _openBatchAction->setIcon(icon1);
+    _openBatchAction->setIcon( _awesome->icon(fa::file));
     connect(_openBatchAction, SIGNAL(triggered()), this, SLOT(batchOpen()));
 
     ////////////////////////////////////////////////////////////////////////////////////
@@ -139,7 +147,7 @@ void	ImageCompletionUI::createActions()
     _saveAction->setObjectName(tr("_saveAction"));
     QIcon icon2;
     icon2.addPixmap(QPixmap(tr(":/new/prefix1/icons/filesave.png")), QIcon::Normal, QIcon::Off);
-    _saveAction->setIcon(icon2);
+    _saveAction->setIcon(_awesome->icon(fa::save));
     connect(_saveAction, SIGNAL(triggered()), this, SLOT(save()));
 
     ////////////////////////////////////////////////////////////////////////////////////
@@ -147,14 +155,15 @@ void	ImageCompletionUI::createActions()
     ////////////////////////////////////////////////////////////////////////////////////
     _saveAsAction = new QAction(  tr("&另存为"), this );
     _saveAsAction->setObjectName(tr("_saveAsAction"));
-    _saveAsAction->setIcon(icon2);
+    _saveAsAction->setIcon(_awesome->icon(fa::save));
     connect(_saveAsAction, SIGNAL(triggered()), this, SLOT( saveAs() ));
 
     ////////////////////////////////////////////////////////////////////////////////////
     //   _closeAction
     ////////////////////////////////////////////////////////////////////////////////////
     _closeAction = new QAction( tr("关闭"), this );
-    _closeAction->setIcon( QIcon(":/new/prefix1/icons/fileclose.png") );
+    //_closeAction->setIcon( QIcon(":/new/prefix1/icons/fileclose.png") );
+    _closeAction->setIcon( _awesome->icon(fa::close) );
     connect( _closeAction, SIGNAL(triggered()), this, SLOT( close() ));
 
     ////////////////////////////////////////////////////////////////////////////////////
@@ -479,8 +488,7 @@ void	ImageCompletionUI::setupWidgets()
     _leftWindow.setupUi(_leftDockWindowContents);
     _leftWindow.tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     _leftWindow.tabWidgetLeftWindow->setTabText(0, tr("图谱信息"));
-    _leftWindow.tabWidgetLeftWindow->removeTab(1); //TODO: now remove these 2 tabs
-    _leftWindow.tabWidgetLeftWindow->removeTab(1);
+    _leftWindow.tabWidgetLeftWindow->removeTab(2);
     _leftWindowWidget->setWidget(_leftDockWindowContents);
     addDockWidget(Qt::LeftDockWidgetArea, _leftWindowWidget);
 
@@ -824,6 +832,18 @@ void ImageCompletionUI::openImage(QString fileName)
                     (new ImageProperties(this))->showDlg(fileName);
                 }
             }
+            else if(status == "Y")
+            {
+                QImage image = this->loadLabelledResult(fileName);
+                if(!image.isNull())
+                {
+                    _editImageViewer->setImage(image);
+                }
+                else
+                {
+                    QMessageBox::warning(0, tr("提示"), "加载标注结果图像失败,自动显示原始图像", QMessageBox::Ok | QMessageBox::Cancel);
+                }
+            }
         }
         else
         {
@@ -888,6 +908,9 @@ void	ImageCompletionUI::save()
     bool ret1, ret2;
 
     // Check Path
+    qDebug() << Global::PathResult;
+    qDebug() << Global::PathMask;
+
     if(!QDir(Global::PathResult).exists())
     {
         QMessageBox::warning(this, tr("保存"), QString("请指定标注图像保存路径:%1").arg(QFileInfo(QApplication::instance()->applicationFilePath()).baseName() + ".ini"));
@@ -913,9 +936,7 @@ void	ImageCompletionUI::save()
     //TODO: Sync Database
     if(ret1 && ret2)
     {
-        bool ret = syncLabelledImage(_imagePath, pathResult, pathMask);
-
-        if(ret)
+        if(syncLabelledImage(_imagePath, pathResult, pathMask))
         {
             setImageState(_imagePath, "Y");
             setBackgroundColor(_imagePath,  this->getColor("Y"));
@@ -2019,7 +2040,16 @@ bool ImageCompletionUI::syncLabelledImage(QString pathOriginal, QString pathResu
 {
     if(pathResult.isEmpty() && pathMask.isEmpty()) return false;
 
-    QSqlTableModel *_model = new QSqlTableModel;
+    QSqlDatabase db;
+    if(!createConnection(db))
+    {
+        QMessageBox::critical(0, qApp->tr("提示"),
+                              qApp->tr("数据库连接失败!"),
+                              QMessageBox::Cancel);
+        return false;
+    }
+
+    QSqlTableModel *_model = new QSqlTableModel(this, db);
 
     _model->setTable("abrasivemarkinfo");
     _model->setFilter(QString("abrasivepicpath = '%1'").arg(pathOriginal));
@@ -2038,7 +2068,6 @@ bool ImageCompletionUI::syncLabelledImage(QString pathOriginal, QString pathResu
                 {
                     QByteArray data = file->readAll();
                     file->close();
-                    qDebug() << data.length();
                     record.setValue("abrasiveResultData", data);
                 }
             }
@@ -2046,10 +2075,12 @@ bool ImageCompletionUI::syncLabelledImage(QString pathOriginal, QString pathResu
             if(!pathMask.isEmpty())
             {
                 QFile *file = new QFile(pathMask);
-                file->open(QIODevice::ReadOnly);
-                QByteArray data = file->readAll();
-                file->close();
-                record.setValue("abrasiveMaskData", data);
+                if(file->open(QIODevice::ReadOnly))
+                {
+                    QByteArray data = file->readAll();
+                    file->close();
+                    record.setValue("abrasiveMaskData", data);
+                }
             }
 
             record.setValue("abrasiveResultExt", QFileInfo(pathResult).suffix());
@@ -2064,28 +2095,34 @@ bool ImageCompletionUI::syncLabelledImage(QString pathOriginal, QString pathResu
             QMessageBox::warning(this, "保存", QString("保存数据库失败"), QMessageBox::Close);
             return false;
         }
-
-        qDebug() << _model->lastError().text();
     }
 
-    _model->setTable("ferrographypicinfo");
-    _model->setFilter(QString("ferrographypicpath = '%1'").arg(pathOriginal));
-    if(_model->select())
+    qDebug() << _model->lastError().text();
+
+    QSqlTableModel *_model2 = new QSqlTableModel(this, db);
+    _model2->setTable("ferrographypicinfo");
+    _model2->setFilter(QString("ferrographypicpath = '%1'").arg(pathOriginal));
+    if(_model2->select())
     {
         if(_model->rowCount() == 1)
         {
-            QSqlRecord record = _model->record(0);
+            QSqlRecord record = _model2->record(0);
             record.setValue("imagesymbol", "Y");
-            _model->setRecord(0, record);
+            _model2->setRecord(0, record);
         }
 
-        if(!_model->submitAll())
+        if(!_model2->submitAll())
         {
-            _model->revertAll();
+            _model2->revertAll();
             QMessageBox::warning(this, "保存", QString("保存数据库失败"), QMessageBox::Close);
             return false;
         }
     }
+
+    qDebug() << _model2->lastError().text();
+    _model->deleteLater();
+    _model2->deleteLater();
+
     return true;
 }
 
@@ -2128,7 +2165,7 @@ QImage ImageCompletionUI::loadLabelledResult(QString file)
         image.loadFromData(arr, suffix.toUtf8().constData());
     }
 
-    DELETE(model);
+    model->deleteLater();
 
     return image.toImage();
 }
