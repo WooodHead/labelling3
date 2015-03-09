@@ -17,10 +17,10 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="dataBaseTabWidget">
      <property name="cursor">
-      <cursorShape>IBeamCursor</cursorShape>
+      <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="dBTab_1">
       <attribute name="title">
@@ -30,7 +30,7 @@
        <item row="0" column="0">
         <widget class="QTableWidget" name="dBTableWidget_1">
          <property name="cursor" stdset="0">
-          <cursorShape>IBeamCursor</cursorShape>
+          <cursorShape>ArrowCursor</cursorShape>
          </property>
          <row>
           <property name="text">
