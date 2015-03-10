@@ -318,18 +318,9 @@ private slots:
     ////////////////////////////////////////////////////////////////////////////////////
     void switchModule();
 
-    //void updateMarkState();
-
     void _RegionupdateBrushSize();
 
     void _SceneupdateBrushSize();
-
-    //void updateLabelTree();
-    //void setLabelTree();
-    //void InitializeIcons();
-    //	void showLabelColor(QTreeWidgetItem*);
-    //void showLabelColor(int i);
-    //ImageViewer* getResultImage(){return _resultImageViewer;}
 
     void Excute();
 
@@ -367,6 +358,8 @@ private slots:
 
     void cellDoubleClicked_(int, int);
 
+    void removeImage(QString filename);
+
 private:
     Searchdata *searchdata1;
     AdvanceSearchDlg *advanceSearchDlg;
@@ -385,7 +378,7 @@ private:
     bool importDB(const QString &path);
     bool exportDB(const QString &path);
 
-    void openImage(QString file);
+    bool openImage(QString file);
     QColor getColor(QString status);
 
     bool syncLabelledImage(QString pathOriginal, QString pathResult, QString pathMask);
@@ -398,6 +391,8 @@ private:
 
 private slots:
     void flushBottom();
+    void showContextMenu(QPoint);
+    void editProperties();
 };
 
 

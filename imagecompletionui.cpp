@@ -369,6 +369,7 @@ void	ImageCompletionUI::setupWidgets()
     _centralTabWidget->addTab( _editTab, _awesome->icon(pictureo), QString("EditTab") );
     _centralTabWidget->setTabText(_centralTabWidget->indexOf(_editTab), QApplication::translate("ImageCompletionUIClass", tr("图像标注").toLocal8Bit().data(), 0));
     _centralTabWidget->setMaximumHeight(0.8 * height);
+    _centralTabWidget->setContextMenuPolicy(Qt::CustomContextMenu);
 
     QPalette palette;
     QPalette palette1;
@@ -482,16 +483,16 @@ void	ImageCompletionUI::setupWidgets()
     ////////////////////////////////////////////////////////////////////////////////////
     //   _cornerWindowWidget
     ////////////////////////////////////////////////////////////////////////////////////
-//    _cornerWindowWidget = new QDockWidget(this );
-//    _cornerWindowWidget->setObjectName(tr("_cornerWindowWidget"));
-//    _cornerWindowWidget->setFeatures(QDockWidget::DockWidgetMovable);
-//    _cornerWindowWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-//    _cornerWindowWidget->setFloating(false);
-//    _cornerDockWindowContents = new QWidget( );
-//    _cornerDockWindowContents->setObjectName(tr("_leftDockWindowContents"));
-//    _cornerWindow.setupUi(_cornerDockWindowContents);
-//    _cornerWindowWidget->setWidget(_cornerDockWindowContents);
-//    addDockWidget(Qt::LeftDockWidgetArea, _cornerWindowWidget);
+    //    _cornerWindowWidget = new QDockWidget(this );
+    //    _cornerWindowWidget->setObjectName(tr("_cornerWindowWidget"));
+    //    _cornerWindowWidget->setFeatures(QDockWidget::DockWidgetMovable);
+    //    _cornerWindowWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    //    _cornerWindowWidget->setFloating(false);
+    //    _cornerDockWindowContents = new QWidget( );
+    //    _cornerDockWindowContents->setObjectName(tr("_leftDockWindowContents"));
+    //    _cornerWindow.setupUi(_cornerDockWindowContents);
+    //    _cornerWindowWidget->setWidget(_cornerDockWindowContents);
+    //    addDockWidget(Qt::LeftDockWidgetArea, _cornerWindowWidget);
 
     ////////////////////////////////////////////////////////////////////////////////////
     //   _bottomWindowWidget
@@ -524,13 +525,12 @@ void ImageCompletionUI::createStatusBar()
 
 void ImageCompletionUI::createConnections()
 {
+    connect( _centralTabWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
+
     connect( _sceneCompletionDialog._brushSizeHSlider, SIGNAL(sliderMoved(int)), this, SLOT(_SceneupdateBrushSize()) );
     connect( _regionCompetitionDialog.brushSizeSmallRadio, SIGNAL(clicked()), this, SLOT(_RegionupdateBrushSize()) );
     connect( _regionCompetitionDialog.brushSizeMediumRadio, SIGNAL(clicked()), this, SLOT(_RegionupdateBrushSize()) );
     connect( _regionCompetitionDialog.brushSizeLargeRadio, SIGNAL(clicked()), this, SLOT(_RegionupdateBrushSize()) );
-
-    //	connect(_regionCompetitionDialog.saveLabelMapBtn, SIGNAL(clicked()), this, SLOT(saveLabelMap()));
-    //	connect(_regionCompetitionDialog.loadLabelMapBtn, SIGNAL(clicked()), this, SLOT(loadLabelMap()));
 
     connect(_regionCompetitionDialog.radioStrikeLabelling, SIGNAL(clicked()), this, SLOT(updateMethod()));
     connect(_regionCompetitionDialog.radioRectLabelling, SIGNAL(clicked()), this, SLOT(updateMethod()));
@@ -557,18 +557,36 @@ void ImageCompletionUI::createConnections()
     connect(_leftWindow.tableWidget, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(cellDoubleClicked_(int, int)));
 }
 
+
+void ImageCompletionUI::showContextMenu(QPoint pos)
+{
+    QAction* triggerEdit = new QAction(this);
+    triggerEdit->setText("编辑磨粒图像属性");
+    connect(triggerEdit, SIGNAL(triggered()), this, SLOT(editProperties()));
+
+    if(_imageName.isEmpty())
+    {
+        triggerEdit->setEnabled(false);
+    }
+
+    QMenu menu;
+    menu.addAction(triggerEdit);
+    menu.exec(_centralTabWidget->mapToGlobal(pos));
+}
+
+void ImageCompletionUI::editProperties()
+{
+
+}
+
 void ImageCompletionUI::setupBrush()
 {
     _brushTool = new PaintTools;
-
     BrushInterface *iBrush = qobject_cast<BrushInterface *>( _brushTool );
-
-    QString brushName = "Pencil";
-
-    _editImageViewer->setBrush( iBrush, brushName );
+    _editImageViewer->setBrush( iBrush, "Pencil" );
 }
 
-void	ImageCompletionUI::open()
+void ImageCompletionUI::open()
 {
     close();
 
@@ -579,8 +597,7 @@ void	ImageCompletionUI::open()
         initialPath = QDir::homePath() + "/untitled";
     }
 
-    QString fileName;
-    fileName = QFileDialog::getOpenFileName( this, tr("打开图像"), initialPath, tr("图像 (*.png *.bmp *.jpg *.jpeg)") );
+    QString fileName = QFileDialog::getOpenFileName( this, tr("打开图像"), initialPath, tr("图像 (*.png *.bmp *.jpg *.jpeg)") );
     if(fileName.isEmpty()) return;
 
     _imagePath = fileName;
@@ -604,186 +621,39 @@ void	ImageCompletionUI::open()
         return;
     }
 
-    int width = _editImageViewer->image().width();
+    int width  = _editImageViewer->image().width();
     int height = _editImageViewer->image().height();
     this->setMinimumSize( width < 800 ? 800 : height, height < 600 ? 600 : height );
-
 
     QString status = this->labelStatus(fileName);
     if(status != "N" && status != "Y")
     {
-        QMessageBox::StandardButton reply = QMessageBox::information(0, tr("提示"), "此图像为新图像,是否要导入数据库?", QMessageBox::Ok | QMessageBox::Cancel);
+        QMessageBox::StandardButton reply = QMessageBox::question(0, tr("提示"), "此图像为新图像,是否要导入数据库?", QMessageBox::Ok | QMessageBox::Cancel);
         if(reply == QMessageBox::Ok)
         {
             (new ImageProperties(this))->showDlg(fileName);
         }
+        else
+        {
+            close();
+            return;
+        }
     }
     else if( status == "Y" )
     {
-        QImage image = this->loadLabelledResult(fileName);
+        QImage image = loadLabelledResult(fileName);
         if(!image.isNull())
         {
             _editImageViewer->setImage(image);
         }
         else
         {
-            QMessageBox::warning(0, tr("提示"), "加载标注结果图像失败,自动显示原始图像", QMessageBox::Ok | QMessageBox::Cancel);
+            QMessageBox::warning(0, tr("提示"), "加载标注结果图像失败,自动显示原始图像", QMessageBox::Close);
         }
     }
 
-    /* QSqlDatabase db;
-    if(!createConnection(db))
-    {
-        QMessageBox::critical(0, qApp->tr("打开数据库失败"),
-                              qApp->tr("无法创建数据库连接"),
-                              QMessageBox::Cancel);
-    }
-
-    QSqlQuery query;
-
-    QString SQL2="select equipmentinfo.*,movepartinfo.*,movepartrepairinfo.*,oilsampleinfo.*,oilanalyzeinfo.*,ferrographyinfo.*,ferrographypicinfo.*,abrasivemarkinfo.* from equipmentinfo,movepartinfo,movepartrepairinfo,oilsampleinfo,oilanalyzeinfo,ferrographyinfo,ferrographypicinfo,abrasivemarkinfo where equipmentinfo.planeid=movepartinfo.planeid and movepartinfo.movepartid=movepartrepairinfo.movepartid and movepartinfo.movepartid=oilsampleinfo.monitorpartid and oilsampleinfo.oilsampleid=oilanalyzeinfo.oilsampleid and oilsampleinfo.oilsampleid=ferrographyinfo.oilsampleid and ferrographyinfo.ferrographysheetid=ferrographypicinfo.ferrographysheetid and ferrographypicinfo.ferrographypicid=abrasivemarkinfo.ferrographypicid and ferrographypicinfo.ferrographypicpath=?";
-    query.prepare(SQL2);
-    query.addBindValue(fileName);
-
-
-    if(query.exec())
-    {
-    }
-
-    while(query.next())
-    {
-        _bottomWindow.dBTableWidget_1->setItem(1,0,new QTableWidgetItem(query.value(0).toString()));
-        _bottomWindow.dBTableWidget_1->setItem(1,1,new QTableWidgetItem(query.value(1).toString()));
-        _bottomWindow.dBTableWidget_1->setItem(1,2,new QTableWidgetItem(query.value(2).toString()));
-        _bottomWindow.dBTableWidget_1->setItem(1,3,new QTableWidgetItem(query.value(3).toString()));
-        _bottomWindow.dBTableWidget_1->setItem(1,4,new QTableWidgetItem(query.value(4).toString()));
-        _bottomWindow.dBTableWidget_1->setItem(1,5,new QTableWidgetItem(query.value(5).toString()));
-        _bottomWindow.dBTableWidget_1->setItem(1,6,new QTableWidgetItem(query.value(6).toString()));
-
-        _bottomWindow.dBTableWidget_2->setItem(1,0,new QTableWidgetItem(query.value(7).toString()));
-        _bottomWindow.dBTableWidget_2->setItem(1,1,new QTableWidgetItem(query.value(8).toString()));
-        _bottomWindow.dBTableWidget_2->setItem(1,2,new QTableWidgetItem(query.value(9).toString()));
-        _bottomWindow.dBTableWidget_2->setItem(1,3,new QTableWidgetItem(query.value(10).toString()));
-        _bottomWindow.dBTableWidget_2->setItem(1,4,new QTableWidgetItem(query.value(11).toString()));
-        _bottomWindow.dBTableWidget_2->setItem(1,5,new QTableWidgetItem(query.value(12).toString()));
-        _bottomWindow.dBTableWidget_2->setItem(1,6,new QTableWidgetItem(query.value(13).toString()));
-        _bottomWindow.dBTableWidget_2->setItem(1,7,new QTableWidgetItem(query.value(14).toString()));
-        _bottomWindow.dBTableWidget_2->setItem(1,8,new QTableWidgetItem(query.value(15).toString()));
-        _bottomWindow.dBTableWidget_2->setItem(1,9,new QTableWidgetItem(query.value(16).toString()));
-
-        _bottomWindow.dBTableWidget_3->setItem(1,0,new QTableWidgetItem(query.value(17).toString()));
-        _bottomWindow.dBTableWidget_3->setItem(1,1,new QTableWidgetItem(query.value(18).toString()));
-        _bottomWindow.dBTableWidget_3->setItem(1,2,new QTableWidgetItem(query.value(19).toString()));
-        _bottomWindow.dBTableWidget_3->setItem(1,3,new QTableWidgetItem(query.value(20).toString()));
-        _bottomWindow.dBTableWidget_3->setItem(1,4,new QTableWidgetItem(query.value(21).toString()));
-        _bottomWindow.dBTableWidget_3->setItem(1,5,new QTableWidgetItem(query.value(22).toString()));
-        _bottomWindow.dBTableWidget_3->setItem(1,6,new QTableWidgetItem(query.value(23).toString()));
-        _bottomWindow.dBTableWidget_3->setItem(1,7,new QTableWidgetItem(query.value(24).toString()));
-        _bottomWindow.dBTableWidget_3->setItem(1,8,new QTableWidgetItem(query.value(25).toString()));
-        _bottomWindow.dBTableWidget_3->setItem(1,9,new QTableWidgetItem(query.value(26).toString()));
-
-        _bottomWindow.dBTableWidget_4->setItem(1,0,new QTableWidgetItem(query.value(27).toString()));
-        _bottomWindow.dBTableWidget_4->setItem(1,1,new QTableWidgetItem(query.value(28).toString()));
-        _bottomWindow.dBTableWidget_4->setItem(1,2,new QTableWidgetItem(query.value(29).toString()));
-        _bottomWindow.dBTableWidget_4->setItem(1,3,new QTableWidgetItem(query.value(30).toString()));
-        _bottomWindow.dBTableWidget_4->setItem(1,4,new QTableWidgetItem(query.value(31).toString()));
-        _bottomWindow.dBTableWidget_4->setItem(1,5,new QTableWidgetItem(query.value(32).toString()));
-        _bottomWindow.dBTableWidget_4->setItem(1,6,new QTableWidgetItem(query.value(33).toString()));
-        _bottomWindow.dBTableWidget_4->setItem(1,7,new QTableWidgetItem(query.value(34).toString()));
-        _bottomWindow.dBTableWidget_4->setItem(1,8,new QTableWidgetItem(query.value(35).toString()));
-        _bottomWindow.dBTableWidget_4->setItem(1,9,new QTableWidgetItem(query.value(36).toString()));
-        _bottomWindow.dBTableWidget_4->setItem(1,10,new QTableWidgetItem(query.value(37).toString()));
-        _bottomWindow.dBTableWidget_4->setItem(1,11,new QTableWidgetItem(query.value(38).toString()));
-        _bottomWindow.dBTableWidget_4->setItem(1,12,new QTableWidgetItem(query.value(39).toString()));
-        _bottomWindow.dBTableWidget_4->setItem(1,13,new QTableWidgetItem(query.value(40).toString()));
-        _bottomWindow.dBTableWidget_4->setItem(1,14,new QTableWidgetItem(query.value(41).toString()));
-        _bottomWindow.dBTableWidget_4->setItem(1,15,new QTableWidgetItem(query.value(42).toString()));
-        _bottomWindow.dBTableWidget_4->setItem(1,16,new QTableWidgetItem(query.value(43).toString()));
-        _bottomWindow.dBTableWidget_4->setItem(1,17,new QTableWidgetItem(query.value(44).toString()));
-        _bottomWindow.dBTableWidget_4->setItem(1,18,new QTableWidgetItem(query.value(45).toString()));
-        _bottomWindow.dBTableWidget_4->setItem(1,19,new QTableWidgetItem(query.value(46).toString()));
-        _bottomWindow.dBTableWidget_4->setItem(1,20,new QTableWidgetItem(query.value(47).toString()));
-        _bottomWindow.dBTableWidget_4->setItem(1,21,new QTableWidgetItem(query.value(48).toString()));
-
-        _bottomWindow.dBTableWidget_5->setItem(1,0,new QTableWidgetItem(query.value(49).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,1,new QTableWidgetItem(query.value(50).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,2,new QTableWidgetItem(query.value(51).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,3,new QTableWidgetItem(query.value(52).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,4,new QTableWidgetItem(query.value(53).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,5,new QTableWidgetItem(query.value(54).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,6,new QTableWidgetItem(query.value(55).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,7,new QTableWidgetItem(query.value(56).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,8,new QTableWidgetItem(query.value(57).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,9,new QTableWidgetItem(query.value(58).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,10,new QTableWidgetItem(query.value(59).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,11,new QTableWidgetItem(query.value(60).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,12,new QTableWidgetItem(query.value(61).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,13,new QTableWidgetItem(query.value(62).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,14,new QTableWidgetItem(query.value(63).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,15,new QTableWidgetItem(query.value(64).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,16,new QTableWidgetItem(query.value(65).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,17,new QTableWidgetItem(query.value(66).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,18,new QTableWidgetItem(query.value(67).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,19,new QTableWidgetItem(query.value(68).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,20,new QTableWidgetItem(query.value(69).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,21,new QTableWidgetItem(query.value(70).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,22,new QTableWidgetItem(query.value(71).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,23,new QTableWidgetItem(query.value(72).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,24,new QTableWidgetItem(query.value(73).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,25,new QTableWidgetItem(query.value(74).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,26,new QTableWidgetItem(query.value(75).toString()));
-        _bottomWindow.dBTableWidget_5->setItem(1,27,new QTableWidgetItem(query.value(76).toString()));
-
-        _bottomWindow.dBTableWidget_6->setItem(1,0,new QTableWidgetItem(query.value(77).toString()));
-        _bottomWindow.dBTableWidget_6->setItem(1,1,new QTableWidgetItem(query.value(78).toString()));
-        _bottomWindow.dBTableWidget_6->setItem(1,2,new QTableWidgetItem(query.value(79).toString()));
-        _bottomWindow.dBTableWidget_6->setItem(1,3,new QTableWidgetItem(query.value(80).toString()));
-        _bottomWindow.dBTableWidget_6->setItem(1,4,new QTableWidgetItem(query.value(81).toString()));
-        _bottomWindow.dBTableWidget_6->setItem(1,5,new QTableWidgetItem(query.value(82).toString()));
-        _bottomWindow.dBTableWidget_6->setItem(1,6,new QTableWidgetItem(query.value(83).toString()));
-        _bottomWindow.dBTableWidget_6->setItem(1,7,new QTableWidgetItem(query.value(84).toString()));
-
-        _bottomWindow.dBTableWidget_7->setItem(1,0,new QTableWidgetItem(query.value(85).toString()));
-        _bottomWindow.dBTableWidget_7->setItem(1,1,new QTableWidgetItem(query.value(86).toString()));
-        _bottomWindow.dBTableWidget_7->setItem(1,2,new QTableWidgetItem(query.value(87).toString()));
-        _bottomWindow.dBTableWidget_7->setItem(1,3,new QTableWidgetItem(query.value(88).toString()));
-        _bottomWindow.dBTableWidget_7->setItem(1,4,new QTableWidgetItem(query.value(89).toString()));
-        _bottomWindow.dBTableWidget_7->setItem(1,5,new QTableWidgetItem(query.value(90).toString()));
-        _bottomWindow.dBTableWidget_7->setItem(1,6,new QTableWidgetItem(query.value(91).toString()));
-        _bottomWindow.dBTableWidget_7->setItem(1,7,new QTableWidgetItem(query.value(92).toString()));
-        _bottomWindow.dBTableWidget_7->setItem(1,8,new QTableWidgetItem(query.value(93).toString()));
-        _bottomWindow.dBTableWidget_7->setItem(1,9,new QTableWidgetItem(query.value(94).toString()));
-        _bottomWindow.dBTableWidget_7->setItem(1,10,new QTableWidgetItem(query.value(95).toString()));
-        _bottomWindow.dBTableWidget_7->setItem(1,11,new QTableWidgetItem(query.value(96).toString()));
-        _bottomWindow.dBTableWidget_7->setItem(1,12,new QTableWidgetItem(query.value(97).toString()));
-
-        _bottomWindow.dBTableWidget_8->setItem(1,0,new QTableWidgetItem(query.value(98).toString()));
-        _bottomWindow.dBTableWidget_8->setItem(1,1,new QTableWidgetItem(query.value(99).toString()));
-        _bottomWindow.dBTableWidget_8->setItem(1,2,new QTableWidgetItem(query.value(100).toString()));
-        _bottomWindow.dBTableWidget_8->setItem(1,3,new QTableWidgetItem(query.value(101).toString()));
-        _bottomWindow.dBTableWidget_8->setItem(1,4,new QTableWidgetItem(query.value(102).toString()));
-        _bottomWindow.dBTableWidget_8->setItem(1,5,new QTableWidgetItem(query.value(103).toString()));
-        _bottomWindow.dBTableWidget_8->setItem(1,6,new QTableWidgetItem(query.value(104).toString()));
-        _bottomWindow.dBTableWidget_8->setItem(1,7,new QTableWidgetItem(query.value(105).toString()));
-        _bottomWindow.dBTableWidget_8->setItem(1,8,new QTableWidgetItem(query.value(106).toString()));
-        _bottomWindow.dBTableWidget_8->setItem(1,9,new QTableWidgetItem(query.value(107).toString()));
-        _bottomWindow.dBTableWidget_8->setItem(1,10,new QTableWidgetItem(query.value(108).toString()));
-        _bottomWindow.dBTableWidget_8->setItem(1,11,new QTableWidgetItem(query.value(109).toString()));
-        _bottomWindow.dBTableWidget_8->setItem(1,12,new QTableWidgetItem(query.value(110).toString()));
-        _bottomWindow.dBTableWidget_8->setItem(1,13,new QTableWidgetItem(query.value(111).toString()));
-        _bottomWindow.dBTableWidget_8->setItem(1,14,new QTableWidgetItem(query.value(112).toString()));
-        _bottomWindow.dBTableWidget_8->setItem(1,15,new QTableWidgetItem(query.value(113).toString()));
-        _bottomWindow.dBTableWidget_8->setItem(1,16,new QTableWidgetItem(query.value(114).toString()));
-        _bottomWindow.dBTableWidget_8->setItem(1,17,new QTableWidgetItem(query.value(115).toString()));
-        _bottomWindow.dBTableWidget_8->setItem(1,18,new QTableWidgetItem(query.value(116).toString()));
-
-
-        _leftWindow.tableWidget->setItem(_cnt, 1, new QTableWidgetItem(query.value(95).toString()));
-        _leftWindow.tableWidget->setItem(_cnt, 2, new QTableWidgetItem(query.value(97).toString()));
-    }*/
-
     _cnt++;
-    if(_leftWindow.tableWidget->rowCount() <= _cnt+1)
+    if(_leftWindow.tableWidget->rowCount() <= _cnt + 1)
     {
         _leftWindow.tableWidget->insertRow(_leftWindow.tableWidget->rowCount()-1);
     }
@@ -791,14 +661,14 @@ void	ImageCompletionUI::open()
     _leftWindow.tableWidget->setItem(_cnt, 0, new QTableWidgetItem(_imageName));
     _leftWindow.tableWidget->setItem(_cnt, 1, new QTableWidgetItem(fileName));
     _leftWindow.tableWidget->setItem(_cnt, 2, new QTableWidgetItem(status == "Y" ? "Y" : "N"));
-    QColor color = getColor(status);
+
     for(int i = 0; i < _leftWindow.tableWidget->columnCount(); i++)
     {
-        _leftWindow.tableWidget->item(_cnt, i)->setBackgroundColor(color);
+        _leftWindow.tableWidget->item(_cnt, i)->setBackgroundColor(getColor(status));
     }
 }
 
-void ImageCompletionUI::openImage(QString fileName)
+bool ImageCompletionUI::openImage(QString fileName)
 {
     if(!fileName.isEmpty())
     {
@@ -818,6 +688,12 @@ void ImageCompletionUI::openImage(QString fileName)
                 if(reply == QMessageBox::Ok)
                 {
                     (new ImageProperties(this))->showDlg(fileName);
+                    return true;
+                }
+                else
+                {
+                    close();
+                    return false;
                 }
             }
             else if(status == "Y")
@@ -829,19 +705,20 @@ void ImageCompletionUI::openImage(QString fileName)
                 }
                 else
                 {
-                    QMessageBox::warning(0, tr("提示"), "加载标注结果图像失败,自动显示原始图像", QMessageBox::Ok | QMessageBox::Cancel);
+                    QMessageBox::warning(0, tr("提示"), "加载标注结果图像失败,自动显示原始图像", QMessageBox::Close);
                 }
+
+                return true;
             }
         }
         else
         {
-            //_editImageViewer->close();
             close();
             _step = LOADFAILED;
             _regionCompetitionDialog.radioForeground->setEnabled(false);
             _regionCompetitionDialog.radioBackground->setEnabled(false);
             _regionCompetitionDialog.radioErazer->setEnabled(false);
-            return;
+            return false;
         }
     }
 
@@ -870,22 +747,24 @@ void ImageCompletionUI::batchOpen()
         {
             _cnt++;
 
-            if(_leftWindow.tableWidget->rowCount() <= _cnt+1)
+            if(_leftWindow.tableWidget->rowCount() <= _cnt + 1)
             {
                 _leftWindow.tableWidget->insertRow(_leftWindow.tableWidget->rowCount()-1);
             }
 
-            QString status = this->labelStatus(absolutePath);
+            QString status = this->labelStatus(absolutePath + "/" + file);
 
             _leftWindow.tableWidget->setItem(_cnt, 0, new QTableWidgetItem(file));
-            _leftWindow.tableWidget->setItem(_cnt, 1, new QTableWidgetItem(absolutePath+"/"+file));
+            _leftWindow.tableWidget->setItem(_cnt, 1, new QTableWidgetItem(absolutePath + "/" + file));
             _leftWindow.tableWidget->setItem(_cnt, 2, new QTableWidgetItem(status == "Y" ? "Y" : "N"));
-            QColor color = getColor(status);
+
             for(int i = 0; i < _leftWindow.tableWidget->columnCount(); i++)
             {
-                _leftWindow.tableWidget->item(_cnt, i)->setBackgroundColor(color);
+                _leftWindow.tableWidget->item(_cnt, i)->setBackgroundColor(getColor(status));
             }
         }
+
+        statusBar()->showMessage(QString("打开%1个文件").arg(fileList.length()), 2000);
     }
 }
 
@@ -2350,19 +2229,30 @@ void ImageCompletionUI::exportData()
         QMessageBox::warning(this,tr("批量数据导出提示"),tr("批量数据导出失败"),QMessageBox::Close);
 }
 
-
-
-void ImageCompletionUI::on_tableWidget_doubleClicked(const QModelIndex & /* index */)
-{
-
-}
+void ImageCompletionUI::on_tableWidget_doubleClicked(const QModelIndex & /* index */) {}
 
 void ImageCompletionUI::cellDoubleClicked_(int row, int /* col */)
 {
     if(_leftWindow.tableWidget->item(row, 1) != 0)
     {
         QString absolutePath = _leftWindow.tableWidget->item(row, 1)->text();
-        openImage(absolutePath);
+        if( !openImage(absolutePath) )
+        {
+            _leftWindow.tableWidget->removeRow(row);
+        }
+    }
+}
+
+void ImageCompletionUI::removeImage(QString filename)
+{
+    close();
+
+    for(int i = 0; i < _leftWindow.tableWidget->rowCount(); i++)
+    {
+        if(filename == _leftWindow.tableWidget->item(i, 1)->text())
+        {
+            _leftWindow.tableWidget->removeRow(i);
+        }
     }
 }
 

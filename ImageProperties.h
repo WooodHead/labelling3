@@ -8,7 +8,9 @@
 #include <QDebug>
 #include <QFile>
 
-#define TABLE_N 8
+#include "QtAwesome.h"
+
+#define TABLE_N 7
 
 namespace Ui {
 class ImageProperties;
@@ -41,6 +43,14 @@ private slots:
 
     void on__comboBoxMentalSampleImageID_textChanged(const QString &arg1);
 
+    void on__buttonNext_clicked();
+
+    void on__tabWidget_currentChanged(int index);
+
+    void on__buttonCancel_clicked();
+
+
+
 private:
     Ui::ImageProperties *ui;
 
@@ -52,14 +62,19 @@ private:
     QStringList getItems(QSqlTableModel* model, QString fieldName);
 
     bool isValid();
+    bool isValid(int index);
     QString _filename;
 
     QString _originalImagePath;
     QString _resultImagePath;
     QString _maskImagePath;
 
+    bool _bSaved[TABLE_N];
+    QtAwesome* _awesome;
+
 signals:
     void flush();
+    void removeImage(QString filename);
 
 public:
     void showDlg(QString filename);
