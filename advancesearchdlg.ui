@@ -35,7 +35,7 @@
       <item>
        <widget class="QStackedWidget" name="conditionStackedWidget">
         <property name="currentIndex">
-         <number>0</number>
+         <number>3</number>
         </property>
         <widget class="QWidget" name="page">
          <layout class="QGridLayout" name="gridLayout_3">
@@ -50,7 +50,7 @@
                <x>0</x>
                <y>0</y>
                <width>276</width>
-               <height>286</height>
+               <height>316</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -229,8 +229,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>253</width>
-               <height>186</height>
+               <width>276</width>
+               <height>316</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout">
@@ -430,8 +430,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>253</width>
-               <height>130</height>
+               <width>276</width>
+               <height>316</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_15">
@@ -568,76 +568,30 @@
              <property name="geometry">
               <rect>
                <x>0</x>
-               <y>0</y>
-               <width>217</width>
-               <height>544</height>
+               <y>-7</y>
+               <width>259</width>
+               <height>488</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_3">
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_34">
+               <layout class="QHBoxLayout" name="horizontalLayout_36">
                 <item>
-                 <widget class="QLabel" name="label_30">
+                 <widget class="QLabel" name="label_18">
                   <property name="text">
-                   <string>采样时间</string>
+                   <string>油样编号</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="sampletimeChkBox">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QTimeEdit" name="sampletimeTimeEdit">
-                  <property name="calendarPopup">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_26">
-                <item>
-                 <widget class="QLabel" name="label_33">
-                  <property name="text">
-                   <string>采样量</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="samplevolumeChkBox">
+                 <widget class="QCheckBox" name="oilsampleidChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="samplevolumeLineEdit"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_24">
-                <item>
-                 <widget class="QLabel" name="label_20">
-                  <property name="text">
-                   <string>机型</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="planetypeChBox">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_19"/>
+                 <widget class="QComboBox" name="oilsampleidCbBox"/>
                 </item>
                </layout>
               </item>
@@ -663,6 +617,48 @@
                </layout>
               </item>
               <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_18">
+                <item>
+                 <widget class="QLabel" name="label_34">
+                  <property name="text">
+                   <string>送样人</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="sendstuffChkBox">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="sendstuffLineEdit"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_26">
+                <item>
+                 <widget class="QLabel" name="label_33">
+                  <property name="text">
+                   <string>采样量</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="samplevolumeChkBox">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="samplevolumeLineEdit"/>
+                </item>
+               </layout>
+              </item>
+              <item>
                <layout class="QHBoxLayout" name="horizontalLayout_27">
                 <item>
                  <widget class="QLabel" name="label_29">
@@ -672,7 +668,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="sampledataChkBox">
+                 <widget class="QCheckBox" name="sampledateChkBox">
                   <property name="text">
                    <string/>
                   </property>
@@ -687,111 +683,6 @@
                    <bool>true</bool>
                   </property>
                  </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_37">
-                <item>
-                 <widget class="QLabel" name="label_21">
-                  <property name="text">
-                   <string>机号</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_20">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_20"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_19">
-                <item>
-                 <widget class="QLabel" name="label_24">
-                  <property name="text">
-                   <string>采样点编号</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="sampleidChkBox">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="sampleidLineEdit"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_35">
-                <item>
-                 <widget class="QLabel" name="label_31">
-                  <property name="text">
-                   <string>采样时机</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="samplesituationChkBox">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="samplesituationLineEdit"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_28">
-                <item>
-                 <widget class="QLabel" name="label_27">
-                  <property name="text">
-                   <string>采样单位名称</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="sampledepartnameChkBox">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="sampledepartnameLineEdit"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_30">
-                <item>
-                 <widget class="QLabel" name="label_32">
-                  <property name="text">
-                   <string>采样方式</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="samplemethodChkBox">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="samplemethodLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -814,7 +705,7 @@
                 <item>
                  <widget class="QDateEdit" name="senddateDateEdit">
                   <property name="displayFormat">
-                   <string>yyyy年MM月dd日</string>
+                   <string>yyyy年/MM月/dd日</string>
                   </property>
                   <property name="calendarPopup">
                    <bool>true</bool>
@@ -824,107 +715,27 @@
                </layout>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_16">
+               <layout class="QHBoxLayout" name="horizontalLayout_34">
                 <item>
-                 <widget class="QLabel" name="label_19">
+                 <widget class="QLabel" name="label_30">
                   <property name="text">
-                   <string>采样单位编号</string>
+                   <string>采样时间</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="sampledepartidChkBox">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="sampledepartidlineEdit"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_18">
-                <item>
-                 <widget class="QLabel" name="label_34">
-                  <property name="text">
-                   <string>送样人</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="sendstuffChkBox">
+                 <widget class="QCheckBox" name="sampletimeChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="sendstuffLineEdit"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_38">
-                <item>
-                 <widget class="QLabel" name="label_22">
-                  <property name="text">
-                   <string>监控部件名称</string>
+                 <widget class="QTimeEdit" name="sampletimeTimeEdit">
+                  <property name="calendarPopup">
+                   <bool>true</bool>
                   </property>
                  </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="monitorpartnameChkBox">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="monitorpartnameLineEdit"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_22">
-                <item>
-                 <widget class="QLabel" name="label_26">
-                  <property name="text">
-                   <string>滑油添加量</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="oiladditionChkBox">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="oiladditionLineEdit"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_31">
-                <item>
-                 <widget class="QLabel" name="label_23">
-                  <property name="text">
-                   <string>监控部件编号</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="monitorpartidChkBox">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="monitorpartidLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -954,23 +765,149 @@
                </layout>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_36">
+               <layout class="QHBoxLayout" name="horizontalLayout_35">
                 <item>
-                 <widget class="QLabel" name="label_18">
+                 <widget class="QLabel" name="label_31">
                   <property name="text">
-                   <string>油样编号</string>
+                   <string>采样时机</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="oilsampleidChkBox">
+                 <widget class="QCheckBox" name="samplesituationChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="oilsampleidLineEdit"/>
+                 <widget class="QComboBox" name="samplesituationCbBox"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_30">
+                <item>
+                 <widget class="QLabel" name="label_32">
+                  <property name="text">
+                   <string>采样方式</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="samplemethodChkBox">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="samplemethodCbBox"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_19">
+                <item>
+                 <widget class="QLabel" name="label_24">
+                  <property name="text">
+                   <string>采样点编号</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="sampleidChkBox">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="sampleidCbBox"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_16">
+                <item>
+                 <widget class="QLabel" name="label_19">
+                  <property name="text">
+                   <string>采样单位编号</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="sampledepartidChkBox">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="sampledepartidCbBox"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_28">
+                <item>
+                 <widget class="QLabel" name="label_27">
+                  <property name="text">
+                   <string>采样单位名称</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="sampledepartnameChkBox">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="sampledepartnameCbBox"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_31">
+                <item>
+                 <widget class="QLabel" name="label_23">
+                  <property name="text">
+                   <string>监控部件编号</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="monitorpartidChkBox">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="monitorpartidCbBox"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_38">
+                <item>
+                 <widget class="QLabel" name="label_22">
+                  <property name="text">
+                   <string>监控部件名称</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="monitorpartnameChkBox">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="monitorpartnameCbBox"/>
                 </item>
                </layout>
               </item>
@@ -995,6 +932,27 @@
                 </item>
                </layout>
               </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_22">
+                <item>
+                 <widget class="QLabel" name="label_26">
+                  <property name="text">
+                   <string>滑油添加量</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="oiladditionChkBox">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="oiladditionLineEdit"/>
+                </item>
+               </layout>
+              </item>
              </layout>
             </widget>
            </widget>
@@ -1013,32 +971,11 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>192</width>
-               <height>740</height>
+               <width>259</width>
+               <height>712</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_4">
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_46">
-                <item>
-                 <widget class="QLabel" name="label_42">
-                  <property name="text">
-                   <string>收油样人</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_41">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_41"/>
-                </item>
-               </layout>
-              </item>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_43">
                 <item>
@@ -1061,48 +998,6 @@
                </layout>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_41">
-                <item>
-                 <widget class="QLabel" name="label_38">
-                  <property name="text">
-                   <string>检测分析单位名称</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="analyzedepartnameChkBox">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="analyzedepartnameLineEdit"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_47">
-                <item>
-                 <widget class="QLabel" name="label_43">
-                  <property name="text">
-                   <string>污染度分析方法</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_42">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_42"/>
-                </item>
-               </layout>
-              </item>
-              <item>
                <layout class="QHBoxLayout" name="horizontalLayout_42">
                 <item>
                  <widget class="QLabel" name="label_39">
@@ -1119,28 +1014,28 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_38"/>
+                 <widget class="QComboBox" name="comboBox"/>
                 </item>
                </layout>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_40">
+               <layout class="QHBoxLayout" name="horizontalLayout_46">
                 <item>
-                 <widget class="QLabel" name="label_37">
+                 <widget class="QLabel" name="label_42">
                   <property name="text">
-                   <string>油样编号</string>
+                   <string>收油样人</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_36">
+                 <widget class="QCheckBox" name="checkBox_41">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_36"/>
+                 <widget class="QLineEdit" name="lineEdit_41"/>
                 </item>
                </layout>
               </item>
@@ -1161,112 +1056,32 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_40"/>
+                 <widget class="QDateEdit" name="dateEdit">
+                  <property name="displayFormat">
+                   <string>yyyy年/MM月/dd日</string>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_50">
+               <layout class="QHBoxLayout" name="horizontalLayout_41">
                 <item>
-                 <widget class="QLabel" name="label_47">
+                 <widget class="QLabel" name="label_38">
                   <property name="text">
-                   <string>污染度分析设备</string>
+                   <string>检测分析单位名称</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_46">
+                 <widget class="QCheckBox" name="analyzedepartnameChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_46"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_93">
-                <item>
-                 <widget class="QLabel" name="label_51">
-                  <property name="text">
-                   <string>光谱分析日期</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_50">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_50"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_64">
-                <item>
-                 <widget class="QLabel" name="label_52">
-                  <property name="text">
-                   <string>光谱分析设备</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_51">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_51"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_49">
-                <item>
-                 <widget class="QLabel" name="label_46">
-                  <property name="text">
-                   <string>污染度分析日期</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_45">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_45"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_67">
-                <item>
-                 <widget class="QLabel" name="label_53">
-                  <property name="text">
-                   <string>光谱分析报告编号</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_52">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_52"/>
+                 <widget class="QComboBox" name="comboBox_2"/>
                 </item>
                </layout>
               </item>
@@ -1292,86 +1107,69 @@
                </layout>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_86">
+               <layout class="QHBoxLayout" name="horizontalLayout_47">
                 <item>
-                 <widget class="QLabel" name="label_59">
+                 <widget class="QLabel" name="label_43">
                   <property name="text">
-                   <string>理化分析方法</string>
+                   <string>污染度分析方法</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_58">
+                 <widget class="QCheckBox" name="checkBox_42">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_58"/>
+                 <widget class="QComboBox" name="comboBox_3"/>
                 </item>
                </layout>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_88">
+               <layout class="QHBoxLayout" name="horizontalLayout_50">
                 <item>
-                 <widget class="QLabel" name="label_61">
+                 <widget class="QLabel" name="label_47">
                   <property name="text">
-                   <string>理化分析日期</string>
+                   <string>污染度分析设备</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_60">
+                 <widget class="QCheckBox" name="checkBox_46">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_60"/>
+                 <widget class="QComboBox" name="comboBox_4"/>
                 </item>
                </layout>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_87">
+               <layout class="QHBoxLayout" name="horizontalLayout_49">
                 <item>
-                 <widget class="QLabel" name="label_60">
+                 <widget class="QLabel" name="label_46">
                   <property name="text">
-                   <string>理化分析人</string>
+                   <string>污染度分析日期</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_59">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_59"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_89">
-                <item>
-                 <widget class="QLabel" name="label_62">
-                  <property name="text">
-                   <string>理化分析设备</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_61">
+                 <widget class="QCheckBox" name="checkBox_45">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_61"/>
+                 <widget class="QDateEdit" name="dateEdit_2">
+                  <property name="displayFormat">
+                   <string>yyyy年/MM月/dd日</string>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </item>
@@ -1392,28 +1190,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_47"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_91">
-                <item>
-                 <widget class="QLabel" name="label_49">
-                  <property name="text">
-                   <string>光谱分析方法</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_48">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_48"/>
+                 <widget class="QComboBox" name="comboBox_5"/>
                 </item>
                </layout>
               </item>
@@ -1439,65 +1216,199 @@
                </layout>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_79">
+               <layout class="QHBoxLayout" name="horizontalLayout_91">
                 <item>
-                 <widget class="QLabel" name="label_54">
+                 <widget class="QLabel" name="label_49">
                   <property name="text">
-                   <string>铁谱分析方法</string>
+                   <string>光谱分析方法</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_53">
+                 <widget class="QCheckBox" name="checkBox_48">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_53"/>
+                 <widget class="QComboBox" name="comboBox_6"/>
                 </item>
                </layout>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_83">
+               <layout class="QHBoxLayout" name="horizontalLayout_64">
                 <item>
-                 <widget class="QLabel" name="label_56">
+                 <widget class="QLabel" name="label_52">
                   <property name="text">
-                   <string>铁谱分析日期</string>
+                   <string>光谱分析设备</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_55">
+                 <widget class="QCheckBox" name="checkBox_51">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_55"/>
+                 <widget class="QComboBox" name="comboBox_7"/>
                 </item>
                </layout>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_84">
+               <layout class="QHBoxLayout" name="horizontalLayout_93">
                 <item>
-                 <widget class="QLabel" name="label_57">
+                 <widget class="QLabel" name="label_51">
                   <property name="text">
-                   <string>铁谱分析设备</string>
+                   <string>光谱分析日期</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_56">
+                 <widget class="QCheckBox" name="checkBox_50">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_56"/>
+                 <widget class="QDateEdit" name="dateEdit_3">
+                  <property name="displayFormat">
+                   <string>yyyy年/MM月/dd日</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_67">
+                <item>
+                 <widget class="QLabel" name="label_53">
+                  <property name="text">
+                   <string>光谱分析报告编号</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_52">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="comboBox_8"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_87">
+                <item>
+                 <widget class="QLabel" name="label_60">
+                  <property name="text">
+                   <string>理化分析人</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_59">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="lineEdit_59"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_86">
+                <item>
+                 <widget class="QLabel" name="label_59">
+                  <property name="text">
+                   <string>理化分析方法</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_58">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="comboBox_9"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_89">
+                <item>
+                 <widget class="QLabel" name="label_62">
+                  <property name="text">
+                   <string>理化分析设备</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_61">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="comboBox_10"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_88">
+                <item>
+                 <widget class="QLabel" name="label_61">
+                  <property name="text">
+                   <string>理化分析日期</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_60">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDateEdit" name="dateEdit_4">
+                  <property name="displayFormat">
+                   <string>yyyy年/MM月/dd日</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_90">
+                <item>
+                 <widget class="QLabel" name="label_63">
+                  <property name="text">
+                   <string>理化分析报告编号</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_62">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="comboBox_11"/>
                 </item>
                </layout>
               </item>
@@ -1523,6 +1434,73 @@
                </layout>
               </item>
               <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_79">
+                <item>
+                 <widget class="QLabel" name="label_54">
+                  <property name="text">
+                   <string>铁谱分析方法</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_53">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="comboBox_12"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_84">
+                <item>
+                 <widget class="QLabel" name="label_57">
+                  <property name="text">
+                   <string>铁谱分析设备</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_56">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="comboBox_13"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_83">
+                <item>
+                 <widget class="QLabel" name="label_56">
+                  <property name="text">
+                   <string>铁谱分析日期</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_55">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDateEdit" name="dateEdit_5">
+                  <property name="displayFormat">
+                   <string>yyyy年/MM月/dd日</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
                <layout class="QHBoxLayout" name="horizontalLayout_32">
                 <item>
                  <widget class="QLabel" name="label_58">
@@ -1539,28 +1517,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_57"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_90">
-                <item>
-                 <widget class="QLabel" name="label_63">
-                  <property name="text">
-                   <string>理化分析报告编号</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_62">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_62"/>
+                 <widget class="QComboBox" name="comboBox_14"/>
                 </item>
                </layout>
               </item>
@@ -1582,50 +1539,176 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>204</width>
-               <height>348</height>
+               <width>259</width>
+               <height>292</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_5">
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_81">
+               <layout class="QHBoxLayout" name="horizontalLayout_71">
                 <item>
-                 <widget class="QLabel" name="label_80">
+                 <widget class="QLabel" name="label_70">
                   <property name="text">
-                   <string>铁谱图片识别分析信息</string>
+                   <string>铁谱图片编号</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_79">
+                 <widget class="QCheckBox" name="checkBox_69">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_79"/>
+                 <widget class="QComboBox" name="comboBox_15"/>
                 </item>
                </layout>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_72">
+               <layout class="QHBoxLayout" name="horizontalLayout_102">
                 <item>
-                 <widget class="QLabel" name="label_71">
+                 <widget class="QLabel" name="label_81">
                   <property name="text">
-                   <string>铁谱片编号</string>
+                   <string>铁谱图片标识符号</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_70">
+                 <widget class="QCheckBox" name="checkBox_80">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_70"/>
+                 <widget class="QComboBox" name="comboBox_22"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_73">
+                <item>
+                 <widget class="QLabel" name="label_72">
+                  <property name="text">
+                   <string>铁谱分析报告编号</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_71">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="comboBox_16"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_78">
+                <item>
+                 <widget class="QLabel" name="label_77">
+                  <property name="text">
+                   <string>铁谱图片采集区域</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_76">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="comboBox_21"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_74">
+                <item>
+                 <widget class="QLabel" name="label_73">
+                  <property name="text">
+                   <string>显微镜型号</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_72">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="comboBox_17"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_76">
+                <item>
+                 <widget class="QLabel" name="label_75">
+                  <property name="text">
+                   <string>光源类型</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_74">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="comboBox_19"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_77">
+                <item>
+                 <widget class="QLabel" name="label_76">
+                  <property name="text">
+                   <string>放大倍数</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_75">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="comboBox_20"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_75">
+                <item>
+                 <widget class="QLabel" name="label_74">
+                  <property name="text">
+                   <string>图像采集器型号</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_73">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="comboBox_18"/>
                 </item>
                </layout>
               </item>
@@ -1651,191 +1734,23 @@
                </layout>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_74">
+               <layout class="QHBoxLayout" name="horizontalLayout_81">
                 <item>
-                 <widget class="QLabel" name="label_73">
+                 <widget class="QLabel" name="label_80">
                   <property name="text">
-                   <string>显微镜型号</string>
+                   <string>铁谱图片识别分析信息</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_72">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_72"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_78">
-                <item>
-                 <widget class="QLabel" name="label_77">
-                  <property name="text">
-                   <string>铁谱图片采集区域</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_76">
+                 <widget class="QCheckBox" name="checkBox_79">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_76"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_75">
-                <item>
-                 <widget class="QLabel" name="label_74">
-                  <property name="text">
-                   <string>图像采集器型号</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_73">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_73"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_77">
-                <item>
-                 <widget class="QLabel" name="label_76">
-                  <property name="text">
-                   <string>放大倍数</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_75">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_75"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_76">
-                <item>
-                 <widget class="QLabel" name="label_75">
-                  <property name="text">
-                   <string>光源类型</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_74">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_74"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_102">
-                <item>
-                 <widget class="QLabel" name="label_81">
-                  <property name="text">
-                   <string>铁谱图片标识符号</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_80">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_80"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_71">
-                <item>
-                 <widget class="QLabel" name="label_70">
-                  <property name="text">
-                   <string>铁谱图片编号</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_69">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_69"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_80">
-                <item>
-                 <widget class="QLabel" name="label_79">
-                  <property name="text">
-                   <string>铁谱图片(路径)</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_78">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_78"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_73">
-                <item>
-                 <widget class="QLabel" name="label_72">
-                  <property name="text">
-                   <string>铁谱分析报告编号</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_71">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_71"/>
+                 <widget class="QLineEdit" name="lineEdit_79"/>
                 </item>
                </layout>
               </item>
@@ -1857,74 +1772,11 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>204</width>
-               <height>214</height>
+               <width>276</width>
+               <height>286</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_6">
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_68">
-                <item>
-                 <widget class="QLabel" name="label_67">
-                  <property name="text">
-                   <string>铁谱片制取油样消耗量</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_66">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_66"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_69">
-                <item>
-                 <widget class="QLabel" name="label_68">
-                  <property name="text">
-                   <string>铁谱片制取方法</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_67">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_67"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_66">
-                <item>
-                 <widget class="QLabel" name="label_65">
-                  <property name="text">
-                   <string>油样编号</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_64">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_64"/>
-                </item>
-               </layout>
-              </item>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_45">
                 <item>
@@ -1942,7 +1794,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_43"/>
+                 <widget class="QComboBox" name="comboBox_23"/>
                 </item>
                </layout>
               </item>
@@ -1968,6 +1820,27 @@
                </layout>
               </item>
               <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_69">
+                <item>
+                 <widget class="QLabel" name="label_68">
+                  <property name="text">
+                   <string>铁谱片制取方法</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_67">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="comboBox_24"/>
+                </item>
+               </layout>
+              </item>
+              <item>
                <layout class="QHBoxLayout" name="horizontalLayout_100">
                 <item>
                  <widget class="QLabel" name="label_66">
@@ -1984,28 +1857,28 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_65"/>
+                 <widget class="QComboBox" name="comboBox_25"/>
                 </item>
                </layout>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_65">
+               <layout class="QHBoxLayout" name="horizontalLayout_68">
                 <item>
-                 <widget class="QLabel" name="label_64">
+                 <widget class="QLabel" name="label_67">
                   <property name="text">
-                   <string>铁谱分析报告编号</string>
+                   <string>铁谱片制取油样消耗量</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_63">
+                 <widget class="QCheckBox" name="checkBox_66">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_63"/>
+                 <widget class="QLineEdit" name="lineEdit_66"/>
                 </item>
                </layout>
               </item>
@@ -2040,11 +1913,32 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>180</width>
-               <height>488</height>
+               <width>259</width>
+               <height>460</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_7">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_51">
+                <item>
+                 <widget class="QLabel" name="label_82">
+                  <property name="text">
+                   <string>磨粒编号</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_81">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="lineEdit_81"/>
+                </item>
+               </layout>
+              </item>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_61">
                 <item>
@@ -2063,48 +1957,6 @@
                 </item>
                 <item>
                  <widget class="QLineEdit" name="lineEdit_90"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_97">
-                <item>
-                 <widget class="QLabel" name="label_97">
-                  <property name="text">
-                   <string>磨粒磨损机理</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_96">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_96"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_94">
-                <item>
-                 <widget class="QLabel" name="label_94">
-                  <property name="text">
-                   <string>磨粒表面纹理类型</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_93">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_93"/>
                 </item>
                </layout>
               </item>
@@ -2130,48 +1982,6 @@
                </layout>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_56">
-                <item>
-                 <widget class="QLabel" name="label_86">
-                  <property name="text">
-                   <string>磨粒标注人</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_85">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_85"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_51">
-                <item>
-                 <widget class="QLabel" name="label_82">
-                  <property name="text">
-                   <string>磨粒编号</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_81">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_81"/>
-                </item>
-               </layout>
-              </item>
-              <item>
                <layout class="QHBoxLayout" name="horizontalLayout_60">
                 <item>
                  <widget class="QLabel" name="label_90">
@@ -2189,69 +1999,6 @@
                 </item>
                 <item>
                  <widget class="QLineEdit" name="lineEdit_89"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_57">
-                <item>
-                 <widget class="QLabel" name="label_87">
-                  <property name="text">
-                   <string>磨粒图片（路径）</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_86">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_86"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_98">
-                <item>
-                 <widget class="QLabel" name="label_98">
-                  <property name="text">
-                   <string>磨粒典型性</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_97">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_97"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_55">
-                <item>
-                 <widget class="QLabel" name="label_85">
-                  <property name="text">
-                   <string>铁谱分析报告编号</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_84">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_84"/>
                 </item>
                </layout>
               </item>
@@ -2298,27 +2045,6 @@
                </layout>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_95">
-                <item>
-                 <widget class="QLabel" name="label_95">
-                  <property name="text">
-                   <string>磨粒磨损类型</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_94">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_94"/>
-                </item>
-               </layout>
-              </item>
-              <item>
                <layout class="QHBoxLayout" name="horizontalLayout_63">
                 <item>
                  <widget class="QLabel" name="label_93">
@@ -2340,23 +2066,65 @@
                </layout>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_54">
+               <layout class="QHBoxLayout" name="horizontalLayout_56">
                 <item>
-                 <widget class="QLabel" name="label_84">
+                 <widget class="QLabel" name="label_86">
                   <property name="text">
-                   <string>铁谱片编号</string>
+                   <string>磨粒标注人</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_83">
+                 <widget class="QCheckBox" name="checkBox_85">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_83"/>
+                 <widget class="QLineEdit" name="lineEdit_85"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_98">
+                <item>
+                 <widget class="QLabel" name="label_98">
+                  <property name="text">
+                   <string>磨粒典型性</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_97">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="lineEdit_97"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_97">
+                <item>
+                 <widget class="QLabel" name="label_97">
+                  <property name="text">
+                   <string>磨粒磨损机理</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_96">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="lineEdit_96"/>
                 </item>
                </layout>
               </item>
@@ -2382,6 +2150,69 @@
                </layout>
               </item>
               <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_95">
+                <item>
+                 <widget class="QLabel" name="label_95">
+                  <property name="text">
+                   <string>磨粒磨损类型</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_94">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="lineEdit_94"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_94">
+                <item>
+                 <widget class="QLabel" name="label_94">
+                  <property name="text">
+                   <string>磨粒表面纹理类型</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_93">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="lineEdit_93"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_54">
+                <item>
+                 <widget class="QLabel" name="label_84">
+                  <property name="text">
+                   <string>铁谱片编号</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_83">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="lineEdit_83"/>
+                </item>
+               </layout>
+              </item>
+              <item>
                <layout class="QHBoxLayout" name="horizontalLayout_53">
                 <item>
                  <widget class="QLabel" name="label_83">
@@ -2402,6 +2233,27 @@
                 </item>
                </layout>
               </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_55">
+                <item>
+                 <widget class="QLabel" name="label_85">
+                  <property name="text">
+                   <string>铁谱分析报告编号</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox_84">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="lineEdit_84"/>
+                </item>
+               </layout>
+              </item>
              </layout>
             </widget>
            </widget>
@@ -2413,11 +2265,37 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_12">
         <item>
+         <spacer name="verticalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
          <widget class="QPushButton" name="queryBtn">
           <property name="text">
            <string>查询</string>
           </property>
          </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_6">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
         </item>
         <item>
          <widget class="QPushButton" name="exportBtn">
@@ -2427,11 +2305,37 @@
          </widget>
         </item>
         <item>
+         <spacer name="verticalSpacer_8">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
          <widget class="QPushButton" name="importBtn">
           <property name="text">
            <string>导入查询</string>
           </property>
          </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_9">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
         </item>
         <item>
          <widget class="QPushButton" name="addtoBtn">
@@ -2479,7 +2383,7 @@
       <item row="0" column="0">
        <widget class="QTabWidget" name="queryResultTabWidget">
         <property name="currentIndex">
-         <number>2</number>
+         <number>0</number>
         </property>
         <property name="elideMode">
          <enum>Qt::ElideNone</enum>

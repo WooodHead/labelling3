@@ -66,14 +66,41 @@ void AdvanceSearchDlg::resetConditions()
     ui->departIdChkBox->setChecked(false);
 
     // mp
+    ui->movepartIdChkBox->setChecked(false);
+    ui->movepartNameChkBox->setChecked(false);
+    ui->movepartTypeChkBox->setChecked(false);
+    ui->partrunHourChkBox->setChecked(false);
+    ui->movepartStartDataChkBox->setChecked(false);
+    ui->movepartEndDataChkBox->setChecked(false);
 
     // mpr
+    ui->movepartRepairIdChkBox->setChecked(false);
+    ui->repairTimeChkBox->setChecked(false);
+    ui->repairDateChkBox->setChecked(false);
+    ui->repairDepartChkBox->setChecked(false);
 
     // feg
 
     // fegp
 
     // ois
+    ui->oilsampleidChkBox->setChecked(false);
+    ui->samplestuffChkBox->setChecked(false);
+    ui->samplevolumeChkBox->setChecked(false);
+    ui->sendstuffChkBox->setChecked(false);
+    ui->sampledateChkBox->setChecked(false);
+    ui->sampletimeChkBox->setChecked(false);
+    ui->senddateChkBox->setChecked(false);
+    ui->sendtimeChkBox->setChecked(false);
+    ui->samplesituationChkBox->setChecked(false);
+    ui->samplemethodChkBox->setChecked(false);
+    ui->sampleidChkBox->setChecked(false);
+    ui->sampledepartidChkBox->setChecked(false);
+    ui->sampledepartnameChkBox->setChecked(false);
+    ui->monitorpartidChkBox->setChecked(false);
+    ui->monitorpartnameChkBox->setChecked(false);
+    ui->oilworktimeChkBox->setChecked(false);
+    ui->oiladditionChkBox->setChecked(false);
 
     // oia
 
@@ -144,33 +171,267 @@ void AdvanceSearchDlg::useproperty()
                 else if(field == "repairtime")
                 {
                     ui->repairTimeCbBox->setCurrentIndex(ui->repairTimeCbBox->findText(eqmValues.at(idx)));
-                    _eqmCdtMap.insert("repairtime",eqmValues.at(0));
+                    _eqmCdtMap.insert("repairtime",eqmValues.at(idx));
                     ui->repairTimeChkBox->setChecked(true);
                 }
                 idx ++;
             }
         }
 
-        QStringList mpFields;
-        QStringList mpValues;
+        QStringList mpFields = query.value(4).toString().split("#");
+        QStringList mpValues = query.value(5).toString().split("#");
+        if(!mpFields.isEmpty())
+        {
+            idx = 0;
+            foreach (QString field, mpFields)
+            {
+                if(field == "movepartname")
+                {
+                    ui->movepartNameCbBox->setCurrentIndex(ui->movepartNameCbBox->findText(mpValues.at(idx)));
+                    _mpCdtMap.insert("movepartname",mpValues.at(idx));
+                    ui->movepartNameChkBox->setChecked(true);
 
-        QStringList mprFields;
-        QStringList mprValues;
+                }
+                else if(field == "movepartid")
+                {
+                    ui->movepartIdCbBox->setCurrentIndex(ui->movepartIdCbBox->findText(mpValues.at(idx)));
+                    _mpCdtMap.insert("movepartid",mpValues.at(idx));
+                    ui->movepartIdChkBox->setChecked(true);
+                }
+                else if(field == "moveparttype")
+                {
+                    ui->movepartTypeCbBox->setCurrentIndex(ui->movepartTypeCbBox->findText(mpValues.at(idx)));
+                    _mpCdtMap.insert("moveparttype",mpValues.at(idx));
+                    ui->movepartTypeChkBox->setChecked(true);
+                }
+                else if(field == "runhour")
+                {
+                    ui->partrunHourCbBox->setCurrentIndex(ui->partrunHourCbBox->findText(mpValues.at(idx)));
+                    _mpCdtMap.insert("runhour",mpValues.at(idx));
+                    ui->partrunHourChkBox->setChecked(true);
+                }
+                else if(field == "startdate")
+                {
+                    QString datestr = mpValues.at(idx);
+                    QStringList datelist = datestr.split("-");
+                    int y = datelist.at(0).toInt();
+                    int m = datelist.at(1).toInt();
+                    int d = datelist.at(2).toInt();
+                    ui->movepartStartDateEdit->setDate(QDate(y,m,d));
+                    _mpCdtMap.insert("startdate",mpValues.at(idx));
+                    ui->movepartStartDataChkBox->setChecked(true);
+                }
+                else if(field == "enddate")
+                {
+                    QString datestr = mpValues.at(idx);
+                    QStringList datelist = datestr.split("-");
+                    int y = datelist.at(0).toInt();
+                    int m = datelist.at(1).toInt();
+                    int d = datelist.at(2).toInt();
+                    ui->movepartEndDateEdit->setDate(QDate(y,m,d));
+                    _mpCdtMap.insert("enddate",mpValues.at(idx));
+                    ui->movepartEndDataChkBox->setChecked(true);
+                }
+                idx ++;
+            }
 
-        QStringList fegFields;
-        QStringList fegValues;
+        }
 
-        QStringList fegpFields;
-        QStringList fegpValues;
+        QStringList mprFields = query.value(6).toString().split("#");
+        QStringList mprValues = query.value(7).toString().split("#");
+        if(!mprFields.isEmpty())
+        {
+            idx = 0;
+            foreach (QString field, mprFields) {
+                if(field == "movepartrepairid")
+                {
+                    ui->movepartRepairIdCbBox->setCurrentIndex(ui->movepartRepairIdCbBox->findText(mprValues.at(idx)));
+                    _mprCdtMap.insert("movepartrepairid",mprValues.at(idx));
+                    ui->movepartRepairIdChkBox->setChecked(true);
+                }
+                else if(field == "repairtime")
+                {
+                    ui->repairrepairTimeCbBox->setCurrentIndex(ui->repairrepairTimeCbBox->findText(mprValues.at(idx)));
+                    _mprCdtMap.insert("repairtime",mprValues.at(idx));
+                    ui->repairrepairTimeChkBox->setChecked(true);
+                }
+                else if(field == "repairdate")
+                {
+                    QString datestr = mprValues.at(idx);
+                    QStringList datelist = datestr.split("-");
+                    int y = datelist.at(0).toInt();
+                    int m = datelist.at(1).toInt();
+                    int d = datelist.at(2).toInt();
+                    ui->repairDateDateEdit->setDate(QDate(y,m,d));
+                    _mprCdtMap.insert("repairdate",mprValues.at(idx));
+                    ui->repairDateChkBox->setChecked(true);
+                }
+                else if(field == "repairdepart")
+                {
+                    ui->repairDepartCbBox->setCurrentIndex(ui->repairDepartCbBox->findText(mprValues.at(idx)));
+                    _mprCdtMap.insert("repairdepart",mprValues.at(idx));
+                    ui->repairDepartChkBox->setChecked(true);
+                }
+                idx ++;
+            }
+        }
 
-        QStringList oisFields;
-        QStringList oisValues;
+        QStringList fegFields = query.value(8).toString().split("#");
+        QStringList fegValues = query.value(9).toString().split("#");
+        if(!fegFields.isEmpty())
+        {
+            idx = 0;
+        }
 
-        QStringList oiaFields;
-        QStringList oiaValues;
+        QStringList fegpFields = query.value(10).toString().split("#");
+        QStringList fegpValues = query.value(11).toString().split("#");
+        if(!fegpFields.isEmpty())
+        {
+            idx = 0;
+        }
 
-        QStringList abmFields;
-        QStringList abmValues;
+        QStringList oisFields = query.value(12).toString().split("#");
+        QStringList oisValues = query.value(13).toString().split("#");
+        if(!oisFields.isEmpty())
+        {
+            idx = 0;
+            foreach (QString field, oisFields)
+            {
+                if(field == "oilsampleid")
+                {
+                    ui->oilsampleidCbBox->setCurrentIndex(ui->oilsampleidCbBox->findText(oisValues.at(idx)));
+                    _oisCdtMap.insert("oilsampleid",oisValues.at(idx));
+                    ui->oilsampleidChkBox->setChecked(true);
+                }
+                else if(field == "samplestuff")
+                {
+                    ui->samplestuffLineEdit->setText(oisValues.at(idx));
+                    _oisCdtMap.insert("samplestuff",oisValues.at(idx));
+                    ui->samplestuffChkBox->setChecked(true);
+                }
+                else if(field == "sendstuff")
+                {
+                    ui->sendstuffLineEdit->setText(oisValues.at(idx));
+                    _oisCdtMap.insert("sendstuff",oisValues.at(idx));
+                    ui->sendstuffChkBox->setChecked(true);
+                }
+                else if(field == "sampledate")
+                {
+                    QString datestr = oisValues.at(idx);
+                    QStringList datelist = datestr.split("-");
+                    int y = datelist.at(0).toInt();
+                    int m = datelist.at(1).toInt();
+                    int d = datelist.at(2).toInt();
+                    ui->sampledateDateEdit->setDate(QDate(y,m,d));
+                    _oisCdtMap.insert("sampledate",oisValues.at(idx));
+                    ui->sampledateChkBox->setChecked(true);
+                }
+                else if(field == "senddate")
+                {
+                    QString datestr = oisValues.at(idx);
+                    QStringList datelist = datestr.split("-");
+                    int y = datelist.at(0).toInt();
+                    int m = datelist.at(1).toInt();
+                    int d = datelist.at(2).toInt();
+                    ui->senddateDateEdit->setDate(QDate(y,m,d));
+                    _oisCdtMap.insert("senddate",oisValues.at(idx));
+                    ui->senddateChkBox->setChecked(true);
+                }
+                else if(field == "sampletime")
+                {
+                    QString timestr = oisValues.at(idx);
+                    QStringList timelist = timestr.split(":");
+                    int h = timelist.at(0).toInt();
+                    int m = timelist.at(1).toInt();
+                    QStringList seclist = timelist.at(2).split(" ");
+                    int s = seclist.at(0).toInt();
+                    ui->sampletimeTimeEdit->setTime(QTime(h,m));
+                    _oisCdtMap.insert("sampletime",oisValues.at(idx));
+                    ui->sampletimeChkBox->setChecked(true);
+                }
+                else if(field == "sendtime")
+                {
+                    QString timestr = oisValues.at(idx);
+                    QStringList timelist = timestr.split(":");
+                    int h = timelist.at(0).toInt();
+                    int m = timelist.at(1).toInt();
+                    QStringList seclist = timelist.at(2).split(" ");
+                    int s = seclist.at(0).toInt();
+                    ui->sendtimeTimeEdit->setTime(QTime(h,m));;
+                    _oisCdtMap.insert("sendtime",oisValues.at(idx));
+                    ui->sendtimeChkBox->setChecked(true);
+                }
+                else if(field == "samplesituation")
+                {
+                    ui->samplesituationCbBox->setCurrentIndex(ui->samplesituationCbBox->findText(oisValues.at(idx)));
+                    _oisCdtMap.insert("samplesituation",oisValues.at(idx));
+                    ui->samplesituationChkBox->setChecked(true);
+                }
+                else if(field == "samplemethod")
+                {
+                    ui->samplemethodCbBox->setCurrentIndex(ui->samplemethodCbBox->findText(oisValues.at(idx)));
+                    _oisCdtMap.insert("samplemethod",oisValues.at(idx));
+                    ui->samplemethodChkBox->setChecked(true);
+                }
+                else if(field == "sampleid")
+                {
+                    ui->sampleidCbBox->setCurrentIndex(ui->sampleidCbBox->findText(oisValues.at(idx)));
+                    _oisCdtMap.insert("sampleid",oisValues.at(idx));
+                    ui->sampleidChkBox->setChecked(true);
+                }
+                else if(field == "sampledepartid")
+                {
+                    ui->sampledepartidCbBox->setCurrentIndex(ui->sampledepartidCbBox->findText(oisValues.at(idx)));
+                    _oisCdtMap.insert("sampledepartid",oisValues.at(idx));
+                    ui->sampledepartidChkBox->setChecked(true);
+                }
+                else if(field == "sampledepartname")
+                {
+                    ui->sampledepartnameCbBox->setCurrentIndex(ui->sampledepartnameCbBox->findText(oisValues.at(idx)));
+                    _oisCdtMap.insert("sampledepartname",oisValues.at(idx));
+                    ui->sampledepartnameChkBox->setChecked(true);
+                }
+                else if(field == "monitorpartid")
+                {
+                    ui->monitorpartidCbBox->setCurrentIndex(ui->monitorpartidCbBox->findText(oisValues.at(idx)));
+                    _oisCdtMap.insert("monitorpartid",oisValues.at(idx));
+                    ui->monitorpartidChkBox->setChecked(true);
+                }
+                else if(field == "monitorpartname")
+                {
+                    ui->monitorpartnameCbBox->setCurrentIndex(ui->monitorpartnameCbBox->findText(oisValues.at(idx)));
+                    _oisCdtMap.insert("monitorpartname",oisValues.at(idx));
+                    ui->monitorpartnameChkBox->setChecked(true);
+                }
+                else if(field == "oilworktime")
+                {
+                    ui->oilworktimeLineEdit->setText(oisValues.at(idx));
+                    _oisCdtMap.insert("oilworktime",oisValues.at(idx));
+                    ui->oilworktimeChkBox->setChecked(true);
+                }
+                else if(field == "oiladdition")
+                {
+                    ui->oiladditionLineEdit->setText(oisValues.at(idx));
+                    _oisCdtMap.insert("oiladdition",oisValues.at(idx));
+                    ui->oiladditionChkBox->setChecked(true);
+                }
+                idx ++;
+            }
+        }
+
+        QStringList oiaFields = query.value(14).toString().split("#");
+        QStringList oiaValues = query.value(15).toString().split("#");
+        if(!oiaFields.isEmpty())
+        {
+            idx = 0;
+        }
+
+        QStringList abmFields = query.value(16).toString().split("#");
+        QStringList abmValues = query.value(17).toString().split("#");
+        if(!abmFields.isEmpty())
+        {
+            idx =0;
+        }
 
         this->query();
     }
@@ -529,11 +790,6 @@ void AdvanceSearchDlg::createListWidget()
     ui->conditionGroupBox->setMaximumHeight(wheight/3);
     ui->groupBox->setMaximumWidth(wwidth/5);
     ui->propertylistGroupBox->setMaximumWidth(wwidth/5);
-//    ui->tableListWidget->setMaximumWidth(wwidth/5);
-//    ui->topWidget->setMaximumHeight(300);
-//    ui->tableListWidget->setMaximumHeight(250);
-//    ui->tableListWidget->setMaximumWidth(150);
-//    ui->conditionStackedWidget->setMaximumHeight(250);
 }
 
 
@@ -803,6 +1059,10 @@ void AdvanceSearchDlg::initCbBox()
             ui->repairTimeCbBox->insertItem(-1,query.value(eqm_repairtime).toString());
     }
     ui->planeidCbBox->setCurrentIndex(0);
+    ui->planeTypeCbBox->setCurrentIndex(0);
+    ui->departIdCbBox->setCurrentIndex(0);
+    ui->runHourCbBox->setCurrentIndex(0);
+    ui->runStageCbBox->setCurrentIndex(0);
     
     query.exec("select * from movepartinfo");
     while(query.next())
@@ -816,6 +1076,10 @@ void AdvanceSearchDlg::initCbBox()
         if(ui->partrunHourCbBox->findText(query.value(mp_runhour).toString()) == -1)
             ui->partrunHourCbBox->insertItem(-1,query.value(mp_runhour).toString());
     }
+    ui->movepartIdCbBox->setCurrentIndex(0);
+    ui->movepartNameCbBox->setCurrentIndex(0);
+    ui->movepartTypeCbBox->setCurrentIndex(0);
+    ui->partrunHourCbBox->setCurrentIndex(0);
     
     query.exec("select * from movepartrepairinfo");
     while(query.next())
@@ -827,6 +1091,40 @@ void AdvanceSearchDlg::initCbBox()
         if(ui->repairrepairTimeCbBox->findText(query.value(mpr_repairtime).toString()) == -1)
             ui->repairrepairTimeCbBox->insertItem(-1,query.value(mpr_repairtime).toString());
     }
+    ui->movepartRepairIdCbBox->setCurrentIndex(0);
+    ui->repairDepartCbBox->setCurrentIndex(0);
+    ui->repairTimeCbBox->setCurrentIndex(0);
+
+    query.exec("select * from oilsampleinfo");
+    while(query.next())
+    {
+        if(ui->oilsampleidCbBox->findText(query.value(ois_oilsampleid).toString()) == -1)
+            ui->oilsampleidCbBox->insertItem(-1,query.value(ois_oilsampleid).toString());
+        if(ui->samplesituationCbBox->findText(query.value(ois_samplesituation).toString()) == -1)
+            ui->samplesituationCbBox->insertItem(-1,query.value(ois_samplesituation).toString());;
+        if(ui->samplemethodCbBox->findText(query.value(ois_samplemethod).toString()) == -1)
+            ui->samplemethodCbBox->insertItem(-1,query.value(ois_samplemethod).toString());
+        if(ui->sampleidCbBox->findText(query.value(ois_sampleid).toString()) == -1)
+            ui->sampleidCbBox->insertItem(-1,query.value(ois_sampleid).toString());
+        if(ui->sampledepartidCbBox->findText(query.value(ois_sampledepartid).toString()) == -1)
+            ui->sampledepartidCbBox->insertItem(-1,query.value(ois_sampledepartid).toString());
+        if(ui->sampledepartnameCbBox->findText(query.value(ois_sampledepartname).toString()) == -1)
+            ui->sampledepartnameCbBox->insertItem(-1,query.value(ois_sampledepartname).toString());
+        if(ui->monitorpartidCbBox->findText(query.value(ois_monitorpartid).toString()) == -1)
+            ui->monitorpartidCbBox->insertItem(-1,query.value(ois_monitorpartid).toString());
+        if(ui->monitorpartnameCbBox->findText(query.value(ois_monitorpartname).toString()) == -1)
+            ui->monitorpartnameCbBox->insertItem(-1,query.value(ois_monitorpartname).toString());
+    }
+    ui->oilsampleidCbBox->setCurrentIndex(0);
+    ui->samplesituationCbBox->setCurrentIndex(0);
+    ui->samplemethodCbBox->setCurrentIndex(0);
+    ui->sampleidCbBox->setCurrentIndex(0);
+    ui->sampledepartidCbBox->setCurrentIndex(0);
+    ui->sampledepartnameCbBox->setCurrentIndex(0);
+    ui->monitorpartidCbBox->setCurrentIndex(0);
+    ui->monitorpartnameCbBox->setCurrentIndex(0);
+
+
 }
 
 
@@ -834,10 +1132,15 @@ void AdvanceSearchDlg::initCbBox()
 void AdvanceSearchDlg::on_PlaneIdChkBox_clicked()
 {
     _eqmCdtMap.remove("planeid");
+    // forein key
+    _mpCdtMap.remove("planeid");
+    _oisCdtMap.remove("planeid");
     if(ui->PlaneIdChkBox->isChecked())
     {   
         QString text = ui->planeidCbBox->currentText();
         _eqmCdtMap.insert("planeid",text);
+        _mpCdtMap.insert("planeid",text);
+        _oisCdtMap.insert("planeid",text);
     }
 }
 
@@ -845,10 +1148,15 @@ void AdvanceSearchDlg::on_PlaneIdChkBox_clicked()
 void AdvanceSearchDlg::on_planeidCbBox_currentIndexChanged(int index)
 {
     _eqmCdtMap.remove("planeid");
+    // forein key
+    _mpCdtMap.remove("planeid");
+    _oisCdtMap.remove("planeid");
     if(ui->PlaneIdChkBox->isChecked())
     {   
         QString text = ui->planeidCbBox->currentText();
         _eqmCdtMap.insert("planeid",text);
+        _mpCdtMap.insert("planeid",text);
+        _oisCdtMap.insert("planeid",text);
     }
 }
 
@@ -1176,10 +1484,14 @@ void AdvanceSearchDlg::on_addtoBtn_clicked()
 void AdvanceSearchDlg::on_movepartIdChkBox_clicked()
 {
     _mpCdtMap.remove("movepartid");
+    //foreign key
+    _mprCdtMap.remove("movepartid");
     if(ui->movepartIdChkBox->isChecked())
     {
         QString text = ui->movepartIdCbBox->currentText();
         _mpCdtMap.insert("movepartid",text);
+        //foreign key
+        _mprCdtMap.insert("movepartid",text);
     }
 }
 
@@ -1187,10 +1499,14 @@ void AdvanceSearchDlg::on_movepartIdChkBox_clicked()
 void AdvanceSearchDlg::on_movepartIdCbBox_currentIndexChanged(int index)
 {
     _mpCdtMap.remove("movepartid");
+    //foreign key
+    _mprCdtMap.remove("movepartid");
     if(ui->movepartIdChkBox->isChecked())
     {
         QString text = ui->movepartIdCbBox->currentText();
         _mpCdtMap.insert("movepartid",text);
+        //foreign key
+        _mprCdtMap.insert("movepartid",text);
     }
 }
 
@@ -1521,10 +1837,10 @@ void AdvanceSearchDlg::on_samplevolumeLineEdit_textChanged(const QString &arg1)
     }
 }
 
-void AdvanceSearchDlg::on_sampledataChkBox_clicked()
+void AdvanceSearchDlg::on_sampledateChkBox_clicked()
 {
     _oisCdtMap.remove("sampledate");
-    if(ui->sampledataChkBox->isChecked())
+    if(ui->sampledateChkBox->isChecked())
     {
         QString text = ui->sampledateDateEdit->date().toString("yyyy-MM-dd");
         _oisCdtMap.insert("sampledate",text);
@@ -1534,7 +1850,7 @@ void AdvanceSearchDlg::on_sampledataChkBox_clicked()
 void AdvanceSearchDlg::on_sampledateDateEdit_dateChanged(const QDate &date)
 {
     _oisCdtMap.remove("sampledate");
-    if(ui->sampledataChkBox->isChecked())
+    if(ui->sampledateChkBox->isChecked())
     {
         QString text = ui->sampledateDateEdit->date().toString("yyyy-MM-dd");
         _oisCdtMap.insert("sampledate",text);
@@ -1627,160 +1943,250 @@ void AdvanceSearchDlg::on_monitorpartidChkBox_clicked()
     _oisCdtMap.remove("monitorpartid");
     if(ui->monitorpartidChkBox->isChecked())
     {
-        QString text = ui->monitorpartidLineEdit->text();
+        QString text = ui->monitorpartidCbBox->currentText();
         _oisCdtMap.insert("monitorpartid",text);
     }
 }
 
-void AdvanceSearchDlg::on_monitorpartidLineEdit_textChanged(const QString &arg1)
+
+
+void AdvanceSearchDlg::on_monitorpartidCbBox_currentIndexChanged(int index)
 {
     _oisCdtMap.remove("monitorpartid");
     if(ui->monitorpartidChkBox->isChecked())
     {
-        QString text = ui->monitorpartidLineEdit->text();
+        QString text = ui->monitorpartidCbBox->currentText();
         _oisCdtMap.insert("monitorpartid",text);
     }
 }
+
+//void AdvanceSearchDlg::on_monitorpartidLineEdit_textChanged(const QString &arg1)
+//{
+//    _oisCdtMap.remove("monitorpartid");
+//    if(ui->monitorpartidChkBox->isChecked())
+//    {
+//        QString text = ui->monitorpartidLineEdit->text();
+//        _oisCdtMap.insert("monitorpartid",text);
+//    }
+//}
 
 void AdvanceSearchDlg::on_monitorpartnameChkBox_clicked()
 {
     _oisCdtMap.remove("monitorpartname");
     if(ui->monitorpartnameChkBox->isChecked())
     {
-        QString text = ui->monitorpartnameLineEdit->text();
+        QString text = ui->monitorpartnameCbBox->currentText();
         _oisCdtMap.insert("monitorpartname",text);
     }
 }
 
-void AdvanceSearchDlg::on_monitorpartnameLineEdit_textChanged(const QString &arg1)
+
+
+
+void AdvanceSearchDlg::on_monitorpartnameCbBox_currentIndexChanged(int index)
 {
     _oisCdtMap.remove("monitorpartname");
     if(ui->monitorpartnameChkBox->isChecked())
     {
-        QString text = ui->monitorpartnameLineEdit->text();
+        QString text = ui->monitorpartnameCbBox->currentText();
         _oisCdtMap.insert("monitorpartname",text);
     }
 }
+
+//void AdvanceSearchDlg::on_monitorpartnameLineEdit_textChanged(const QString &arg1)
+//{
+//    _oisCdtMap.remove("monitorpartname");
+//    if(ui->monitorpartnameChkBox->isChecked())
+//    {
+//        QString text = ui->monitorpartnameLineEdit->text();
+//        _oisCdtMap.insert("monitorpartname",text);
+//    }
+//}
 
 void AdvanceSearchDlg::on_oilsampleidChkBox_clicked()
 {
     _oisCdtMap.remove("oilsampleid");
     if(ui->oilsampleidChkBox->isChecked())
     {
-        QString text = ui->oilsampleidLineEdit->text();
+        QString text = ui->oilsampleidCbBox->currentText();
         _oisCdtMap.insert("oilsampleid",text);
     }
 }
 
-void AdvanceSearchDlg::on_oilsampleidLineEdit_textChanged(const QString &arg1)
+//void AdvanceSearchDlg::on_oilsampleidLineEdit_textChanged(const QString &arg1)
+//{
+//    _oisCdtMap.remove("oilsampleid");
+//    if(ui->oilsampleidChkBox->isChecked())
+//    {
+//        QString text = ui->oilsampleidCbBox->currentText();
+//        _oisCdtMap.insert("oilsampleid",text);
+//    }
+//}
+
+void AdvanceSearchDlg::on_oilsampleidCbBox_currentIndexChanged(int index)
 {
     _oisCdtMap.remove("oilsampleid");
     if(ui->oilsampleidChkBox->isChecked())
     {
-        QString text = ui->oilsampleidLineEdit->text();
+        QString text = ui->oilsampleidCbBox->currentText();
         _oisCdtMap.insert("oilsampleid",text);
     }
 }
+
 
 void AdvanceSearchDlg::on_samplesituationChkBox_clicked()
 {
     _oisCdtMap.remove("samplesituation");
     if(ui->samplesituationChkBox->isChecked())
     {
-        QString text = ui->samplesituationLineEdit->text();
+        QString text = ui->samplesituationCbBox->currentText();
         _oisCdtMap.insert("samplesituation",text);
     }
 }
 
-void AdvanceSearchDlg::on_samplesituationLineEdit_textChanged(const QString &arg1)
+
+void AdvanceSearchDlg::on_samplesituationCbBox_currentIndexChanged(int index)
 {
     _oisCdtMap.remove("samplesituation");
     if(ui->samplesituationChkBox->isChecked())
     {
-        QString text = ui->samplesituationLineEdit->text();
+        QString text = ui->samplesituationCbBox->currentText();
         _oisCdtMap.insert("samplesituation",text);
     }
 }
+
+//void AdvanceSearchDlg::on_samplesituationLineEdit_textChanged(const QString &arg1)
+//{
+//    _oisCdtMap.remove("samplesituation");
+//    if(ui->samplesituationChkBox->isChecked())
+//    {
+//        QString text = ui->samplesituationLineEdit->text();
+//        _oisCdtMap.insert("samplesituation",text);
+//    }
+//}
 
 void AdvanceSearchDlg::on_sampleidChkBox_clicked()
 {
     _oisCdtMap.remove("sampleid");
     if(ui->sampleidChkBox->isChecked())
     {
-        QString text = ui->sampleidLineEdit->text();
+        QString text = ui->sampleidCbBox->currentText();
         _oisCdtMap.insert("sampleid",text);
     }
 }
 
-void AdvanceSearchDlg::on_sampleidLineEdit_textChanged(const QString &arg1)
+
+void AdvanceSearchDlg::on_sampleidCbBox_currentIndexChanged(int index)
 {
     _oisCdtMap.remove("sampleid");
     if(ui->sampleidChkBox->isChecked())
     {
-        QString text = ui->sampleidLineEdit->text();
+        QString text = ui->sampleidCbBox->currentText();
         _oisCdtMap.insert("sampleid",text);
     }
 }
+
+//void AdvanceSearchDlg::on_sampleidLineEdit_textChanged(const QString &arg1)
+//{
+//    _oisCdtMap.remove("sampleid");
+//    if(ui->sampleidChkBox->isChecked())
+//    {
+//        QString text = ui->sampleidLineEdit->text();
+//        _oisCdtMap.insert("sampleid",text);
+//    }
+//}
 
 void AdvanceSearchDlg::on_samplemethodChkBox_clicked()
 {
     _oisCdtMap.remove("samplemethod");
     if(ui->samplemethodChkBox->isChecked())
     {
-        QString text = ui->samplemethodLineEdit->text();
+        QString text = ui->samplemethodCbBox->currentText();
         _oisCdtMap.insert("samplemethod",text);
     }
 }
 
-void AdvanceSearchDlg::on_samplemethodLineEdit_textChanged(const QString &arg1)
+
+void AdvanceSearchDlg::on_samplemethodCbBox_currentIndexChanged(int index)
 {
     _oisCdtMap.remove("samplemethod");
     if(ui->samplemethodChkBox->isChecked())
     {
-        QString text = ui->samplemethodLineEdit->text();
+        QString text = ui->samplemethodCbBox->currentText();
         _oisCdtMap.insert("samplemethod",text);
     }
 }
+
+//void AdvanceSearchDlg::on_samplemethodLineEdit_textChanged(const QString &arg1)
+//{
+//    _oisCdtMap.remove("samplemethod");
+//    if(ui->samplemethodChkBox->isChecked())
+//    {
+//        QString text = ui->samplemethodLineEdit->text();
+//        _oisCdtMap.insert("samplemethod",text);
+//    }
+//}
 
 void AdvanceSearchDlg::on_sampledepartidChkBox_clicked()
 {
     _oisCdtMap.remove("sampledepartid");
     if(ui->sampledepartidChkBox->isChecked())
     {
-        QString text = ui->sampledepartidlineEdit->text();
+        QString text = ui->sampledepartidCbBox->currentText();
         _oisCdtMap.insert("sampledepartid",text);
     }
 }
 
-void AdvanceSearchDlg::on_sampledepartidlineEdit_textChanged(const QString &arg1)
+
+void AdvanceSearchDlg::on_sampledepartidCbBox_currentIndexChanged(int index)
 {
     _oisCdtMap.remove("sampledepartid");
     if(ui->sampledepartidChkBox->isChecked())
     {
-        QString text = ui->sampledepartidlineEdit->text();
+        QString text = ui->sampledepartidCbBox->currentText();
         _oisCdtMap.insert("sampledepartid",text);
     }
 }
+
+//void AdvanceSearchDlg::on_sampledepartidlineEdit_textChanged(const QString &arg1)
+//{
+//    _oisCdtMap.remove("sampledepartid");
+//    if(ui->sampledepartidChkBox->isChecked())
+//    {
+//        QString text = ui->sampledepartidlineEdit->text();
+//        _oisCdtMap.insert("sampledepartid",text);
+//    }
+//}
 
 void AdvanceSearchDlg::on_sampledepartnameChkBox_clicked()
 {
     _oisCdtMap.remove("sampledepartname");
     if(ui->sampledepartnameChkBox->isChecked())
     {
-        QString text = ui->sampledepartnameLineEdit->text();
+        QString text = ui->sampledepartnameCbBox->currentText();
         _oisCdtMap.insert("sampledepartname",text);
     }
 }
 
-void AdvanceSearchDlg::on_sampledepartnameLineEdit_textChanged(const QString &arg1)
+
+void AdvanceSearchDlg::on_sampledepartnameCbBox_currentIndexChanged(int index)
 {
-    _oisCdtMap.remove("sampledepartname");
+    _oisCdtMap.remove("sampledepartname")   ;
     if(ui->sampledepartnameChkBox->isChecked())
     {
-        QString text = ui->sampledepartnameLineEdit->text();
+        QString text = ui->sampledepartnameCbBox->currentText();
         _oisCdtMap.insert("sampledepartname",text);
     }
 }
+//void AdvanceSearchDlg::on_sampledepartnameLineEdit_textChanged(const QString &arg1)
+//{
+//    _oisCdtMap.remove("sampledepartname");
+//    if(ui->sampledepartnameChkBox->isChecked())
+//    {
+//        QString text = ui->sampledepartnameLineEdit->text();
+//        _oisCdtMap.insert("sampledepartname",text);
+//    }
+//}
 
 void AdvanceSearchDlg::on_sendstuffChkBox_clicked()
 {
@@ -1824,3 +2230,11 @@ void AdvanceSearchDlg::on_sendtimeTimeEdit_timeChanged(const QTime &date)
         _oisCdtMap.insert("sendtime",text);
     }
 }
+
+
+
+
+
+
+
+

@@ -114,7 +114,7 @@ private slots:
      
      void on_samplevolumeLineEdit_textChanged(const QString &arg1);
      
-     void on_sampledataChkBox_clicked();
+     void on_sampledateChkBox_clicked();
      
      void on_sampledateDateEdit_dateChanged(const QDate &date);
      
@@ -136,35 +136,36 @@ private slots:
      
      void on_monitorpartidChkBox_clicked();
      
-     void on_monitorpartidLineEdit_textChanged(const QString &arg1);
+//     void on_monitorpartidLineEdit_textChanged(const QString &arg1);
      
      void on_monitorpartnameChkBox_clicked();
      
-     void on_monitorpartnameLineEdit_textChanged(const QString &arg1);
+//     void on_monitorpartnameLineEdit_textChanged(const QString &arg1);
      
      void on_oilsampleidChkBox_clicked();
-     
-     void on_oilsampleidLineEdit_textChanged(const QString &arg1);
+
+     void on_oilsampleidCbBox_currentIndexChanged(int index);
+//     void on_oilsampleidLineEdit_textChanged(const QString &arg1);
      
      void on_samplesituationChkBox_clicked();
 
-     void on_samplesituationLineEdit_textChanged(const QString &arg1);
+//     void on_samplesituationLineEdit_textChanged(const QString &arg1);
 
      void on_sampleidChkBox_clicked();
 
-     void on_sampleidLineEdit_textChanged(const QString &arg1);
+//     void on_sampleidLineEdit_textChanged(const QString &arg1);
 
      void on_samplemethodChkBox_clicked();
 
-     void on_samplemethodLineEdit_textChanged(const QString &arg1);
+//     void on_samplemethodLineEdit_textChanged(const QString &arg1);
 
      void on_sampledepartidChkBox_clicked();
 
-     void on_sampledepartidlineEdit_textChanged(const QString &arg1);
+//     void on_sampledepartidlineEdit_textChanged(const QString &arg1);
 
      void on_sampledepartnameChkBox_clicked();
 
-     void on_sampledepartnameLineEdit_textChanged(const QString &arg1);
+//     void on_sampledepartnameLineEdit_textChanged(const QString &arg1);
 
      void on_sendstuffChkBox_clicked();
 
@@ -193,6 +194,22 @@ private:
 private slots:
      void useproperty();
      void manageproperty();
+
+
+
+     void on_sampleidCbBox_currentIndexChanged(int index);
+
+     void on_samplesituationCbBox_currentIndexChanged(int index);
+
+     void on_samplemethodCbBox_currentIndexChanged(int index);
+
+     void on_sampledepartidCbBox_currentIndexChanged(int index);
+
+     void on_sampledepartnameCbBox_currentIndexChanged(int index);
+
+     void on_monitorpartidCbBox_currentIndexChanged(int index);
+
+     void on_monitorpartnameCbBox_currentIndexChanged(int index);
 
 private:
     Ui::AdvanceSearchDlg *ui;
