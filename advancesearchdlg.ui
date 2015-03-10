@@ -21,7 +21,16 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_7">
       <item>
-       <widget class="QListWidget" name="tableListWidget"/>
+       <widget class="QGroupBox" name="groupBox">
+        <property name="title">
+         <string>选择表：</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_19">
+         <item row="0" column="0">
+          <widget class="QListWidget" name="tableListWidget"/>
+         </item>
+        </layout>
+       </widget>
       </item>
       <item>
        <widget class="QStackedWidget" name="conditionStackedWidget">
@@ -40,7 +49,7 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>282</width>
+               <width>276</width>
                <height>286</height>
               </rect>
              </property>
@@ -220,8 +229,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>282</width>
-               <height>286</height>
+               <width>253</width>
+               <height>186</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout">
@@ -421,8 +430,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>282</width>
-               <height>286</height>
+               <width>253</width>
+               <height>130</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_15">
