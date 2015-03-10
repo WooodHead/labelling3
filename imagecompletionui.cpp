@@ -212,17 +212,11 @@ void	ImageCompletionUI::createActions()
     connect(_importDataAction,SIGNAL(triggered()),this,SLOT(importData()));
 
     // Image Labelling
-
-    _strikeCombobox = new QComboBox;
-    _strikeCombobox->setInsertPolicy(QComboBox::InsertAfterCurrent);
-    _strikeCombobox->setObjectName( tr("_strikeCombox") );
-    connect( _strikeCombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(strikeComboChanged(int)));
-    QStringList list = (QStringList() << "笔画标注" << "前景" << "背景" << "橡皮");
-    _strikeCombobox->addItems(list);
-    _strikeCombobox->setItemIcon(0, _awesome->icon(pencil));
-    _strikeCombobox->setItemIcon(1, _awesome->icon(suno));
-    _strikeCombobox->setItemIcon(2, _awesome->icon(moono));
-    _strikeCombobox->setItemIcon(3, _awesome->icon(eraser));
+    _strikeToolButton = new QToolButton(this);
+    _strikeToolButton->setText(tr("笔画标注"));
+    _strikeToolButton->setPopupMode(QToolButton::MenuButtonPopup);
+    _strikeToolButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    _strikeToolButton->setIcon(_awesome->icon(pencil));
 
     // Group 1
     _fgAction = new QAction( _awesome->icon(suno), tr("前景"), this );
@@ -231,6 +225,10 @@ void	ImageCompletionUI::createActions()
     _bgAction->setCheckable(true);
     _eraserAction = new QAction( _awesome->icon(eraser), tr("橡皮"), this );
     _eraserAction->setCheckable(true);
+
+    _strikeToolButton->addAction(_fgAction);
+    _strikeToolButton->addAction(_bgAction);
+    _strikeToolButton->addAction(_eraserAction);
 
     QActionGroup *group = new QActionGroup(this);
     group->addAction(_fgAction);
@@ -293,19 +291,25 @@ void	ImageCompletionUI::createActions()
     }
     connect(group4, SIGNAL(triggered(QAction*)), this, SLOT(lineThicknessChanged(QAction*)) );
 
-    _strikeThicknessCombobox = new QComboBox;
-    _strikeThicknessCombobox->setInsertPolicy(QComboBox::InsertAfterCurrent);
-    _strikeThicknessCombobox->setObjectName( tr("_strikeCombox") );
-    connect( _strikeThicknessCombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(strikeThicknessComboboxChanged(int)));
-    list = (QStringList() << "笔画粗细" << "细" << "中" << "粗");
-    _strikeThicknessCombobox->addItems(list);
+    _strikeThicknessToolButton = new QToolButton(this);
+    _strikeThicknessToolButton->setText(tr("笔画粗细"));
+    _strikeThicknessToolButton->setPopupMode(QToolButton::MenuButtonPopup);
+    _strikeThicknessToolButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    _strikeThicknessToolButton->setIcon(_awesome->icon(circlethin));
+    for(int i = 0; i < 3; i++)
+    {
+        _strikeThicknessToolButton->addAction(_strikeThickness[i]);
+    }
 
-    _lineThicknessCombobox = new QComboBox;
-    _lineThicknessCombobox->setInsertPolicy(QComboBox::InsertAfterCurrent);
-    _lineThicknessCombobox->setObjectName( tr("_strikeCombox") );
-    connect( _lineThicknessCombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(lineThicknessComboboxChanged(int)));
-    list = (QStringList() << "线条粗细" << "细" << "中" << "粗");
-    _lineThicknessCombobox->addItems(list);
+    _lineThicknessToolButton = new QToolButton(this);
+    _lineThicknessToolButton->setText(tr("线条粗细"));
+    _lineThicknessToolButton->setPopupMode(QToolButton::MenuButtonPopup);
+    _lineThicknessToolButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    _lineThicknessToolButton->setIcon(_awesome->icon(minus));
+    for(int i = 0; i < 3; i++)
+    {
+        _lineThicknessToolButton->addAction(_lineThickness[i]);
+    }
 
     // user
     if(Global::Authority == "1") //admin
@@ -326,7 +330,7 @@ void	ImageCompletionUI::createToolBars()
     _editToolBar->addSeparator();
 
     // Labeling Actions
-    _editToolBar->addWidget(_strikeCombobox);
+    _editToolBar->addWidget(_strikeToolButton);
     _editToolBar->addAction(_rectAction);
     _editToolBar->addAction(_polygonAction);
     _editToolBar->addAction(_manualAction);
@@ -341,8 +345,8 @@ void	ImageCompletionUI::createToolBars()
     //_editToolBar->addAction(_saveMaskAction);
 
     _editToolBar->addSeparator();
-    _editToolBar->addWidget(_strikeThicknessCombobox);
-    _editToolBar->addWidget(_lineThicknessCombobox);
+    _editToolBar->addWidget(_strikeThicknessToolButton);
+    _editToolBar->addWidget(_lineThicknessToolButton);
 }
 
 void	ImageCompletionUI::setupWidgets()
