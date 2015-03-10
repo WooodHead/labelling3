@@ -21,14 +21,17 @@ UserManagement::UserManagement(QWidget *parent) :
 
     _model = 0;
     _selectedRow = -1;
+
+    _awesome = new QtAwesome(this);
+    _awesome->initFontAwesome();
+    setIcons();
     
     if(!createConnection(db))
     {
-        QMessageBox::warning(this,tr("提示"),tr("不能打开数据库链接"),QMessageBox::Close);
+        QMessageBox::warning(this, tr("提示"), tr("不能打开数据库链接"), QMessageBox::Close);
         return;
     }
-    else
-        initTableView();
+    else initTableView();
 }
 
 UserManagement::~UserManagement()
@@ -36,6 +39,7 @@ UserManagement::~UserManagement()
     if(_model) delete _model;
     db.close();
     delete ui;
+    delete _awesome;
 }
 
 void UserManagement::initTableView()
@@ -62,7 +66,7 @@ void UserManagement::initTableView()
     ui->_userTableView->resizeColumnToContents(2);
     ui->_userTableView->verticalHeader()->setVisible(false);
     ui->_userTableView->setEditTriggers(QTableView::NoEditTriggers);
-    ui->_userTableView->horizontalHeader()->setStyleSheet("QHeaderView::section{background:lightblue;}");
+    //ui->_userTableView->horizontalHeader()->setStyleSheet("QHeaderView::section{background:lightblue;}");
     ui->_userTableView->horizontalHeader()->setHighlightSections(false);
 }
 
@@ -78,6 +82,14 @@ UserInfo *UserManagement::getSelectedUserInfo()
     int authority    = ui->_userTableView->model()->data(ui->_userTableView->model()->index(_selectedRow,5)).toInt();
 
     return new UserInfo(username, passwd, email, phone, authority);
+}
+
+void UserManagement::setIcons()
+{
+    ui->_addUser->setIcon(_awesome->icon(userplus));
+    ui->_deleteUser->setIcon(_awesome->icon(usertimes));
+    ui->_searchUser->setIcon(_awesome->icon(search));
+    ui->_editUser->setIcon(_awesome->icon(pencilsquareo));
 }
 
 void UserManagement::on__deleteUser_clicked()

@@ -39,10 +39,10 @@ Login::Login(QWidget *parent) :
     ui->_editPasswd->setStyleSheet("border: 2px solid #708090;height: 30px;");
 
     //ui->_login->setFocus();
-    ui->_login->setIcon( _awesome->icon(icon_signin) );
+    ui->_login->setIcon( _awesome->icon(signin) );
     ui->_login->setStyleSheet("padding:5px 0;border:0px;background-color: #87CEEB;color:white;");
 
-    ui->_cancel->setIcon( _awesome->icon(icon_remove) );
+    ui->_cancel->setIcon( _awesome->icon(remove_) );
     ui->_cancel->setStyleSheet("padding:5px 0;border:0px;background-color: #87CEEB;color:white;");
 
     ui->_login->setAutoDefault(false);

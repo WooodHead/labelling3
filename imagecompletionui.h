@@ -11,6 +11,7 @@
 #include <QSqlField>
 #include <QSqlTableModel>
 #include <QSqlDatabase>
+#include <QToolButton>
 
 #include "ui_SceneCompletionWidget.h"
 #include "ui_RegionCompetition.h"
@@ -221,9 +222,9 @@ private:
 
     QAction             *_openBatchAction;
 
-    QComboBox           *_strikeCombobox;
-    QComboBox           *_strikeThicknessCombobox;
-    QComboBox           *_lineThicknessCombobox;
+    QToolButton         *_strikeToolButton;
+    QToolButton         *_strikeThicknessToolButton;
+    QToolButton         *_lineThicknessToolButton;
 
     QAction               *_fgAction;
     QAction               *_bgAction;
