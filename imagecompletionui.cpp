@@ -169,7 +169,7 @@ void	ImageCompletionUI::createActions()
     ////////////////////////////////////////////////////////////////////////////////////
     _searchAction = new QAction( tr("查询"), this );
     _searchAction->setObjectName(tr("_searchAction"));
-    _searchAction->setIcon( QIcon(":/new/prefix1/icons/histo.png") );
+    _searchAction->setIcon( _awesome->icon(areachart) );
     connect( _searchAction, SIGNAL(triggered()), this, SLOT( search() ));
 
     ////////////////////////////////////////////////////////////////////////////////////
@@ -177,28 +177,20 @@ void	ImageCompletionUI::createActions()
     ////////////////////////////////////////////////////////////////////////////////////
     _addtosqlAction = new QAction( tr("属性分类"), this );
     _addtosqlAction->setObjectName(tr("_addtosqlAction"));
-    _addtosqlAction->setIcon( QIcon(":/new/prefix1/icons/add.png") );
+    _addtosqlAction->setIcon( _awesome->icon(reorder) );
     connect( _addtosqlAction, SIGNAL(triggered()), this, SLOT( addtosql() ));
-
-    ////////////////////////////////////////////////////////////////////////////////////
-    //   _saveresultAction
-    ////////////////////////////////////////////////////////////////////////////////////
-    _saveresultAction = new QAction( tr("保存标注结果"), this );
-    _saveresultAction->setObjectName(tr("_saveresultAction"));
-    _saveresultAction->setIcon( QIcon(":/new/prefix1/icons/filesave.png") );
-    connect( _saveresultAction, SIGNAL(triggered()), this, SLOT( savemarkresult() ));
 
     ////////////////////////////////////////////////////////////////////////////////////
     //   _exportDataAction
     ////////////////////////////////////////////////////////////////////////////////////
-    _exportDataAction = new QAction(tr("批量导出数据"),this);
+    _exportDataAction = new QAction( QIcon(":/new/prefix1/icons/export.png"), tr("批量导出数据"),this);
     _exportDataAction->setObjectName(tr("_exportDataAction"));
     connect(_exportDataAction,SIGNAL(triggered()),this,SLOT(exportData()));
 
     ////////////////////////////////////////////////////////////////////////////////////
     //   _importDataAction
     ////////////////////////////////////////////////////////////////////////////////////
-    _importDataAction = new QAction(tr("批量导入数据"),this);
+    _importDataAction = new QAction(QIcon(":/new/prefix1/icons/import.png"), tr("批量导入数据"),this);
     _importDataAction->setObjectName(tr("_importDataAction"));
     connect(_importDataAction,SIGNAL(triggered()),this,SLOT(importData()));
 
@@ -312,7 +304,6 @@ void	ImageCompletionUI::createToolBars()
 
     _editToolBar->addSeparator();
 
-    // Labeling Actions
     _editToolBar->addWidget(_strikeToolButton);
     _editToolBar->addAction(_rectAction);
     _editToolBar->addAction(_polygonAction);

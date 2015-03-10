@@ -23,5 +23,7 @@
         <file>icons/login.png</file>
         <file>icons/ruler.png</file>
         <file>icons/scale.png</file>
+        <file>icons/export.png</file>
+        <file>icons/import.png</file>
     </qresource>
 </RCC>
