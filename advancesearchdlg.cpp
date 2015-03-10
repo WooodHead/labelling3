@@ -523,6 +523,13 @@ void AdvanceSearchDlg::createListWidget()
     ui->tableListWidget->insertItem(7,tr("磨粒标注信息表"));
     
     ui->tableListWidget->setCurrentRow(0);
+
+    int wheight = this->height();
+    int wwidth  = this->width();
+    ui->conditionGroupBox->setMaximumHeight(wheight/3);
+    ui->groupBox->setMaximumWidth(wwidth/5);
+    ui->propertylistGroupBox->setMaximumWidth(wwidth/5);
+//    ui->tableListWidget->setMaximumWidth(wwidth/5);
 //    ui->topWidget->setMaximumHeight(300);
 //    ui->tableListWidget->setMaximumHeight(250);
 //    ui->tableListWidget->setMaximumWidth(150);
