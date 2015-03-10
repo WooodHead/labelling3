@@ -2,6 +2,7 @@
 #define LOGIN_H
 
 #include <QDialog>
+#include "QtAwesome.h"
 
 namespace Ui {
 class Login;
@@ -33,6 +34,8 @@ private:
     void	mouseMoveEvent ( QMouseEvent * event );
     void	mousePressEvent ( QMouseEvent * event );
     void	mouseReleaseEvent ( QMouseEvent * event );
+
+    QtAwesome* _awesome;
 
 public:
     void getDataForMainform();

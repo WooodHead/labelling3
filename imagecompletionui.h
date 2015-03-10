@@ -25,7 +25,7 @@
 #include "advancesearchdlg.h"
 #include "UserManagement.h"
 #include "Global.h"
-#include "QtAwesome/QtAwesome/QtAwesome.h"
+#include "QtAwesome.h"
 
 #define DELETEPTR(ptr) if(ptr) { delete ptr; ptr = 0; }
 

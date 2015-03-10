@@ -90,5 +90,4 @@ win32 {
 OTHER_FILES += \
     imageLabelling.ini
 
-include(QtAwesome/QtAwesome/QtAwesome.pri)
-QMAKE_CXXFLAGS += -std=c++0x
+include(QtAwesome/QtAwesome.pri)

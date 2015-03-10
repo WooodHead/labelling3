@@ -19,6 +19,9 @@ Login::Login(QWidget *parent) :
 
     _moving = false;
 
+    _awesome = new QtAwesome(this);
+    _awesome->initFontAwesome();
+
     setWindowTitle( tr("用户登录") );
     setWindowFlags(Qt::Dialog | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
 
@@ -30,14 +33,17 @@ Login::Login(QWidget *parent) :
     ui->_icon->setStyleSheet("background: url(:/new/prefix1/icons/login.png);");
 
     ui->_editUsername->setPlaceholderText("用户名");
-    ui->_editUsername->setStyleSheet("border: 3px solid #eee;height: 30px;");
+    ui->_editUsername->setStyleSheet("border: 2px solid #708090;height: 30px;");
 
     ui->_editPasswd->setPlaceholderText("密码");
-    ui->_editPasswd->setStyleSheet("border: 3px solid #eee;height: 30px;");
+    ui->_editPasswd->setStyleSheet("border: 2px solid #708090;height: 30px;");
 
-    ui->_login->setFocus();
-    ui->_login->setStyleSheet("padding:5px 0;border:0px;background-color: #26b9a5;color:white;");
-    ui->_cancel->setStyleSheet("padding:5px 0;border:0px;background-color: #26b9a5;color:white;");
+    //ui->_login->setFocus();
+    ui->_login->setIcon( _awesome->icon(icon_signin) );
+    ui->_login->setStyleSheet("padding:5px 0;border:0px;background-color: #87CEEB;color:white;");
+
+    ui->_cancel->setIcon( _awesome->icon(icon_remove) );
+    ui->_cancel->setStyleSheet("padding:5px 0;border:0px;background-color: #87CEEB;color:white;");
 
     ui->_login->setAutoDefault(false);
     ui->_cancel->setAutoDefault(false);
