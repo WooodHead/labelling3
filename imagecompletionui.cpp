@@ -147,7 +147,7 @@ void	ImageCompletionUI::createActions()
     ////////////////////////////////////////////////////////////////////////////////////
     _saveAsAction = new QAction(  _awesome->icon(floppyo), tr("&另存为"), this );
     _saveAsAction->setObjectName(tr("_saveAsAction"));
-    connect(_saveAsAction, SIGNAL(triggered()), this, SLOT( floppyo() ));
+    connect(_saveAsAction, SIGNAL(triggered()), this, SLOT( saveAs() ));
 
     ////////////////////////////////////////////////////////////////////////////////////
     //   _closeAction
