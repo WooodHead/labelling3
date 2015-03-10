@@ -47,7 +47,6 @@ private:
     UserAdd *_userAddDialog;
     useredit* _userEditDialog;
     QSqlDatabase db;
-    QAction *modifyAction;
 
     int _selectedRow;
 

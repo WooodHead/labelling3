@@ -181,12 +181,18 @@ private:
      void createTableNames();
      void createListWidget();
      void initCbBox();
+     void initpropertylistName();
+     void resetConditions();
      void query();
      bool copyFiles(QString fromDir,QString toDir,bool convertIfExits = false);
      bool copyFiles(QString fromDir,QString toDir,QStringList filenames,bool convertIfExist = false);
      bool importDB(const QString &path);
      bool exportDB(const QSqlQueryModel *model,const QString &tablename,const QString &path);
      bool importDB(const QSqlQueryModel &model);
+
+private slots:
+     void useproperty();
+     void manageproperty();
 
 private:
     Ui::AdvanceSearchDlg *ui;
@@ -204,7 +210,10 @@ private:
     QSqlQueryModel *_mprInfoModel;
     QSqlQueryModel *_oiaInfoModel;
     QSqlQueryModel *_oisInfoModel;
-    
+
+    QSqlQueryModel *propertymodel;
+    QAction *usepropertyAction;
+    QAction *managepropertyAction;
 
     QStringList _eqmCdtField;          // zhuang bei xin xi biao condition Field
     QStringList _abmCdtField;          // mo li biao ji xin xi biao condition Field

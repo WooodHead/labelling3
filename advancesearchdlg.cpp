@@ -15,12 +15,24 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent) :
     createListWidget();
     
     connect(ui->tableListWidget,SIGNAL(currentRowChanged(int)),ui->conditionStackedWidget,SLOT(setCurrentIndex(int)));
+
+    usepropertyAction = new QAction(tr("使用属性"),ui->propertylistTableView);
+    ui->propertylistTableView->addAction(usepropertyAction);
+    connect(usepropertyAction,SIGNAL(triggered()),this,SLOT(useproperty()));
+
+    managepropertyAction = new QAction(tr("管理属性"),ui->propertylistTableView);
+    ui->propertylistTableView->addAction(managepropertyAction);;
+    connect(managepropertyAction,SIGNAL(triggered()),this,SLOT(manageproperty()));
+
+    ui->propertylistTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
     
     createTableNames();
     
     createTableView();
     
     initCbBox();
+
+    initpropertylistName();
     
     query();
    
@@ -30,6 +42,145 @@ AdvanceSearchDlg::~AdvanceSearchDlg()
 {
     delete ui;
     db.close();
+}
+
+
+void AdvanceSearchDlg::resetConditions()
+{
+    // clear all conditions
+    _eqmCdtMap.clear();;
+    _mpCdtMap.clear();
+    _mprCdtMap.clear();
+    _fegCdtMap.clear();
+    _fegpCdtMap.clear();
+    _oisCdtMap.clear();
+    _oiaCdtMap.clear();
+    _abmCdtMap.clear();
+
+    // eqm
+    ui->PlaneIdChkBox->setChecked(false);
+    ui->planeTypeChkBox->setChecked(false);
+    ui->runHourChkBox->setChecked(false);
+    ui->runStageChkBox->setChecked(false);
+    ui->repairTimeChkBox->setChecked(false);
+    ui->departIdChkBox->setChecked(false);
+
+    // mp
+
+    // mpr
+
+    // feg
+
+    // fegp
+
+    // ois
+
+    // oia
+
+    // abm
+}
+
+
+void AdvanceSearchDlg::useproperty()
+{
+
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, tr("QMessageBox::question()"), tr("确认使用当前属性查询?"),
+                                  QMessageBox::Yes | QMessageBox::Cancel);
+
+    if(reply == QMessageBox::Yes)
+    {
+        QModelIndex index = ui->propertylistTableView->currentIndex();
+        QSqlRecord record = propertymodel->record(index.row());
+        QString propertyname = record.value(0).toString();
+
+        QString sql = "select * from propertyinfo where propertyname = '";
+        sql.append(propertyname);
+        sql.append("'");
+        QSqlQuery query;
+        query.exec(sql);
+        query.next();
+
+        this->resetConditions();
+
+        int idx;
+
+        QStringList eqmFields = query.value(2).toString().split("#");
+        QStringList eqmValues = query.value(3).toString().split("#");
+        if(!eqmFields.isEmpty())
+        {
+            idx = 0;
+            foreach (QString field, eqmFields) {
+                if(field == "planeid")
+                {
+                    ui->planeidCbBox->setCurrentIndex(ui->planeidCbBox->findText(eqmValues.at(idx)));
+                    _eqmCdtMap.insert("planeid",eqmValues.at(idx));
+                    ui->PlaneIdChkBox->setChecked(true);
+                }
+                else if(field == "planetype")
+                {
+                    ui->planeTypeCbBox->setCurrentIndex(ui->planeTypeCbBox->findText(eqmValues.at(idx)));
+                    _eqmCdtMap.insert("planetype",eqmValues.at(idx));
+                    ui->planeTypeChkBox->setChecked(true);
+                }
+                else if(field == "departid")
+                {
+                    ui->departIdCbBox->setCurrentIndex(ui->departIdCbBox->findText(eqmValues.at(idx)));
+                    _eqmCdtMap.insert("departid",eqmValues.at(idx));
+                    ui->departIdChkBox->setChecked(true);
+                }
+                else if(field == "runhour")
+                {
+                    ui->runHourCbBox->setCurrentIndex(ui->runHourCbBox->findText(eqmValues.at(idx)));
+                    _eqmCdtMap.insert("runhour",eqmValues.at(idx));
+                    ui->runHourChkBox->setChecked(true);
+                }
+                else if(field == "runstage")
+                {
+                    ui->runStageCbBox->setCurrentIndex(ui->runStageCbBox->findText(eqmValues.at(idx)));
+                    _eqmCdtMap.insert("runstage",eqmValues.at(idx));
+                    ui->runStageChkBox->setChecked(true);
+                }
+                else if(field == "repairtime")
+                {
+                    ui->repairTimeCbBox->setCurrentIndex(ui->repairTimeCbBox->findText(eqmValues.at(idx)));
+                    _eqmCdtMap.insert("repairtime",eqmValues.at(0));
+                    ui->repairTimeChkBox->setChecked(true);
+                }
+                idx ++;
+            }
+        }
+
+        QStringList mpFields;
+        QStringList mpValues;
+
+        QStringList mprFields;
+        QStringList mprValues;
+
+        QStringList fegFields;
+        QStringList fegValues;
+
+        QStringList fegpFields;
+        QStringList fegpValues;
+
+        QStringList oisFields;
+        QStringList oisValues;
+
+        QStringList oiaFields;
+        QStringList oiaValues;
+
+        QStringList abmFields;
+        QStringList abmValues;
+
+        this->query();
+    }
+
+}
+
+
+void AdvanceSearchDlg::manageproperty()
+{
+    QMessageBox::warning(this,tr("提示"),tr("管理属性"),QMessageBox::Close);
 }
 
 
@@ -609,6 +760,19 @@ void AdvanceSearchDlg::setModelHeaderData(QString tablename)
 }
 
 
+void AdvanceSearchDlg::initpropertylistName()
+{
+    if(propertymodel)
+        delete propertymodel;
+    propertymodel = new QSqlQueryModel;
+    propertymodel->setQuery("select propertyname from propertyinfo");
+    propertymodel->setHeaderData(0,Qt::Horizontal,tr("查询属性名"));
+    ui->propertylistTableView->setModel(propertymodel);
+    ui->propertylistTableView->setAlternatingRowColors(true);
+    ui->propertylistTableView->setSelectionMode(QTableView::SingleSelection);
+    ui->propertylistTableView->setEditTriggers(QTableView::NoEditTriggers);
+    ui->propertylistTableView->verticalHeader()->setVisible(false);
+}
 
 void AdvanceSearchDlg::initCbBox()
 {
@@ -797,8 +961,8 @@ void AdvanceSearchDlg::on_addtoBtn_clicked()
     ppnDlg = new ProPertyNameDlg(this);
     if(ppnDlg->exec()== QDialog::Accepted)
     {
-        qDebug()<<"Accept";
-        qDebug()<<this->propertyName;
+//        qDebug()<<"Accept";
+//        qDebug()<<this->propertyName;
         
         QString eqmFields = "";
         QString eqmValues = "";
@@ -989,12 +1153,16 @@ void AdvanceSearchDlg::on_addtoBtn_clicked()
         propertySql.append("')");
         
         if(query.exec(propertySql))
+        {
+            initpropertylistName();
             QMessageBox::warning(this,tr("提示"),tr("保存查询属性成功"),QMessageBox::Close);
+        }
         else
             QMessageBox::warning(this,tr("提示"),tr("保存查询属性失败"),QMessageBox::Close);
     }
     else
-        qDebug()<<"Reject";
+        ;
+//        qDebug()<<"Reject";
 }
 
 
