@@ -365,7 +365,8 @@ void	ImageCompletionUI::setupWidgets()
 
     QVBoxLayout *centralwigetLayout = new QVBoxLayout;
     centralwigetLayout->addWidget(_centralTabWidget);
-    centralwigetLayout->setAlignment(Qt::AlignCenter);
+    //centralwigetLayout->setAlignment(Qt::AlignCenter);
+    centralwigetLayout->setAlignment(Qt::AlignTop);
     _centralwidget->setLayout(centralwigetLayout);
 
     ////////////////////////////////////////////////////////////////////////////////////
@@ -394,6 +395,7 @@ void	ImageCompletionUI::setupWidgets()
 
     _centralTabWidget->addTab( _editTab, _awesome->icon(pictureo), QString("EditTab") );
     _centralTabWidget->setTabText(_centralTabWidget->indexOf(_editTab), QApplication::translate("ImageCompletionUIClass", tr("图像标注").toLocal8Bit().data(), 0));
+    _centralTabWidget->setMaximumHeight(0.8 * height);
 
     QPalette palette;
     QPalette palette1;
@@ -416,7 +418,8 @@ void	ImageCompletionUI::setupWidgets()
 
     _rightOperationWidget = new QDockWidget(tr("工具箱"),this );
     _rightOperationWidget->setObjectName(tr("_rightOperationWidget"));
-    _rightOperationWidget->setMaximumSize(QSize(0.2*width, height));
+    _rightOperationWidget->setWindowIcon( _awesome->icon(inbox) );
+    _rightOperationWidget->setMaximumSize(QSize(0.2*width, 0.8*height));
     _rightOperationWidget->setFloating(false);
 
     _dockWidgetContents = new QWidget( );
@@ -432,6 +435,7 @@ void	ImageCompletionUI::setupWidgets()
 
     QVBoxLayout *rightwidgetLayout = new QVBoxLayout;
     rightwidgetLayout->addWidget(_operationStackedWidget);
+    rightwidgetLayout->setAlignment(Qt::AlignTop);
     _dockWidgetContents->setLayout(rightwidgetLayout);
 
     _sceneCompletionPage = new QWidget(  );
@@ -454,6 +458,28 @@ void	ImageCompletionUI::setupWidgets()
     _operationStackedWidget->setCurrentIndex(1);
 
     ////////////////////////////////////////////////////////////////////////////////////
+    //   _leftWindowWidget
+    ////////////////////////////////////////////////////////////////////////////////////
+    _leftWindowWidget = new QDockWidget(tr(""),this );
+    _leftWindowWidget->setObjectName(tr("_leftWindowWidget"));
+    _leftWindowWidget->setFeatures(QDockWidget::DockWidgetMovable);
+    _leftWindowWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    _leftWindowWidget->setMaximumSize(QSize(0.2*width, height));
+    _leftWindowWidget->setMaximumHeight(height);
+    _leftWindowWidget->setFloating(false);
+    //
+    _leftDockWindowContents = new QWidget( );
+    _leftDockWindowContents->setObjectName(tr("_leftDockWindowContents"));
+
+    _leftWindow.setupUi(_leftDockWindowContents);
+    _leftWindow.tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _leftWindow.tabWidgetLeftWindow->setTabText(0, tr("图谱信息"));
+    _leftWindow.tabWidgetLeftWindow->removeTab(1);
+    _leftWindow.tabWidgetLeftWindow->removeTab(1);
+    _leftWindowWidget->setWidget(_leftDockWindowContents);
+    addDockWidget(Qt::LeftDockWidgetArea, _leftWindowWidget);
+
+    ////////////////////////////////////////////////////////////////////////////////////
     //   _logWidget
     ////////////////////////////////////////////////////////////////////////////////////
 
@@ -472,43 +498,22 @@ void	ImageCompletionUI::setupWidgets()
     _logWindowWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
     _logWindowWidget->setWidget(_logWidget);
-    _logWindowWidget->setMinimumHeight(0.28 * height);
-    addDockWidget(Qt::RightDockWidgetArea,_logWindowWidget);
-
-    ////////////////////////////////////////////////////////////////////////////////////
-    //   _leftWindowWidget
-    ////////////////////////////////////////////////////////////////////////////////////
-    _leftWindowWidget = new QDockWidget(tr(""),this );
-    _leftWindowWidget->setObjectName(tr("_leftWindowWidget"));
-    _leftWindowWidget->setFeatures(QDockWidget::DockWidgetMovable);
-    _leftWindowWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    _leftWindowWidget->setMaximumSize(QSize(0.2*width, height));
-    _leftWindowWidget->setMaximumHeight(height);
-    _leftWindowWidget->setFloating(false);
-    //
-    _leftDockWindowContents = new QWidget( );
-    _leftDockWindowContents->setObjectName(tr("_leftDockWindowContents"));
-
-    _leftWindow.setupUi(_leftDockWindowContents);
-    _leftWindow.tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    _leftWindow.tabWidgetLeftWindow->setTabText(0, tr("图谱信息"));
-    _leftWindow.tabWidgetLeftWindow->removeTab(2);
-    _leftWindowWidget->setWidget(_leftDockWindowContents);
-    addDockWidget(Qt::LeftDockWidgetArea, _leftWindowWidget);
+    _logWindowWidget->setMinimumHeight(0.27 * height);
+    addDockWidget(Qt::LeftDockWidgetArea, _logWindowWidget);
 
     ////////////////////////////////////////////////////////////////////////////////////
     //   _cornerWindowWidget
     ////////////////////////////////////////////////////////////////////////////////////
-    _cornerWindowWidget = new QDockWidget(this );
-    _cornerWindowWidget->setObjectName(tr("_cornerWindowWidget"));
-    _cornerWindowWidget->setFeatures(QDockWidget::DockWidgetMovable);
-    _cornerWindowWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    _cornerWindowWidget->setFloating(false);
-    _cornerDockWindowContents = new QWidget( );
-    _cornerDockWindowContents->setObjectName(tr("_leftDockWindowContents"));
-    _cornerWindow.setupUi(_cornerDockWindowContents);
-    _cornerWindowWidget->setWidget(_cornerDockWindowContents);
-    addDockWidget(Qt::LeftDockWidgetArea, _cornerWindowWidget);
+//    _cornerWindowWidget = new QDockWidget(this );
+//    _cornerWindowWidget->setObjectName(tr("_cornerWindowWidget"));
+//    _cornerWindowWidget->setFeatures(QDockWidget::DockWidgetMovable);
+//    _cornerWindowWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+//    _cornerWindowWidget->setFloating(false);
+//    _cornerDockWindowContents = new QWidget( );
+//    _cornerDockWindowContents->setObjectName(tr("_leftDockWindowContents"));
+//    _cornerWindow.setupUi(_cornerDockWindowContents);
+//    _cornerWindowWidget->setWidget(_cornerDockWindowContents);
+//    addDockWidget(Qt::LeftDockWidgetArea, _cornerWindowWidget);
 
     ////////////////////////////////////////////////////////////////////////////////////
     //   _bottomWindowWidget
@@ -518,6 +523,7 @@ void	ImageCompletionUI::setupWidgets()
     _bottomWindowWidget->setObjectName(tr("_bottomWindowWidget"));
     _bottomWindowWidget->setFeatures(QDockWidget::DockWidgetMovable);
     _bottomWindowWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
+    _bottomWindowWidget->setMinimumHeight(0.35 * height);
     _bottomDockWindowContents = new QWidget( );
     _bottomDockWindowContents->setObjectName(tr("_bottomDockWindowContents"));
     _bottomWindow.setupUi(_bottomDockWindowContents);
@@ -526,7 +532,7 @@ void	ImageCompletionUI::setupWidgets()
     addDockWidget(Qt::BottomDockWidgetArea, _bottomWindowWidget);
 
     setCorner(Qt::BottomLeftCorner,Qt::LeftDockWidgetArea);
-    setCorner(Qt::BottomRightCorner,Qt::RightDockWidgetArea);
+    //setCorner(Qt::BottomRightCorner,Qt::RightDockWidgetArea);
 
     QPixmap pixmap(30,30);
     pixmap.fill(_editImageViewer->getLineColor());
