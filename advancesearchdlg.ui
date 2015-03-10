@@ -35,7 +35,7 @@
       <item>
        <widget class="QStackedWidget" name="conditionStackedWidget">
         <property name="currentIndex">
-         <number>3</number>
+         <number>5</number>
         </property>
         <widget class="QWidget" name="page">
          <layout class="QGridLayout" name="gridLayout_3">
@@ -970,7 +970,7 @@
              <property name="geometry">
               <rect>
                <x>0</x>
-               <y>0</y>
+               <y>-396</y>
                <width>259</width>
                <height>712</height>
               </rect>
@@ -986,14 +986,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_39">
+                 <widget class="QCheckBox" name="oia_sendstuffChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_39"/>
+                 <widget class="QLineEdit" name="oia_sendstuffLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -1007,14 +1007,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_38">
+                 <widget class="QCheckBox" name="oia_senddepartChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox"/>
+                 <widget class="QComboBox" name="oia_senddepartCbBox"/>
                 </item>
                </layout>
               </item>
@@ -1028,14 +1028,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_41">
+                 <widget class="QCheckBox" name="oia_receivestuffChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_41"/>
+                 <widget class="QLineEdit" name="oia_receivestuffLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -1049,14 +1049,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_40">
+                 <widget class="QCheckBox" name="oia_receivedateChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QDateEdit" name="dateEdit">
+                 <widget class="QDateEdit" name="oia_receivedateDateEdit">
                   <property name="displayFormat">
                    <string>yyyy年/MM月/dd日</string>
                   </property>
@@ -1074,14 +1074,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="analyzedepartnameChkBox">
+                 <widget class="QCheckBox" name="oia_analyzedepartnameChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_2"/>
+                 <widget class="QComboBox" name="oia_analyzedepartnameCbBox"/>
                 </item>
                </layout>
               </item>
@@ -1095,14 +1095,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_44">
+                 <widget class="QCheckBox" name="oia_contaminationanalyzestuffChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_44"/>
+                 <widget class="QLineEdit" name="oia_contaminationanalyzestuffChkLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -1116,14 +1116,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_42">
+                 <widget class="QCheckBox" name="oia_contaminationanalyzemethodChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_3"/>
+                 <widget class="QComboBox" name="oia_contaminationanalyzemethodCbBox"/>
                 </item>
                </layout>
               </item>
@@ -1137,14 +1137,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_46">
+                 <widget class="QCheckBox" name="oia_contaminationanalyzeequipmentChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_4"/>
+                 <widget class="QComboBox" name="oia_contaminationanalyzeequipmentCbBox"/>
                 </item>
                </layout>
               </item>
@@ -1158,14 +1158,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_45">
+                 <widget class="QCheckBox" name="oia_contaminationanalyzedateChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QDateEdit" name="dateEdit_2">
+                 <widget class="QDateEdit" name="oia_contaminationanalyzedateDateEdit">
                   <property name="displayFormat">
                    <string>yyyy年/MM月/dd日</string>
                   </property>
@@ -1183,14 +1183,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_47">
+                 <widget class="QCheckBox" name="oia_contaminationanalyzereportidChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_5"/>
+                 <widget class="QComboBox" name="oia_contaminationanalyzereportidCbBox"/>
                 </item>
                </layout>
               </item>
@@ -1204,14 +1204,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_49">
+                 <widget class="QCheckBox" name="oia_spectroscopystuffChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_49"/>
+                 <widget class="QLineEdit" name="oia_spectroscopystuffLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -1225,14 +1225,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_48">
+                 <widget class="QCheckBox" name="oia_spectroscopymethodChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_6"/>
+                 <widget class="QComboBox" name="oia_spectroscopymethodCbBo"/>
                 </item>
                </layout>
               </item>
@@ -1246,14 +1246,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_51">
+                 <widget class="QCheckBox" name="oia_spectroscopyequipmentChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_7"/>
+                 <widget class="QComboBox" name="oia_spectroscopyequipmentCbBox"/>
                 </item>
                </layout>
               </item>
@@ -1267,14 +1267,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_50">
+                 <widget class="QCheckBox" name="oia_spectroscopydateChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QDateEdit" name="dateEdit_3">
+                 <widget class="QDateEdit" name="oia_spectroscopydateDateEdit">
                   <property name="displayFormat">
                    <string>yyyy年/MM月/dd日</string>
                   </property>
@@ -1292,14 +1292,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_52">
+                 <widget class="QCheckBox" name="oia_spectroscopyreportidChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_8"/>
+                 <widget class="QComboBox" name="oia_spectroscopyreportidCbBox"/>
                 </item>
                </layout>
               </item>
@@ -1313,14 +1313,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_59">
+                 <widget class="QCheckBox" name="oia_physicochemicalstuffChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_59"/>
+                 <widget class="QLineEdit" name="oia_physicochemicalstuffLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -1334,14 +1334,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_58">
+                 <widget class="QCheckBox" name="oia_physicochemicalmethodChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_9"/>
+                 <widget class="QComboBox" name="oia_physicochemicalmethodChkCbBox"/>
                 </item>
                </layout>
               </item>
@@ -1355,14 +1355,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_61">
+                 <widget class="QCheckBox" name="oia_physicochemicalequipmentChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_10"/>
+                 <widget class="QComboBox" name="oia_physicochemicalequipmentCbBox"/>
                 </item>
                </layout>
               </item>
@@ -1376,14 +1376,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_60">
+                 <widget class="QCheckBox" name="oia_physicochemicaldateChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QDateEdit" name="dateEdit_4">
+                 <widget class="QDateEdit" name="oia_physicochemicaldateDateEdit">
                   <property name="displayFormat">
                    <string>yyyy年/MM月/dd日</string>
                   </property>
@@ -1401,14 +1401,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_62">
+                 <widget class="QCheckBox" name="oia_physicochemicalreportidChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_11"/>
+                 <widget class="QComboBox" name="oia_physicochemicalreportidCbBox"/>
                 </item>
                </layout>
               </item>
@@ -1422,14 +1422,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_54">
+                 <widget class="QCheckBox" name="oia_ferrographystuffChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_54"/>
+                 <widget class="QLineEdit" name="oia_ferrographystuffLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -1443,14 +1443,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_53">
+                 <widget class="QCheckBox" name="oia_ferrographymethodChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_12"/>
+                 <widget class="QComboBox" name="oia_ferrographymethodCbBox"/>
                 </item>
                </layout>
               </item>
@@ -1464,14 +1464,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_56">
+                 <widget class="QCheckBox" name="oia_ferrographyequipmentChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_13"/>
+                 <widget class="QComboBox" name="oia_ferrographyequipmentCbBox"/>
                 </item>
                </layout>
               </item>
@@ -1485,14 +1485,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_55">
+                 <widget class="QCheckBox" name="oia_ferrographydateChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QDateEdit" name="dateEdit_5">
+                 <widget class="QDateEdit" name="oia_ferrographydateDateEdit">
                   <property name="displayFormat">
                    <string>yyyy年/MM月/dd日</string>
                   </property>
@@ -1510,14 +1510,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_57">
+                 <widget class="QCheckBox" name="oia_ferrographyreportidChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_14"/>
+                 <widget class="QComboBox" name="oia_ferrographyreportidCbBox"/>
                 </item>
                </layout>
               </item>
@@ -1539,8 +1539,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>259</width>
-               <height>292</height>
+               <width>276</width>
+               <height>316</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -1773,7 +1773,7 @@
                <x>0</x>
                <y>0</y>
                <width>276</width>
-               <height>286</height>
+               <height>316</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_6">
