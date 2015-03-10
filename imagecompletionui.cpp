@@ -51,15 +51,11 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
     setStrikeOptionsEnabled(false);
 
     showData();
-
-    qDebug() <<"11";
-
-    qDebug() <<"22";
 }
 
 ImageCompletionUI::~ImageCompletionUI()
 {
-
+    delete _awesome;
 }
 
 void	ImageCompletionUI::setupMainWindow()
@@ -96,20 +92,15 @@ void	 ImageCompletionUI::createMenus()
     _menuLabelling->addAction( _manualAction );
     _menuLabelling->addSeparator();
 
-    submenu = _menuLabelling->addMenu( tr("笔画粗细") );
+    submenu = _menuLabelling->addMenu(_awesome->icon(circleo), tr("笔画粗细"));
     for(int i = 0; i < 3; i++) submenu->addAction(_strikeThickness[i]);
 
-    submenu = _menuLabelling->addMenu( tr("线条粗细") );
+    submenu = _menuLabelling->addMenu( _awesome->icon(minus), tr("线条粗细") );
     for(int i = 0; i < 3; i++) submenu->addAction(_lineThickness[i]);
-
-    //    _menuLabelling->addSeparator();
-    //    _menuLabelling->addAction(_saveLabelResultAction);
-    //    _menuLabelling->addAction(_saveMaskAction);
 
     _menuData=menuBar()->addMenu(tr("&数据管理"));
     _menuData->addAction(_searchAction);
     _menuData->addAction(_addtosqlAction);
-    //_menuData->addAction(_saveresultAction);
     _menuData->addAction(_exportDataAction);
     _menuData->addAction(_importDataAction);
 
@@ -251,14 +242,6 @@ void	ImageCompletionUI::createActions()
     group2->addAction(_manualAction);
     connect(group2, SIGNAL(triggered(QAction*)), this, SLOT(labellingMethodChanged(QAction*)));
 
-    //    _saveLabelResultAction = new QAction( tr("保存标注图像"), this );
-    //    _saveLabelResultAction->setObjectName( tr("_saveLabelResultAction") );
-    //    connect( _saveLabelResultAction, SIGNAL(triggered()), this, SLOT(saveLabelledResult()));
-
-    //    _saveMaskAction = new QAction( tr("保存掩码"), this );
-    //    _saveMaskAction->setObjectName( tr("_saveMaskAction") );
-    //    connect( _saveMaskAction, SIGNAL(triggered()), this, SLOT(saveMask()) );
-
     _redo = new QAction( _awesome->icon(repeat), tr("重做"), this );
     _redo->setObjectName( tr("_redo") );
     connect( _redo, SIGNAL(triggered()), this, SLOT(redo()) );
@@ -340,10 +323,6 @@ void	ImageCompletionUI::createToolBars()
     _editToolBar->addAction(_redo);
     _editToolBar->addAction(_undo);
 
-    //_editToolBar->addSeparator();
-    //_editToolBar->addAction(_saveLabelResultAction);
-    //_editToolBar->addAction(_saveMaskAction);
-
     _editToolBar->addSeparator();
     _editToolBar->addWidget(_strikeThicknessToolButton);
     _editToolBar->addWidget(_lineThicknessToolButton);
@@ -369,7 +348,6 @@ void	ImageCompletionUI::setupWidgets()
 
     QVBoxLayout *centralwigetLayout = new QVBoxLayout;
     centralwigetLayout->addWidget(_centralTabWidget);
-    //centralwigetLayout->setAlignment(Qt::AlignCenter);
     centralwigetLayout->setAlignment(Qt::AlignTop);
     _centralwidget->setLayout(centralwigetLayout);
 
@@ -455,6 +433,11 @@ void	ImageCompletionUI::setupWidgets()
     ////////////////////////////////////////////////////////////////////////////////////
     _sceneCompletionDialog.setupUi( _sceneCompletionPage );
     _regionCompetitionDialog.setupUi(_regionCompetitionPage);
+    _regionCompetitionDialog.buttonSelectColor->setIcon(_awesome->icon(eyedropper));
+    _regionCompetitionDialog.radioBrightness->setIcon(_awesome->icon(adjust));
+    _regionCompetitionDialog.radioScale->setIcon(QIcon(":/new/prefix1/icons/scale.png"));
+    _regionCompetitionDialog.radioNotColor->setIcon(_awesome->icon(circle));
+    _regionCompetitionDialog.radioMesuarement->setIcon(QIcon(":/new/prefix1/icons/ruler.png"));
 
     _rightOperationWidget->setWidget(_dockWidgetContents);
     this->addDockWidget(static_cast<Qt::DockWidgetArea>(2), _rightOperationWidget);
