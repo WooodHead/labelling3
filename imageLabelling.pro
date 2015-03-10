@@ -82,18 +82,9 @@ unix:!macx {
 win32 {
 INCLUDEPATH += D:\Application\CMake_Qt_OpenCV_MinGW482\install\include\
 
-LIBS += D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_calib3d244.dll.a\
-    D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_contrib244.dll.a\
-    D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_core244.dll.a\
-    D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_features2d244.dll.a\
-    D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_flann244.dll.a\
-    D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_gpu244.dll.a\
-    D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_highgui244.dll.a\
-    D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_imgproc244.dll.a\
-    D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_legacy244.dll.a\
-    D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_ml244.dll.a\
-    D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_objdetect244.dll.a\
-    D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_video244.dll.a
+LIBS += D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_core244.dll.a\
+        D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_highgui244.dll.a\
+        D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_imgproc244.dll.a\
 }
 
 OTHER_FILES += \
