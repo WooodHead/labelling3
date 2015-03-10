@@ -164,8 +164,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>251</width>
-         <height>451</height>
+         <width>276</width>
+         <height>401</height>
         </rect>
        </property>
        <property name="widgetResizable">
@@ -176,8 +176,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>249</width>
-          <height>449</height>
+          <width>274</width>
+          <height>399</height>
          </rect>
         </property>
         <widget class="QTreeView" name="treeViewTabSearch">
@@ -185,8 +185,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>251</width>
-           <height>451</height>
+           <width>256</width>
+           <height>401</height>
           </rect>
          </property>
          <property name="midLineWidth">
@@ -194,6 +194,16 @@
          </property>
          <property name="tabKeyNavigation">
           <bool>true</bool>
+         </property>
+        </widget>
+        <widget class="QTreeView" name="treeView">
+         <property name="geometry">
+          <rect>
+           <x>120</x>
+           <y>280</y>
+           <width>256</width>
+           <height>192</height>
+          </rect>
          </property>
         </widget>
        </widget>
