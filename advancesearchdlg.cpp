@@ -103,6 +103,36 @@ void AdvanceSearchDlg::resetConditions()
     ui->oiladditionChkBox->setChecked(false);
 
     // oia
+    ui->oia_sendstuffChkBox->setChecked(false);
+    ui->oia_senddepartChkBox->setChecked(false);
+    ui->oia_analyzedepartnameChkBox->setChecked(false);
+    ui->oia_receivedateChkBox->setChecked(false);
+    ui->oia_receivestuffChkBox->setChecked(false);
+
+    ui->oia_contaminationanalyzedateChkBox->setChecked(false);
+    ui->oia_contaminationanalyzeequipmentChkBox->setChecked(false);
+    ui->oia_contaminationanalyzemethodChkBox->setChecked(false);
+    ui->oia_contaminationanalyzereportidChkBox->setChecked(false);
+    ui->oia_contaminationanalyzereportidChkBox->setChecked(false);
+    ui->oia_contaminationanalyzestuffChkBox->setChecked(false);
+
+    ui->oia_spectroscopydateChkBox->setChecked(false);
+    ui->oia_spectroscopyequipmentChkBox->setChecked(false);
+    ui->oia_spectroscopymethodChkBox->setChecked(false);
+    ui->oia_spectroscopyreportidChkBox->setChecked(false);
+    ui->oia_spectroscopystuffChkBox->setChecked(false);
+
+    ui->oia_ferrographydateChkBox->setChecked(false);
+    ui->oia_ferrographyequipmentChkBox->setChecked(false);
+    ui->oia_ferrographymethodChkBox->setChecked(false);
+    ui->oia_ferrographyreportidChkBox->setChecked(false);
+    ui->oia_ferrographystuffChkBox->setChecked(false);
+
+    ui->oia_physicochemicaldateChkBox->setChecked(false);
+    ui->oia_physicochemicalequipmentChkBox->setChecked(false);
+    ui->oia_physicochemicalmethodChkBox->setChecked(false);
+    ui->oia_physicochemicalreportidChkBox->setChecked(false);
+    ui->oia_physicochemicalstuffChkBox->setChecked(false);
 
     // abm
 }
@@ -424,6 +454,185 @@ void AdvanceSearchDlg::useproperty()
         if(!oiaFields.isEmpty())
         {
             idx = 0;
+            foreach (QString field, oiaFields)
+            {
+                if(field == "sendstuff")
+                {
+                    ui->oia_sendstuffLineEdit->setText(oiaValues.at(idx));
+                    _oiaCdtMap.insert("sendstuff",oiaValues.at(idx));
+                    ui->oia_sendstuffChkBox->setChecked(true);
+                }
+                else if(field == "senddepart")
+                {
+                    ui->oia_senddepartCbBox->setCurrentIndex(ui->oia_senddepartCbBox->findText(oiaValues.at(idx)));
+                    _oiaCdtMap.insert("senddepart",oiaValues.at(idx));
+                    ui->oia_senddepartChkBox->setChecked(true);
+                }
+                else if(field == "receivestuff")
+                {
+                    ui->oia_receivestuffLineEdit->setText(oiaValues.at(idx));
+                    _oiaCdtMap.insert("receivestuff",oiaValues.at(idx));
+                    ui->oia_receivestuffChkBox->setChecked(true);
+                }
+                else if(field == "receivedate")
+                {
+                    QString datestr = oiaValues.at(idx);
+                    QStringList datelist = datestr.split("-");
+                    int y = datelist.at(0).toInt();
+                    int m = datelist.at(1).toInt();
+                    int d = datelist.at(2).toInt();
+                    ui->oia_receivedateDateEdit->setDate(QDate(y,m,d));
+                    _oiaCdtMap.insert("receivedate",oiaValues.at(idx));
+                    ui->oia_receivedateChkBox->setChecked(true);
+                }
+                else if(field == "analyzedepartname")
+                {
+                    ui->oia_analyzedepartnameCbBox->setCurrentIndex(ui->oia_analyzedepartnameCbBox->findText(oiaValues.at(idx)));
+                    _oiaCdtMap.insert("analyzedepartname",oiaValues.at(idx));
+                    ui->oia_analyzedepartnameChkBox->setChecked(true);
+                }
+                else if(field == "contaminationanalyzestuff")
+                {
+                    ui->oia_contaminationanalyzestuffChkLineEdit->setText(oiaValues.at(idx));
+                    _oiaCdtMap.insert("contaminationanalyzestuff",oiaValues.at(idx));
+                    ui->oia_contaminationanalyzestuffChkBox->setChecked(true);
+                }
+                else if(field == "contaminationanalyzemethod")
+                {
+                    ui->oia_contaminationanalyzemethodCbBox->setCurrentIndex(ui->oia_contaminationanalyzemethodCbBox->findText(oiaValues.at(idx)));
+                    _oiaCdtMap.insert("contaminationanalyzemethod",oiaValues.at(idx));
+                    ui->oia_contaminationanalyzestuffChkBox->setChecked(true);
+                }
+                else if(field == "contaminationanalyzeequipment")
+                {
+                    ui->oia_contaminationanalyzeequipmentCbBox->setCurrentIndex(ui->oia_contaminationanalyzeequipmentCbBox->findText(oiaValues.at(idx)));
+                    _oiaCdtMap.insert("contaminationanalyzeequipment",oiaValues.at(idx));
+                    ui->oia_contaminationanalyzeequipmentChkBox->setChecked(true);
+                }
+                else if(field == "contaminationanalyzedate")
+                {
+                    QString datestr = oiaValues.at(idx);
+                    QStringList datelist = datestr.split("-");
+                    int y = datelist.at(0).toInt();
+                    int m = datelist.at(1).toInt();
+                    int d = datelist.at(2).toInt();
+                    ui->oia_contaminationanalyzedateDateEdit->setDate(QDate(y,m,d));
+                    _oiaCdtMap.insert("contaminationanalyzedate",oiaValues.at(idx));
+                    ui->oia_contaminationanalyzedateChkBox->setChecked(true);
+                }
+                else if(field == "contaminationanalyzereportid")
+                {
+                    ui->oia_contaminationanalyzereportidCbBox->setCurrentIndex(ui->oia_contaminationanalyzereportidCbBox->findText(oiaValues.at(idx)));
+                    _oiaCdtMap.insert("contaminationanalyzereportid",oiaValues.at(idx));
+                    ui->oia_contaminationanalyzereportidChkBox->setChecked(true);
+                }
+                else if(field == "spectroscopystuff")
+                {
+                    ui->oia_spectroscopystuffLineEdit->setText(oiaValues.at(idx));
+                    _oiaCdtMap.insert("spectroscopystuff",oiaValues.at(idx));
+                    ui->oia_spectroscopystuffChkBox->setChecked(true);
+                }
+                else if(field == "spectroscopymethod")
+                {
+                    ui->oia_spectroscopymethodCbBo->setCurrentIndex(ui->oia_spectroscopymethodCbBo->findText(oiaValues.at(idx)));
+                    _oiaCdtMap.insert("spectroscopymethod",oiaValues.at(idx));
+                    ui->oia_spectroscopymethodChkBox->setChecked(true);
+                }
+                else if(field == "spectroscopyequipment")
+                {
+                    ui->oia_spectroscopyequipmentCbBox->setCurrentIndex(ui->oia_spectroscopyequipmentCbBox->findText(oiaValues.at(idx)));
+                    _oiaCdtMap.insert("spectroscopyequipment",oiaValues.at(idx));
+                    ui->oia_spectroscopyequipmentChkBox->setChecked(true);
+                }
+                else if(field == "spectroscopydate")
+                {
+                    QString datestr = oiaValues.at(idx);
+                    QStringList datelist = datestr.split("-");
+                    int y = datelist.at(0).toInt();
+                    int m = datelist.at(1).toInt();
+                    int d = datelist.at(2).toInt();
+                    ui->oia_spectroscopydateDateEdit->setDate(QDate(y,m,d));
+                    _oiaCdtMap.insert("spectroscopydate",oiaValues.at(idx));
+                    ui->oia_spectroscopydateChkBox->setChecked(true);
+                }
+                else if(field == "spectroscopyreportid")
+                {
+                    ui->oia_spectroscopyreportidCbBox->setCurrentIndex(ui->oia_spectroscopyreportidCbBox->findText(oiaValues.at(idx)));
+                    _oiaCdtMap.insert("spectroscopyreportid",oiaValues.at(idx));
+                    ui->oia_spectroscopyreportidChkBox->setChecked(true);
+                }
+                else if(field == "ferrographystuff")
+                {
+                    ui->oia_ferrographystuffLineEdit->setText(oiaValues.at(idx));
+                    _oiaCdtMap.insert("ferrographystuff",oiaValues.at(idx));
+                    ui->oia_ferrographystuffChkBox->setChecked(true);
+                }
+                else if(field == "ferrographymethod")
+                {
+                    ui->oia_ferrographymethodCbBox->setCurrentIndex(ui->oia_ferrographymethodCbBox->findText(oiaValues.at(idx)));
+                    _oiaCdtMap.insert("ferrographymethod",oiaValues.at(idx));
+                    ui->oia_ferrographymethodChkBox->setChecked(true);
+                }
+                else if(field == "ferrographyequipment")
+                {
+                    ui->oia_ferrographyequipmentCbBox->setCurrentIndex(ui->oia_ferrographyequipmentCbBox->findText(oiaValues.at(idx)));
+                    _oiaCdtMap.insert("ferrographyequipment",oiaValues.at(idx));
+                    ui->oia_ferrographyequipmentChkBox->setChecked(true);
+                }
+                else if(field == "ferrographydate")
+                {
+                    QString datestr = oiaValues.at(idx);
+                    QStringList datelist = datestr.split("-");
+                    int y = datelist.at(0).toInt();
+                    int m = datelist.at(1).toInt();
+                    int d = datelist.at(2).toInt();
+                    ui->oia_ferrographydateDateEdit->setDate(QDate(y,m,d));
+                    _oiaCdtMap.insert("ferrographydate",oiaValues.at(idx));
+                    ui->oia_ferrographydateChkBox->setChecked(true);
+                }
+                else if(field == "ferrographyreportid")
+                {
+                    ui->oia_ferrographyreportidCbBox->setCurrentIndex(ui->oia_ferrographyreportidCbBox->findText(oiaValues.at(idx)));
+                    _oiaCdtMap.insert("ferrographyreportid",oiaValues.at(idx));
+                    ui->oia_ferrographyreportidChkBox->setChecked(true);
+                }
+                else if(field == "physicochemicalstuff")
+                {
+                    ui->oia_physicochemicalstuffLineEdit->setText(oiaValues.at(idx));
+                    _oiaCdtMap.insert("physicochemicalstuff",oiaValues.at(idx));
+                    ui->oia_physicochemicalstuffChkBox->setChecked(true);
+                }
+                else if(field == "physicochemicalmethod")
+                {
+                    ui->oia_physicochemicalmethodCbBox->setCurrentIndex(ui->oia_physicochemicalmethodCbBox->findText(oiaValues.at(idx)));
+                    _oiaCdtMap.insert("physicochemicalmethod",oiaValues.at(idx));
+                    ui->oia_physicochemicalmethodChkBox->setChecked(true);
+                }
+                else if(field == "physicochemicalequipment")
+                {
+                    ui->oia_physicochemicalequipmentCbBox->setCurrentIndex(ui->oia_physicochemicalequipmentCbBox->findText(oiaValues.at(idx)));
+                    _oiaCdtMap.insert("physicochemicalequipment",oiaValues.at(idx));
+                    ui->oia_physicochemicalequipmentChkBox->setChecked(true);
+                }
+                else if(field == "physicochemicaldate")
+                {
+                    QString datestr = oiaValues.at(idx);
+                    QStringList datelist = datestr.split("-");
+                    int y = datelist.at(0).toInt();
+                    int m = datelist.at(1).toInt();
+                    int d = datelist.at(2).toInt();
+                    ui->oia_physicochemicaldateDateEdit->setDate(QDate(y,m,d));
+                    _oiaCdtMap.insert(" physicochemicaldate",oiaValues.at(idx));
+                    ui->oia_physicochemicaldateChkBox->setChecked(true);
+                }
+                else if(field == "physicochemicalreportid")
+                {
+                    ui->oia_physicochemicalreportidCbBox->setCurrentIndex(ui->oia_physicochemicalreportidCbBox->findText(oiaValues.at(idx)));
+                    _oiaCdtMap.insert("physicochemicalreportid",oiaValues.at(idx));
+                    ui->oia_physicochemicalreportidChkBox->setChecked(true);
+                }
+                idx ++;
+            }
         }
 
         QStringList abmFields = query.value(16).toString().split("#");
@@ -1124,7 +1333,38 @@ void AdvanceSearchDlg::initCbBox()
     ui->monitorpartidCbBox->setCurrentIndex(0);
     ui->monitorpartnameCbBox->setCurrentIndex(0);
 
-
+    query.exec("select * from oilanalyzeinfo");
+    while(query.next())
+    {
+        if(ui->oia_senddepartCbBox->findText(query.value(oia_senddepart).toString()) == -1)
+            ui->oia_senddepartCbBox->insertItem(-1,query.value(oia_senddepart).toString());
+        if(ui->oia_analyzedepartnameCbBox->findText(query.value(oia_analyzedepartname).toString()) == -1)
+            ui->oia_analyzedepartnameCbBox->insertItem(-1,query.value(oia_analyzedepartname).toString());
+        if(ui->oia_contaminationanalyzemethodCbBox->findText(query.value(oia_contaminationanalyzemethod).toString()) == -1)
+            ui->oia_contaminationanalyzemethodCbBox->insertItem(-1,query.value(oia_analyzedepartname).toString());
+        if(ui->oia_contaminationanalyzeequipmentCbBox->findText(query.value(oia_contaminationanalyzeequipment).toString()) == -1)
+            ui->oia_contaminationanalyzeequipmentCbBox->insertItem(-1,query.value(oia_contaminationanalyzeequipment).toString());
+        if(ui->oia_contaminationanalyzereportidCbBox->findText(query.value(oia_contaminationanalyzereportid).toString()) == -1)
+            ui->oia_contaminationanalyzereportidCbBox->insertItem(-1,query.value(oia_contaminationanalyzereportid).toString());
+        if(ui->oia_spectroscopymethodCbBo->findText(query.value(oia_spectroscopymethod).toString()) == -1)
+            ui->oia_spectroscopymethodCbBo->insertItem(-1,query.value(oia_spectroscopymethod).toString());
+        if(ui->oia_spectroscopyequipmentCbBox->findText(query.value(oia_spectroscopyequipment).toString()) == -1)
+            ui->oia_spectroscopyequipmentCbBox->insertItem(-1,query.value(oia_spectroscopyequipment).toString());
+        if(ui->oia_spectroscopyreportidCbBox->findText(query.value(oia_spectroscopyreportid).toString()) == -1)
+            ui->oia_spectroscopyreportidCbBox->insertItem(-1,query.value(oia_spectroscopyreportid).toString());
+        if(ui->oia_physicochemicalmethodCbBox->findText(query.value(oia_physicochemicalmethod).toString()) == -1)
+            ui->oia_physicochemicalmethodCbBox->insertItem(-1,query.value(oia_physicochemicalmethod).toString());
+        if(ui->oia_physicochemicalequipmentCbBox->findText(query.value(oia_physicochemicalequipment).toString()) == -1)
+            ui->oia_physicochemicalequipmentCbBox->insertItem(-1,query.value(oia_physicochemicalequipment).toString());
+        if(ui->oia_physicochemicalreportidCbBox->findText(query.value(oia_physicochemicalreportid).toString()) == -1)
+            ui->oia_physicochemicalreportidCbBox->insertItem(-1,query.value(oia_physicochemicalreportid).toString());
+        if(ui->oia_ferrographymethodCbBox->findText(query.value(oia_ferrographymethod).toString()) == -1)
+            ui->oia_ferrographymethodCbBox->insertItem(-1,query.value(oia_ferrographymethod).toString());
+        if(ui->oia_ferrographyequipmentCbBox->findText(query.value(oia_ferrographyequipment).toString()) == -1)
+            ui->oia_ferrographyequipmentCbBox->insertItem(-1,query.value(oia_ferrographyequipment).toString());
+        if(ui->oia_ferrographyreportidCbBox->findText(query.value(oia_ferrographyreportid).toString()) == -1)
+            ui->oia_ferrographyreportidCbBox->insertItem(-1,query.value(oia_ferrographyreportid).toString());
+    }
 }
 
 
@@ -2232,9 +2472,524 @@ void AdvanceSearchDlg::on_sendtimeTimeEdit_timeChanged(const QTime &date)
 }
 
 
+void AdvanceSearchDlg::on_oia_sendstuffChkBox_clicked()
+{
+    _oiaCdtMap.remove("sendstuff");
+    if(ui->oia_sendstuffChkBox->isChecked())
+    {
+        QString text = ui->sendstuffLineEdit->text();
+        _oiaCdtMap.insert("sendstuff",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_sendstuffLineEdit_textChanged(const QString &arg1)
+{
+    _oiaCdtMap.remove("sendstuff");
+    if(ui->oia_sendstuffChkBox->isChecked())
+    {
+        QString text = ui->sendstuffLineEdit->text();
+        _oiaCdtMap.insert("sendstuff",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_senddepartChkBox_clicked()
+{
+    _oiaCdtMap.remove("senddepart");
+    if(ui->oia_senddepartChkBox->isChecked())
+    {
+        QString text = ui->oia_senddepartCbBox->currentText();
+        _oiaCdtMap.insert("senddepart",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_senddepartCbBox_currentIndexChanged(int index)
+{
+    _oiaCdtMap.remove("senddepart");
+    if(ui->oia_senddepartChkBox->isChecked())
+    {
+        QString text = ui->oia_senddepartCbBox->currentText();
+        _oiaCdtMap.insert("senddepart",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_receivestuffChkBox_clicked()
+{
+    _oiaCdtMap.remove("receivestuff");
+    if(ui->oia_receivestuffChkBox->isChecked())
+    {
+        QString text = ui->oia_receivestuffLineEdit->text();
+        _oiaCdtMap.insert("receivestuff",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_receivestuffLineEdit_textChanged(const QString &arg1)
+{
+    _oiaCdtMap.remove("receivestuff");
+    if(ui->oia_receivestuffChkBox->isChecked())
+    {
+        QString text = ui->oia_receivestuffLineEdit->text();
+        _oiaCdtMap.insert("receivestuff",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_receivedateChkBox_clicked()
+{
+    _oiaCdtMap.remove("receivedate");
+    if(ui->oia_receivedateChkBox->isChecked())
+    {
+        QString text = ui->oia_receivedateDateEdit->date().toString("yyyy-MM-dd");
+        _oiaCdtMap.insert("receivedate",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_receivedateDateEdit_dateChanged(const QDate &date)
+{
+    _oiaCdtMap.remove("receivedate");
+    if(ui->oia_receivedateChkBox->isChecked())
+    {
+        QString text = ui->oia_receivedateDateEdit->date().toString("yyyy-MM-dd");
+        _oiaCdtMap.insert("receivedate",text);
+    }
+}
+
+//void AdvanceSearchDlg::on_oia_receivedateDateEdit_timeChanged(const QTime &time)
+//{
+//    _oiaCdtMap.remove("receivedate");
+//    if(ui->oia_receivedateChkBox->isChecked())
+//    {
+//        QString text = ui->oia_receivedateDateEdit->date().toString("yyyy-MM-dd");
+//        _oiaCdtMap.insert("receivedate",text);
+//    }
+//}
+
+
+void AdvanceSearchDlg::on_oia_analyzedepartnameChkBox_clicked()
+{
+    _oiaCdtMap.remove("analyzedepartname");
+    if(ui->oia_analyzedepartnameChkBox->isChecked())
+    {
+        QString text = ui->oia_analyzedepartnameCbBox->currentText();
+        _oiaCdtMap.insert("analyzedepartname",text);
+    }
+}
+
+
+void AdvanceSearchDlg::on_oia_analyzedepartnameCbBox_currentIndexChanged(int index)
+{
+    _oiaCdtMap.remove("analyzedepartname");
+    if(ui->oia_analyzedepartnameChkBox->isChecked())
+    {
+        QString text = ui->oia_analyzedepartnameCbBox->currentText();
+        _oiaCdtMap.insert("analyzedepartname",text);
+    }
+}
+
+
+void AdvanceSearchDlg::on_oia_contaminationanalyzestuffChkBox_clicked()
+{
+    _oiaCdtMap.remove("contaminationanalyzestuff");
+    if(ui->oia_contaminationanalyzestuffChkBox->isChecked())
+    {
+        QString text = ui->oia_contaminationanalyzestuffChkLineEdit->text();
+        _oiaCdtMap.insert("contaminationanalyzestuff",text);
+    }
+}
+
+
+void AdvanceSearchDlg::on_oia_contaminationanalyzestuffChkLineEdit_textChanged(const QString &arg1)
+{
+    _oiaCdtMap.remove("contaminationanalyzestuff");
+    if(ui->oia_contaminationanalyzestuffChkBox->isChecked())
+    {
+        QString text = ui->oia_contaminationanalyzestuffChkLineEdit->text();
+        _oiaCdtMap.insert("contaminationanalyzestuff",text);
+    }
+}
+
+
+void AdvanceSearchDlg::on_oia_contaminationanalyzemethodChkBox_clicked()
+{
+    _oiaCdtMap.remove("contaminationanalyzemethod");
+    if(ui->oia_contaminationanalyzemethodChkBox->isChecked())
+    {
+        QString text = ui->oia_contaminationanalyzemethodCbBox->currentText();
+        _oiaCdtMap.insert("contaminationanalyzemethod",text);
+    }
+}
+
+
+void AdvanceSearchDlg::on_oia_contaminationanalyzemethodCbBox_currentIndexChanged(int index)
+{
+    _oiaCdtMap.remove("contaminationanalyzemethod");
+    if(ui->oia_contaminationanalyzemethodChkBox->isChecked())
+    {
+        QString text = ui->oia_contaminationanalyzemethodCbBox->currentText();
+        _oiaCdtMap.insert("contaminationanalyzemethod",text);
+    }
+}
+
+
+void AdvanceSearchDlg::on_oia_contaminationanalyzeequipmentChkBox_clicked()
+{
+    _oiaCdtMap.remove("contaminationanalyzeequipment");
+    if(ui->oia_contaminationanalyzeequipmentChkBox->isChecked())
+    {
+        QString text = ui->oia_contaminationanalyzeequipmentCbBox->currentText();
+        _oiaCdtMap.insert("contaminationanalyzeequipment",text);
+    }
+}
+
+
+void AdvanceSearchDlg::on_oia_contaminationanalyzeequipmentCbBox_currentIndexChanged(int index)
+{
+    _oiaCdtMap.remove("contaminationanalyzeequipment");
+    if(ui->oia_contaminationanalyzeequipmentChkBox->isChecked())
+    {
+        QString text = ui->oia_contaminationanalyzeequipmentCbBox->currentText();
+        _oiaCdtMap.insert("contaminationanalyzeequipment",text);
+    }
+}
+
+
+void AdvanceSearchDlg::on_oia_contaminationanalyzedateChkBox_clicked()
+{
+    _oiaCdtMap.remove("contaminationanalyzedate");
+    if(ui->oia_contaminationanalyzedateChkBox->isChecked())
+    {
+        QString text = ui->oia_contaminationanalyzedateDateEdit->date().toString("yyyy-MM-dd");
+        _oiaCdtMap.insert("contaminationanalyzedate",text);
+    }
+}
+
+
+void AdvanceSearchDlg::on_oia_contaminationanalyzedateDateEdit_dateChanged(const QDate &date)
+{
+    _oiaCdtMap.remove("contaminationanalyzedate");
+    if(ui->oia_contaminationanalyzedateChkBox->isChecked())
+    {
+        QString text = ui->oia_contaminationanalyzedateDateEdit->date().toString("yyyy-MM-dd");
+        _oiaCdtMap.insert("contaminationanalyzedate",text);
+    }
+}
 
 
 
+void AdvanceSearchDlg::on_oia_contaminationanalyzereportidChkBox_clicked()
+{
+    _oiaCdtMap.remove("contaminationanalyzereportid");
+    if(ui->oia_contaminationanalyzereportidChkBox->isChecked())
+    {
+        QString text = ui->oia_contaminationanalyzereportidCbBox->currentText();
+        _oiaCdtMap.insert("contaminationanalyzereportid",text);
+    }
+}
 
+void AdvanceSearchDlg::on_oia_contaminationanalyzereportidCbBox_currentIndexChanged(int index)
+{
+    _oiaCdtMap.remove("contaminationanalyzereportid");
+    if(ui->oia_contaminationanalyzereportidChkBox->isChecked())
+    {
+        QString text = ui->oia_contaminationanalyzereportidCbBox->currentText();
+        _oiaCdtMap.insert("contaminationanalyzereportid",text);
+    }
+}
 
+void AdvanceSearchDlg::on_oia_spectroscopystuffChkBox_clicked()
+{
+    _oiaCdtMap.remove("spectroscopystuff");
+    if(ui->oia_spectroscopystuffChkBox->isChecked())
+    {
+        QString text = ui->oia_spectroscopystuffLineEdit->text();
+        _oiaCdtMap.insert("spectroscopystuff",text);
+    }
+}
 
+void AdvanceSearchDlg::on_oia_spectroscopystuffLineEdit_textChanged(const QString &arg1)
+{
+    _oiaCdtMap.remove("spectroscopystuff");
+    if(ui->oia_spectroscopystuffChkBox->isChecked())
+    {
+        QString text = ui->oia_spectroscopystuffLineEdit->text();
+        _oiaCdtMap.insert("spectroscopystuff",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_spectroscopymethodChkBox_clicked()
+{
+    _oiaCdtMap.remove("spectroscopymethod");
+    if(ui->oia_spectroscopymethodChkBox->isChecked())
+    {
+        QString text = ui->oia_spectroscopymethodCbBo->currentText();
+        _oiaCdtMap.insert("spectroscopymethod",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_spectroscopymethodCbBo_currentIndexChanged(int index)
+{
+    _oiaCdtMap.remove("spectroscopymethod");
+    if(ui->oia_spectroscopymethodChkBox->isChecked())
+    {
+        QString text = ui->oia_spectroscopymethodCbBo->currentText();
+        _oiaCdtMap.insert("spectroscopymethod",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_spectroscopyequipmentChkBox_clicked()
+{
+    _oiaCdtMap.remove("spectroscopyequipment");
+    if(ui->oia_spectroscopyequipmentChkBox->isChecked())
+    {
+        QString text = ui->oia_spectroscopyequipmentCbBox->currentText();
+        _oiaCdtMap.insert("spectroscopyequipment",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_spectroscopyequipmentCbBox_currentIndexChanged(int index)
+{
+    _oiaCdtMap.remove("spectroscopyequipment");
+    if(ui->oia_spectroscopyequipmentChkBox->isChecked())
+    {
+        QString text = ui->oia_spectroscopyequipmentCbBox->currentText();
+        _oiaCdtMap.insert("spectroscopyequipment",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_spectroscopydateChkBox_clicked()
+{
+    _oiaCdtMap.remove("spectroscopydate");
+    if(ui->oia_spectroscopydateChkBox->isChecked())
+    {
+        QString text = ui->oia_spectroscopydateDateEdit->date().toString("yyyy-MM-dd");
+        _oiaCdtMap.insert("spectroscopydate",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_spectroscopydateDateEdit_dateChanged(const QDate &date)
+{
+    _oiaCdtMap.remove("spectroscopydate");
+    if(ui->oia_spectroscopydateChkBox->isChecked())
+    {
+        QString text = ui->oia_spectroscopydateDateEdit->date().toString("yyyy-MM-dd");
+        _oiaCdtMap.insert("spectroscopydate",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_spectroscopyreportidChkBox_clicked()
+{
+    _oiaCdtMap.remove("spectroscopyreportid");
+    if(ui->oia_spectroscopyreportidChkBox->isChecked())
+    {
+        QString text = ui->oia_spectroscopyreportidCbBox->currentText();
+        _oiaCdtMap.insert("spectroscopyreportid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_spectroscopyreportidCbBox_currentIndexChanged(int index)
+{
+    _oiaCdtMap.remove("spectroscopyreportid");
+    if(ui->oia_spectroscopyreportidChkBox->isChecked())
+    {
+        QString text = ui->oia_spectroscopyreportidCbBox->currentText();
+        _oiaCdtMap.insert("spectroscopyreportid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_physicochemicalstuffChkBox_clicked()
+{
+    _oiaCdtMap.remove("physicochemicalstuff");
+    if(ui->oia_physicochemicalstuffChkBox->isChecked())
+    {
+        QString text = ui->oia_physicochemicalstuffLineEdit->text();
+        _oiaCdtMap.insert("physicochemicalstuff",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_physicochemicalstuffLineEdit_textChanged(const QString &arg1)
+{
+    _oiaCdtMap.remove("physicochemicalstuff");
+    if(ui->oia_physicochemicalstuffChkBox->isChecked())
+    {
+        QString text = ui->oia_physicochemicalstuffLineEdit->text();
+        _oiaCdtMap.insert("physicochemicalstuff",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_physicochemicalmethodChkBox_clicked()
+{
+    _oiaCdtMap.remove("physicochemicalmethod");
+    if(ui->oia_physicochemicalmethodChkBox->isChecked())
+    {
+        QString text = ui->oia_physicochemicalmethodCbBox->currentText();
+        _oiaCdtMap.insert("physicochemicalmethod",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_physicochemicalmethodCbBox_currentIndexChanged(int index)
+{
+    _oiaCdtMap.remove("physicochemicalmethod");
+    if(ui->oia_physicochemicalmethodChkBox->isChecked())
+    {
+        QString text = ui->oia_physicochemicalmethodCbBox->currentText();
+        _oiaCdtMap.insert("physicochemicalmethod",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_physicochemicalequipmentChkBox_clicked()
+{
+    _oiaCdtMap.remove("physicochemicalequipment");
+    if(ui->oia_physicochemicalequipmentChkBox->isChecked())
+    {
+        QString text = ui->oia_physicochemicalequipmentCbBox->currentText();
+        _oiaCdtMap.insert("physicochemicalequipment",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_physicochemicalequipmentCbBox_currentIndexChanged(int index)
+{
+    _oiaCdtMap.remove("physicochemicalequipment");
+    if(ui->oia_physicochemicalequipmentChkBox->isChecked())
+    {
+        QString text = ui->oia_physicochemicalequipmentCbBox->currentText();
+        _oiaCdtMap.insert("physicochemicalequipment",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_physicochemicaldateChkBox_clicked()
+{
+    _oiaCdtMap.remove("physicochemicaldate");
+    if(ui->oia_physicochemicaldateChkBox->isChecked())
+    {
+        QString text = ui->oia_physicochemicaldateDateEdit->date().toString("yyyy-MM-dd");
+        _oiaCdtMap.insert("physicochemicaldate",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_physicochemicaldateDateEdit_dateChanged(const QDate &date)
+{
+    _oiaCdtMap.remove("physicochemicaldate");
+    if(ui->oia_physicochemicaldateChkBox->isChecked())
+    {
+        QString text = ui->oia_physicochemicaldateDateEdit->date().toString("yyyy-MM-dd");
+        _oiaCdtMap.insert("physicochemicaldate",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_physicochemicalreportidChkBox_clicked()
+{
+    _oiaCdtMap.remove("physicochemicalreportid");
+    if(ui->oia_physicochemicalreportidChkBox->isChecked())
+    {
+        QString text = ui->oia_physicochemicalreportidCbBox->currentText();
+        _oiaCdtMap.insert("physicochemicalreportid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_physicochemicalreportidCbBox_currentIndexChanged(int index)
+{
+    _oiaCdtMap.remove("physicochemicalreportid");
+    if(ui->oia_physicochemicalreportidChkBox->isChecked())
+    {
+        QString text = ui->oia_physicochemicalreportidCbBox->currentText();
+        _oiaCdtMap.insert("physicochemicalreportid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_ferrographystuffChkBox_clicked()
+{
+    _oiaCdtMap.remove("ferrographystuff");
+    if(ui->oia_ferrographystuffChkBox->isChecked())
+    {
+        QString text = ui->oia_ferrographystuffLineEdit->text();
+        _oiaCdtMap.insert("ferrographystuff",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_ferrographystuffLineEdit_textChanged(const QString &arg1)
+{
+    _oiaCdtMap.remove("ferrographystuff");
+    if(ui->oia_ferrographystuffChkBox->isChecked())
+    {
+        QString text = ui->oia_ferrographystuffLineEdit->text();
+        _oiaCdtMap.insert("ferrographystuff",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_ferrographymethodChkBox_clicked()
+{
+    _oiaCdtMap.remove("ferrographymethod");
+    if(ui->oia_ferrographymethodChkBox->isChecked())
+    {
+        QString text = ui->oia_ferrographyreportidCbBox->currentText();
+        _oiaCdtMap.insert("ferrographymethod",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_ferrographymethodCbBox_currentIndexChanged(int index)
+{
+    _oiaCdtMap.remove("ferrographymethod");
+    if(ui->oia_ferrographymethodChkBox->isChecked())
+    {
+        QString text = ui->oia_ferrographyreportidCbBox->currentText();
+        _oiaCdtMap.insert("ferrographymethod",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_ferrographyequipmentChkBox_clicked()
+{
+    _oiaCdtMap.remove("ferrographyequipment");
+    if(ui->oia_ferrographyequipmentChkBox->isChecked())
+    {
+        QString text = ui->oia_ferrographyequipmentCbBox->currentText();
+        _oiaCdtMap.insert("ferrographyequipment",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_ferrographyequipmentCbBox_currentIndexChanged(int index)
+{
+    _oiaCdtMap.remove("ferrographyequipment");
+    if(ui->oia_ferrographyequipmentChkBox->isChecked())
+    {
+        QString text = ui->oia_ferrographyequipmentCbBox->currentText();
+        _oiaCdtMap.insert("ferrographyequipment",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_ferrographydateChkBox_clicked()
+{
+    _oiaCdtMap.remove("ferrographydate");
+    if(ui->oia_ferrographydateChkBox->isChecked())
+    {
+        QString text = ui->oia_ferrographydateDateEdit->date().toString("yyyy-MM-dd");
+        _oiaCdtMap.insert("ferrographydate",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_ferrographydateDateEdit_dateChanged(const QDate &date)
+{
+    _oiaCdtMap.remove("ferrographydate");
+    if(ui->oia_ferrographydateChkBox->isChecked())
+    {
+        QString text = ui->oia_ferrographydateDateEdit->date().toString("yyyy-MM-dd");
+        _oiaCdtMap.insert("ferrographydate",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_ferrographyreportidChkBox_clicked()
+{
+    _oiaCdtMap.remove("ferrographyreportid");
+    if(ui->oia_ferrographyreportidChkBox->isChecked())
+    {
+        QString text = ui->oia_ferrographyreportidCbBox->currentText();
+        _oiaCdtMap.insert("ferrographyreportid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_oia_ferrographyreportidCbBox_currentIndexChanged(int index)
+{
+    _oiaCdtMap.remove("ferrographyreportid");
+    if(ui->oia_ferrographyreportidChkBox->isChecked())
+    {
+        QString text = ui->oia_ferrographyreportidCbBox->currentText();
+        _oiaCdtMap.insert("ferrographyreportid",text);
+    }
+}

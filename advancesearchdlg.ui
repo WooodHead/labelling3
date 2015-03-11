@@ -35,7 +35,7 @@
       <item>
        <widget class="QStackedWidget" name="conditionStackedWidget">
         <property name="currentIndex">
-         <number>5</number>
+         <number>4</number>
         </property>
         <widget class="QWidget" name="page">
          <layout class="QGridLayout" name="gridLayout_3">
@@ -49,8 +49,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>276</width>
-               <height>316</height>
+               <width>162</width>
+               <height>186</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -229,8 +229,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>276</width>
-               <height>316</height>
+               <width>253</width>
+               <height>186</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout">
@@ -430,8 +430,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>276</width>
-               <height>316</height>
+               <width>253</width>
+               <height>130</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_15">
@@ -568,7 +568,7 @@
              <property name="geometry">
               <rect>
                <x>0</x>
-               <y>-7</y>
+               <y>0</y>
                <width>259</width>
                <height>488</height>
               </rect>
@@ -1341,7 +1341,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="oia_physicochemicalmethodChkCbBox"/>
+                 <widget class="QComboBox" name="oia_physicochemicalmethodCbBox"/>
                 </item>
                </layout>
               </item>
@@ -1913,7 +1913,7 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>259</width>
+               <width>180</width>
                <height>460</height>
               </rect>
              </property>
