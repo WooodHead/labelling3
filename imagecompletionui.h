@@ -27,6 +27,7 @@
 #include "UserManagement.h"
 #include "Global.h"
 #include "QtAwesome.h"
+#include "MoliProperties.h"
 
 #define DELETEPTR(ptr) if(ptr) { delete ptr; ptr = 0; }
 
@@ -318,18 +319,9 @@ private slots:
     ////////////////////////////////////////////////////////////////////////////////////
     void switchModule();
 
-    //void updateMarkState();
-
     void _RegionupdateBrushSize();
 
     void _SceneupdateBrushSize();
-
-    //void updateLabelTree();
-    //void setLabelTree();
-    //void InitializeIcons();
-    //	void showLabelColor(QTreeWidgetItem*);
-    //void showLabelColor(int i);
-    //ImageViewer* getResultImage(){return _resultImageViewer;}
 
     void Excute();
 
@@ -367,6 +359,8 @@ private slots:
 
     void cellDoubleClicked_(int, int);
 
+    void removeImage(QString filename);
+
 private:
     Searchdata *searchdata1;
     AdvanceSearchDlg *advanceSearchDlg;
@@ -385,7 +379,7 @@ private:
     bool importDB(const QString &path);
     bool exportDB(const QString &path);
 
-    void openImage(QString file);
+    bool openImage(QString file);
     QColor getColor(QString status);
 
     bool syncLabelledImage(QString pathOriginal, QString pathResult, QString pathMask);
@@ -396,8 +390,13 @@ private:
 
     QtAwesome* _awesome;
 
+    int rowIndex(QString image);
+
 private slots:
     void flushBottom();
+    void flushLeft(QString path, QString label);
+    void showContextMenu(QPoint);
+    void editProperties();
 };
 
 

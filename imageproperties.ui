@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1112</width>
+    <width>1113</width>
     <height>401</height>
    </rect>
   </property>
@@ -19,14 +19,14 @@
   <widget class="QTabWidget" name="_tabWidget">
    <property name="geometry">
     <rect>
-     <x>9</x>
-     <y>9</y>
+     <x>1</x>
+     <y>1</y>
      <width>991</width>
-     <height>381</height>
+     <height>391</height>
     </rect>
    </property>
    <property name="currentIndex">
-    <number>3</number>
+    <number>7</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -819,6 +819,13 @@
       <item row="2" column="1" colspan="7">
        <widget class="QLineEdit" name="_editOilAnalyzeReason"/>
       </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_65">
+        <property name="text">
+         <string>检测分析单位名称</string>
+        </property>
+       </widget>
+      </item>
       <item row="3" column="7">
        <widget class="QComboBox" name="_comboBoxOilAnalyzePolluteLevelEquip">
         <property name="editable">
@@ -837,13 +844,6 @@
        <widget class="QLabel" name="label_73">
         <property name="text">
          <string>污染度分析日期</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QLabel" name="label_65">
-        <property name="text">
-         <string>检测分析单位名称</string>
         </property>
        </widget>
       </item>
@@ -1135,181 +1135,175 @@
     <attribute name="title">
      <string>铁谱图片采集信息</string>
     </attribute>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>20</y>
-       <width>861</width>
-       <height>128</height>
-      </rect>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_12">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_52">
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;铁谱图片编号&lt;span style=&quot; color:#ff0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="_comboBoxMentalSampleImageID">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2" colspan="2">
-       <widget class="QLabel" name="label_53">
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;铁谱片编号&lt;span style=&quot; color:#ff0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="4">
-       <widget class="QComboBox" name="_comboBoxMentalSampleID">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="5">
-       <widget class="QLabel" name="label_54">
-        <property name="text">
-         <string>铁谱分析报告编号</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="6">
-       <widget class="QComboBox" name="_comboBoxMentalSampleReportID">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="7" colspan="2">
-       <widget class="QLabel" name="label_55">
-        <property name="text">
-         <string>显微镜型号</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="9">
-       <widget class="QComboBox" name="_comboBoxMentalSampleMicroType">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_56">
-        <property name="text">
-         <string>图像采集器型号</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QComboBox" name="_comboBoxMentalSampleSamplerType">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2" colspan="2">
-       <widget class="QLabel" name="label_57">
-        <property name="text">
-         <string>光源类型</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="4">
-       <widget class="QComboBox" name="_comboBoxMentalSampleLightType">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="5">
-       <widget class="QLabel" name="label_58">
-        <property name="text">
-         <string>放大倍数</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="7" colspan="2">
-       <widget class="QLabel" name="label_59">
-        <property name="text">
-         <string>铁谱图片采集区域</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="9">
-       <widget class="QComboBox" name="_comboBoxMentalSampleArea">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_60">
-        <property name="text">
-         <string>铁谱图片采集人</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QComboBox" name="_comboBoxMentalSampleGuy">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <widget class="QLabel" name="label_61">
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;铁谱图片&lt;span style=&quot; color:#ff0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="6" colspan="2">
-       <widget class="QLabel" name="label_62">
-        <property name="text">
-         <string>铁谱图片识别分析信息</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="8" colspan="2">
-       <widget class="QLineEdit" name="_editMentalSampleAnalysis"/>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label_63">
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;铁谱图片标识&lt;span style=&quot; color:#ff0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QComboBox" name="_comboBoxMentalSampleImageTag">
-        <property name="editable">
-         <bool>false</bool>
-        </property>
-        <property name="currentIndex">
-         <number>-1</number>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="3" colspan="3">
-       <widget class="QLineEdit" name="_editMentalSamplePath">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="6">
-       <widget class="QLineEdit" name="_editMentalSampleEnlarger"/>
-      </item>
-     </layout>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <layout class="QGridLayout" name="gridLayout_12">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_52">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;铁谱图片编号&lt;span style=&quot; color:#ff0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="_comboBoxMentalSampleImageID">
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2" colspan="2">
+        <widget class="QLabel" name="label_53">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;铁谱片编号&lt;span style=&quot; color:#ff0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="4">
+        <widget class="QComboBox" name="_comboBoxMentalSampleID">
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="5">
+        <widget class="QLabel" name="label_54">
+         <property name="text">
+          <string>铁谱分析报告编号</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="6">
+        <widget class="QComboBox" name="_comboBoxMentalSampleReportID">
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="7" colspan="2">
+        <widget class="QLabel" name="label_55">
+         <property name="text">
+          <string>显微镜型号</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="9">
+        <widget class="QComboBox" name="_comboBoxMentalSampleMicroType">
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_56">
+         <property name="text">
+          <string>图像采集器型号</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="_comboBoxMentalSampleSamplerType">
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2" colspan="2">
+        <widget class="QLabel" name="label_57">
+         <property name="text">
+          <string>光源类型</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4">
+        <widget class="QComboBox" name="_comboBoxMentalSampleLightType">
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="5">
+        <widget class="QLabel" name="label_58">
+         <property name="text">
+          <string>放大倍数</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="7" colspan="2">
+        <widget class="QLabel" name="label_59">
+         <property name="text">
+          <string>铁谱图片采集区域</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="9">
+        <widget class="QComboBox" name="_comboBoxMentalSampleArea">
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_60">
+         <property name="text">
+          <string>铁谱图片采集人</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QComboBox" name="_comboBoxMentalSampleGuy">
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <widget class="QLabel" name="label_61">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;铁谱图片&lt;span style=&quot; color:#ff0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="6" colspan="2">
+        <widget class="QLabel" name="label_62">
+         <property name="text">
+          <string>铁谱图片识别分析信息</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="8" colspan="2">
+        <widget class="QLineEdit" name="_editMentalSampleAnalysis"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_63">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;铁谱图片标识&lt;span style=&quot; color:#ff0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QComboBox" name="_comboBoxMentalSampleImageTag">
+         <property name="editable">
+          <bool>false</bool>
+         </property>
+         <property name="currentIndex">
+          <number>-1</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="3" colspan="3">
+        <widget class="QLineEdit" name="_editMentalSamplePath">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="6">
+        <widget class="QLineEdit" name="_editMentalSampleEnlarger"/>
+       </item>
+      </layout>
+     </item>
+    </layout>
    </widget>
    <widget class="QWidget" name="tab_9">
     <attribute name="title">
@@ -1517,13 +1511,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="7">
-       <widget class="QLabel" name="label_94">
-        <property name="text">
-         <string>铁谱分析报告编号</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="8">
        <widget class="QComboBox" name="_comboBoxMoliReportID">
         <property name="editable">
@@ -1617,6 +1604,13 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="7">
+       <widget class="QLabel" name="label_94">
+        <property name="text">
+         <string>铁谱分析报告编号</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </widget>
@@ -1624,121 +1618,122 @@
     <attribute name="title">
      <string>采样点信息</string>
     </attribute>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>60</x>
-       <y>40</y>
-       <width>623</width>
-       <height>62</height>
-      </rect>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_18">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_109">
-        <property name="text">
-         <string>采样点编号</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="comboBox_78">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <widget class="QLabel" name="label_110">
-        <property name="text">
-         <string>装备名称</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="QComboBox" name="comboBox_79">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="4" colspan="2">
-       <widget class="QLabel" name="label_111">
-        <property name="text">
-         <string>装备编号(机号或动部件编号)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="6">
-       <widget class="QComboBox" name="comboBox_80">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_112">
-        <property name="text">
-         <string>装备型号</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QComboBox" name="comboBox_81">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QLabel" name="label_113">
-        <property name="text">
-         <string>采样方法</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="3">
-       <widget class="QComboBox" name="comboBox_82">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="4">
-       <widget class="QLabel" name="label_114">
-        <property name="text">
-         <string>采样注意事项</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="5" colspan="2">
-       <widget class="QLineEdit" name="lineEdit_20"/>
-      </item>
-     </layout>
-    </widget>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <layout class="QGridLayout" name="gridLayout_18">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_109">
+         <property name="text">
+          <string>采样点编号</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="comboBox_78">
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLabel" name="label_110">
+         <property name="text">
+          <string>装备名称</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="QComboBox" name="comboBox_79">
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="4" colspan="2">
+        <widget class="QLabel" name="label_111">
+         <property name="text">
+          <string>装备编号(机号或动部件编号)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="6">
+        <widget class="QComboBox" name="comboBox_80">
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_112">
+         <property name="text">
+          <string>装备型号</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="comboBox_81">
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLabel" name="label_113">
+         <property name="text">
+          <string>采样方法</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QComboBox" name="comboBox_82">
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4">
+        <widget class="QLabel" name="label_114">
+         <property name="text">
+          <string>采样注意事项</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="5" colspan="2">
+        <widget class="QLineEdit" name="lineEdit_20"/>
+       </item>
+      </layout>
+     </item>
+    </layout>
    </widget>
   </widget>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
      <x>1000</x>
-     <y>20</y>
-     <width>106</width>
-     <height>68</height>
+     <y>30</y>
+     <width>100</width>
+     <height>121</height>
     </rect>
    </property>
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="0">
-     <widget class="QPushButton" name="_buttonClose">
-      <property name="text">
-       <string>取消</string>
-      </property>
-     </widget>
-    </item>
+   <layout class="QGridLayout" name="gridLayout_3">
     <item row="0" column="0">
      <widget class="QPushButton" name="_buttonSave">
       <property name="text">
-       <string>保存</string>
+       <string>PushButton</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QPushButton" name="_buttonCancel">
+      <property name="text">
+       <string>PushButton</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QPushButton" name="_buttonNext">
+      <property name="text">
+       <string>PushButton</string>
       </property>
      </widget>
     </item>

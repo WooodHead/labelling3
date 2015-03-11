@@ -26,7 +26,8 @@ HEADERS += \
     UserInfo.h \
     UserManagement.h \
     Global.h \
-    SimplifiedSearch.h
+    SimplifiedSearch.h \
+    MoliProperties.h
 
 
 SOURCES += \
@@ -51,7 +52,8 @@ SOURCES += \
     UserInfo.cpp \
     UserManagement.cpp \
     Global.cpp \
-    SimplifiedSearch.cpp
+    SimplifiedSearch.cpp \
+    MoliProperties.cpp
 
 
 FORMS += \
@@ -71,7 +73,8 @@ FORMS += \
     advancesearchdlg.ui \
     useredit.ui \
     propertynamedlg.ui \
-    SimplifiedSearch.ui
+    SimplifiedSearch.ui \
+    MoliProperties.ui
 
 RESOURCES += \
     ImageCompletion.qrc
