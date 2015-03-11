@@ -878,15 +878,15 @@ void	ImageCompletionUI::saveAs()
     }
 
     //TODO: Sync Database
-    if(ret1 && ret2)
-    {
-        if(syncLabelledImage(_imagePath, pathResult, pathMask))
-        {
-            setImageState(_imagePath, "Y");
-            setBackgroundColor(_imagePath,  this->getColor("Y"));
-            showData();
-        }
-    }
+//    if(ret1 && ret2)
+//    {
+//        if(syncLabelledImage(_imagePath, pathResult, pathMask))
+//        {
+//            setImageState(_imagePath, "Y");
+//            setBackgroundColor(_imagePath,  this->getColor("Y"));
+//            showData();
+//        }
+//    }
 }
 
 void	ImageCompletionUI::close()

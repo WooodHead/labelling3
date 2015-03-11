@@ -12,6 +12,9 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent) :
         QMessageBox::warning(this,tr("数据库提示"),tr("不能链接数据库"),QMessageBox::Close);
         return;
     }
+
+    propertymodel = 0;
+
     createListWidget();
     
     connect(ui->tableListWidget,SIGNAL(currentRowChanged(int)),ui->conditionStackedWidget,SLOT(setCurrentIndex(int)));
