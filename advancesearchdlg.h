@@ -114,7 +114,7 @@ private slots:
      
      void on_samplevolumeLineEdit_textChanged(const QString &arg1);
      
-     void on_sampledataChkBox_clicked();
+     void on_sampledateChkBox_clicked();
      
      void on_sampledateDateEdit_dateChanged(const QDate &date);
      
@@ -136,35 +136,36 @@ private slots:
      
      void on_monitorpartidChkBox_clicked();
      
-     void on_monitorpartidLineEdit_textChanged(const QString &arg1);
+//     void on_monitorpartidLineEdit_textChanged(const QString &arg1);
      
      void on_monitorpartnameChkBox_clicked();
      
-     void on_monitorpartnameLineEdit_textChanged(const QString &arg1);
+//     void on_monitorpartnameLineEdit_textChanged(const QString &arg1);
      
      void on_oilsampleidChkBox_clicked();
-     
-     void on_oilsampleidLineEdit_textChanged(const QString &arg1);
+
+     void on_oilsampleidCbBox_currentIndexChanged(int index);
+//     void on_oilsampleidLineEdit_textChanged(const QString &arg1);
      
      void on_samplesituationChkBox_clicked();
 
-     void on_samplesituationLineEdit_textChanged(const QString &arg1);
+//     void on_samplesituationLineEdit_textChanged(const QString &arg1);
 
      void on_sampleidChkBox_clicked();
 
-     void on_sampleidLineEdit_textChanged(const QString &arg1);
+//     void on_sampleidLineEdit_textChanged(const QString &arg1);
 
      void on_samplemethodChkBox_clicked();
 
-     void on_samplemethodLineEdit_textChanged(const QString &arg1);
+//     void on_samplemethodLineEdit_textChanged(const QString &arg1);
 
      void on_sampledepartidChkBox_clicked();
 
-     void on_sampledepartidlineEdit_textChanged(const QString &arg1);
+//     void on_sampledepartidlineEdit_textChanged(const QString &arg1);
 
      void on_sampledepartnameChkBox_clicked();
 
-     void on_sampledepartnameLineEdit_textChanged(const QString &arg1);
+//     void on_sampledepartnameLineEdit_textChanged(const QString &arg1);
 
      void on_sendstuffChkBox_clicked();
 
@@ -193,6 +194,124 @@ private:
 private slots:
      void useproperty();
      void manageproperty();
+
+
+
+     void on_sampleidCbBox_currentIndexChanged(int index);
+
+     void on_samplesituationCbBox_currentIndexChanged(int index);
+
+     void on_samplemethodCbBox_currentIndexChanged(int index);
+
+     void on_sampledepartidCbBox_currentIndexChanged(int index);
+
+     void on_sampledepartnameCbBox_currentIndexChanged(int index);
+
+     void on_monitorpartidCbBox_currentIndexChanged(int index);
+
+     void on_monitorpartnameCbBox_currentIndexChanged(int index);
+
+     void on_oia_sendstuffChkBox_clicked();
+
+     void on_oia_sendstuffLineEdit_textChanged(const QString &arg1);
+
+     void on_oia_senddepartChkBox_clicked();
+
+     void on_oia_senddepartCbBox_currentIndexChanged(int index);
+
+     void on_oia_receivestuffChkBox_clicked();
+
+     void on_oia_receivestuffLineEdit_textChanged(const QString &arg1);
+
+     void on_oia_receivedateChkBox_clicked();
+
+//     void on_oia_receivedateDateEdit_timeChanged(const QTime &time);
+
+     void on_oia_analyzedepartnameChkBox_clicked();
+
+     void on_oia_analyzedepartnameCbBox_currentIndexChanged(int index);
+
+     void on_oia_contaminationanalyzestuffChkBox_clicked();
+
+     void on_oia_contaminationanalyzestuffChkLineEdit_textChanged(const QString &arg1);
+
+     void on_oia_contaminationanalyzemethodChkBox_clicked();
+
+     void on_oia_contaminationanalyzemethodCbBox_currentIndexChanged(int index);
+
+     void on_oia_contaminationanalyzeequipmentChkBox_clicked();
+
+     void on_oia_contaminationanalyzeequipmentCbBox_currentIndexChanged(int index);
+
+     void on_oia_contaminationanalyzedateChkBox_clicked();
+
+     void on_oia_contaminationanalyzedateDateEdit_dateChanged(const QDate &date);
+
+     void on_oia_receivedateDateEdit_dateChanged(const QDate &date);
+
+     void on_oia_contaminationanalyzereportidChkBox_clicked();
+
+     void on_oia_contaminationanalyzereportidCbBox_currentIndexChanged(int index);
+
+     void on_oia_spectroscopystuffChkBox_clicked();
+
+     void on_oia_spectroscopystuffLineEdit_textChanged(const QString &arg1);
+
+     void on_oia_spectroscopymethodChkBox_clicked();
+
+     void on_oia_spectroscopymethodCbBo_currentIndexChanged(int index);
+
+     void on_oia_spectroscopyequipmentChkBox_clicked();
+
+     void on_oia_spectroscopyequipmentCbBox_currentIndexChanged(int index);
+
+     void on_oia_spectroscopydateChkBox_clicked();
+
+     void on_oia_spectroscopydateDateEdit_dateChanged(const QDate &date);
+
+     void on_oia_spectroscopyreportidChkBox_clicked();
+
+     void on_oia_spectroscopyreportidCbBox_currentIndexChanged(int index);
+
+     void on_oia_physicochemicalstuffChkBox_clicked();
+
+     void on_oia_physicochemicalstuffLineEdit_textChanged(const QString &arg1);
+
+     void on_oia_physicochemicalmethodChkBox_clicked();
+
+     void on_oia_physicochemicalmethodCbBox_currentIndexChanged(int index);
+
+     void on_oia_physicochemicalequipmentChkBox_clicked();
+
+     void on_oia_physicochemicalequipmentCbBox_currentIndexChanged(int index);
+
+     void on_oia_physicochemicaldateChkBox_clicked();
+
+     void on_oia_physicochemicaldateDateEdit_dateChanged(const QDate &date);
+
+     void on_oia_physicochemicalreportidChkBox_clicked();
+
+     void on_oia_physicochemicalreportidCbBox_currentIndexChanged(int index);
+
+     void on_oia_ferrographystuffChkBox_clicked();
+
+     void on_oia_ferrographystuffLineEdit_textChanged(const QString &arg1);
+
+     void on_oia_ferrographymethodChkBox_clicked();
+
+     void on_oia_ferrographymethodCbBox_currentIndexChanged(int index);
+
+     void on_oia_ferrographyequipmentChkBox_clicked();
+
+     void on_oia_ferrographyequipmentCbBox_currentIndexChanged(int index);
+
+     void on_oia_ferrographydateChkBox_clicked();
+
+     void on_oia_ferrographydateDateEdit_dateChanged(const QDate &date);
+
+     void on_oia_ferrographyreportidChkBox_clicked();
+
+     void on_oia_ferrographyreportidCbBox_currentIndexChanged(int index);
 
 private:
     Ui::AdvanceSearchDlg *ui;
