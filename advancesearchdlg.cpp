@@ -83,8 +83,24 @@ void AdvanceSearchDlg::resetConditions()
     ui->repairDepartChkBox->setChecked(false);
 
     // feg
+    ui->feg_ferrographyanalyzertypeChkBox->setChecked(false);
+    ui->feg_ferrographymakemethodChkBox->setChecked(false);
+    ui->feg_ferrographymakeoilconsumptionChkBox->setChecked(false);
+    ui->feg_ferrographymakestuffChkBox->setChecked(false);
+    ui->feg_ferrographysheetidChkBox->setChecked(false);
+
 
     // fegp
+    ui->fegp_ferrographypicidChkBox->setChecked(false);
+    ui->fegp_ferrographyreportidChkBox->setChecked(false);
+    ui->fegp_imageacquisitionareaChkBox->setChecked(false);
+    ui->fegp_imageacquisitionstuffChkBox->setChecked(false);
+    ui->fegp_imageacquisitiontypeChkBox->setChecked(false);
+    ui->fegp_imagerecognitioninfoanalysisChkBox->setChecked(false);
+    ui->fegp_imagesymbolChkBox->setChecked(false);
+    ui->fegp_lightsourcetypeChkBox->setChecked(false);
+    ui->fegp_magnificationChkBox->setChecked(false);
+    ui->fegp_microscopictypeChkBox->setChecked(false);
 
     // ois
     ui->oilsampleidChkBox->setChecked(false);
@@ -330,6 +346,40 @@ void AdvanceSearchDlg::useproperty()
         if(!fegFields.isEmpty())
         {
             idx = 0;
+            foreach (QString field, fegFields)
+            {
+                if(field == "ferrographysheetid")
+                {
+                    ui->feg_ferrographysheetidCbBox->setCurrentIndex(ui->feg_ferrographysheetidCbBox->findText(fegValues.at(idx)));
+                    _fegCdtMap.insert("ferrographysheetid",fegValues.at(idx));
+                    ui->feg_ferrographysheetidChkBox->setChecked(true);
+                }
+                else if(field == "ferrographymakestuff")
+                {
+                    ui->feg_ferrographymakestuffLineEdit->setText(fegValues.at(idx));
+                    _fegCdtMap.insert("ferrographymakestuff",fegValues.at(idx));
+                    ui->feg_ferrographymakestuffChkBox->setChecked(true);
+                }
+                else if(field == "ferrographymakemethod")
+                {
+                    ui->feg_ferrographymakemethodCbBox->setCurrentIndex(ui->feg_ferrographymakemethodCbBox->findText(fegValues.at(idx)));
+                    _fegCdtMap.insert("ferrographymakemethod",fegValues.at(idx));
+                    ui->feg_ferrographymakemethodChkBox->setChecked(true);
+                }
+                else if(field == "ferrographyanalyzertype")
+                {
+                    ui->feg_ferrographyanalyzertypeCbBox->setCurrentIndex(ui->feg_ferrographyanalyzertypeCbBox->findText(fegValues.at(idx)));
+                    _fegCdtMap.insert("ferrographyanalyzertype",fegValues.at(idx));
+                    ui->feg_ferrographyanalyzertypeChkBox->setChecked(true);
+                }
+                else if(field == "ferrographymakeoilconsumption")
+                {
+                    ui->feg_ferrographymakeoilconsumptionLineEdit->setText(fegValues.at(idx));
+                    _fegCdtMap.insert("ferrographymakeoilconsumption",fegValues.at(idx));
+                    ui->feg_ferrographymakeoilconsumptionChkBox->setChecked(true);
+                }
+                idx ++;
+            }
         }
 
         QStringList fegpFields = query.value(10).toString().split("#");
@@ -337,6 +387,70 @@ void AdvanceSearchDlg::useproperty()
         if(!fegpFields.isEmpty())
         {
             idx = 0;
+            foreach (QString field, fegpFields)
+            {
+                if(field == "ferrographypicid")
+                {
+                    ui->fegp_ferrographypicidCbBox->setCurrentIndex(ui->fegp_ferrographypicidCbBox->findText(fegpValues.at(idx)));
+                    _fegpCdtMap.insert("ferrographypicid",fegpValues.at(idx));
+                    ui->fegp_ferrographypicidChkBox->setChecked(true);
+                }
+                else if(field == "ferrographyreportid")
+                {
+                    ui->fegp_ferrographyreportidCbBox->setCurrentIndex(ui->fegp_ferrographyreportidCbBox->findText(fegpValues.at(idx)));
+                    _fegpCdtMap.insert("ferrographyreportid",fegpValues.at(idx));
+                    ui->fegp_ferrographyreportidChkBox->setChecked(true);
+                }
+                else if(field == "imagesymbol")
+                {
+                    ui->fegp_imagesymbolCbBox->setCurrentIndex(ui->fegp_imagesymbolCbBox->findText(fegpValues.at(idx)));
+                    _fegpCdtMap.insert("imagesymbol",fegpValues.at(idx));
+                    ui->fegp_imagesymbolChkBox->setChecked(true);
+                }
+                else if(field == "imageacquisitionarea")
+                {
+                    ui->fegp_imageacquisitionareaCbBox->setCurrentIndex(ui->fegp_imageacquisitionareaCbBox->findText(fegpValues.at(idx)));
+                    _fegpCdtMap.insert("imageacquisitionarea",fegpValues.at(idx));
+                    ui->fegp_imageacquisitionareaChkBox->setChecked(true);
+                }
+                else if(field == "microscopictype")
+                {
+                    ui->fegp_microscopictypeCbBox->setCurrentIndex(ui->fegp_microscopictypeCbBox->findText(fegpValues.at(idx)));
+                    _fegpCdtMap.insert("microscopictype",fegpValues.at(idx));
+                    ui->fegp_microscopictypeChkBox->setChecked(true);
+                }
+                else if(field == "lightsourcetype")
+                {
+                    ui->fegp_lightsourcetypeCbBox->setCurrentIndex(ui->fegp_lightsourcetypeCbBox->findText(fegpValues.at(idx)));
+                    _fegpCdtMap.insert("lightsourcetype",fegpValues.at(idx));
+                    ui->fegp_lightsourcetypeChkBox->setChecked(true);
+                }
+                else if(field == "magnification")
+                {
+                    ui->fegp_magnificationCbBox->setCurrentIndex(ui->fegp_magnificationCbBox->findText(fegpValues.at(idx)));
+                    _fegpCdtMap.insert("magnification",fegpValues.at(idx));
+                    ui->fegp_magnificationChkBox->setChecked(true);
+                }
+                else if(field == "imageacquisitiontype")
+                {
+                    ui->fegp_imageacquisitiontypeCbBox->setCurrentIndex(ui->fegp_imageacquisitiontypeCbBox->findText(fegpValues.at(idx)));
+                    _fegpCdtMap.insert("imageacquisitiontype",fegpValues.at(idx));
+                    ui->fegp_imageacquisitiontypeChkBox->setChecked(true);
+                }
+                else if(field == "imageacquisitionstuff")
+                {
+                    ui->fegp_imageacquisitionstuffLineEdit->setText(fegpValues.at(idx));
+                    _fegpCdtMap.insert("imageacquisitionstuff",fegpValues.at(idx));
+                    ui->fegp_imageacquisitionstuffChkBox->setChecked(true);
+                }
+                else if(field == "imagerecognitioninfoanalysis")
+                {
+                    ui->fegp_imagerecognitioninfoanalysisLineEdit->setText(fegpValues.at(idx));
+                    _fegpCdtMap.insert("imagerecognitioninfoanalysis",fegpValues.at(idx));
+                    ui->fegp_imagerecognitioninfoanalysisChkBox->setChecked(true);
+                }
+                idx++;
+            }
         }
 
         QStringList oisFields = query.value(12).toString().split("#");
@@ -1509,6 +1623,37 @@ void AdvanceSearchDlg::initCbBox()
             ui->abm_ferrographypicidCbBox->insertItem(-1,query.value(abm_ferrographypicid).toString());
         if(ui->abm_ferrographyreportidCbBox->findText(query.value(abm_ferrographyreportid).toString()) == -1)
             ui->abm_ferrographyreportidCbBox->insertItem(-1,query.value(abm_ferrographyreportid).toString());
+    }
+
+    query.exec("select * from ferrographypicinfo");
+    while(query.next())
+    {
+        if(ui->fegp_ferrographypicidCbBox->findText(query.value(fegp_ferrographypicid).toString()) == -1)
+            ui->fegp_ferrographypicidCbBox->insertItem(-1,query.value(fegp_ferrographypicid).toString());
+        if(ui->fegp_imagesymbolCbBox->findText(query.value(fegp_imagesymbol).toString()) == -1)
+            ui->fegp_imagesymbolCbBox->insertItem(-1,query.value(fegp_imagesymbol).toString());
+        if(ui->fegp_ferrographyreportidCbBox->findText(query.value(fegp_ferrographyreportid).toString()) == -1)
+            ui->fegp_ferrographyreportidCbBox->insertItem(-1,query.value(fegp_ferrographyreportid).toString());
+        if(ui->fegp_imageacquisitionareaCbBox->findText(query.value(fegp_imageacquisitionarea).toString()) == -1)
+            ui->fegp_imageacquisitionareaCbBox->insertItem(-1,query.value(fegp_imageacquisitionarea).toString());
+        if(ui->fegp_imageacquisitiontypeCbBox->findText(query.value(fegp_imageacquisitiontype).toString()) == -1)
+            ui->fegp_imageacquisitiontypeCbBox->insertItem(-1,query.value(fegp_imageacquisitiontype).toString());
+        if(ui->fegp_lightsourcetypeCbBox->findText(query.value(fegp_lightsourcetype).toString()) == -1)
+            ui->fegp_lightsourcetypeCbBox->insertItem(-1,query.value(fegp_lightsourcetype).toString());
+        if(ui->fegp_magnificationCbBox->findText(query.value(fegp_magnification).toString()) == -1)
+            ui->fegp_magnificationCbBox->insertItem(-1,query.value(fegp_magnification).toString());
+        if(ui->fegp_microscopictypeCbBox->findText(query.value(fegp_microscopictype).toString()) == -1)
+            ui->fegp_microscopictypeCbBox->insertItem(-1,query.value(fegp_microscopictype).toString());
+    }
+    query.exec("select * from ferrographyinfo");
+    while(query.next())
+    {
+        if(ui->feg_ferrographysheetidCbBox->findText(query.value(feg_ferrographysheetid).toString()) == -1)
+            ui->feg_ferrographysheetidCbBox->insertItem(-1,query.value(feg_ferrographysheetid).toString());
+        if(ui->feg_ferrographymakemethodCbBox->findText(query.value(feg_ferrographymakemethod).toString()) == -1)
+            ui->feg_ferrographymakemethodCbBox->insertItem(-1,query.value(feg_ferrographymakemethod).toString());
+        if(ui->feg_ferrographyanalyzertypeCbBox->findText(query.value(feg_ferrographyanalyertype).toString()) == -1)
+            ui->feg_ferrographyanalyzertypeCbBox->insertItem(-1,query.value(feg_ferrographyanalyertype).toString());
     }
 }
 
@@ -3456,5 +3601,305 @@ void AdvanceSearchDlg::on_abm_ferrographyreportidCbBox_currentIndexChanged(int i
     {
         QString text = ui->abm_ferrographyreportidCbBox->currentText();
         _abmCdtMap.insert("ferrographyreportid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_fegp_ferrographypicidChkBox_clicked()
+{
+    _fegpCdtMap.remove("ferrographypicid");
+    if(ui->fegp_ferrographypicidChkBox->isChecked())
+    {
+        QString text =ui->fegp_ferrographypicidCbBox->currentText();
+        _fegpCdtMap.insert("ferrographypicid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_fegp_ferrographypicidCbBox_currentIndexChanged(int index)
+{
+    _fegpCdtMap.remove("ferrographypicid");
+    if(ui->fegp_ferrographypicidChkBox->isChecked())
+    {
+        QString text =ui->fegp_ferrographypicidCbBox->currentText();
+        _fegpCdtMap.insert("ferrographypicid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_fegp_imagesymbolChkBox_clicked()
+{
+    _fegpCdtMap.remove("imagesymbol");
+    if(ui->fegp_imagesymbolChkBox->isChecked())
+    {
+        QString text = ui->fegp_imagesymbolCbBox->currentText();
+        _fegpCdtMap.insert("imagesymbol",text);
+    }
+}
+
+void AdvanceSearchDlg::on_fegp_imagesymbolCbBox_currentIndexChanged(int index)
+{
+    _fegpCdtMap.remove("imagesymbol");
+    if(ui->fegp_imagesymbolChkBox->isChecked())
+    {
+        QString text = ui->fegp_imagesymbolCbBox->currentText();
+        _fegpCdtMap.insert("imagesymbol",text);
+    }
+}
+
+void AdvanceSearchDlg::on_fegp_ferrographyreportidChkBox_clicked()
+{
+    _fegpCdtMap.remove("ferrographyreportid");
+    if(ui->fegp_ferrographyreportidChkBox->isChecked())
+    {
+        QString text = ui->fegp_ferrographyreportidCbBox->currentText();
+        _fegpCdtMap.insert("ferrographyreportid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_fegp_ferrographyreportidCbBox_currentIndexChanged(int index)
+{
+    _fegpCdtMap.remove("ferrographyreportid");
+    if(ui->fegp_ferrographyreportidChkBox->isChecked())
+    {
+        QString text = ui->fegp_ferrographyreportidCbBox->currentText();
+        _fegpCdtMap.insert("ferrographyreportid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_fegp_imageacquisitionareaChkBox_clicked()
+{
+    _fegpCdtMap.remove("imageacquisitionarea");
+    if(ui->fegp_imageacquisitionareaChkBox->isChecked())
+    {
+        QString text = ui->fegp_imageacquisitionareaCbBox->currentText();
+        _fegpCdtMap.insert("imageacquisitionarea",text);
+    }
+}
+
+void AdvanceSearchDlg::on_fegp_imageacquisitionareaCbBox_currentIndexChanged(int index)
+{
+    _fegpCdtMap.remove("imageacquisitionarea");
+    if(ui->fegp_imageacquisitionareaChkBox->isChecked())
+    {
+        QString text = ui->fegp_imageacquisitionareaCbBox->currentText();
+        _fegpCdtMap.insert("imageacquisitionarea",text);
+    }
+}
+
+void AdvanceSearchDlg::on_fegp_microscopictypeChkBox_clicked()
+{
+    _fegpCdtMap.remove("microscopictype");
+    if(ui->fegp_microscopictypeChkBox->isChecked())
+    {
+        QString text = ui->fegp_microscopictypeCbBox->currentText();
+        _fegpCdtMap.insert("microscopictype",text);
+    }
+}
+
+void AdvanceSearchDlg::on_fegp_microscopictypeCbBox_currentIndexChanged(int index)
+{
+    _fegpCdtMap.remove("microscopictype");
+    if(ui->fegp_microscopictypeChkBox->isChecked())
+    {
+        QString text = ui->fegp_microscopictypeCbBox->currentText();
+        _fegpCdtMap.insert("microscopictype",text);
+    }
+}
+
+void AdvanceSearchDlg::on_fegp_lightsourcetypeChkBox_clicked()
+{
+    _fegpCdtMap.remove("lightsourcetype");
+    if(ui->fegp_lightsourcetypeChkBox->isChecked())
+    {
+        QString text = ui->fegp_lightsourcetypeCbBox->currentText();
+        _fegpCdtMap.insert("lightsourcetype",text);
+    }
+}
+
+void AdvanceSearchDlg::on_fegp_lightsourcetypeCbBox_currentIndexChanged(int index)
+{
+    _fegpCdtMap.remove("lightsourcetype");
+    if(ui->fegp_lightsourcetypeChkBox->isChecked())
+    {
+        QString text = ui->fegp_lightsourcetypeCbBox->currentText();
+        _fegpCdtMap.insert("lightsourcetype",text);
+    }
+}
+
+void AdvanceSearchDlg::on_fegp_magnificationChkBox_clicked()
+{
+    _fegpCdtMap.remove("magnification");
+    if(ui->fegp_magnificationChkBox->isChecked())
+    {
+        QString text = ui->fegp_magnificationCbBox->currentText();
+        _fegpCdtMap.insert("magnification",text);
+    }
+}
+
+void AdvanceSearchDlg::on_fegp_magnificationCbBox_currentIndexChanged(int index)
+{
+    _fegpCdtMap.remove("magnification");
+    if(ui->fegp_magnificationChkBox->isChecked())
+    {
+        QString text = ui->fegp_magnificationCbBox->currentText();
+        _fegpCdtMap.insert("magnification",text);
+    }
+}
+
+void AdvanceSearchDlg::on_fegp_imageacquisitiontypeChkBox_clicked()
+{
+    _fegpCdtMap.remove("imageacquisitiontype");
+    if(ui->fegp_imageacquisitiontypeChkBox->isChecked())
+    {
+        QString text = ui->fegp_imageacquisitiontypeCbBox->currentText();
+        _fegpCdtMap.insert("imageacquisitiontype",text);
+    }
+}
+
+void AdvanceSearchDlg::on_fegp_imageacquisitiontypeCbBox_currentIndexChanged(int index)
+{
+    _fegpCdtMap.remove("imageacquisitiontype");
+    if(ui->fegp_imageacquisitiontypeChkBox->isChecked())
+    {
+        QString text = ui->fegp_imageacquisitiontypeCbBox->currentText();
+        _fegpCdtMap.insert("imageacquisitiontype",text);
+    }
+}
+
+void AdvanceSearchDlg::on_fegp_imageacquisitionstuffChkBox_clicked()
+{
+    _fegpCdtMap.remove("imageacquisitionstuff");
+    if(ui->fegp_imageacquisitionstuffChkBox->isChecked())
+    {
+        QString text = ui->fegp_imageacquisitionstuffLineEdit->text();
+        _fegpCdtMap.insert("imageacquisitionstuff",text);
+    }
+}
+
+void AdvanceSearchDlg::on_fegp_imageacquisitionstuffLineEdit_textChanged(const QString &arg1)
+{
+    _fegpCdtMap.remove("imageacquisitionstuff");
+    if(ui->fegp_imageacquisitionstuffChkBox->isChecked())
+    {
+        QString text = ui->fegp_imageacquisitionstuffLineEdit->text();
+        _fegpCdtMap.insert("imageacquisitionstuff",text);
+    }
+}
+
+void AdvanceSearchDlg::on_fegp_imagerecognitioninfoanalysisChkBox_clicked()
+{
+    _fegpCdtMap.remove("imagerecognitioninfoanalysis");
+    if(ui->fegp_imagerecognitioninfoanalysisChkBox->isChecked())
+    {
+        QString text = ui->fegp_imagerecognitioninfoanalysisLineEdit->text();
+        _fegpCdtMap.insert("imagerecognitioninfoanalysis",text);
+    }
+}
+
+void AdvanceSearchDlg::on_fegp_imagerecognitioninfoanalysisLineEdit_textChanged(const QString &arg1)
+{
+    _fegpCdtMap.remove("imagerecognitioninfoanalysis");
+    if(ui->fegp_imagerecognitioninfoanalysisChkBox->isChecked())
+    {
+        QString text = ui->fegp_imagerecognitioninfoanalysisLineEdit->text();
+        _fegpCdtMap.insert("imagerecognitioninfoanalysis",text);
+    }
+}
+
+void AdvanceSearchDlg::on_feg_ferrographysheetidChkBox_clicked()
+{
+    _fegCdtMap.remove("ferrographysheetid");
+    if(ui->feg_ferrographysheetidChkBox->isChecked())
+    {
+        QString text = ui->feg_ferrographysheetidCbBox->currentText();
+        _fegCdtMap.insert("ferrographysheetid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_feg_ferrographysheetidCbBox_currentIndexChanged(int index)
+{
+    _fegCdtMap.remove("ferrographysheetid");
+    if(ui->feg_ferrographysheetidChkBox->isChecked())
+    {
+        QString text = ui->feg_ferrographysheetidCbBox->currentText();
+        _fegCdtMap.insert("ferrographysheetid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_feg_ferrographymakestuffChkBox_clicked()
+{
+    _fegCdtMap.remove("ferrographymakestuff");
+    if(ui->feg_ferrographymakestuffChkBox->isChecked())
+    {
+        QString text = ui->feg_ferrographymakestuffLineEdit->text();
+        _fegCdtMap.insert("ferrographymakestuff",text);
+    }
+}
+
+void AdvanceSearchDlg::on_feg_ferrographymakestuffLineEdit_textChanged(const QString &arg1)
+{
+    _fegCdtMap.remove("ferrographymakestuff");
+    if(ui->feg_ferrographymakestuffChkBox->isChecked())
+    {
+        QString text = ui->feg_ferrographymakestuffLineEdit->text();
+        _fegCdtMap.insert("ferrographymakestuff",text);
+    }
+}
+
+void AdvanceSearchDlg::on_feg_ferrographymakemethodChkBox_clicked()
+{
+    _fegCdtMap.remove("ferrographymakemethod");
+    if(ui->feg_ferrographymakemethodChkBox->isChecked())
+    {
+        QString text = ui->feg_ferrographymakemethodCbBox->currentText();
+        _fegCdtMap.insert("ferrographymakemethod",text);
+    }
+}
+
+void AdvanceSearchDlg::on_feg_ferrographymakemethodCbBox_currentIndexChanged(int index)
+{
+    _fegCdtMap.remove("ferrographymakemethod");
+    if(ui->feg_ferrographymakemethodChkBox->isChecked())
+    {
+        QString text = ui->feg_ferrographymakemethodCbBox->currentText();
+        _fegCdtMap.insert("ferrographymakemethod",text);
+    }
+}
+
+void AdvanceSearchDlg::on_feg_ferrographyanalyzertypeChkBox_clicked()
+{
+    _fegCdtMap.remove("ferrographyanalyzertype");
+    if(ui->feg_ferrographyanalyzertypeChkBox->isChecked())
+    {
+        QString text = ui->feg_ferrographyanalyzertypeCbBox->currentText();
+        _fegCdtMap.insert("ferrographyanalyzertype",text);
+    }
+}
+
+void AdvanceSearchDlg::on_feg_ferrographyanalyzertypeCbBox_currentIndexChanged(int index)
+{
+    _fegCdtMap.remove("ferrographyanalyzertype");
+    if(ui->feg_ferrographyanalyzertypeChkBox->isChecked())
+    {
+        QString text = ui->feg_ferrographyanalyzertypeCbBox->currentText();
+        _fegCdtMap.insert("ferrographyanalyzertype",text);
+    }
+}
+
+void AdvanceSearchDlg::on_feg_ferrographymakeoilconsumptionChkBox_clicked()
+{
+    _fegCdtMap.remove("ferrographymakeoilconsumption");
+    if(ui->feg_ferrographymakeoilconsumptionChkBox->isChecked())
+    {
+        QString text = ui->feg_ferrographymakeoilconsumptionLineEdit->text();
+        _fegCdtMap.insert("ferrographymakeoilconsumption",text);
+    }
+}
+
+void AdvanceSearchDlg::on_feg_ferrographymakeoilconsumptionLineEdit_textChanged(const QString &arg1)
+{
+    _fegCdtMap.remove("ferrographymakeoilconsumption");
+    if(ui->feg_ferrographymakeoilconsumptionChkBox->isChecked())
+    {
+        QString text = ui->feg_ferrographymakeoilconsumptionLineEdit->text();
+        _fegCdtMap.insert("ferrographymakeoilconsumption",text);
     }
 }

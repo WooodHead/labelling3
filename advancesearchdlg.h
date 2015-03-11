@@ -377,6 +377,66 @@ private slots:
 
      void on_abm_ferrographyreportidCbBox_currentIndexChanged(int index);
 
+     void on_fegp_ferrographypicidChkBox_clicked();
+
+     void on_fegp_ferrographypicidCbBox_currentIndexChanged(int index);
+
+     void on_fegp_imagesymbolChkBox_clicked();
+
+     void on_fegp_imagesymbolCbBox_currentIndexChanged(int index);
+
+     void on_fegp_ferrographyreportidChkBox_clicked();
+
+     void on_fegp_ferrographyreportidCbBox_currentIndexChanged(int index);
+
+     void on_fegp_imageacquisitionareaChkBox_clicked();
+
+     void on_fegp_imageacquisitionareaCbBox_currentIndexChanged(int index);
+
+     void on_fegp_microscopictypeChkBox_clicked();
+
+     void on_fegp_microscopictypeCbBox_currentIndexChanged(int index);
+
+     void on_fegp_lightsourcetypeChkBox_clicked();
+
+     void on_fegp_lightsourcetypeCbBox_currentIndexChanged(int index);
+
+     void on_fegp_magnificationChkBox_clicked();
+
+     void on_fegp_magnificationCbBox_currentIndexChanged(int index);
+
+     void on_fegp_imageacquisitiontypeChkBox_clicked();
+
+     void on_fegp_imageacquisitiontypeCbBox_currentIndexChanged(int index);
+
+     void on_fegp_imageacquisitionstuffChkBox_clicked();
+
+     void on_fegp_imageacquisitionstuffLineEdit_textChanged(const QString &arg1);
+
+     void on_fegp_imagerecognitioninfoanalysisChkBox_clicked();
+
+     void on_fegp_imagerecognitioninfoanalysisLineEdit_textChanged(const QString &arg1);
+
+     void on_feg_ferrographysheetidChkBox_clicked();
+
+     void on_feg_ferrographysheetidCbBox_currentIndexChanged(int index);
+
+     void on_feg_ferrographymakestuffChkBox_clicked();
+
+     void on_feg_ferrographymakestuffLineEdit_textChanged(const QString &arg1);
+
+     void on_feg_ferrographymakemethodChkBox_clicked();
+
+     void on_feg_ferrographymakemethodCbBox_currentIndexChanged(int index);
+
+     void on_feg_ferrographyanalyzertypeChkBox_clicked();
+
+     void on_feg_ferrographyanalyzertypeCbBox_currentIndexChanged(int index);
+
+     void on_feg_ferrographymakeoilconsumptionChkBox_clicked();
+
+     void on_feg_ferrographymakeoilconsumptionLineEdit_textChanged(const QString &arg1);
+
 private:
     Ui::AdvanceSearchDlg *ui;
     

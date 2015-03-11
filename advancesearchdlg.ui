@@ -35,7 +35,7 @@
       <item>
        <widget class="QStackedWidget" name="conditionStackedWidget">
         <property name="currentIndex">
-         <number>7</number>
+         <number>6</number>
         </property>
         <widget class="QWidget" name="page">
          <layout class="QGridLayout" name="gridLayout_3">
@@ -266,7 +266,7 @@
                    <string>动部件编号</string>
                   </property>
                   <property name="buddy">
-                   <cstring>checkBox_7</cstring>
+                   <cstring>fegp_ferrographyreportidChkBox</cstring>
                   </property>
                  </widget>
                 </item>
@@ -1554,14 +1554,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_69">
+                 <widget class="QCheckBox" name="fegp_ferrographypicidChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_15"/>
+                 <widget class="QComboBox" name="fegp_ferrographypicidCbBox"/>
                 </item>
                </layout>
               </item>
@@ -1570,19 +1570,19 @@
                 <item>
                  <widget class="QLabel" name="label_81">
                   <property name="text">
-                   <string>铁谱图片标识符号</string>
+                   <string>铁谱图片标识</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_80">
+                 <widget class="QCheckBox" name="fegp_imagesymbolChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_22"/>
+                 <widget class="QComboBox" name="fegp_imagesymbolCbBox"/>
                 </item>
                </layout>
               </item>
@@ -1596,14 +1596,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_71">
+                 <widget class="QCheckBox" name="fegp_ferrographyreportidChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_16"/>
+                 <widget class="QComboBox" name="fegp_ferrographyreportidCbBox"/>
                 </item>
                </layout>
               </item>
@@ -1617,14 +1617,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_76">
+                 <widget class="QCheckBox" name="fegp_imageacquisitionareaChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_21"/>
+                 <widget class="QComboBox" name="fegp_imageacquisitionareaCbBox"/>
                 </item>
                </layout>
               </item>
@@ -1638,14 +1638,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_72">
+                 <widget class="QCheckBox" name="fegp_microscopictypeChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_17"/>
+                 <widget class="QComboBox" name="fegp_microscopictypeCbBox"/>
                 </item>
                </layout>
               </item>
@@ -1659,14 +1659,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_74">
+                 <widget class="QCheckBox" name="fegp_lightsourcetypeChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_19"/>
+                 <widget class="QComboBox" name="fegp_lightsourcetypeCbBox"/>
                 </item>
                </layout>
               </item>
@@ -1680,14 +1680,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_75">
+                 <widget class="QCheckBox" name="fegp_magnificationChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_20"/>
+                 <widget class="QComboBox" name="fegp_magnificationCbBox"/>
                 </item>
                </layout>
               </item>
@@ -1701,14 +1701,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_73">
+                 <widget class="QCheckBox" name="fegp_imageacquisitiontypeChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_18"/>
+                 <widget class="QComboBox" name="fegp_imageacquisitiontypeCbBox"/>
                 </item>
                </layout>
               </item>
@@ -1722,14 +1722,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_77">
+                 <widget class="QCheckBox" name="fegp_imageacquisitionstuffChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_77"/>
+                 <widget class="QLineEdit" name="fegp_imageacquisitionstuffLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -1743,14 +1743,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_79">
+                 <widget class="QCheckBox" name="fegp_imagerecognitioninfoanalysisChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_79"/>
+                 <widget class="QLineEdit" name="fegp_imagerecognitioninfoanalysisLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -1787,14 +1787,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_43">
+                 <widget class="QCheckBox" name="feg_ferrographysheetidChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_23"/>
+                 <widget class="QComboBox" name="feg_ferrographysheetidCbBox"/>
                 </item>
                </layout>
               </item>
@@ -1808,14 +1808,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_68">
+                 <widget class="QCheckBox" name="feg_ferrographymakestuffChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_68"/>
+                 <widget class="QLineEdit" name="feg_ferrographymakestuffLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -1829,14 +1829,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_67">
+                 <widget class="QCheckBox" name="feg_ferrographymakemethodChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_24"/>
+                 <widget class="QComboBox" name="feg_ferrographymakemethodCbBox"/>
                 </item>
                </layout>
               </item>
@@ -1850,14 +1850,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_65">
+                 <widget class="QCheckBox" name="feg_ferrographyanalyzertypeChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="comboBox_25"/>
+                 <widget class="QComboBox" name="feg_ferrographyanalyzertypeCbBox"/>
                 </item>
                </layout>
               </item>
@@ -1871,14 +1871,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_66">
+                 <widget class="QCheckBox" name="feg_ferrographymakeoilconsumptionChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_66"/>
+                 <widget class="QLineEdit" name="feg_ferrographymakeoilconsumptionLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -1912,7 +1912,7 @@
              <property name="geometry">
               <rect>
                <x>0</x>
-               <y>-144</y>
+               <y>0</y>
                <width>259</width>
                <height>460</height>
               </rect>
