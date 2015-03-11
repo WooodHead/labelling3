@@ -13,6 +13,9 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent) :
         return;
     }
 
+    _awesome = new QtAwesome(this);
+    _awesome->initFontAwesome();
+
     propertymodel = 0;
 
     createListWidget();
@@ -2536,10 +2539,16 @@ void AdvanceSearchDlg::on_monitorpartnameCbBox_currentIndexChanged(int index)
 void AdvanceSearchDlg::on_oilsampleidChkBox_clicked()
 {
     _oisCdtMap.remove("oilsampleid");
+    // foreign key
+    _oiaCdtMap.remove("oiasampleid");
+    _fegCdtMap.remove("oilsampleid");
     if(ui->oilsampleidChkBox->isChecked())
     {
         QString text = ui->oilsampleidCbBox->currentText();
         _oisCdtMap.insert("oilsampleid",text);
+
+        _oiaCdtMap.insert("oilsampleid",text);
+        _fegCdtMap.insert("oilsampleid",text);
     }
 }
 
@@ -2556,10 +2565,14 @@ void AdvanceSearchDlg::on_oilsampleidChkBox_clicked()
 void AdvanceSearchDlg::on_oilsampleidCbBox_currentIndexChanged(int index)
 {
     _oisCdtMap.remove("oilsampleid");
+    _oiaCdtMap.remove("oiasampleid");
+    _fegCdtMap.remove("oilsampleid");
     if(ui->oilsampleidChkBox->isChecked())
     {
         QString text = ui->oilsampleidCbBox->currentText();
         _oisCdtMap.insert("oilsampleid",text);
+        _oiaCdtMap.insert("oilsampleid",text);
+        _fegCdtMap.insert("oilsampleid",text);
     }
 }
 
@@ -3807,20 +3820,26 @@ void AdvanceSearchDlg::on_fegp_imagerecognitioninfoanalysisLineEdit_textChanged(
 void AdvanceSearchDlg::on_feg_ferrographysheetidChkBox_clicked()
 {
     _fegCdtMap.remove("ferrographysheetid");
+    //foreign key
+    _fegpCdtMap.remove("ferrographysheetid");
     if(ui->feg_ferrographysheetidChkBox->isChecked())
     {
         QString text = ui->feg_ferrographysheetidCbBox->currentText();
         _fegCdtMap.insert("ferrographysheetid",text);
+        _fegpCdtMap.insert("ferrographysheetid",text);
     }
 }
 
 void AdvanceSearchDlg::on_feg_ferrographysheetidCbBox_currentIndexChanged(int index)
 {
     _fegCdtMap.remove("ferrographysheetid");
+    //foreign key
+    _fegpCdtMap.remove("ferrographysheetid");
     if(ui->feg_ferrographysheetidChkBox->isChecked())
     {
         QString text = ui->feg_ferrographysheetidCbBox->currentText();
         _fegCdtMap.insert("ferrographysheetid",text);
+        _fegpCdtMap.insert("ferrographysheetid",text);
     }
 }
 

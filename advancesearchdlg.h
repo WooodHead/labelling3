@@ -18,6 +18,7 @@
 #include "Connection.h"
 #include "propertynamedlg.h"
 #include "Global.h"
+#include "QtAwesome.h"
 
 namespace Ui {
 class AdvanceSearchDlg;
@@ -443,6 +444,8 @@ private:
     QSqlDatabase db;
     ProPertyNameDlg *ppnDlg;
     QString propertyName;
+
+    QtAwesome* _awesome;
     
     QMap<QString,QString> tableNames;
     QSqlQueryModel *_eqmInfoModel;
