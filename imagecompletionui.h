@@ -27,6 +27,7 @@
 #include "UserManagement.h"
 #include "Global.h"
 #include "QtAwesome.h"
+#include "MoliProperties.h"
 
 #define DELETEPTR(ptr) if(ptr) { delete ptr; ptr = 0; }
 
@@ -389,8 +390,11 @@ private:
 
     QtAwesome* _awesome;
 
+    int rowIndex(QString image);
+
 private slots:
     void flushBottom();
+    void flushLeft(QString path, QString label);
     void showContextMenu(QPoint);
     void editProperties();
 };

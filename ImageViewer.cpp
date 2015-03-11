@@ -269,9 +269,16 @@ bool ImageViewer::saveMask(QString path, QString ext)
 {
     if(_mask.empty()) return false;
 
-    _mask = _mask * 255;
-    IplImage* temp = new IplImage(_mask);
-    return IplImageToQImage(temp)->save(path, ext.toUtf8().constData());
+    if(m_method == 0)
+    {
+        return saveLabelMap(path, ext.toUtf8().constData());
+    }
+    else
+    {
+        _mask = _mask * 255;
+        IplImage* temp = new IplImage(_mask);
+        return IplImageToQImage(temp)->save(path, ext.toUtf8().constData());
+    }
 }
 
 bool ImageViewer::saveAsMask(QString &pathMask)
@@ -946,8 +953,7 @@ void ImageViewer::imageNotColor( double /*scaleFactor*/ )
 
     if(img) {cvReleaseImage(&img); img = NULL;}
 
-    QImage *image;
-    image = IplImageToQImage( _ocvImage );
+    QImage *image = IplImageToQImage( _ocvImage );
 
     setImage( *image );
 }
@@ -1053,4 +1059,46 @@ void ImageViewer::setDefaultCursor()
     setCursor(Qt::ArrowCursor);
 
     update();
+}
+
+QImage *ImageViewer::getMask()
+{
+    bool flag;
+    if(m_method == 0)
+    {
+        for (int i = 0; i < _labelMapImage->height(); i++)
+        {
+            for (int j = 0; j < _labelMapImage->width(); j++)
+            {
+                flag = false;
+                for (int k = 0; k < 10; k++)
+                {
+                    QRgb rgb = qRgb(colorTable[3*k], colorTable[3*k+1], colorTable[3*k+2]);
+                    QRgb rgb1 = _labelMapImage->pixel(j, i);
+                    if (rgb == rgb1)
+                    {
+                        flag = true;
+                    }
+                }
+                if (!flag)
+                {
+                    _labelMapImage->setPixel(j,i, qRgb(0, 0, 0));
+                }
+            }
+        }
+        return _labelMapImage;
+    }
+    else
+    {
+        if(_mask.empty()) return false;
+
+        _mask = _mask * 255;
+        IplImage* temp = new IplImage(_mask);
+        return IplImageToQImage(temp);
+    }
+}
+
+QImage *ImageViewer::getResult()
+{
+    return _result_labelImage != NULL ? _result_labelImage : NULL;
 }

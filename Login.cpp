@@ -75,7 +75,7 @@ void Login::mousePressEvent(QMouseEvent *event)
     _dpos = _mousePos - _pos;
 }
 
-void Login::mouseReleaseEvent(QMouseEvent *event)
+void Login::mouseReleaseEvent(QMouseEvent */*event*/)
 {
     _moving = false;
 }

@@ -25,8 +25,6 @@ public:
     ~ImageProperties();
     
 private slots:
-    void on__buttonClose_clicked();
-
     void on__buttonSave_clicked();
 
     void on__comboBoxEquipPlaneID_textChanged(const QString &arg1);
@@ -49,7 +47,7 @@ private slots:
 
     void on__buttonCancel_clicked();
 
-
+    void closeEvent(QCloseEvent *);
 
 private:
     Ui::ImageProperties *ui;
@@ -71,6 +69,7 @@ private:
 
     bool _bSaved[TABLE_N];
     QtAwesome* _awesome;
+    bool _bCommited;
 
 signals:
     void flush();

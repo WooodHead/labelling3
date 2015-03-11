@@ -179,6 +179,9 @@ public:
     void undo();
 
     void setDefaultCursor();
+
+    QImage* getMask();
+    QImage* getResult();
   
 public slots:
 	void				changeObjectLabeling(QTreeWidgetItem*); 

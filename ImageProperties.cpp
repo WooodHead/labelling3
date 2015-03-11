@@ -7,9 +7,6 @@ ImageProperties::ImageProperties(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowTitle(tr("编辑图像属性"));
-    ui->_labelOriginalImage->setFixedSize(100, 50);
-    ui->_labelResultImage->setFixedSize(100, 50);
-    ui->_labelMaskImage->setFixedSize(100, 50);
 
     ui->_tabWidget->removeTab(8);
     ui->_tabWidget->removeTab(7);
@@ -26,8 +23,9 @@ ImageProperties::ImageProperties(QWidget *parent) :
     ui->_buttonNext->setIcon(_awesome->icon(forward));
 
     connect(this, SIGNAL(flush()), parent, SLOT(flushBottom()));
-    connect(this, SIGNAL(removeImage(QString)), parent, SLOT(removeImage()));
+    connect(this, SIGNAL(removeImage(QString)), parent, SLOT(removeImage(QString)));
 
+    _bCommited = false;
     for(int i = 0; i < TABLE_N; i++ ) _models[i] = 0;
     for(int i = 0; i < TABLE_N; i++ ) _bSaved[i] = false;
     load();
@@ -461,6 +459,8 @@ bool ImageProperties::isValid(int index)
             return false;
         }
     }
+
+    return true;
 }
 
 void ImageProperties::showDlg(QString filename)
@@ -479,11 +479,6 @@ void ImageProperties::showDlg(QString filename)
     }
 }
 
-void ImageProperties::on__buttonClose_clicked()
-{
-    close();
-}
-
 void ImageProperties::on__buttonSave_clicked()
 {
     int index = ui->_tabWidget->currentIndex();
@@ -494,6 +489,7 @@ void ImageProperties::on__buttonSave_clicked()
     }
     else
     {
+        _bSaved[TABLE_N-1] = true;
         for(int i = 0; i < TABLE_N; i++)
         {
             if(_bSaved[i] == false)
@@ -798,25 +794,25 @@ void ImageProperties::on__buttonSave_clicked()
                 _models[6]->setData(_models[6]->index(0, 11), ui->_comboBoxMentalSampleImageTag->currentText());
             }
         }
-    }
-
-    for(int i = 0; i < TABLE_N; i++)
-    {
-        if(!_models[i]->submitAll())
+        for(int i = 0; i < TABLE_N; i++)
         {
-            for(int k = 0; k < i; k++)
+            if(!_models[i]->submitAll())
             {
-                _models[k]->revertAll();
+                for(int k = 0; k < i; k++)
+                {
+                    _models[k]->revertAll();
+                }
+                QMessageBox::warning(this, tr("提示"), tr("保存失败!"), QMessageBox::Close);
+                return;
             }
-            QMessageBox::warning(this, tr("提示"), tr("保存失败!"), QMessageBox::Close);
-            return;
         }
+        _bCommited = true;
+        QMessageBox::warning(this, tr("提示"), tr("保存成功!"), QMessageBox::Close);
+
+        emit flush();
+
+        close();
     }
-    QMessageBox::warning(this, tr("提示"), tr("保存成功!"), QMessageBox::Close);
-
-    emit flush();
-
-    close();
 }
 
 void ImageProperties::on__comboBoxEquipPlaneID_textChanged(const QString &arg1)
@@ -883,16 +879,17 @@ void ImageProperties::on__tabWidget_currentChanged(int index)
 
 void ImageProperties::on__buttonCancel_clicked()
 {
-    for(int i = 0; i < TABLE_N; i++)
+    close();
+}
+
+void ImageProperties::closeEvent(QCloseEvent *)
+{
+    if(!_bCommited)
     {
-        if(_bSaved[i])
+        QMessageBox::StandardButton reply = QMessageBox::warning(0, tr("提示"), tr("关闭将导致所填写的数据丢失, 是否确认退出?"), QMessageBox::Ok | QMessageBox::Cancel);
+        if(reply == QMessageBox::Ok)
         {
-            QMessageBox::StandardButton reply = QMessageBox::warning(0, tr("提示"), tr("关闭将导致所填写的数据丢失, 是否确认退出?"), QMessageBox::Ok | QMessageBox::Cancel);
-            if(reply == QMessageBox::Ok)
-            {
-                emit removeImage(_filename);
-            }
+            emit removeImage(_originalImagePath);
         }
     }
 }
-

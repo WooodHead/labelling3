@@ -7,6 +7,7 @@
 #include <QSqlDatabase>
 #include <QFile>
 #include <QSqlRecord>
+#include <QBuffer>
 
 namespace Ui {
 class MoliProperties;
@@ -25,6 +26,46 @@ private slots:
 
     void on_pushButton_clicked();
 
+    void on__comboBoxMoliGivenInfo_editTextChanged(const QString &arg1);
+
+    void on__comboBoxMoliID_editTextChanged(const QString &arg1);
+
+    void on__comboBoxMoliImageID_editTextChanged(const QString &arg1);
+
+    void on__comboBoxMoliPianID_editTextChanged(const QString &arg1);
+
+    void on__comboBoxMoliReportID_editTextChanged(const QString &arg1);
+
+    void on__comboBoxMoliGuy_editTextChanged(const QString &arg1);
+
+    void on__editMoliPath_textChanged(const QString &arg1);
+
+    void on__comboBoxMoliProperty_editTextChanged(const QString &arg1);
+
+    void on__comboBoxMoliPosition_editTextChanged(const QString &arg1);
+
+    void on__editMoliSize_textChanged(const QString &arg1);
+
+    void on__editMoliLength_textChanged(const QString &arg1);
+
+    void on__comboBoxMoliShape_editTextChanged(const QString &arg1);
+
+    void on__comboBoxMoliColor_editTextChanged(const QString &arg1);
+
+    void on__comboBoxMoliSurface_editTextChanged(const QString &arg1);
+
+    void on__comboBoxMoliErodeType_editTextChanged(const QString &arg1);
+
+    void on__comboBoxMoliErodePart_editTextChanged(const QString &arg1);
+
+    void on__comboBoxMoliErodeReason_editTextChanged(const QString &arg1);
+
+    void on__comboBoxMoliTypical_editTextChanged(const QString &arg1);
+
+signals:
+    void flush();
+    void flushLeft(QString path, QString label);
+
 private:
     Ui::MoliProperties *ui;
 
@@ -32,10 +73,15 @@ private:
     QSqlDatabase _db;
 
     QString _originalImagePath;
-    QString _resultPath;
-    QString _maskPath;
+    QImage _result;
+    QImage _mask;
 
-    void showDlg(QString imagePath, QString resultPath, QString maskPath);
+    bool _bDirty;
+
+    QStringList getItems(QSqlTableModel *model, QString fieldName);
+
+public:
+    void showDlg(QString imagePath, const QImage& result, const QImage& mask);
 };
 
 #endif // MOLIPROPERTIES_H

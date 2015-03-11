@@ -576,7 +576,12 @@ void ImageCompletionUI::showContextMenu(QPoint pos)
 
 void ImageCompletionUI::editProperties()
 {
+    if(_imagePath.isEmpty()) return;
 
+    QImage* result = _editImageViewer->getResult();
+    QImage* mask = _editImageViewer->getMask();
+
+    (new MoliProperties(this))->showDlg(_imagePath, result != NULL ? *result : QImage(), mask != NULL ? *mask : QImage() );
 }
 
 void ImageCompletionUI::setupBrush()
@@ -652,20 +657,41 @@ void ImageCompletionUI::open()
         }
     }
 
-    _cnt++;
-    if(_leftWindow.tableWidget->rowCount() <= _cnt + 1)
+    int row = rowIndex(_imagePath);
+    if(row > 0)
     {
-        _leftWindow.tableWidget->insertRow(_leftWindow.tableWidget->rowCount()-1);
+        QMessageBox::information(0, tr("提示"), QString("图像已打开(第%1行)").arg(row), QMessageBox::Close);
+    }
+    else
+    {
+        _cnt++;
+        if(_leftWindow.tableWidget->rowCount() <= _cnt + 1)
+        {
+            _leftWindow.tableWidget->insertRow(_leftWindow.tableWidget->rowCount()-1);
+        }
+
+        _leftWindow.tableWidget->setItem(_cnt, 0, new QTableWidgetItem(_imageName));
+        _leftWindow.tableWidget->setItem(_cnt, 1, new QTableWidgetItem(fileName));
+        _leftWindow.tableWidget->setItem(_cnt, 2, new QTableWidgetItem(status == "Y" ? "Y" : "N"));
+
+        for(int i = 0; i < _leftWindow.tableWidget->columnCount(); i++)
+        {
+            _leftWindow.tableWidget->item(_cnt, i)->setBackgroundColor(getColor(status));
+        }
+    }
+}
+
+int ImageCompletionUI::rowIndex(QString image)
+{
+    for(int i = 0; i < _leftWindow.tableWidget->rowCount(); i++)
+    {
+        if(_leftWindow.tableWidget->item(i,1) && image == _leftWindow.tableWidget->item(i,1)->text())
+        {
+            return i+1;
+        }
     }
 
-    _leftWindow.tableWidget->setItem(_cnt, 0, new QTableWidgetItem(_imageName));
-    _leftWindow.tableWidget->setItem(_cnt, 1, new QTableWidgetItem(fileName));
-    _leftWindow.tableWidget->setItem(_cnt, 2, new QTableWidgetItem(status == "Y" ? "Y" : "N"));
-
-    for(int i = 0; i < _leftWindow.tableWidget->columnCount(); i++)
-    {
-        _leftWindow.tableWidget->item(_cnt, i)->setBackgroundColor(getColor(status));
-    }
+    return -1;
 }
 
 bool ImageCompletionUI::openImage(QString fileName)
@@ -774,10 +800,6 @@ void	ImageCompletionUI::save()
 
     bool ret1, ret2;
 
-    // Check Path
-    qDebug() << Global::PathResult;
-    qDebug() << Global::PathMask;
-
     if(!QDir(Global::PathResult).exists())
     {
         QMessageBox::warning(this, tr("保存"), QString("请指定标注图像保存路径:%1").arg(QFileInfo(QApplication::instance()->applicationFilePath()).baseName() + ".ini"));
@@ -801,15 +823,15 @@ void	ImageCompletionUI::save()
     }
 
     //TODO: Sync Database
-    if(ret1 && ret2)
-    {
-        if(syncLabelledImage(_imagePath, pathResult, pathMask))
-        {
-            setImageState(_imagePath, "Y");
-            setBackgroundColor(_imagePath,  this->getColor("Y"));
-            showData();
-        }
-    }
+    //    if(ret1 && ret2)
+    //    {
+    //        if(syncLabelledImage(_imagePath, pathResult, pathMask))
+    //        {
+    //            setImageState(_imagePath, "Y");
+    //            setBackgroundColor(_imagePath,  this->getColor("Y"));
+    //            showData();
+    //        }
+    //    }
 }
 
 void ImageCompletionUI::setBackgroundColor(QString path, QColor color)
@@ -2042,6 +2064,23 @@ void ImageCompletionUI::flushBottom()
     showData();
 }
 
+void ImageCompletionUI::flushLeft(QString filename, QString label)
+{
+    for(int i = 0; i < _leftWindow.tableWidget->rowCount(); i++)
+    {
+        if(_leftWindow.tableWidget->item(i, 2) && filename == _leftWindow.tableWidget->item(i,1)->text())
+        {
+            _leftWindow.tableWidget->item(i,2)->setText(label);
+
+            for(int j = 0; j < _leftWindow.tableWidget->columnCount(); j++)
+            {
+                _leftWindow.tableWidget->item(i, j)->setBackground(getColor(label));
+            }
+            return;
+        }
+    }
+}
+
 // 拷贝文件--zhyn
 bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIfExits)
 {
@@ -2249,9 +2288,10 @@ void ImageCompletionUI::removeImage(QString filename)
 
     for(int i = 0; i < _leftWindow.tableWidget->rowCount(); i++)
     {
-        if(filename == _leftWindow.tableWidget->item(i, 1)->text())
+        if(_leftWindow.tableWidget->item(i,1) && filename == _leftWindow.tableWidget->item(i, 1)->text())
         {
             _leftWindow.tableWidget->removeRow(i);
+            _cnt--;
         }
     }
 }
@@ -2285,3 +2325,5 @@ QString ImageCompletionUI::labelStatus(QString imagePath)
 void ImageCompletionUI::editImageProperties(QString /* fileName */)
 {
 }
+
+
