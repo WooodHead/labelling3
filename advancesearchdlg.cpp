@@ -135,6 +135,22 @@ void AdvanceSearchDlg::resetConditions()
     ui->oia_physicochemicalstuffChkBox->setChecked(false);
 
     // abm
+    ui->abm_abrasiveidChkBox->setChecked(false);
+    ui->abm_abrasivecolorChkBox->setChecked(false);
+    ui->abm_abrasivepositionChkBox->setChecked(false);
+    ui->abm_abrasiveshapeChkBox->setChecked(false);
+    ui->abm_abrasivesperimeterChkBox->setChecked(false);
+    ui->abm_abrasivesizeChkBox->setChecked(false);
+    ui->abm_abrasivematerialChkBox->setChecked(false);
+    ui->abm_abrasivemarkstuffChkBox->setChecked(false);
+    ui->abm_abrasivetypicalChkBox->setChecked(false);
+    ui->abm_abrasivemechanismtypeChkBox_->setChecked(false);
+    ui->abm_abrasivedamagetypeChkBox->setChecked(false);
+    ui->abm_abrasiveweartypeChkBox->setChecked(false);
+    ui->abm_abrasivesurfacetexturetypeChkBox->setChecked(false);
+    ui->abm_ferrographypicidChkBox->setChecked(false);
+    ui->abm_ferrographyreportidChkBox->setChecked(false);
+    ui->abm_ferrographysheetidChkBox->setChecked(false);
 }
 
 
@@ -622,7 +638,7 @@ void AdvanceSearchDlg::useproperty()
                     int m = datelist.at(1).toInt();
                     int d = datelist.at(2).toInt();
                     ui->oia_physicochemicaldateDateEdit->setDate(QDate(y,m,d));
-                    _oiaCdtMap.insert(" physicochemicaldate",oiaValues.at(idx));
+                    _oiaCdtMap.insert("physicochemicaldate",oiaValues.at(idx));
                     ui->oia_physicochemicaldateChkBox->setChecked(true);
                 }
                 else if(field == "physicochemicalreportid")
@@ -640,11 +656,110 @@ void AdvanceSearchDlg::useproperty()
         if(!abmFields.isEmpty())
         {
             idx =0;
+            foreach (QString field, abmFields)
+            {
+                if(field == "abrasiveid")
+                {
+                    ui->abm_abrasiveidCbBox->setCurrentIndex(ui->abm_abrasiveidCbBox->findText(abmValues.at(idx)));
+                    _abmCdtMap.insert("abrasiveid",abmValues.at(idx));
+                    ui->abm_abrasiveidChkBox->setChecked(true);
+                }
+                else if(field == "abrasiveshape")
+                {
+                    ui->abm_abrasiveshapeCbBox->setCurrentIndex(ui->abm_abrasiveshapeCbBox->findText(abmValues.at(idx)));
+                    _abmCdtMap.insert("abrasiveshape",abmValues.at(idx));
+                    ui->abm_abrasiveshapeChkBox->setChecked(true);
+                }
+                else if(field == "abrasiveposition")
+                {
+                    ui->abm_abrasivepositionCbBox->setCurrentIndex(ui->abm_abrasivepositionCbBox->findText(abmValues.at(idx)));
+                    _abmCdtMap.insert("abrasiveposition",abmValues.at(idx));
+                    ui->abm_abrasivepositionChkBox->setChecked(true);
+                }
+                else if(field == "abrasivematerial")
+                {
+                    ui->abm_abrasivematerialCbBox->setCurrentIndex(ui->abm_abrasivematerialCbBox->findText(abmValues.at(idx)));
+                    _abmCdtMap.insert("abrasivematerial",abmValues.at(idx));
+                    ui->abm_abrasivematerialChkBox->setChecked(true);
+                }
+                else if(field == "abrasivecolor")
+                {
+                    ui->abm_abrasivecolorCbBox->setCurrentIndex(ui->abm_abrasivecolorCbBox->findText(abmValues.at(idx)));
+                    _abmCdtMap.insert("abrasivecolor",abmValues.at(idx));
+                    ui->abm_abrasivecolorChkBox->setChecked(true);
+                }
+                else if(field == "abrasivesperimeter")
+                {
+                    ui->abm_abrasivesperimeterLineEdit->setText(abmValues.at(idx));
+                    _abmCdtMap.insert("abrasivesperimeter",abmValues.at(idx));
+                    ui->abm_abrasivesperimeterChkBox->setChecked(true);
+                }
+                else if(field == "abrasivesize")
+                {
+                    ui->abm_abrasivesizeLineEdit->setText(abmValues.at(idx));
+                    _abmCdtMap.insert("abrasivesize",abmValues.at(idx));
+                    ui->abm_abrasivesizeChkBox->setChecked(true);
+                }
+                else if(field == "abrasivemarkstuff")
+                {
+                    ui->abm_abrasivemarkstuffLineEdit->setText(abmValues.at(idx));
+                    _abmCdtMap.insert("abrasivemarkstuff",abmValues.at(idx));
+                    ui->abm_abrasivemarkstuffChkBox->setChecked(true);
+                }
+                else if(field == "abrasivetypical")
+                {
+                    ui->abm_abrasivetypicalLineEdit->setText(abmValues.at(idx));
+                    _abmCdtMap.insert("abrasivetypical",abmValues.at(idx));
+                    ui->abm_abrasivetypicalChkBox->setChecked(true);
+                }
+                else if(field == "abrasivemechanismtype")
+                {
+                    ui->abm_abrasivemechanismtypeLineEdit->setText(abmValues.at(idx));
+                    _abmCdtMap.insert("abrasivemechanismtype",abmValues.at(idx));
+                    ui->abm_abrasivemechanismtypeChkBox_->setChecked(true);
+                }
+                else if(field == "abrasivedamagetype")
+                {
+                    ui->abm_abrasivedamagetypeCbBox->setCurrentIndex(ui->abm_abrasivedamagetypeCbBox->findText(abmValues.at(idx)));
+                    _abmCdtMap.insert("abrasivedamagetype",abmValues.at(idx));
+                    ui->abm_abrasivedamagetypeChkBox->setChecked(true);
+                }
+                else if(field == "abrasiveweartype")
+                {
+                    ui->abm_abrasiveweartypeCbBox->setCurrentIndex(ui->abm_abrasiveweartypeCbBox->findText(abmValues.at(idx)));
+                    _abmCdtMap.insert("abrasiveweartype",abmValues.at(idx));
+                    ui->abm_abrasiveweartypeChkBox->setChecked(true);
+                }
+                else if(field == "abrasivesurfacetexturetype")
+                {
+                    ui->abm_abrasivesurfacetexturetypeCbBox->setCurrentIndex(ui->abm_abrasivesurfacetexturetypeCbBox->findText(abmValues.at(idx)));
+                    _abmCdtMap.insert("abrasivesurfacetexturetype",abmValues.at(idx));
+                    ui->abm_abrasivesurfacetexturetypeChkBox->setChecked(true);
+                }
+                else if(field == "ferrographysheetid")
+                {
+                    ui->abm_ferrographysheetidCbBox->setCurrentIndex(ui->abm_ferrographysheetidCbBox->findText(abmValues.at(idx)));
+                    _abmCdtMap.insert("ferrographysheetid",abmValues.at(idx));
+                    ui->abm_ferrographysheetidChkBox->setChecked(true);
+                }
+                else if(field == "ferrographypicid")
+                {
+                    ui->abm_ferrographypicidCbBox->setCurrentIndex(ui->abm_ferrographypicidCbBox->findText(abmValues.at(idx)));
+                    _abmCdtMap.insert("ferrographypicid",abmValues.at(idx));
+                    ui->abm_ferrographypicidChkBox->setChecked(true);
+                }
+                else if(field == "ferrographyreportid")
+                {
+                    ui->abm_ferrographyreportidCbBox->setCurrentIndex(ui->abm_ferrographypicidCbBox->findText(abmValues.at(idx)));
+                    _abmCdtMap.insert("ferrographyreportid",abmValues.at(idx));
+                    ui->abm_ferrographypicidChkBox->setChecked(true);
+                }
+                idx++;
+            }
         }
 
         this->query();
     }
-
 }
 
 
@@ -1364,6 +1479,33 @@ void AdvanceSearchDlg::initCbBox()
             ui->oia_ferrographyequipmentCbBox->insertItem(-1,query.value(oia_ferrographyequipment).toString());
         if(ui->oia_ferrographyreportidCbBox->findText(query.value(oia_ferrographyreportid).toString()) == -1)
             ui->oia_ferrographyreportidCbBox->insertItem(-1,query.value(oia_ferrographyreportid).toString());
+    }
+
+    query.exec("select * from abrasivemarkinfo");
+    while(query.next())
+    {
+        if(ui->abm_abrasiveidCbBox->findText(query.value(abm_abrasiveid).toString()) == -1)
+            ui->abm_abrasiveidCbBox->insertItem(-1,query.value(abm_abrasiveid).toString());
+        if(ui->abm_abrasivecolorCbBox->findText(query.value(abm_abrasivecolor).toString()) == -1)
+            ui->abm_abrasivecolorCbBox->insertItem(-1,query.value(abm_abrasivecolor).toString());
+        if(ui->abm_abrasiveshapeCbBox->findText(query.value(abm_abrasiveshape).toString()) == -1)
+            ui->abm_abrasiveshapeCbBox->insertItem(-1,query.value(abm_abrasiveshape).toString());
+        if(ui->abm_abrasivematerialCbBox->findText(query.value(abm_abrasivematerial).toString()) == -1)
+            ui->abm_abrasivematerialCbBox->insertItem(-1,query.value(abm_abrasivematerial).toString());
+        if(ui->abm_abrasivepositionCbBox->findText(query.value(abm_abrasiveposition).toString()) == -1)
+            ui->abm_abrasivepositionCbBox->insertItem(-1,query.value(abm_abrasiveposition).toString());
+        if(ui->abm_abrasivedamagetypeCbBox->findText(query.value(abm_abrasivedamagetype).toString()) == -1)
+            ui->abm_abrasivedamagetypeCbBox->insertItem(-1,query.value(abm_abrasivedamagetype).toString());
+        if(ui->abm_abrasiveweartypeCbBox->findText(query.value(abm_abrasiveweartype).toString()) == -1)
+            ui->abm_abrasiveweartypeCbBox->insertItem(-1,query.value(abm_abrasiveweartype).toString());
+        if(ui->abm_abrasivesurfacetexturetypeCbBox->findText(query.value(abm_abrasivesurfacetexturetype).toString()) == -1)
+            ui->abm_abrasivesurfacetexturetypeCbBox->insertItem(-1,query.value(abm_abrasivesurfacetexturetype).toString());
+        if(ui->abm_ferrographysheetidCbBox->findText(query.value(abm_ferrographysheetid).toString())== -1)
+            ui->abm_ferrographysheetidCbBox->insertItem(-1,query.value(abm_ferrographysheetid).toString());
+        if(ui->abm_ferrographypicidCbBox->findText(query.value(abm_ferrographypicid).toString()) == -1)
+            ui->abm_ferrographypicidCbBox->insertItem(-1,query.value(abm_ferrographypicid).toString());
+        if(ui->abm_ferrographyreportidCbBox->findText(query.value(abm_ferrographyreportid).toString()) == -1)
+            ui->abm_ferrographyreportidCbBox->insertItem(-1,query.value(abm_ferrographyreportid).toString());
     }
 }
 
@@ -2991,5 +3133,325 @@ void AdvanceSearchDlg::on_oia_ferrographyreportidCbBox_currentIndexChanged(int i
     {
         QString text = ui->oia_ferrographyreportidCbBox->currentText();
         _oiaCdtMap.insert("ferrographyreportid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasiveidChkBox_clicked()
+{
+    _abmCdtMap.remove("abrasiveid");
+    if(ui->abm_abrasiveidChkBox->isChecked())
+    {
+        QString text = ui->abm_abrasiveidCbBox->currentText();
+        _abmCdtMap.insert("abrasiveid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasiveidCbBox_currentIndexChanged(int index)
+{
+    _abmCdtMap.remove("abrasiveid");
+    if(ui->abm_abrasiveidChkBox->isChecked())
+    {
+        QString text = ui->abm_abrasiveidCbBox->currentText();
+        _abmCdtMap.insert("abrasiveid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasiveshapeChkBox_clicked()
+{
+    _abmCdtMap.remove("abrasiveshape");
+    if(ui->abm_abrasiveshapeChkBox->isChecked())
+    {
+        QString text = ui->abm_abrasiveshapeCbBox->currentText();
+        _abmCdtMap.insert("abrasiveshape",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasiveshapeCbBox_currentIndexChanged(int index)
+{
+    _abmCdtMap.remove("abrasiveshape");
+    if(ui->abm_abrasiveshapeChkBox->isChecked())
+    {
+        QString text = ui->abm_abrasiveshapeCbBox->currentText();
+        _abmCdtMap.insert("abrasiveshape",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasivepositionChkBox_clicked()
+{
+    _abmCdtMap.remove("abrasiveposition");
+    if(ui->abm_abrasivepositionChkBox->isChecked())
+    {
+        QString text = ui->abm_abrasivepositionCbBox->currentText();
+        _abmCdtMap.insert("abrasiveposition",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasivepositionCbBox_currentIndexChanged(int index)
+{
+    _abmCdtMap.remove("abrasiveposition");
+    if(ui->abm_abrasivepositionChkBox->isChecked())
+    {
+        QString text = ui->abm_abrasivepositionCbBox->currentText();
+        _abmCdtMap.insert("abrasiveposition",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasivematerialChkBox_clicked()
+{
+    _abmCdtMap.remove("abrasivematerial");
+    if(ui->abm_abrasivematerialChkBox->isChecked())
+    {
+        QString text = ui->abm_abrasivematerialCbBox->currentText();
+        _abmCdtMap.insert("abrasivematerial",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasivematerialCbBox_currentIndexChanged(int index)
+{
+    _abmCdtMap.remove("abrasivematerial");
+    if(ui->abm_abrasivematerialChkBox->isChecked())
+    {
+        QString text = ui->abm_abrasivematerialCbBox->currentText();
+        _abmCdtMap.insert("abrasivematerial",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasivecolorChkBox_clicked()
+{
+    _abmCdtMap.remove("abrasivecolor");
+    if(ui->abm_abrasivecolorChkBox->isChecked())
+    {
+        QString text = ui->abm_abrasivecolorCbBox->currentText();
+        _abmCdtMap.insert("abrasivecolor",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasivecolorCbBox_currentIndexChanged(int index)
+{
+    _abmCdtMap.remove("abrasivecolor");
+    if(ui->abm_abrasivecolorChkBox->isChecked())
+    {
+        QString text = ui->abm_abrasivecolorCbBox->currentText();
+        _abmCdtMap.insert("abrasivecolor",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasivesperimeterChkBox_clicked()
+{
+    _abmCdtMap.remove("abrasivesperimeter");
+    if(ui->abm_abrasivesperimeterChkBox->isChecked())
+    {
+        QString text = ui->abm_abrasivesperimeterLineEdit->text();
+        _abmCdtMap.insert("abrasivesperimeter",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasivesperimeterLineEdit_textChanged(const QString &arg1)
+{
+    _abmCdtMap.remove("abrasivesperimeter");
+    if(ui->abm_abrasivesperimeterChkBox->isChecked())
+    {
+        QString text = ui->abm_abrasivesperimeterLineEdit->text();
+        _abmCdtMap.insert("abrasivesperimeter",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasivesizeChkBox_clicked()
+{
+    _abmCdtMap.remove("abrasivesize");
+    if(ui->abm_abrasivesizeChkBox->isChecked())
+    {
+        QString text = ui->abm_abrasivesizeLineEdit->text();
+        _abmCdtMap.insert("abrasivesize",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasivesizeLineEdit_textChanged(const QString &arg1)
+{
+    _abmCdtMap.remove("abrasivesize");
+    if(ui->abm_abrasivesizeChkBox->isChecked())
+    {
+        QString text = ui->abm_abrasivesizeLineEdit->text();
+        _abmCdtMap.insert("abrasivesize",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasivemarkstuffChkBox_clicked()
+{
+    _abmCdtMap.remove("abrasivemarkstuff");
+    if(ui->abm_abrasivemarkstuffChkBox->isChecked())
+    {
+        QString text = ui->abm_abrasivemarkstuffLineEdit->text();
+        _abmCdtMap.insert("abrasivemarkstuff",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasivemarkstuffLineEdit_textChanged(const QString &arg1)
+{
+    _abmCdtMap.remove("abrasivemarkstuff");
+    if(ui->abm_abrasivemarkstuffChkBox->isChecked())
+    {
+        QString text = ui->abm_abrasivemarkstuffLineEdit->text();
+        _abmCdtMap.insert("abrasivemarkstuff",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasivetypicalChkBox_clicked()
+{
+    _abmCdtMap.remove("abrasivetypical");
+    if(ui->abm_abrasivetypicalChkBox->isChecked())
+    {
+        QString text = ui->abm_abrasivetypicalLineEdit->text();
+        _abmCdtMap.insert("abrasivetypical",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasivetypicalLineEdit_textChanged(const QString &arg1)
+{
+    _abmCdtMap.remove("abrasivetypical");
+    if(ui->abm_abrasivetypicalChkBox->isChecked())
+    {
+        QString text = ui->abm_abrasivetypicalLineEdit->text();
+        _abmCdtMap.insert("abrasivetypical",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasivemechanismtypeChkBox__clicked()
+{
+    _abmCdtMap.remove("abrasivemechanismtype");
+    if(ui->abm_abrasivemechanismtypeChkBox_->isChecked())
+    {
+        QString text = ui->abm_abrasivemechanismtypeLineEdit->text();
+        _abmCdtMap.insert("abrasivemechanismtype",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasivemechanismtypeLineEdit_textChanged(const QString &arg1)
+{
+    _abmCdtMap.remove("abrasivemechanismtype");
+    if(ui->abm_abrasivemechanismtypeChkBox_->isChecked())
+    {
+        QString text = ui->abm_abrasivemechanismtypeLineEdit->text();
+        _abmCdtMap.insert("abrasivemechanismtype",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasivedamagetypeChkBox_clicked()
+{
+    _abmCdtMap.remove("abrasivedamagetype");
+    if(ui->abm_abrasivedamagetypeChkBox->isChecked())
+    {
+        QString text = ui->abm_abrasivedamagetypeCbBox->currentText();
+        _abmCdtMap.insert("abrasivedamagetype",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasivedamagetypeCbBox_currentIndexChanged(int index)
+{
+    _abmCdtMap.remove("abrasivedamagetype");
+    if(ui->abm_abrasivedamagetypeChkBox->isChecked())
+    {
+        QString text = ui->abm_abrasivedamagetypeCbBox->currentText();
+        _abmCdtMap.insert("abrasivedamagetype",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasiveweartypeChkBox_clicked()
+{
+    _abmCdtMap.remove("abrasiveweartype");
+    if(ui->abm_abrasiveweartypeChkBox->isChecked())
+    {
+        QString text = ui->abm_abrasiveweartypeCbBox->currentText();
+        _abmCdtMap.insert("abrasiveweartype",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasiveweartypeCbBox_currentIndexChanged(int index)
+{
+    _abmCdtMap.remove("abrasiveweartype");
+    if(ui->abm_abrasiveweartypeChkBox->isChecked())
+    {
+        QString text = ui->abm_abrasiveweartypeCbBox->currentText();
+        _abmCdtMap.insert("abrasiveweartype",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasivesurfacetexturetypeChkBox_clicked()
+{
+    _abmCdtMap.remove("abrasivesurfacetexturetype");
+    if(ui->abm_abrasivesurfacetexturetypeChkBox->isChecked())
+    {
+        QString text = ui->abm_abrasivesurfacetexturetypeCbBox->currentText();
+        _abmCdtMap.insert("abrasivesurfacetexturetype",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_abrasivesurfacetexturetypeCbBox_currentIndexChanged(int index)
+{
+    _abmCdtMap.remove("abrasivesurfacetexturetype");
+    if(ui->abm_abrasivesurfacetexturetypeChkBox->isChecked())
+    {
+        QString text = ui->abm_abrasivesurfacetexturetypeCbBox->currentText();
+        _abmCdtMap.insert("abrasivesurfacetexturetype",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_ferrographysheetidChkBox_clicked()
+{
+    _abmCdtMap.remove("ferrographysheetid");
+    if(ui->abm_ferrographysheetidChkBox->isChecked())
+    {
+        QString text = ui->abm_ferrographysheetidCbBox->currentText();
+        _abmCdtMap.insert("ferrographysheetid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_ferrographysheetidCbBox_currentIndexChanged(int index)
+{
+    _abmCdtMap.remove("ferrographysheetid");
+    if(ui->abm_ferrographysheetidChkBox->isChecked())
+    {
+        QString text = ui->abm_ferrographysheetidCbBox->currentText();
+        _abmCdtMap.insert("ferrographysheetid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_ferrographypicidChkBox_clicked()
+{
+    _abmCdtMap.remove("ferrographypicid");
+    if(ui->abm_ferrographypicidChkBox->isChecked())
+    {
+        QString text = ui->abm_ferrographypicidCbBox->currentText();
+        _abmCdtMap.insert("ferrographypicid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_ferrographypicidCbBox_currentIndexChanged(int index)
+{
+    _abmCdtMap.remove("ferrographypicid");
+    if(ui->abm_ferrographypicidChkBox->isChecked())
+    {
+        QString text = ui->abm_ferrographypicidCbBox->currentText();
+        _abmCdtMap.insert("ferrographypicid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_ferrographyreportidChkBox_clicked()
+{
+    _abmCdtMap.remove("ferrographyreportid");
+    if(ui->abm_ferrographyreportidChkBox->isChecked())
+    {
+        QString text = ui->abm_ferrographyreportidCbBox->currentText();
+        _abmCdtMap.insert("ferrographyreportid",text);
+    }
+}
+
+void AdvanceSearchDlg::on_abm_ferrographyreportidCbBox_currentIndexChanged(int index)
+{
+    _abmCdtMap.remove("ferrographyreportid");
+    if(ui->abm_ferrographyreportidChkBox->isChecked())
+    {
+        QString text = ui->abm_ferrographyreportidCbBox->currentText();
+        _abmCdtMap.insert("ferrographyreportid",text);
     }
 }

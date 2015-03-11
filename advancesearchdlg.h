@@ -313,6 +313,70 @@ private slots:
 
      void on_oia_ferrographyreportidCbBox_currentIndexChanged(int index);
 
+     void on_abm_abrasiveidChkBox_clicked();
+
+     void on_abm_abrasiveidCbBox_currentIndexChanged(int index);
+
+     void on_abm_abrasiveshapeChkBox_clicked();
+
+     void on_abm_abrasiveshapeCbBox_currentIndexChanged(int index);
+
+     void on_abm_abrasivepositionChkBox_clicked();
+
+     void on_abm_abrasivepositionCbBox_currentIndexChanged(int index);
+
+     void on_abm_abrasivematerialChkBox_clicked();
+
+     void on_abm_abrasivematerialCbBox_currentIndexChanged(int index);
+
+     void on_abm_abrasivecolorChkBox_clicked();
+
+     void on_abm_abrasivecolorCbBox_currentIndexChanged(int index);
+
+     void on_abm_abrasivesperimeterChkBox_clicked();
+
+     void on_abm_abrasivesperimeterLineEdit_textChanged(const QString &arg1);
+
+     void on_abm_abrasivesizeChkBox_clicked();
+
+     void on_abm_abrasivesizeLineEdit_textChanged(const QString &arg1);
+
+     void on_abm_abrasivemarkstuffChkBox_clicked();
+
+     void on_abm_abrasivemarkstuffLineEdit_textChanged(const QString &arg1);
+
+     void on_abm_abrasivetypicalChkBox_clicked();
+
+     void on_abm_abrasivetypicalLineEdit_textChanged(const QString &arg1);
+
+     void on_abm_abrasivemechanismtypeChkBox__clicked();
+
+     void on_abm_abrasivemechanismtypeLineEdit_textChanged(const QString &arg1);
+
+     void on_abm_abrasivedamagetypeChkBox_clicked();
+
+     void on_abm_abrasivedamagetypeCbBox_currentIndexChanged(int index);
+
+     void on_abm_abrasiveweartypeChkBox_clicked();
+
+     void on_abm_abrasiveweartypeCbBox_currentIndexChanged(int index);
+
+     void on_abm_abrasivesurfacetexturetypeChkBox_clicked();
+
+     void on_abm_abrasivesurfacetexturetypeCbBox_currentIndexChanged(int index);
+
+     void on_abm_ferrographysheetidChkBox_clicked();
+
+     void on_abm_ferrographysheetidCbBox_currentIndexChanged(int index);
+
+     void on_abm_ferrographypicidChkBox_clicked();
+
+     void on_abm_ferrographypicidCbBox_currentIndexChanged(int index);
+
+     void on_abm_ferrographyreportidChkBox_clicked();
+
+     void on_abm_ferrographyreportidCbBox_currentIndexChanged(int index);
+
 private:
     Ui::AdvanceSearchDlg *ui;
     
