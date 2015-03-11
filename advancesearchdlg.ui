@@ -35,7 +35,7 @@
       <item>
        <widget class="QStackedWidget" name="conditionStackedWidget">
         <property name="currentIndex">
-         <number>4</number>
+         <number>7</number>
         </property>
         <widget class="QWidget" name="page">
          <layout class="QGridLayout" name="gridLayout_3">
@@ -242,7 +242,7 @@
                    <string>动部件名称</string>
                   </property>
                   <property name="buddy">
-                   <cstring>checkBox_8</cstring>
+                   <cstring>abm_abrasiveidChkBox</cstring>
                   </property>
                  </widget>
                 </item>
@@ -1912,8 +1912,8 @@
              <property name="geometry">
               <rect>
                <x>0</x>
-               <y>0</y>
-               <width>180</width>
+               <y>-144</y>
+               <width>259</width>
                <height>460</height>
               </rect>
              </property>
@@ -1928,77 +1928,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_81">
+                 <widget class="QCheckBox" name="abm_abrasiveidChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_81"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_61">
-                <item>
-                 <widget class="QLabel" name="label_91">
-                  <property name="text">
-                   <string>磨粒周长</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_90">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_90"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_59">
-                <item>
-                 <widget class="QLabel" name="label_89">
-                  <property name="text">
-                   <string>磨粒位置</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_88">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_88"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_60">
-                <item>
-                 <widget class="QLabel" name="label_90">
-                  <property name="text">
-                   <string>磨粒尺寸</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QCheckBox" name="checkBox_89">
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_89"/>
+                 <widget class="QComboBox" name="abm_abrasiveidCbBox"/>
                 </item>
                </layout>
               </item>
@@ -2012,14 +1949,35 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_91">
+                 <widget class="QCheckBox" name="abm_abrasiveshapeChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_91"/>
+                 <widget class="QComboBox" name="abm_abrasiveshapeCbBox"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_59">
+                <item>
+                 <widget class="QLabel" name="label_89">
+                  <property name="text">
+                   <string>磨粒位置</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="abm_abrasivepositionChkBox">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="abm_abrasivepositionCbBox"/>
                 </item>
                </layout>
               </item>
@@ -2033,14 +1991,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_87">
+                 <widget class="QCheckBox" name="abm_abrasivematerialChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_87"/>
+                 <widget class="QComboBox" name="abm_abrasivematerialCbBox"/>
                 </item>
                </layout>
               </item>
@@ -2054,14 +2012,56 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_92">
+                 <widget class="QCheckBox" name="abm_abrasivecolorChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_92"/>
+                 <widget class="QComboBox" name="abm_abrasivecolorCbBox"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_61">
+                <item>
+                 <widget class="QLabel" name="label_91">
+                  <property name="text">
+                   <string>磨粒周长</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="abm_abrasivesperimeterChkBox">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="abm_abrasivesperimeterLineEdit"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_60">
+                <item>
+                 <widget class="QLabel" name="label_90">
+                  <property name="text">
+                   <string>磨粒尺寸</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="abm_abrasivesizeChkBox">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="abm_abrasivesizeLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -2075,14 +2075,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_85">
+                 <widget class="QCheckBox" name="abm_abrasivemarkstuffChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_85"/>
+                 <widget class="QLineEdit" name="abm_abrasivemarkstuffLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -2096,14 +2096,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_97">
+                 <widget class="QCheckBox" name="abm_abrasivetypicalChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_97"/>
+                 <widget class="QLineEdit" name="abm_abrasivetypicalLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -2117,14 +2117,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_96">
+                 <widget class="QCheckBox" name="abm_abrasivemechanismtypeChkBox_">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_96"/>
+                 <widget class="QLineEdit" name="abm_abrasivemechanismtypeLineEdit"/>
                 </item>
                </layout>
               </item>
@@ -2133,19 +2133,19 @@
                 <item>
                  <widget class="QLabel" name="label_96">
                   <property name="text">
-                   <string>磨粒损伤部位</string>
+                   <string>磨粒损伤类型</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_95">
+                 <widget class="QCheckBox" name="abm_abrasivedamagetypeChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_95"/>
+                 <widget class="QComboBox" name="abm_abrasivedamagetypeCbBox"/>
                 </item>
                </layout>
               </item>
@@ -2159,14 +2159,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_94">
+                 <widget class="QCheckBox" name="abm_abrasiveweartypeChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_94"/>
+                 <widget class="QComboBox" name="abm_abrasiveweartypeCbBox"/>
                 </item>
                </layout>
               </item>
@@ -2180,14 +2180,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_93">
+                 <widget class="QCheckBox" name="abm_abrasivesurfacetexturetypeChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_93"/>
+                 <widget class="QComboBox" name="abm_abrasivesurfacetexturetypeCbBox"/>
                 </item>
                </layout>
               </item>
@@ -2201,14 +2201,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_83">
+                 <widget class="QCheckBox" name="abm_ferrographysheetidChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_83"/>
+                 <widget class="QComboBox" name="abm_ferrographysheetidCbBox"/>
                 </item>
                </layout>
               </item>
@@ -2222,14 +2222,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_82">
+                 <widget class="QCheckBox" name="abm_ferrographypicidChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_82"/>
+                 <widget class="QComboBox" name="abm_ferrographypicidCbBox"/>
                 </item>
                </layout>
               </item>
@@ -2243,14 +2243,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox_84">
+                 <widget class="QCheckBox" name="abm_ferrographyreportidChkBox">
                   <property name="text">
                    <string/>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="lineEdit_84"/>
+                 <widget class="QComboBox" name="abm_ferrographyreportidCbBox"/>
                 </item>
                </layout>
               </item>
