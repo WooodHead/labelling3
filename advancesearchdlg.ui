@@ -49,8 +49,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>190</width>
-               <height>228</height>
+               <width>162</width>
+               <height>186</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -229,8 +229,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>314</width>
-               <height>228</height>
+               <width>253</width>
+               <height>186</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout">
@@ -430,8 +430,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>290</width>
-               <height>158</height>
+               <width>253</width>
+               <height>130</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_15">
@@ -569,8 +569,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>270</width>
-               <height>607</height>
+               <width>217</width>
+               <height>488</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -971,8 +971,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>314</width>
-               <height>887</height>
+               <width>253</width>
+               <height>712</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -1539,8 +1539,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>258</width>
-               <height>362</height>
+               <width>210</width>
+               <height>292</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -1772,8 +1772,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>286</width>
-               <height>350</height>
+               <width>276</width>
+               <height>354</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -1925,8 +1925,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>249</width>
-               <height>572</height>
+               <width>210</width>
+               <height>460</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -2352,7 +2352,27 @@
         <item>
          <widget class="QPushButton" name="addtoBtn">
           <property name="text">
-           <string>添加分类</string>
+           <string>添加属性</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_10">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="modifyButton">
+          <property name="text">
+           <string>修改属性</string>
           </property>
          </widget>
         </item>

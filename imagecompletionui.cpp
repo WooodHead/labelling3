@@ -428,11 +428,13 @@ void	ImageCompletionUI::setupWidgets()
 
     _sceneCompletionPage = new QWidget(  );
     _sceneCompletionPage->setObjectName(tr("_sceneCompletionPage"));
-    _operationStackedWidget->addWidget( _sceneCompletionPage );
+//    _operationStackedWidget->addWidget( _sceneCompletionPage );
 
     _regionCompetitionPage = new QWidget(  );
     _regionCompetitionPage->setObjectName(tr("_regionCompetitionPage"));
-    _operationStackedWidget->addWidget( _regionCompetitionPage );
+    QScrollArea *rightscroArea = new QScrollArea(_operationStackedWidget);
+    rightscroArea->setWidget(_regionCompetitionPage);
+    _operationStackedWidget->addWidget( rightscroArea );
 
     ////////////////////////////////////////////////////////////////////////////////////
     //		_sceneCompletionPage
@@ -448,7 +450,7 @@ void	ImageCompletionUI::setupWidgets()
     _rightOperationWidget->setWidget(_dockWidgetContents);
     this->addDockWidget(static_cast<Qt::DockWidgetArea>(2), _rightOperationWidget);
 
-    _operationStackedWidget->setCurrentIndex(1);
+    _operationStackedWidget->setCurrentIndex(0);
 
     ////////////////////////////////////////////////////////////////////////////////////
     //   _leftWindowWidget
@@ -526,6 +528,7 @@ void	ImageCompletionUI::setupWidgets()
 
     setCorner(Qt::BottomLeftCorner,Qt::LeftDockWidgetArea);
     //setCorner(Qt::BottomRightCorner,Qt::RightDockWidgetArea);
+    setCorner(Qt::BottomRightCorner,Qt::BottomDockWidgetArea);
 
     QPixmap pixmap(30,30);
     pixmap.fill(_editImageViewer->getLineColor());
