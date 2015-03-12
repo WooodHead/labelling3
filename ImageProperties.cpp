@@ -140,25 +140,6 @@ void ImageProperties::load()
     QStringList list = QStringList() << "N" << "Y";
     ui->_comboBoxMentalSampleImageTag->addItems(list);
     ui->_comboBoxMentalSampleImageTag->setCurrentIndex(0);
-
-    // model 7
-    //    ui->_comboBoxMoliID->addItems(getItems(_models[7], "abrasiveid"));
-    //    ui->_comboBoxMoliImageID->addItems(getItems(_models[7], "ferrographypicid"));
-    //    ui->_comboBoxMoliPianID->addItems(getItems(_models[7], "ferrographysheetid"));
-    //    ui->_comboBoxMoliReportID->addItems(getItems(_models[7], "ferrographyreportid"));
-    //    ui->_comboBoxMoliGuy->addItems(getItems(_models[7], "abrasivemarkstuff"));
-    //    ui->_comboBoxMoliProperty->addItems(getItems(_models[7], "abrasivematerial"));
-    //    ui->_comboBoxMoliPosition->addItems(getItems(_models[7], "abrasiveposition"));
-    //    ui->_comboBoxMoliShape->addItems(getItems(_models[7], "abrasiveshape"));
-    //    ui->_comboBoxMoliColor->addItems(getItems(_models[7], "abrasivecolor"));
-    //    ui->_comboBoxMoliSurface->addItems(getItems(_models[7], "abrasivesurfacetexturetype"));
-    //    ui->_comboBoxMoliErodeType->addItems(getItems(_models[7], "abrasiveweartype"));
-    //    ui->_comboBoxMoliErodePart->addItems(getItems(_models[7], "abrasivedamagetype"));
-    //    ui->_comboBoxMoliErodeReason->addItems(getItems(_models[7], "abrasivemechanismtype"));
-    //    ui->_comboBoxMoliGivenInfo->addItems(getItems(_models[7], "abrasivedamagetype"));
-    //    ui->_comboBoxMoliTypical->addItems(getItems(_models[7], "abrasivetypical"));
-
-    // model 8 TODO
 }
 
 QStringList ImageProperties::getItems(QSqlTableModel* model, int col)
@@ -274,6 +255,13 @@ bool ImageProperties::isValid()
         return false;
     }
 
+    if(ui->_comboBoxOilSampleSamplePointID->currentText().isEmpty())
+    {
+        ui->_tabWidget->setCurrentIndex(3);
+        QMessageBox::warning(this, tr("提示"), tr("采样点编号不能为空!"), QMessageBox::Close);
+        return false;
+    }
+
     if(ui->_comboBoxOilAnalyzeOilSampleID->currentText().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(4);
@@ -307,24 +295,6 @@ bool ImageProperties::isValid()
         return false;
     }
 
-    //    if(ui->_comboBoxMoliID->currentText().isEmpty())
-    //    {
-    //        ui->_tabWidget->setCurrentIndex(7);
-    //        QMessageBox::warning(this, tr("提示"), tr("磨粒编号不能为空!"), QMessageBox::Close);
-    //        return false;
-    //    }
-    //    if(ui->_comboBoxMoliImageID->currentText().isEmpty())
-    //    {
-    //        ui->_tabWidget->setCurrentIndex(7);
-    //        QMessageBox::warning(this, tr("提示"), tr("铁谱图片编号不能为空!"), QMessageBox::Close);
-    //        return false;
-    //    }
-    //    if(ui->_comboBoxMoliPianID->currentText().isEmpty())
-    //    {
-    //        ui->_tabWidget->setCurrentIndex(7);
-    //        QMessageBox::warning(this, tr("提示"), tr("铁谱片编号不能为空!"), QMessageBox::Close);
-    //        return false;
-    //    }
     return true;
 }
 
@@ -417,6 +387,12 @@ bool ImageProperties::isValid(int index)
         {
             ui->_tabWidget->setCurrentIndex(3);
             QMessageBox::warning(this, tr("提示"), tr("机型不能为空!"), QMessageBox::Close);
+            return false;
+        }
+        if(ui->_comboBoxOilSampleSamplePointID->currentText().isEmpty())
+        {
+            ui->_tabWidget->setCurrentIndex(3);
+            QMessageBox::warning(this, tr("提示"), tr("采样点编号不能为空!"), QMessageBox::Close);
             return false;
         }
     }
@@ -534,8 +510,8 @@ void ImageProperties::on__buttonSave_clicked()
             {
                 QSqlRecord record = _models[1]->record();
                 record.setValue("movepartid", ui->_comboBoxMovepartID->currentText());
-                record.setValue("moveparttype", ui->_comboBoxMovepartName->currentText());
-                record.setValue("movepartname", ui->_comboBoxMovepartType->currentText());
+                record.setValue("moveparttype", ui->_comboBoxMovepartType->currentText());
+                record.setValue("movepartname", ui->_comboBoxMovepartName->currentText());
                 record.setValue("runhour", ui->_editMovepartHours->text().toInt());
                 record.setValue("runstage", ui->_comboBoxMovepartMohe->currentText());
                 record.setValue("planeid", ui->_comboBoxMovepartPlaneID->currentText());
@@ -806,6 +782,38 @@ void ImageProperties::on__buttonSave_clicked()
                 return;
             }
         }
+
+        // Save Summary Info;
+
+        QSqlTableModel* model = new QSqlTableModel;
+        model->setTable("sampleSummaryInfo");
+        model->setFilter(QString("sampleID = '%1'").arg(ui->_comboBoxOilSampleSamplePointID->currentText()));
+        if(model->select())
+        {
+            if(model->rowCount() == 1)
+            {
+                QSqlRecord record = model->record(0);
+                record.setValue("sampleID", ui->_comboBoxOilSampleSamplePointID->currentText());
+                record.setValue("equitName", ui->_comboBoxMovepartName->currentText());
+                record.setValue("equipID", ui->_comboBoxEquipPlaneID->currentText());
+                record.setValue("equipType", ui->_comboBoxEquipPlaneType->currentText());
+                record.setValue("sampleMethod", ui->_comboBoxOilSampleSampleMethod->currentText());
+                record.setValue("sampleAttention", ui->_editOilSampleInfo->text());
+                model->setRecord(0, record);
+            }
+            else
+            {
+                model->insertRows(0, 1);
+                model->setData(model->index(0, 0), ui->_comboBoxOilSampleSamplePointID->currentText());
+                model->setData(model->index(0, 1), ui->_comboBoxMovepartName->currentText());
+                model->setData(model->index(0, 2), ui->_comboBoxEquipPlaneID->currentText());
+                model->setData(model->index(0, 3), ui->_comboBoxEquipPlaneType->currentText());
+                model->setData(model->index(0, 4), ui->_comboBoxOilSampleSampleMethod->currentText());
+                model->setData(model->index(0, 5), ui->_editOilSampleInfo->text());
+            }
+            model->submitAll();
+        }
+
         _bCommited = true;
         QMessageBox::warning(this, tr("提示"), tr("保存成功!"), QMessageBox::Close);
 

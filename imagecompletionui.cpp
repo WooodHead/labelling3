@@ -1214,9 +1214,9 @@ void ImageCompletionUI::showData()
     bool ret;
     QSqlRecord rec;
 
-    QString tableNames[8] = { "equipmentinfo", "movepartinfo", "movepartrepairinfo", "oilsampleinfo", "oilanalyzeinfo", "ferrographyinfo", "ferrographypicinfo", "abrasivemarkinfo" };
+    QString tableNames[9] = { "equipmentinfo", "movepartinfo", "movepartrepairinfo", "oilsampleinfo", "oilanalyzeinfo", "ferrographyinfo", "ferrographypicinfo", "abrasivemarkinfo", "sampleSummaryInfo" };
 
-    for(int k = 1; k <= 8; k++)
+    for(int k = 1; k <= 9; k++)
     {
         QSqlQuery query;
         ret = query.exec(QString("select * from %1").arg(tableNames[k-1]));
@@ -1270,6 +1270,11 @@ void ImageCompletionUI::showData()
                     {
                         if( j == 0 ) _bottomWindow.dBTableWidget_8->insertRow(_bottomWindow.dBTableWidget_8->rowCount());
                         _bottomWindow.dBTableWidget_8->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                    }
+                    case 9:
+                    {
+                        if( j == 0 ) _bottomWindow.dBTableWidget_9->insertRow(_bottomWindow.dBTableWidget_9->rowCount());
+                        _bottomWindow.dBTableWidget_9->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
                     }
                     }
                 }
