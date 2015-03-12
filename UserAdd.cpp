@@ -20,6 +20,8 @@ UserAdd::UserAdd(QWidget *parent) :
     
     ui->_authorityCombo->addItem(tr("普通用户"));
     ui->_authorityCombo->addItem(tr("管理员"));
+
+    setWindowFlags(Qt::Dialog | Qt::WindowCloseButtonHint);
  
     connect(this,SIGNAL(addUser(UserInfo*)),parent,SLOT(addUser(UserInfo*)));
 }

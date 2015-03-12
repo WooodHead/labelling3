@@ -17,6 +17,9 @@ MoliProperties::MoliProperties(QWidget *parent) :
 
     _bDirty = false;
 
+    setWindowFlags(Qt::Tool | Qt::WindowCloseButtonHint);
+    this->move(250, 250);
+
     connect(this, SIGNAL(flushLeft(QString, QString)), parent, SLOT(flushLeft(QString, QString)));
     connect(this, SIGNAL(flush()), parent, SLOT(flushBottom()));
 

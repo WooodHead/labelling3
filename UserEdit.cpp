@@ -21,6 +21,8 @@ useredit::useredit(QWidget *parent) :
     ui->_authorityCombo->addItem(tr("普通用户"));
     ui->_authorityCombo->addItem(tr("管理员"));
 
+    setWindowFlags(Qt::Dialog | Qt::WindowCloseButtonHint);
+
     connect(this->ui->_edit, SIGNAL(clicked()), this, SLOT(on_edit_clicked()));
     connect(this,SIGNAL(editUser(UserInfo*)),parent,SLOT(editUser(UserInfo*)));
 }
