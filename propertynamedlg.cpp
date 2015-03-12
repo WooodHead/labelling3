@@ -9,6 +9,17 @@ ProPertyNameDlg::ProPertyNameDlg(QWidget *parent) :
     connect(this,SIGNAL(setpropertyName(QString)),parent,SLOT(setpropertyName(QString)));
 }
 
+ProPertyNameDlg::ProPertyNameDlg(QWidget *parent, QString propertyname):
+    QDialog(parent),
+    ui(new Ui::ProPertyNameDlg)
+{
+    ui->setupUi(this);
+    
+    ui->propertyNaeLineEdit->setText(propertyname);
+    ui->propertyNaeLineEdit->setFocus();
+    connect(this,SIGNAL(setpropertyName(QString)),parent,SLOT(setpropertyName(QString)));
+}
+
 ProPertyNameDlg::~ProPertyNameDlg()
 {
     delete ui;

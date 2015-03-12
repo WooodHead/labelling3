@@ -185,6 +185,7 @@ private:
      void initCbBox();
      void initpropertylistName();
      void resetConditions();
+     void reloadConditions(QString propertyname);
      void query();
      bool copyFiles(QString fromDir,QString toDir,bool convertIfExits = false);
      bool copyFiles(QString fromDir,QString toDir,QStringList filenames,bool convertIfExist = false);
@@ -438,6 +439,8 @@ private slots:
 
      void on_feg_ferrographymakeoilconsumptionLineEdit_textChanged(const QString &arg1);
 
+     void on_modifyButton_clicked();
+     
 private:
     Ui::AdvanceSearchDlg *ui;
     
