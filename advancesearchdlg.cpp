@@ -16,6 +16,12 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent) :
     _awesome = new QtAwesome(this);
     _awesome->initFontAwesome();
 
+    ui->queryBtn->setIcon(_awesome->icon(search));
+    ui->exportBtn->setIcon(QIcon(":/new/prefix1/icons/export.png"));
+    ui->importBtn->setIcon(QIcon(":/new/prefix1/icons/import.png"));
+    ui->addtoBtn->setIcon(_awesome->icon(plus));
+    ui->modifyButton->setIcon(_awesome->icon(pluscircle));
+
     propertymodel = 0;
 
     createListWidget();
@@ -1469,8 +1475,11 @@ void AdvanceSearchDlg::setModelHeaderData(QString tablename)
 
 void AdvanceSearchDlg::initpropertylistName()
 {
-    if(propertymodel)
+    if(propertymodel)   
+    {
         delete propertymodel;
+        propertymodel = 0;
+    }
     propertymodel = new QSqlQueryModel;
     propertymodel->setQuery("select propertyname from propertyinfo");
     propertymodel->setHeaderData(0,Qt::Horizontal,tr("查询属性名"));

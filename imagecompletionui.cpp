@@ -455,9 +455,8 @@ void	ImageCompletionUI::setupWidgets()
     ////////////////////////////////////////////////////////////////////////////////////
     //   _leftWindowWidget
     ////////////////////////////////////////////////////////////////////////////////////
-    _leftWindowWidget = new QDockWidget(tr(""),this );
+    _leftWindowWidget = new QDockWidget(tr("图谱信息"),this );
     _leftWindowWidget->setObjectName(tr("_leftWindowWidget"));
-    _leftWindowWidget->setFeatures(QDockWidget::DockWidgetMovable);
     _leftWindowWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     _leftWindowWidget->setMaximumSize(QSize(0.2*width, height));
     _leftWindowWidget->setMaximumHeight(height);
@@ -468,7 +467,6 @@ void	ImageCompletionUI::setupWidgets()
 
     _leftWindow.setupUi(_leftDockWindowContents);
     _leftWindow.tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    _leftWindow.tabWidgetLeftWindow->setTabText(0, tr("图谱信息"));
     _leftWindow.tabWidgetLeftWindow->removeTab(1);
     _leftWindow.tabWidgetLeftWindow->removeTab(1);
     _leftWindowWidget->setWidget(_leftDockWindowContents);
@@ -489,26 +487,12 @@ void	ImageCompletionUI::setupWidgets()
 
     _logWindowWidget = new QDockWidget(tr("工作日志"),this)    ;
     _logWindowWidget->setObjectName("_logWindowWidget");
-    _logWindowWidget->setFeatures(QDockWidget::DockWidgetMovable);
     _logWindowWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
     _logWindowWidget->setWidget(_logWidget);
     _logWindowWidget->setMinimumHeight(0.27 * height);
+    _logWindowWidget->setWindowIcon(_awesome->icon(filetexto));
     addDockWidget(Qt::LeftDockWidgetArea, _logWindowWidget);
-
-    ////////////////////////////////////////////////////////////////////////////////////
-    //   _cornerWindowWidget
-    ////////////////////////////////////////////////////////////////////////////////////
-    //    _cornerWindowWidget = new QDockWidget(this );
-    //    _cornerWindowWidget->setObjectName(tr("_cornerWindowWidget"));
-    //    _cornerWindowWidget->setFeatures(QDockWidget::DockWidgetMovable);
-    //    _cornerWindowWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    //    _cornerWindowWidget->setFloating(false);
-    //    _cornerDockWindowContents = new QWidget( );
-    //    _cornerDockWindowContents->setObjectName(tr("_leftDockWindowContents"));
-    //    _cornerWindow.setupUi(_cornerDockWindowContents);
-    //    _cornerWindowWidget->setWidget(_cornerDockWindowContents);
-    //    addDockWidget(Qt::LeftDockWidgetArea, _cornerWindowWidget);
 
     ////////////////////////////////////////////////////////////////////////////////////
     //   _bottomWindowWidget
@@ -516,7 +500,6 @@ void	ImageCompletionUI::setupWidgets()
 
     _bottomWindowWidget = new QDockWidget(tr("数据库信息"),this );
     _bottomWindowWidget->setObjectName(tr("_bottomWindowWidget"));
-    _bottomWindowWidget->setFeatures(QDockWidget::DockWidgetMovable);
     _bottomWindowWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
     _bottomWindowWidget->setMinimumHeight(0.35 * height);
     _bottomDockWindowContents = new QWidget( );
@@ -527,7 +510,6 @@ void	ImageCompletionUI::setupWidgets()
     addDockWidget(Qt::BottomDockWidgetArea, _bottomWindowWidget);
 
     setCorner(Qt::BottomLeftCorner,Qt::LeftDockWidgetArea);
-    //setCorner(Qt::BottomRightCorner,Qt::RightDockWidgetArea);
     setCorner(Qt::BottomRightCorner,Qt::BottomDockWidgetArea);
 
     QPixmap pixmap(30,30);
