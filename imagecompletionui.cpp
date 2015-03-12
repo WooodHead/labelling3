@@ -200,6 +200,7 @@ void	ImageCompletionUI::createActions()
     _strikeToolButton->setPopupMode(QToolButton::MenuButtonPopup);
     _strikeToolButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     _strikeToolButton->setIcon(_awesome->icon(pencil));
+    _strikeToolButton->setChecked(false);
 
     // Group 1
     _fgAction = new QAction( _awesome->icon(suno), tr("前景"), this );
@@ -317,6 +318,19 @@ void	ImageCompletionUI::createToolBars()
     _editToolBar->addSeparator();
     _editToolBar->addWidget(_strikeThicknessToolButton);
     _editToolBar->addWidget(_lineThicknessToolButton);
+
+    _editToolBar->addSeparator();
+    _editToolBar->addAction(_searchAction);
+    _editToolBar->addAction(_addtosqlAction);
+    _editToolBar->addAction(_exportDataAction);
+    _editToolBar->addAction(_importDataAction);
+
+    _editToolBar->addSeparator();
+
+    if(Global::Authority == "1")
+    {
+        _editToolBar->addAction(_userManagementAction);
+    }
 }
 
 void	ImageCompletionUI::setupWidgets()
@@ -1146,7 +1160,7 @@ void ImageCompletionUI::updateLog()
     {
 
         (*_logInformationString) = log_str;
-        sprintf(log_str, "");
+        //sprintf(log_str, "");
         _logWidget->clear();
         QTextCursor cursor(_logWidget->textCursor());
         cursor.movePosition(QTextCursor::End);
@@ -2320,6 +2334,7 @@ QString ImageCompletionUI::labelStatus(QString imagePath)
         }
         else return "";
     }
+    return "";
 }
 
 void ImageCompletionUI::editImageProperties(QString /* fileName */)
