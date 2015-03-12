@@ -624,7 +624,7 @@ bool QtAwesome::initFontAwesome( )
     m.insert("searchminus",         searchminus);
     m.insert("searchplus",          searchplus);
     m.insert("sellsy",              sellsy);
-    m.insert("send",                send);
+    m.insert("send",                send_);
     m.insert("sendo",               sendo);
     m.insert("server",              server);
     m.insert("share",               share);

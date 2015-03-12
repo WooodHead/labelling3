@@ -452,7 +452,7 @@ enum QtFontAwesomeName {
     searchminus             =           0xf010,
     searchplus              =           0xf00e,
     sellsy                  =           0xf213,
-    send                    =           0xf1d8,
+    send_                   =           0xf1d8,
     sendo                   =           0xf1d9,
     server                  =           0xf233,
     share                   =           0xf064,
