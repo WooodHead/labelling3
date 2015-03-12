@@ -14,6 +14,7 @@ class ProPertyNameDlg : public QDialog
     
 public:
     explicit ProPertyNameDlg(QWidget *parent = 0);
+    ProPertyNameDlg(QWidget *parent ,QString propertyname);
     ~ProPertyNameDlg();
     
 signals:

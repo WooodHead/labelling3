@@ -12,7 +12,7 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent) :
         QMessageBox::warning(this,tr("数据库提示"),tr("不能链接数据库"),QMessageBox::Close);
         return;
     }
-
+    
     _awesome = new QtAwesome(this);
     _awesome->initFontAwesome();
 
@@ -23,19 +23,19 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent) :
     ui->modifyButton->setIcon(_awesome->icon(pluscircle));
 
     propertymodel = 0;
-
+    
     createListWidget();
     
     connect(ui->tableListWidget,SIGNAL(currentRowChanged(int)),ui->conditionStackedWidget,SLOT(setCurrentIndex(int)));
-
+    
     usepropertyAction = new QAction(tr("使用属性"),ui->propertylistTableView);
     ui->propertylistTableView->addAction(usepropertyAction);
     connect(usepropertyAction,SIGNAL(triggered()),this,SLOT(useproperty()));
-
-    managepropertyAction = new QAction(tr("管理属性"),ui->propertylistTableView);
+    
+    managepropertyAction = new QAction(tr("更新属性"),ui->propertylistTableView);
     ui->propertylistTableView->addAction(managepropertyAction);;
     connect(managepropertyAction,SIGNAL(triggered()),this,SLOT(manageproperty()));
-
+    
     ui->propertylistTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
     
     createTableNames();
@@ -43,11 +43,14 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent) :
     createTableView();
     
     initCbBox();
-
+    
     initpropertylistName();
     
     query();
-   
+    
+    ui->modifyButton->setEnabled(false);
+    ui->conditionStackedWidget->setCurrentIndex(0);
+    
 }
 
 AdvanceSearchDlg::~AdvanceSearchDlg()
@@ -68,7 +71,7 @@ void AdvanceSearchDlg::resetConditions()
     _oisCdtMap.clear();
     _oiaCdtMap.clear();
     _abmCdtMap.clear();
-
+    
     // eqm
     ui->PlaneIdChkBox->setChecked(false);
     ui->planeTypeChkBox->setChecked(false);
@@ -76,7 +79,7 @@ void AdvanceSearchDlg::resetConditions()
     ui->runStageChkBox->setChecked(false);
     ui->repairTimeChkBox->setChecked(false);
     ui->departIdChkBox->setChecked(false);
-
+    
     // mp
     ui->movepartIdChkBox->setChecked(false);
     ui->movepartNameChkBox->setChecked(false);
@@ -84,21 +87,21 @@ void AdvanceSearchDlg::resetConditions()
     ui->partrunHourChkBox->setChecked(false);
     ui->movepartStartDataChkBox->setChecked(false);
     ui->movepartEndDataChkBox->setChecked(false);
-
+    
     // mpr
     ui->movepartRepairIdChkBox->setChecked(false);
     ui->repairTimeChkBox->setChecked(false);
     ui->repairDateChkBox->setChecked(false);
     ui->repairDepartChkBox->setChecked(false);
-
+    
     // feg
     ui->feg_ferrographyanalyzertypeChkBox->setChecked(false);
     ui->feg_ferrographymakemethodChkBox->setChecked(false);
     ui->feg_ferrographymakeoilconsumptionChkBox->setChecked(false);
     ui->feg_ferrographymakestuffChkBox->setChecked(false);
     ui->feg_ferrographysheetidChkBox->setChecked(false);
-
-
+    
+    
     // fegp
     ui->fegp_ferrographypicidChkBox->setChecked(false);
     ui->fegp_ferrographyreportidChkBox->setChecked(false);
@@ -110,7 +113,7 @@ void AdvanceSearchDlg::resetConditions()
     ui->fegp_lightsourcetypeChkBox->setChecked(false);
     ui->fegp_magnificationChkBox->setChecked(false);
     ui->fegp_microscopictypeChkBox->setChecked(false);
-
+    
     // ois
     ui->oilsampleidChkBox->setChecked(false);
     ui->samplestuffChkBox->setChecked(false);
@@ -129,39 +132,39 @@ void AdvanceSearchDlg::resetConditions()
     ui->monitorpartnameChkBox->setChecked(false);
     ui->oilworktimeChkBox->setChecked(false);
     ui->oiladditionChkBox->setChecked(false);
-
+    
     // oia
     ui->oia_sendstuffChkBox->setChecked(false);
     ui->oia_senddepartChkBox->setChecked(false);
     ui->oia_analyzedepartnameChkBox->setChecked(false);
     ui->oia_receivedateChkBox->setChecked(false);
     ui->oia_receivestuffChkBox->setChecked(false);
-
+    
     ui->oia_contaminationanalyzedateChkBox->setChecked(false);
     ui->oia_contaminationanalyzeequipmentChkBox->setChecked(false);
     ui->oia_contaminationanalyzemethodChkBox->setChecked(false);
     ui->oia_contaminationanalyzereportidChkBox->setChecked(false);
     ui->oia_contaminationanalyzereportidChkBox->setChecked(false);
     ui->oia_contaminationanalyzestuffChkBox->setChecked(false);
-
+    
     ui->oia_spectroscopydateChkBox->setChecked(false);
     ui->oia_spectroscopyequipmentChkBox->setChecked(false);
     ui->oia_spectroscopymethodChkBox->setChecked(false);
     ui->oia_spectroscopyreportidChkBox->setChecked(false);
     ui->oia_spectroscopystuffChkBox->setChecked(false);
-
+    
     ui->oia_ferrographydateChkBox->setChecked(false);
     ui->oia_ferrographyequipmentChkBox->setChecked(false);
     ui->oia_ferrographymethodChkBox->setChecked(false);
     ui->oia_ferrographyreportidChkBox->setChecked(false);
     ui->oia_ferrographystuffChkBox->setChecked(false);
-
+    
     ui->oia_physicochemicaldateChkBox->setChecked(false);
     ui->oia_physicochemicalequipmentChkBox->setChecked(false);
     ui->oia_physicochemicalmethodChkBox->setChecked(false);
     ui->oia_physicochemicalreportidChkBox->setChecked(false);
     ui->oia_physicochemicalstuffChkBox->setChecked(false);
-
+    
     // abm
     ui->abm_abrasiveidChkBox->setChecked(false);
     ui->abm_abrasivecolorChkBox->setChecked(false);
@@ -184,28 +187,28 @@ void AdvanceSearchDlg::resetConditions()
 
 void AdvanceSearchDlg::useproperty()
 {
-
+    
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(this, tr("QMessageBox::question()"), tr("确认使用当前属性查询?"),
                                   QMessageBox::Yes | QMessageBox::Cancel);
-
+    
     if(reply == QMessageBox::Yes)
     {
         QModelIndex index = ui->propertylistTableView->currentIndex();
         QSqlRecord record = propertymodel->record(index.row());
         QString propertyname = record.value(0).toString();
-
+        
         QString sql = "select * from propertyinfo where propertyname = '";
         sql.append(propertyname);
         sql.append("'");
         QSqlQuery query;
         query.exec(sql);
         query.next();
-
+        
         this->resetConditions();
-
+        
         int idx;
-
+        
         QStringList eqmFields = query.value(2).toString().split("#");
         QStringList eqmValues = query.value(3).toString().split("#");
         if(!eqmFields.isEmpty())
@@ -251,7 +254,7 @@ void AdvanceSearchDlg::useproperty()
                 idx ++;
             }
         }
-
+        
         QStringList mpFields = query.value(4).toString().split("#");
         QStringList mpValues = query.value(5).toString().split("#");
         if(!mpFields.isEmpty())
@@ -264,7 +267,7 @@ void AdvanceSearchDlg::useproperty()
                     ui->movepartNameCbBox->setCurrentIndex(ui->movepartNameCbBox->findText(mpValues.at(idx)));
                     _mpCdtMap.insert("movepartname",mpValues.at(idx));
                     ui->movepartNameChkBox->setChecked(true);
-
+                    
                 }
                 else if(field == "movepartid")
                 {
@@ -308,9 +311,9 @@ void AdvanceSearchDlg::useproperty()
                 }
                 idx ++;
             }
-
+            
         }
-
+        
         QStringList mprFields = query.value(6).toString().split("#");
         QStringList mprValues = query.value(7).toString().split("#");
         if(!mprFields.isEmpty())
@@ -349,7 +352,7 @@ void AdvanceSearchDlg::useproperty()
                 idx ++;
             }
         }
-
+        
         QStringList fegFields = query.value(8).toString().split("#");
         QStringList fegValues = query.value(9).toString().split("#");
         if(!fegFields.isEmpty())
@@ -390,7 +393,7 @@ void AdvanceSearchDlg::useproperty()
                 idx ++;
             }
         }
-
+        
         QStringList fegpFields = query.value(10).toString().split("#");
         QStringList fegpValues = query.value(11).toString().split("#");
         if(!fegpFields.isEmpty())
@@ -461,7 +464,7 @@ void AdvanceSearchDlg::useproperty()
                 idx++;
             }
         }
-
+        
         QStringList oisFields = query.value(12).toString().split("#");
         QStringList oisValues = query.value(13).toString().split("#");
         if(!oisFields.isEmpty())
@@ -590,7 +593,7 @@ void AdvanceSearchDlg::useproperty()
                 idx ++;
             }
         }
-
+        
         QStringList oiaFields = query.value(14).toString().split("#");
         QStringList oiaValues = query.value(15).toString().split("#");
         if(!oiaFields.isEmpty())
@@ -776,7 +779,7 @@ void AdvanceSearchDlg::useproperty()
                 idx ++;
             }
         }
-
+        
         QStringList abmFields = query.value(16).toString().split("#");
         QStringList abmValues = query.value(17).toString().split("#");
         if(!abmFields.isEmpty())
@@ -883,7 +886,7 @@ void AdvanceSearchDlg::useproperty()
                 idx++;
             }
         }
-
+        
         this->query();
     }
 }
@@ -891,7 +894,14 @@ void AdvanceSearchDlg::useproperty()
 
 void AdvanceSearchDlg::manageproperty()
 {
-    QMessageBox::warning(this,tr("提示"),tr("管理属性"),QMessageBox::Close);
+//    QMessageBox::warning(this,tr("提示"),tr("管理属性"),QMessageBox::Close);
+    this->resetConditions();
+    QModelIndex index = ui->propertylistTableView->currentIndex();
+    QSqlRecord record = propertymodel->record(index.row());
+    QString propertyname = record.value(0).toString();
+    this->reloadConditions(propertyname);
+    ui->queryBtn->setEnabled(false);
+    ui->modifyButton->setEnabled(true);
 }
 
 
@@ -908,7 +918,7 @@ bool AdvanceSearchDlg::importDB(const QString &path)
         QString sql=in.readLine();
         // 通过分析values(E'),判断是否有二进制数据,如没有直接运行sql语句,如有则需要将16进制文本转换为blob数据
         QRegExp reg("E'([0-9a-f]{1,})'");
-
+        
         if(!sql.contains(reg))
         {
             if(query.exec(sql))
@@ -917,24 +927,24 @@ bool AdvanceSearchDlg::importDB(const QString &path)
         {
             int pos=0;
             QStringList bList;
-
+            
             // 探索所有的blob字段
             while((pos=reg.indexIn(sql,pos))!=-1)
             {
                 bList.append(reg.cap(0));
-
+                
                 QString blob=reg.cap(1);
                 pos+=reg.matchedLength();
             }
-
+            
             // blob字段填充占位符
             foreach(QString key,bList)
             {
                 sql.replace(key,"?");
             }
-
+            
             query.prepare(sql);
-
+            
             // 绑定占位符数据
             for(int i=0;i<bList.size();i++)
             {
@@ -942,7 +952,7 @@ bool AdvanceSearchDlg::importDB(const QString &path)
                 QString hexBlob=bList[i].mid(2,bList[i].size()-1);
                 // 还原16进制数据
                 QByteArray ba=QByteArray::fromHex(hexBlob.toLocal8Bit());
-
+                
                 query.bindValue(i,ba);
             }
             query.exec();
@@ -954,7 +964,7 @@ bool AdvanceSearchDlg::importDB(const QString &path)
 
 bool AdvanceSearchDlg::exportDB(const QSqlQueryModel *model, const QString &tablename, const QString &path)
 {
-     QStringList vList;
+    QStringList vList;
     int count = model->rowCount();
     for(int i =0;i<count;++i)
     {
@@ -967,7 +977,7 @@ bool AdvanceSearchDlg::exportDB(const QSqlQueryModel *model, const QString &tabl
         {
             QSqlField field=record.field(j);
             QString fieldName=field.name();
-
+            
             switch(field.type())
             {
             case QVariant::String:
@@ -991,7 +1001,7 @@ bool AdvanceSearchDlg::exportDB(const QSqlQueryModel *model, const QString &tabl
                 prefix+=fieldName;
                 suffix+=record.value(j).toString();
             }
-
+            
             if(record.count()==1)
             {
                 prefix+=")";
@@ -1009,11 +1019,11 @@ bool AdvanceSearchDlg::exportDB(const QSqlQueryModel *model, const QString &tabl
         // 组装sql语句 insert into auth_test values(0,'hello',E'003f')
         QString iSql=QString("%1 %2;").arg(prefix).arg(suffix);
         vList.append(iSql);
-//        qDebug()<<iSql;
+        //        qDebug()<<iSql;
     }
     QFile file(path);
     file.open(QIODevice::WriteOnly|QIODevice::Truncate);
-
+    
     // 将sql语句写入文件
     QTextStream out(&file);
     foreach(QString line,vList)
@@ -1028,7 +1038,7 @@ bool AdvanceSearchDlg::copyFiles(QString fromDir, QString toDir, QStringList fil
 {
     QDir sourceDir(fromDir);
     QDir targetDir(toDir);
-
+    
     if(!targetDir.exists())
     {
         //< 如果目标目录不存在，则进行创建
@@ -1070,14 +1080,14 @@ bool AdvanceSearchDlg::copyFiles(QString fromDir, QString toDir, bool convertIfE
      */
     QDir sourceDir(fromDir);
     QDir targetDir(toDir);
-
+    
     if(!targetDir.exists())
     {
         //< 如果目标目录不存在，则进行创建
         if(!targetDir.mkdir(targetDir.absolutePath()))
             return false;
     }
-
+    
     QFileInfoList fileInfoList = sourceDir.entryInfoList();
     // 遍历所有文件信息
     foreach(QFileInfo fileInfo, fileInfoList)
@@ -1088,14 +1098,14 @@ bool AdvanceSearchDlg::copyFiles(QString fromDir, QString toDir, bool convertIfE
         // 数据库文件处理
         if(fileInfo.fileName().split(".")[1] == "sql")
             continue;
-
+        
         // 当为目录时，递归的进行copy
         if(fileInfo.isDir())
         {
-//            if(!copyFiles(fileInfo.filePath(),
-//                          targetDir.filePath(fileInfo.fileName()),
-//                          convertIfExits))
-//                return false;
+            //            if(!copyFiles(fileInfo.filePath(),
+            //                          targetDir.filePath(fileInfo.fileName()),
+            //                          convertIfExits))
+            //                return false;
             continue;
         }
         else
@@ -1234,7 +1244,7 @@ void AdvanceSearchDlg::createListWidget()
     ui->tableListWidget->insertItem(7,tr("磨粒标注信息表"));
     
     ui->tableListWidget->setCurrentRow(0);
-
+    
     int wheight = this->height();
     int wwidth  = this->width();
     ui->conditionGroupBox->setMaximumHeight(wheight/3);
@@ -1547,7 +1557,7 @@ void AdvanceSearchDlg::initCbBox()
     ui->movepartRepairIdCbBox->setCurrentIndex(0);
     ui->repairDepartCbBox->setCurrentIndex(0);
     ui->repairTimeCbBox->setCurrentIndex(0);
-
+    
     query.exec("select * from oilsampleinfo");
     while(query.next())
     {
@@ -1576,7 +1586,7 @@ void AdvanceSearchDlg::initCbBox()
     ui->sampledepartnameCbBox->setCurrentIndex(0);
     ui->monitorpartidCbBox->setCurrentIndex(0);
     ui->monitorpartnameCbBox->setCurrentIndex(0);
-
+    
     query.exec("select * from oilanalyzeinfo");
     while(query.next())
     {
@@ -1609,7 +1619,7 @@ void AdvanceSearchDlg::initCbBox()
         if(ui->oia_ferrographyreportidCbBox->findText(query.value(oia_ferrographyreportid).toString()) == -1)
             ui->oia_ferrographyreportidCbBox->insertItem(-1,query.value(oia_ferrographyreportid).toString());
     }
-
+    
     query.exec("select * from abrasivemarkinfo");
     while(query.next())
     {
@@ -1636,7 +1646,7 @@ void AdvanceSearchDlg::initCbBox()
         if(ui->abm_ferrographyreportidCbBox->findText(query.value(abm_ferrographyreportid).toString()) == -1)
             ui->abm_ferrographyreportidCbBox->insertItem(-1,query.value(abm_ferrographyreportid).toString());
     }
-
+    
     query.exec("select * from ferrographypicinfo");
     while(query.next())
     {
@@ -1818,8 +1828,8 @@ void AdvanceSearchDlg::on_addtoBtn_clicked()
     ppnDlg = new ProPertyNameDlg(this);
     if(ppnDlg->exec()== QDialog::Accepted)
     {
-//        qDebug()<<"Accept";
-//        qDebug()<<this->propertyName;
+        //        qDebug()<<"Accept";
+        //        qDebug()<<this->propertyName;
         
         QString eqmFields = "";
         QString eqmValues = "";
@@ -2019,7 +2029,7 @@ void AdvanceSearchDlg::on_addtoBtn_clicked()
     }
     else
         ;
-//        qDebug()<<"Reject";
+    //        qDebug()<<"Reject";
 }
 
 
@@ -2215,9 +2225,9 @@ void AdvanceSearchDlg::on_importBtn_clicked()
 {
     
     QFileDialog *packgeFileDlg = new QFileDialog(this,
-                                                tr("选择数据导入路径"),
-                                                tr(""),
-                                                tr(""));
+                                                 tr("选择数据导入路径"),
+                                                 tr(""),
+                                                 tr(""));
     packgeFileDlg->setFileMode(QFileDialog::DirectoryOnly);
     
     QString packgefilepath;
@@ -2555,7 +2565,7 @@ void AdvanceSearchDlg::on_oilsampleidChkBox_clicked()
     {
         QString text = ui->oilsampleidCbBox->currentText();
         _oisCdtMap.insert("oilsampleid",text);
-
+        
         _oiaCdtMap.insert("oilsampleid",text);
         _fegCdtMap.insert("oilsampleid",text);
     }
@@ -3930,4 +3940,931 @@ void AdvanceSearchDlg::on_feg_ferrographymakeoilconsumptionLineEdit_textChanged(
         QString text = ui->feg_ferrographymakeoilconsumptionLineEdit->text();
         _fegCdtMap.insert("ferrographymakeoilconsumption",text);
     }
+}
+
+void AdvanceSearchDlg::reloadConditions(QString propertyname)
+{
+    //    QMessageBox::StandardButton reply;
+    //    reply = QMessageBox::question(this, tr("QMessageBox::question()"), tr("确认使用当前属性查询?"),
+    //                                  QMessageBox::Yes | QMessageBox::Cancel);
+    
+    //    if(reply == QMessageBox::Yes)
+    //    {
+    //        QModelIndex index = ui->propertylistTableView->currentIndex();
+    //        QSqlRecord record = propertymodel->record(index.row());
+    //        QString propertyname = record.value(0).toString();
+    
+    QString sql = "select * from propertyinfo where propertyname = '";
+    sql.append(propertyname);
+    sql.append("'");
+    QSqlQuery query;
+    query.exec(sql);
+    query.next();
+    
+    this->resetConditions();
+    
+    int idx;
+    
+    QStringList eqmFields = query.value(2).toString().split("#");
+    QStringList eqmValues = query.value(3).toString().split("#");
+    if(!eqmFields.isEmpty())
+    {
+        idx = 0;
+        foreach (QString field, eqmFields) {
+            if(field == "planeid")
+            {
+                ui->planeidCbBox->setCurrentIndex(ui->planeidCbBox->findText(eqmValues.at(idx)));
+                _eqmCdtMap.insert("planeid",eqmValues.at(idx));
+                ui->PlaneIdChkBox->setChecked(true);
+            }
+            else if(field == "planetype")
+            {
+                ui->planeTypeCbBox->setCurrentIndex(ui->planeTypeCbBox->findText(eqmValues.at(idx)));
+                _eqmCdtMap.insert("planetype",eqmValues.at(idx));
+                ui->planeTypeChkBox->setChecked(true);
+            }
+            else if(field == "departid")
+            {
+                ui->departIdCbBox->setCurrentIndex(ui->departIdCbBox->findText(eqmValues.at(idx)));
+                _eqmCdtMap.insert("departid",eqmValues.at(idx));
+                ui->departIdChkBox->setChecked(true);
+            }
+            else if(field == "runhour")
+            {
+                ui->runHourCbBox->setCurrentIndex(ui->runHourCbBox->findText(eqmValues.at(idx)));
+                _eqmCdtMap.insert("runhour",eqmValues.at(idx));
+                ui->runHourChkBox->setChecked(true);
+            }
+            else if(field == "runstage")
+            {
+                ui->runStageCbBox->setCurrentIndex(ui->runStageCbBox->findText(eqmValues.at(idx)));
+                _eqmCdtMap.insert("runstage",eqmValues.at(idx));
+                ui->runStageChkBox->setChecked(true);
+            }
+            else if(field == "repairtime")
+            {
+                ui->repairTimeCbBox->setCurrentIndex(ui->repairTimeCbBox->findText(eqmValues.at(idx)));
+                _eqmCdtMap.insert("repairtime",eqmValues.at(idx));
+                ui->repairTimeChkBox->setChecked(true);
+            }
+            idx ++;
+        }
+    }
+    
+    QStringList mpFields = query.value(4).toString().split("#");
+    QStringList mpValues = query.value(5).toString().split("#");
+    if(!mpFields.isEmpty())
+    {
+        idx = 0;
+        foreach (QString field, mpFields)
+        {
+            if(field == "movepartname")
+            {
+                ui->movepartNameCbBox->setCurrentIndex(ui->movepartNameCbBox->findText(mpValues.at(idx)));
+                _mpCdtMap.insert("movepartname",mpValues.at(idx));
+                ui->movepartNameChkBox->setChecked(true);
+                
+            }
+            else if(field == "movepartid")
+            {
+                ui->movepartIdCbBox->setCurrentIndex(ui->movepartIdCbBox->findText(mpValues.at(idx)));
+                _mpCdtMap.insert("movepartid",mpValues.at(idx));
+                ui->movepartIdChkBox->setChecked(true);
+            }
+            else if(field == "moveparttype")
+            {
+                ui->movepartTypeCbBox->setCurrentIndex(ui->movepartTypeCbBox->findText(mpValues.at(idx)));
+                _mpCdtMap.insert("moveparttype",mpValues.at(idx));
+                ui->movepartTypeChkBox->setChecked(true);
+            }
+            else if(field == "runhour")
+            {
+                ui->partrunHourCbBox->setCurrentIndex(ui->partrunHourCbBox->findText(mpValues.at(idx)));
+                _mpCdtMap.insert("runhour",mpValues.at(idx));
+                ui->partrunHourChkBox->setChecked(true);
+            }
+            else if(field == "startdate")
+            {
+                QString datestr = mpValues.at(idx);
+                QStringList datelist = datestr.split("-");
+                int y = datelist.at(0).toInt();
+                int m = datelist.at(1).toInt();
+                int d = datelist.at(2).toInt();
+                ui->movepartStartDateEdit->setDate(QDate(y,m,d));
+                _mpCdtMap.insert("startdate",mpValues.at(idx));
+                ui->movepartStartDataChkBox->setChecked(true);
+            }
+            else if(field == "enddate")
+            {
+                QString datestr = mpValues.at(idx);
+                QStringList datelist = datestr.split("-");
+                int y = datelist.at(0).toInt();
+                int m = datelist.at(1).toInt();
+                int d = datelist.at(2).toInt();
+                ui->movepartEndDateEdit->setDate(QDate(y,m,d));
+                _mpCdtMap.insert("enddate",mpValues.at(idx));
+                ui->movepartEndDataChkBox->setChecked(true);
+            }
+            idx ++;
+        }
+        
+    }
+    
+    QStringList mprFields = query.value(6).toString().split("#");
+    QStringList mprValues = query.value(7).toString().split("#");
+    if(!mprFields.isEmpty())
+    {
+        idx = 0;
+        foreach (QString field, mprFields) {
+            if(field == "movepartrepairid")
+            {
+                ui->movepartRepairIdCbBox->setCurrentIndex(ui->movepartRepairIdCbBox->findText(mprValues.at(idx)));
+                _mprCdtMap.insert("movepartrepairid",mprValues.at(idx));
+                ui->movepartRepairIdChkBox->setChecked(true);
+            }
+            else if(field == "repairtime")
+            {
+                ui->repairrepairTimeCbBox->setCurrentIndex(ui->repairrepairTimeCbBox->findText(mprValues.at(idx)));
+                _mprCdtMap.insert("repairtime",mprValues.at(idx));
+                ui->repairrepairTimeChkBox->setChecked(true);
+            }
+            else if(field == "repairdate")
+            {
+                QString datestr = mprValues.at(idx);
+                QStringList datelist = datestr.split("-");
+                int y = datelist.at(0).toInt();
+                int m = datelist.at(1).toInt();
+                int d = datelist.at(2).toInt();
+                ui->repairDateDateEdit->setDate(QDate(y,m,d));
+                _mprCdtMap.insert("repairdate",mprValues.at(idx));
+                ui->repairDateChkBox->setChecked(true);
+            }
+            else if(field == "repairdepart")
+            {
+                ui->repairDepartCbBox->setCurrentIndex(ui->repairDepartCbBox->findText(mprValues.at(idx)));
+                _mprCdtMap.insert("repairdepart",mprValues.at(idx));
+                ui->repairDepartChkBox->setChecked(true);
+            }
+            idx ++;
+        }
+    }
+    
+    QStringList fegFields = query.value(8).toString().split("#");
+    QStringList fegValues = query.value(9).toString().split("#");
+    if(!fegFields.isEmpty())
+    {
+        idx = 0;
+        foreach (QString field, fegFields)
+        {
+            if(field == "ferrographysheetid")
+            {
+                ui->feg_ferrographysheetidCbBox->setCurrentIndex(ui->feg_ferrographysheetidCbBox->findText(fegValues.at(idx)));
+                _fegCdtMap.insert("ferrographysheetid",fegValues.at(idx));
+                ui->feg_ferrographysheetidChkBox->setChecked(true);
+            }
+            else if(field == "ferrographymakestuff")
+            {
+                ui->feg_ferrographymakestuffLineEdit->setText(fegValues.at(idx));
+                _fegCdtMap.insert("ferrographymakestuff",fegValues.at(idx));
+                ui->feg_ferrographymakestuffChkBox->setChecked(true);
+            }
+            else if(field == "ferrographymakemethod")
+            {
+                ui->feg_ferrographymakemethodCbBox->setCurrentIndex(ui->feg_ferrographymakemethodCbBox->findText(fegValues.at(idx)));
+                _fegCdtMap.insert("ferrographymakemethod",fegValues.at(idx));
+                ui->feg_ferrographymakemethodChkBox->setChecked(true);
+            }
+            else if(field == "ferrographyanalyzertype")
+            {
+                ui->feg_ferrographyanalyzertypeCbBox->setCurrentIndex(ui->feg_ferrographyanalyzertypeCbBox->findText(fegValues.at(idx)));
+                _fegCdtMap.insert("ferrographyanalyzertype",fegValues.at(idx));
+                ui->feg_ferrographyanalyzertypeChkBox->setChecked(true);
+            }
+            else if(field == "ferrographymakeoilconsumption")
+            {
+                ui->feg_ferrographymakeoilconsumptionLineEdit->setText(fegValues.at(idx));
+                _fegCdtMap.insert("ferrographymakeoilconsumption",fegValues.at(idx));
+                ui->feg_ferrographymakeoilconsumptionChkBox->setChecked(true);
+            }
+            idx ++;
+        }
+    }
+    
+    QStringList fegpFields = query.value(10).toString().split("#");
+    QStringList fegpValues = query.value(11).toString().split("#");
+    if(!fegpFields.isEmpty())
+    {
+        idx = 0;
+        foreach (QString field, fegpFields)
+        {
+            if(field == "ferrographypicid")
+            {
+                ui->fegp_ferrographypicidCbBox->setCurrentIndex(ui->fegp_ferrographypicidCbBox->findText(fegpValues.at(idx)));
+                _fegpCdtMap.insert("ferrographypicid",fegpValues.at(idx));
+                ui->fegp_ferrographypicidChkBox->setChecked(true);
+            }
+            else if(field == "ferrographyreportid")
+            {
+                ui->fegp_ferrographyreportidCbBox->setCurrentIndex(ui->fegp_ferrographyreportidCbBox->findText(fegpValues.at(idx)));
+                _fegpCdtMap.insert("ferrographyreportid",fegpValues.at(idx));
+                ui->fegp_ferrographyreportidChkBox->setChecked(true);
+            }
+            else if(field == "imagesymbol")
+            {
+                ui->fegp_imagesymbolCbBox->setCurrentIndex(ui->fegp_imagesymbolCbBox->findText(fegpValues.at(idx)));
+                _fegpCdtMap.insert("imagesymbol",fegpValues.at(idx));
+                ui->fegp_imagesymbolChkBox->setChecked(true);
+            }
+            else if(field == "imageacquisitionarea")
+            {
+                ui->fegp_imageacquisitionareaCbBox->setCurrentIndex(ui->fegp_imageacquisitionareaCbBox->findText(fegpValues.at(idx)));
+                _fegpCdtMap.insert("imageacquisitionarea",fegpValues.at(idx));
+                ui->fegp_imageacquisitionareaChkBox->setChecked(true);
+            }
+            else if(field == "microscopictype")
+            {
+                ui->fegp_microscopictypeCbBox->setCurrentIndex(ui->fegp_microscopictypeCbBox->findText(fegpValues.at(idx)));
+                _fegpCdtMap.insert("microscopictype",fegpValues.at(idx));
+                ui->fegp_microscopictypeChkBox->setChecked(true);
+            }
+            else if(field == "lightsourcetype")
+            {
+                ui->fegp_lightsourcetypeCbBox->setCurrentIndex(ui->fegp_lightsourcetypeCbBox->findText(fegpValues.at(idx)));
+                _fegpCdtMap.insert("lightsourcetype",fegpValues.at(idx));
+                ui->fegp_lightsourcetypeChkBox->setChecked(true);
+            }
+            else if(field == "magnification")
+            {
+                ui->fegp_magnificationCbBox->setCurrentIndex(ui->fegp_magnificationCbBox->findText(fegpValues.at(idx)));
+                _fegpCdtMap.insert("magnification",fegpValues.at(idx));
+                ui->fegp_magnificationChkBox->setChecked(true);
+            }
+            else if(field == "imageacquisitiontype")
+            {
+                ui->fegp_imageacquisitiontypeCbBox->setCurrentIndex(ui->fegp_imageacquisitiontypeCbBox->findText(fegpValues.at(idx)));
+                _fegpCdtMap.insert("imageacquisitiontype",fegpValues.at(idx));
+                ui->fegp_imageacquisitiontypeChkBox->setChecked(true);
+            }
+            else if(field == "imageacquisitionstuff")
+            {
+                ui->fegp_imageacquisitionstuffLineEdit->setText(fegpValues.at(idx));
+                _fegpCdtMap.insert("imageacquisitionstuff",fegpValues.at(idx));
+                ui->fegp_imageacquisitionstuffChkBox->setChecked(true);
+            }
+            else if(field == "imagerecognitioninfoanalysis")
+            {
+                ui->fegp_imagerecognitioninfoanalysisLineEdit->setText(fegpValues.at(idx));
+                _fegpCdtMap.insert("imagerecognitioninfoanalysis",fegpValues.at(idx));
+                ui->fegp_imagerecognitioninfoanalysisChkBox->setChecked(true);
+            }
+            idx++;
+        }
+    }
+    
+    QStringList oisFields = query.value(12).toString().split("#");
+    QStringList oisValues = query.value(13).toString().split("#");
+    if(!oisFields.isEmpty())
+    {
+        idx = 0;
+        foreach (QString field, oisFields)
+        {
+            if(field == "oilsampleid")
+            {
+                ui->oilsampleidCbBox->setCurrentIndex(ui->oilsampleidCbBox->findText(oisValues.at(idx)));
+                _oisCdtMap.insert("oilsampleid",oisValues.at(idx));
+                ui->oilsampleidChkBox->setChecked(true);
+            }
+            else if(field == "samplestuff")
+            {
+                ui->samplestuffLineEdit->setText(oisValues.at(idx));
+                _oisCdtMap.insert("samplestuff",oisValues.at(idx));
+                ui->samplestuffChkBox->setChecked(true);
+            }
+            else if(field == "sendstuff")
+            {
+                ui->sendstuffLineEdit->setText(oisValues.at(idx));
+                _oisCdtMap.insert("sendstuff",oisValues.at(idx));
+                ui->sendstuffChkBox->setChecked(true);
+            }
+            else if(field == "sampledate")
+            {
+                QString datestr = oisValues.at(idx);
+                QStringList datelist = datestr.split("-");
+                int y = datelist.at(0).toInt();
+                int m = datelist.at(1).toInt();
+                int d = datelist.at(2).toInt();
+                ui->sampledateDateEdit->setDate(QDate(y,m,d));
+                _oisCdtMap.insert("sampledate",oisValues.at(idx));
+                ui->sampledateChkBox->setChecked(true);
+            }
+            else if(field == "senddate")
+            {
+                QString datestr = oisValues.at(idx);
+                QStringList datelist = datestr.split("-");
+                int y = datelist.at(0).toInt();
+                int m = datelist.at(1).toInt();
+                int d = datelist.at(2).toInt();
+                ui->senddateDateEdit->setDate(QDate(y,m,d));
+                _oisCdtMap.insert("senddate",oisValues.at(idx));
+                ui->senddateChkBox->setChecked(true);
+            }
+            else if(field == "sampletime")
+            {
+                QString timestr = oisValues.at(idx);
+                QStringList timelist = timestr.split(":");
+                int h = timelist.at(0).toInt();
+                int m = timelist.at(1).toInt();
+                QStringList seclist = timelist.at(2).split(" ");
+                int s = seclist.at(0).toInt();
+                ui->sampletimeTimeEdit->setTime(QTime(h,m));
+                _oisCdtMap.insert("sampletime",oisValues.at(idx));
+                ui->sampletimeChkBox->setChecked(true);
+            }
+            else if(field == "sendtime")
+            {
+                QString timestr = oisValues.at(idx);
+                QStringList timelist = timestr.split(":");
+                int h = timelist.at(0).toInt();
+                int m = timelist.at(1).toInt();
+                QStringList seclist = timelist.at(2).split(" ");
+                int s = seclist.at(0).toInt();
+                ui->sendtimeTimeEdit->setTime(QTime(h,m));;
+                _oisCdtMap.insert("sendtime",oisValues.at(idx));
+                ui->sendtimeChkBox->setChecked(true);
+            }
+            else if(field == "samplesituation")
+            {
+                ui->samplesituationCbBox->setCurrentIndex(ui->samplesituationCbBox->findText(oisValues.at(idx)));
+                _oisCdtMap.insert("samplesituation",oisValues.at(idx));
+                ui->samplesituationChkBox->setChecked(true);
+            }
+            else if(field == "samplemethod")
+            {
+                ui->samplemethodCbBox->setCurrentIndex(ui->samplemethodCbBox->findText(oisValues.at(idx)));
+                _oisCdtMap.insert("samplemethod",oisValues.at(idx));
+                ui->samplemethodChkBox->setChecked(true);
+            }
+            else if(field == "sampleid")
+            {
+                ui->sampleidCbBox->setCurrentIndex(ui->sampleidCbBox->findText(oisValues.at(idx)));
+                _oisCdtMap.insert("sampleid",oisValues.at(idx));
+                ui->sampleidChkBox->setChecked(true);
+            }
+            else if(field == "sampledepartid")
+            {
+                ui->sampledepartidCbBox->setCurrentIndex(ui->sampledepartidCbBox->findText(oisValues.at(idx)));
+                _oisCdtMap.insert("sampledepartid",oisValues.at(idx));
+                ui->sampledepartidChkBox->setChecked(true);
+            }
+            else if(field == "sampledepartname")
+            {
+                ui->sampledepartnameCbBox->setCurrentIndex(ui->sampledepartnameCbBox->findText(oisValues.at(idx)));
+                _oisCdtMap.insert("sampledepartname",oisValues.at(idx));
+                ui->sampledepartnameChkBox->setChecked(true);
+            }
+            else if(field == "monitorpartid")
+            {
+                ui->monitorpartidCbBox->setCurrentIndex(ui->monitorpartidCbBox->findText(oisValues.at(idx)));
+                _oisCdtMap.insert("monitorpartid",oisValues.at(idx));
+                ui->monitorpartidChkBox->setChecked(true);
+            }
+            else if(field == "monitorpartname")
+            {
+                ui->monitorpartnameCbBox->setCurrentIndex(ui->monitorpartnameCbBox->findText(oisValues.at(idx)));
+                _oisCdtMap.insert("monitorpartname",oisValues.at(idx));
+                ui->monitorpartnameChkBox->setChecked(true);
+            }
+            else if(field == "oilworktime")
+            {
+                ui->oilworktimeLineEdit->setText(oisValues.at(idx));
+                _oisCdtMap.insert("oilworktime",oisValues.at(idx));
+                ui->oilworktimeChkBox->setChecked(true);
+            }
+            else if(field == "oiladdition")
+            {
+                ui->oiladditionLineEdit->setText(oisValues.at(idx));
+                _oisCdtMap.insert("oiladdition",oisValues.at(idx));
+                ui->oiladditionChkBox->setChecked(true);
+            }
+            idx ++;
+        }
+    }
+    
+    QStringList oiaFields = query.value(14).toString().split("#");
+    QStringList oiaValues = query.value(15).toString().split("#");
+    if(!oiaFields.isEmpty())
+    {
+        idx = 0;
+        foreach (QString field, oiaFields)
+        {
+            if(field == "sendstuff")
+            {
+                ui->oia_sendstuffLineEdit->setText(oiaValues.at(idx));
+                _oiaCdtMap.insert("sendstuff",oiaValues.at(idx));
+                ui->oia_sendstuffChkBox->setChecked(true);
+            }
+            else if(field == "senddepart")
+            {
+                ui->oia_senddepartCbBox->setCurrentIndex(ui->oia_senddepartCbBox->findText(oiaValues.at(idx)));
+                _oiaCdtMap.insert("senddepart",oiaValues.at(idx));
+                ui->oia_senddepartChkBox->setChecked(true);
+            }
+            else if(field == "receivestuff")
+            {
+                ui->oia_receivestuffLineEdit->setText(oiaValues.at(idx));
+                _oiaCdtMap.insert("receivestuff",oiaValues.at(idx));
+                ui->oia_receivestuffChkBox->setChecked(true);
+            }
+            else if(field == "receivedate")
+            {
+                QString datestr = oiaValues.at(idx);
+                QStringList datelist = datestr.split("-");
+                int y = datelist.at(0).toInt();
+                int m = datelist.at(1).toInt();
+                int d = datelist.at(2).toInt();
+                ui->oia_receivedateDateEdit->setDate(QDate(y,m,d));
+                _oiaCdtMap.insert("receivedate",oiaValues.at(idx));
+                ui->oia_receivedateChkBox->setChecked(true);
+            }
+            else if(field == "analyzedepartname")
+            {
+                ui->oia_analyzedepartnameCbBox->setCurrentIndex(ui->oia_analyzedepartnameCbBox->findText(oiaValues.at(idx)));
+                _oiaCdtMap.insert("analyzedepartname",oiaValues.at(idx));
+                ui->oia_analyzedepartnameChkBox->setChecked(true);
+            }
+            else if(field == "contaminationanalyzestuff")
+            {
+                ui->oia_contaminationanalyzestuffChkLineEdit->setText(oiaValues.at(idx));
+                _oiaCdtMap.insert("contaminationanalyzestuff",oiaValues.at(idx));
+                ui->oia_contaminationanalyzestuffChkBox->setChecked(true);
+            }
+            else if(field == "contaminationanalyzemethod")
+            {
+                ui->oia_contaminationanalyzemethodCbBox->setCurrentIndex(ui->oia_contaminationanalyzemethodCbBox->findText(oiaValues.at(idx)));
+                _oiaCdtMap.insert("contaminationanalyzemethod",oiaValues.at(idx));
+                ui->oia_contaminationanalyzestuffChkBox->setChecked(true);
+            }
+            else if(field == "contaminationanalyzeequipment")
+            {
+                ui->oia_contaminationanalyzeequipmentCbBox->setCurrentIndex(ui->oia_contaminationanalyzeequipmentCbBox->findText(oiaValues.at(idx)));
+                _oiaCdtMap.insert("contaminationanalyzeequipment",oiaValues.at(idx));
+                ui->oia_contaminationanalyzeequipmentChkBox->setChecked(true);
+            }
+            else if(field == "contaminationanalyzedate")
+            {
+                QString datestr = oiaValues.at(idx);
+                QStringList datelist = datestr.split("-");
+                int y = datelist.at(0).toInt();
+                int m = datelist.at(1).toInt();
+                int d = datelist.at(2).toInt();
+                ui->oia_contaminationanalyzedateDateEdit->setDate(QDate(y,m,d));
+                _oiaCdtMap.insert("contaminationanalyzedate",oiaValues.at(idx));
+                ui->oia_contaminationanalyzedateChkBox->setChecked(true);
+            }
+            else if(field == "contaminationanalyzereportid")
+            {
+                ui->oia_contaminationanalyzereportidCbBox->setCurrentIndex(ui->oia_contaminationanalyzereportidCbBox->findText(oiaValues.at(idx)));
+                _oiaCdtMap.insert("contaminationanalyzereportid",oiaValues.at(idx));
+                ui->oia_contaminationanalyzereportidChkBox->setChecked(true);
+            }
+            else if(field == "spectroscopystuff")
+            {
+                ui->oia_spectroscopystuffLineEdit->setText(oiaValues.at(idx));
+                _oiaCdtMap.insert("spectroscopystuff",oiaValues.at(idx));
+                ui->oia_spectroscopystuffChkBox->setChecked(true);
+            }
+            else if(field == "spectroscopymethod")
+            {
+                ui->oia_spectroscopymethodCbBo->setCurrentIndex(ui->oia_spectroscopymethodCbBo->findText(oiaValues.at(idx)));
+                _oiaCdtMap.insert("spectroscopymethod",oiaValues.at(idx));
+                ui->oia_spectroscopymethodChkBox->setChecked(true);
+            }
+            else if(field == "spectroscopyequipment")
+            {
+                ui->oia_spectroscopyequipmentCbBox->setCurrentIndex(ui->oia_spectroscopyequipmentCbBox->findText(oiaValues.at(idx)));
+                _oiaCdtMap.insert("spectroscopyequipment",oiaValues.at(idx));
+                ui->oia_spectroscopyequipmentChkBox->setChecked(true);
+            }
+            else if(field == "spectroscopydate")
+            {
+                QString datestr = oiaValues.at(idx);
+                QStringList datelist = datestr.split("-");
+                int y = datelist.at(0).toInt();
+                int m = datelist.at(1).toInt();
+                int d = datelist.at(2).toInt();
+                ui->oia_spectroscopydateDateEdit->setDate(QDate(y,m,d));
+                _oiaCdtMap.insert("spectroscopydate",oiaValues.at(idx));
+                ui->oia_spectroscopydateChkBox->setChecked(true);
+            }
+            else if(field == "spectroscopyreportid")
+            {
+                ui->oia_spectroscopyreportidCbBox->setCurrentIndex(ui->oia_spectroscopyreportidCbBox->findText(oiaValues.at(idx)));
+                _oiaCdtMap.insert("spectroscopyreportid",oiaValues.at(idx));
+                ui->oia_spectroscopyreportidChkBox->setChecked(true);
+            }
+            else if(field == "ferrographystuff")
+            {
+                ui->oia_ferrographystuffLineEdit->setText(oiaValues.at(idx));
+                _oiaCdtMap.insert("ferrographystuff",oiaValues.at(idx));
+                ui->oia_ferrographystuffChkBox->setChecked(true);
+            }
+            else if(field == "ferrographymethod")
+            {
+                ui->oia_ferrographymethodCbBox->setCurrentIndex(ui->oia_ferrographymethodCbBox->findText(oiaValues.at(idx)));
+                _oiaCdtMap.insert("ferrographymethod",oiaValues.at(idx));
+                ui->oia_ferrographymethodChkBox->setChecked(true);
+            }
+            else if(field == "ferrographyequipment")
+            {
+                ui->oia_ferrographyequipmentCbBox->setCurrentIndex(ui->oia_ferrographyequipmentCbBox->findText(oiaValues.at(idx)));
+                _oiaCdtMap.insert("ferrographyequipment",oiaValues.at(idx));
+                ui->oia_ferrographyequipmentChkBox->setChecked(true);
+            }
+            else if(field == "ferrographydate")
+            {
+                QString datestr = oiaValues.at(idx);
+                QStringList datelist = datestr.split("-");
+                int y = datelist.at(0).toInt();
+                int m = datelist.at(1).toInt();
+                int d = datelist.at(2).toInt();
+                ui->oia_ferrographydateDateEdit->setDate(QDate(y,m,d));
+                _oiaCdtMap.insert("ferrographydate",oiaValues.at(idx));
+                ui->oia_ferrographydateChkBox->setChecked(true);
+            }
+            else if(field == "ferrographyreportid")
+            {
+                ui->oia_ferrographyreportidCbBox->setCurrentIndex(ui->oia_ferrographyreportidCbBox->findText(oiaValues.at(idx)));
+                _oiaCdtMap.insert("ferrographyreportid",oiaValues.at(idx));
+                ui->oia_ferrographyreportidChkBox->setChecked(true);
+            }
+            else if(field == "physicochemicalstuff")
+            {
+                ui->oia_physicochemicalstuffLineEdit->setText(oiaValues.at(idx));
+                _oiaCdtMap.insert("physicochemicalstuff",oiaValues.at(idx));
+                ui->oia_physicochemicalstuffChkBox->setChecked(true);
+            }
+            else if(field == "physicochemicalmethod")
+            {
+                ui->oia_physicochemicalmethodCbBox->setCurrentIndex(ui->oia_physicochemicalmethodCbBox->findText(oiaValues.at(idx)));
+                _oiaCdtMap.insert("physicochemicalmethod",oiaValues.at(idx));
+                ui->oia_physicochemicalmethodChkBox->setChecked(true);
+            }
+            else if(field == "physicochemicalequipment")
+            {
+                ui->oia_physicochemicalequipmentCbBox->setCurrentIndex(ui->oia_physicochemicalequipmentCbBox->findText(oiaValues.at(idx)));
+                _oiaCdtMap.insert("physicochemicalequipment",oiaValues.at(idx));
+                ui->oia_physicochemicalequipmentChkBox->setChecked(true);
+            }
+            else if(field == "physicochemicaldate")
+            {
+                QString datestr = oiaValues.at(idx);
+                QStringList datelist = datestr.split("-");
+                int y = datelist.at(0).toInt();
+                int m = datelist.at(1).toInt();
+                int d = datelist.at(2).toInt();
+                ui->oia_physicochemicaldateDateEdit->setDate(QDate(y,m,d));
+                _oiaCdtMap.insert("physicochemicaldate",oiaValues.at(idx));
+                ui->oia_physicochemicaldateChkBox->setChecked(true);
+            }
+            else if(field == "physicochemicalreportid")
+            {
+                ui->oia_physicochemicalreportidCbBox->setCurrentIndex(ui->oia_physicochemicalreportidCbBox->findText(oiaValues.at(idx)));
+                _oiaCdtMap.insert("physicochemicalreportid",oiaValues.at(idx));
+                ui->oia_physicochemicalreportidChkBox->setChecked(true);
+            }
+            idx ++;
+        }
+    }
+    
+    QStringList abmFields = query.value(16).toString().split("#");
+    QStringList abmValues = query.value(17).toString().split("#");
+    if(!abmFields.isEmpty())
+    {
+        idx =0;
+        foreach (QString field, abmFields)
+        {
+            if(field == "abrasiveid")
+            {
+                ui->abm_abrasiveidCbBox->setCurrentIndex(ui->abm_abrasiveidCbBox->findText(abmValues.at(idx)));
+                _abmCdtMap.insert("abrasiveid",abmValues.at(idx));
+                ui->abm_abrasiveidChkBox->setChecked(true);
+            }
+            else if(field == "abrasiveshape")
+            {
+                ui->abm_abrasiveshapeCbBox->setCurrentIndex(ui->abm_abrasiveshapeCbBox->findText(abmValues.at(idx)));
+                _abmCdtMap.insert("abrasiveshape",abmValues.at(idx));
+                ui->abm_abrasiveshapeChkBox->setChecked(true);
+            }
+            else if(field == "abrasiveposition")
+            {
+                ui->abm_abrasivepositionCbBox->setCurrentIndex(ui->abm_abrasivepositionCbBox->findText(abmValues.at(idx)));
+                _abmCdtMap.insert("abrasiveposition",abmValues.at(idx));
+                ui->abm_abrasivepositionChkBox->setChecked(true);
+            }
+            else if(field == "abrasivematerial")
+            {
+                ui->abm_abrasivematerialCbBox->setCurrentIndex(ui->abm_abrasivematerialCbBox->findText(abmValues.at(idx)));
+                _abmCdtMap.insert("abrasivematerial",abmValues.at(idx));
+                ui->abm_abrasivematerialChkBox->setChecked(true);
+            }
+            else if(field == "abrasivecolor")
+            {
+                ui->abm_abrasivecolorCbBox->setCurrentIndex(ui->abm_abrasivecolorCbBox->findText(abmValues.at(idx)));
+                _abmCdtMap.insert("abrasivecolor",abmValues.at(idx));
+                ui->abm_abrasivecolorChkBox->setChecked(true);
+            }
+            else if(field == "abrasivesperimeter")
+            {
+                ui->abm_abrasivesperimeterLineEdit->setText(abmValues.at(idx));
+                _abmCdtMap.insert("abrasivesperimeter",abmValues.at(idx));
+                ui->abm_abrasivesperimeterChkBox->setChecked(true);
+            }
+            else if(field == "abrasivesize")
+            {
+                ui->abm_abrasivesizeLineEdit->setText(abmValues.at(idx));
+                _abmCdtMap.insert("abrasivesize",abmValues.at(idx));
+                ui->abm_abrasivesizeChkBox->setChecked(true);
+            }
+            else if(field == "abrasivemarkstuff")
+            {
+                ui->abm_abrasivemarkstuffLineEdit->setText(abmValues.at(idx));
+                _abmCdtMap.insert("abrasivemarkstuff",abmValues.at(idx));
+                ui->abm_abrasivemarkstuffChkBox->setChecked(true);
+            }
+            else if(field == "abrasivetypical")
+            {
+                ui->abm_abrasivetypicalLineEdit->setText(abmValues.at(idx));
+                _abmCdtMap.insert("abrasivetypical",abmValues.at(idx));
+                ui->abm_abrasivetypicalChkBox->setChecked(true);
+            }
+            else if(field == "abrasivemechanismtype")
+            {
+                ui->abm_abrasivemechanismtypeLineEdit->setText(abmValues.at(idx));
+                _abmCdtMap.insert("abrasivemechanismtype",abmValues.at(idx));
+                ui->abm_abrasivemechanismtypeChkBox_->setChecked(true);
+            }
+            else if(field == "abrasivedamagetype")
+            {
+                ui->abm_abrasivedamagetypeCbBox->setCurrentIndex(ui->abm_abrasivedamagetypeCbBox->findText(abmValues.at(idx)));
+                _abmCdtMap.insert("abrasivedamagetype",abmValues.at(idx));
+                ui->abm_abrasivedamagetypeChkBox->setChecked(true);
+            }
+            else if(field == "abrasiveweartype")
+            {
+                ui->abm_abrasiveweartypeCbBox->setCurrentIndex(ui->abm_abrasiveweartypeCbBox->findText(abmValues.at(idx)));
+                _abmCdtMap.insert("abrasiveweartype",abmValues.at(idx));
+                ui->abm_abrasiveweartypeChkBox->setChecked(true);
+            }
+            else if(field == "abrasivesurfacetexturetype")
+            {
+                ui->abm_abrasivesurfacetexturetypeCbBox->setCurrentIndex(ui->abm_abrasivesurfacetexturetypeCbBox->findText(abmValues.at(idx)));
+                _abmCdtMap.insert("abrasivesurfacetexturetype",abmValues.at(idx));
+                ui->abm_abrasivesurfacetexturetypeChkBox->setChecked(true);
+            }
+            else if(field == "ferrographysheetid")
+            {
+                ui->abm_ferrographysheetidCbBox->setCurrentIndex(ui->abm_ferrographysheetidCbBox->findText(abmValues.at(idx)));
+                _abmCdtMap.insert("ferrographysheetid",abmValues.at(idx));
+                ui->abm_ferrographysheetidChkBox->setChecked(true);
+            }
+            else if(field == "ferrographypicid")
+            {
+                ui->abm_ferrographypicidCbBox->setCurrentIndex(ui->abm_ferrographypicidCbBox->findText(abmValues.at(idx)));
+                _abmCdtMap.insert("ferrographypicid",abmValues.at(idx));
+                ui->abm_ferrographypicidChkBox->setChecked(true);
+            }
+            else if(field == "ferrographyreportid")
+            {
+                ui->abm_ferrographyreportidCbBox->setCurrentIndex(ui->abm_ferrographypicidCbBox->findText(abmValues.at(idx)));
+                _abmCdtMap.insert("ferrographyreportid",abmValues.at(idx));
+                ui->abm_ferrographypicidChkBox->setChecked(true);
+            }
+            idx++;
+        }
+    }
+}
+
+void AdvanceSearchDlg::on_modifyButton_clicked()
+{
+
+    QModelIndex index = ui->propertylistTableView->currentIndex();
+    QSqlRecord record = propertymodel->record(index.row());
+    QString propertyname = record.value(0).toString();
+    
+    QString uid;
+    QSqlQuery *query = new QSqlQuery;
+    QString uidsql = "select uid from propertyinfo where propertyname = '";
+    uidsql.append(propertyname);
+    uidsql.append("'");
+    query->exec(uidsql);
+    if(query->next())
+        uid = query->value(0).toString();
+    
+    ppnDlg = new ProPertyNameDlg(this,propertyname);
+    if(ppnDlg->exec()== QDialog::Accepted)
+    {
+        
+            QMessageBox::StandardButton reply;
+            reply = QMessageBox::question(this, tr("QMessageBox::question()"), tr("确认修改当前属性?"),
+                                          QMessageBox::Yes | QMessageBox::Cancel);
+        
+            if(reply == QMessageBox::Yes)
+            {
+                QString eqmFields = "";
+                QString eqmValues = "";
+                if(!_eqmCdtMap.isEmpty())
+                {
+                    QMap<QString,QString>::iterator it;
+                    it = _eqmCdtMap.begin();
+                    eqmFields.append(it.key());
+                    eqmValues.append(it.value());
+                    ++it;
+                    for(;it != _eqmCdtMap.end();++it)
+                    {
+                        eqmFields.append("#");
+                        eqmFields.append(it.key());
+                        eqmValues.append("#");
+                        eqmValues.append(it.value());
+                    }
+                }
+                
+                QString mpFields = "";
+                QString mpValues = "";
+                if(!_mpCdtMap.isEmpty())
+                {
+                    QMap<QString,QString>::iterator it;
+                    it = _mpCdtMap.begin();
+                    mpFields.append(it.key());
+                    mpValues.append(it.value());
+                    ++it;
+                    for(;it !=_mpCdtMap.end();++it)
+                    {
+                        mpFields.append("#");
+                        mpValues.append("#");
+                        mpFields.append(it.key());
+                        mpValues.append(it.value());
+                    }
+                }
+                
+                QString mprFields = "";
+                QString mprValues = "";
+                if(!_mprCdtMap.isEmpty())
+                {
+                    QMap<QString,QString>::iterator it;
+                    it = _mprCdtMap.begin();
+                    mprFields.append(it.key());
+                    mprValues.append(it.value());
+                    ++it;
+                    for(;it != _mprCdtMap.end();++it)
+                    {
+                        mprFields.append("#");
+                        mprValues.append("#");
+                        mprFields.append(it.key());
+                        mprValues.append(it.value());
+                    }
+                }
+                
+                QString fegFields = "";
+                QString fegValues = "";
+                if(!_fegCdtMap.isEmpty())
+                {
+                    QMap<QString,QString>::iterator it;
+                    it = _fegCdtMap.begin();
+                    fegFields.append(it.key());
+                    fegValues.append(it.value());
+                    ++it;
+                    for(;it!=_fegCdtMap.end();++it)
+                    {
+                        fegFields.append("#");
+                        fegValues.append("#");
+                        fegFields.append(it.key());
+                        fegValues.append(it.value());
+                    }
+                }
+                
+                QString fegpFields = "";
+                QString fegpValues = "";
+                if(!_fegpCdtMap.isEmpty())
+                {
+                    QMap<QString,QString>::iterator it;
+                    it = _fegpCdtMap.begin();
+                    fegpFields.append(it.key());
+                    fegpValues.append(it.value());
+                    ++it;
+                    for(;it != _fegpCdtMap.end();++it)
+                    {
+                        fegpFields.append("#");
+                        fegpValues.append("#");
+                        fegpFields.append(it.key());
+                        fegpValues.append(it.value());
+                    }
+                }
+                
+                QString oisFields = "";
+                QString oisValues = "";
+                if(!_oisCdtMap.isEmpty())
+                {
+                    QMap<QString,QString>::iterator it;
+                    it = _oisCdtMap.begin();
+                    oisFields.append(it.key());
+                    oisValues.append(it.value());
+                    ++it;
+                    for(;it!=_oisCdtMap.end();++it)
+                    {
+                        oisFields.append("#");
+                        oisValues.append("#");
+                        fegpFields.append(it.key());
+                        fegpValues.append(it.value());
+                    }
+                }
+                
+                QString oiaFields = "";
+                QString oiaValues = "";
+                if(!_oiaCdtMap.isEmpty())
+                {
+                    QMap<QString,QString>::iterator it;
+                    it = _oiaCdtMap.begin();
+                    oiaFields.append(it.key());
+                    oiaValues.append(it.value());
+                    ++it;
+                    for(;it!=_oiaCdtMap.end();++it)
+                    {
+                        oiaFields.append("#");
+                        oisValues.append("#");
+                        fegpFields.append(it.key());
+                        fegpValues.append(it.value());
+                    }
+                }
+                
+                QString abmFields = "";
+                QString abmValues = "";
+                if(!_abmCdtMap.isEmpty())
+                {
+                    QMap<QString,QString>::iterator it;
+                    it = _abmCdtMap.begin();
+                    abmFields.append(it.key());
+                    abmValues.append(it.value());
+                    ++it;
+                    for(;it != _abmCdtMap.end();++it)
+                    {
+                        abmFields.append("#");
+                        abmValues.append("#");
+                        abmFields.append(it.key());
+                        abmValues.append(it.value());
+                    }
+                }
+        
+                QString propertySql = "update propertyinfo set propertyname = '";
+                propertySql.append(propertyName);
+                propertySql.append("', eqmfields = '");
+                propertySql.append(eqmFields);
+                propertySql.append("', eqmvalues = '");
+                propertySql.append(eqmValues);
+                propertySql.append("', mpfields = '");
+                propertySql.append(mpFields);
+                propertySql.append("', mpvalues = '");
+                propertySql.append(mpValues);
+                propertySql.append("', mprfields = '");
+                propertySql.append(mprFields);
+                propertySql.append("', mprvalues = '");
+                propertySql.append(mprValues);
+                propertySql.append("', fegfields = '");
+                propertySql.append(fegFields);
+                propertySql.append("', fegvalues = '");
+                propertySql.append(fegValues);
+                propertySql.append("', fegpfields = '");
+                propertySql.append(fegpFields);
+                propertySql.append("', fegpvalues = '");
+                propertySql.append(fegpValues);
+                propertySql.append("', oisfields = '");
+                propertySql.append(oisFields);
+                propertySql.append("', oisvalues = '");
+                propertySql.append(oisValues);
+                propertySql.append("', oiafields = '");
+                propertySql.append(oiaFields);
+                propertySql.append("', oiavalues = '");
+                propertySql.append(oiaValues);
+                propertySql.append("', abmfields = '");
+                propertySql.append(abmFields);
+                propertySql.append("', abmvalues = '");
+                propertySql.append(abmValues);
+                propertySql.append("' where uid = ");
+                propertySql.append(uid);
+
+                if(query->exec(propertySql))
+                {
+                    initpropertylistName();
+                    QMessageBox::warning(this,tr("提示"),tr("更新查询属性成功"),QMessageBox::Close);
+                }
+                else
+                    QMessageBox::warning(this,tr("提示"),tr("更新查询属性失败"),QMessageBox::Close);
+            }
+            else
+                this->propertyName = "";
+    }
+    else
+        ;
+    
+    ui->queryBtn->setEnabled(true);
+    ui->modifyButton->setEnabled(false);
 }
