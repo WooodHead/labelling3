@@ -184,7 +184,7 @@ private:
     Ui::LeftWindow                _leftWindow;
     Ui::ButtomWindow              _bottomWindow;
 
-    Ui::CornerWindow              _cornerWindow;
+    //Ui::CornerWindow              _cornerWindow;
     //Ui::Searchdata                _searchWindow;
 
     QDockWidget         *_cornerWindowWidget;

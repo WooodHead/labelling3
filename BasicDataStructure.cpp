@@ -142,11 +142,11 @@ QImage* setLabelMap(IplImage* ocvImage, char* labelMap)
 
 	int height = ocvImage->height;
 	int width = ocvImage->width;
-	int widthStep = ocvImage->widthStep;
+    //int widthStep = ocvImage->widthStep;
 	QImage *retImage = new QImage( width, height, QImage::Format_RGB32 );
 	
 	char* _labelMap = labelMap;
-	char* _image = ocvImage->imageData;
+    //char* _image = ocvImage->imageData;
 	int R, G, B;
 	for (int y = 0; y < height; y++)
 	{

@@ -200,6 +200,7 @@ void	ImageCompletionUI::createActions()
     _strikeToolButton->setPopupMode(QToolButton::MenuButtonPopup);
     _strikeToolButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     _strikeToolButton->setIcon(_awesome->icon(pencil));
+    _strikeToolButton->setChecked(false);
 
     // Group 1
     _fgAction = new QAction( _awesome->icon(suno), tr("前景"), this );
@@ -317,6 +318,19 @@ void	ImageCompletionUI::createToolBars()
     _editToolBar->addSeparator();
     _editToolBar->addWidget(_strikeThicknessToolButton);
     _editToolBar->addWidget(_lineThicknessToolButton);
+
+    _editToolBar->addSeparator();
+    _editToolBar->addAction(_searchAction);
+    _editToolBar->addAction(_addtosqlAction);
+    _editToolBar->addAction(_exportDataAction);
+    _editToolBar->addAction(_importDataAction);
+
+    _editToolBar->addSeparator();
+
+    if(Global::Authority == "1")
+    {
+        _editToolBar->addAction(_userManagementAction);
+    }
 }
 
 void	ImageCompletionUI::setupWidgets()
@@ -441,9 +455,8 @@ void	ImageCompletionUI::setupWidgets()
     ////////////////////////////////////////////////////////////////////////////////////
     //   _leftWindowWidget
     ////////////////////////////////////////////////////////////////////////////////////
-    _leftWindowWidget = new QDockWidget(tr(""),this );
+    _leftWindowWidget = new QDockWidget(tr("图谱信息"),this );
     _leftWindowWidget->setObjectName(tr("_leftWindowWidget"));
-    _leftWindowWidget->setFeatures(QDockWidget::DockWidgetMovable);
     _leftWindowWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     _leftWindowWidget->setMaximumSize(QSize(0.2*width, height));
     _leftWindowWidget->setMaximumHeight(height);
@@ -454,7 +467,6 @@ void	ImageCompletionUI::setupWidgets()
 
     _leftWindow.setupUi(_leftDockWindowContents);
     _leftWindow.tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    _leftWindow.tabWidgetLeftWindow->setTabText(0, tr("图谱信息"));
     _leftWindow.tabWidgetLeftWindow->removeTab(1);
     _leftWindow.tabWidgetLeftWindow->removeTab(1);
     _leftWindowWidget->setWidget(_leftDockWindowContents);
@@ -475,26 +487,12 @@ void	ImageCompletionUI::setupWidgets()
 
     _logWindowWidget = new QDockWidget(tr("工作日志"),this)    ;
     _logWindowWidget->setObjectName("_logWindowWidget");
-    _logWindowWidget->setFeatures(QDockWidget::DockWidgetMovable);
     _logWindowWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
     _logWindowWidget->setWidget(_logWidget);
     _logWindowWidget->setMinimumHeight(0.27 * height);
+    _logWindowWidget->setWindowIcon(_awesome->icon(filetexto));
     addDockWidget(Qt::LeftDockWidgetArea, _logWindowWidget);
-
-    ////////////////////////////////////////////////////////////////////////////////////
-    //   _cornerWindowWidget
-    ////////////////////////////////////////////////////////////////////////////////////
-    //    _cornerWindowWidget = new QDockWidget(this );
-    //    _cornerWindowWidget->setObjectName(tr("_cornerWindowWidget"));
-    //    _cornerWindowWidget->setFeatures(QDockWidget::DockWidgetMovable);
-    //    _cornerWindowWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    //    _cornerWindowWidget->setFloating(false);
-    //    _cornerDockWindowContents = new QWidget( );
-    //    _cornerDockWindowContents->setObjectName(tr("_leftDockWindowContents"));
-    //    _cornerWindow.setupUi(_cornerDockWindowContents);
-    //    _cornerWindowWidget->setWidget(_cornerDockWindowContents);
-    //    addDockWidget(Qt::LeftDockWidgetArea, _cornerWindowWidget);
 
     ////////////////////////////////////////////////////////////////////////////////////
     //   _bottomWindowWidget
@@ -502,7 +500,6 @@ void	ImageCompletionUI::setupWidgets()
 
     _bottomWindowWidget = new QDockWidget(tr("数据库信息"),this );
     _bottomWindowWidget->setObjectName(tr("_bottomWindowWidget"));
-    _bottomWindowWidget->setFeatures(QDockWidget::DockWidgetMovable);
     _bottomWindowWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
     _bottomWindowWidget->setMinimumHeight(0.35 * height);
     _bottomDockWindowContents = new QWidget( );
@@ -513,7 +510,6 @@ void	ImageCompletionUI::setupWidgets()
     addDockWidget(Qt::BottomDockWidgetArea, _bottomWindowWidget);
 
     setCorner(Qt::BottomLeftCorner,Qt::LeftDockWidgetArea);
-    //setCorner(Qt::BottomRightCorner,Qt::RightDockWidgetArea);
     setCorner(Qt::BottomRightCorner,Qt::BottomDockWidgetArea);
 
     QPixmap pixmap(30,30);
@@ -1149,7 +1145,7 @@ void ImageCompletionUI::updateLog()
     {
 
         (*_logInformationString) = log_str;
-        sprintf(log_str, "");
+        //sprintf(log_str, "");
         _logWidget->clear();
         QTextCursor cursor(_logWidget->textCursor());
         cursor.movePosition(QTextCursor::End);
@@ -1200,9 +1196,9 @@ void ImageCompletionUI::showData()
     bool ret;
     QSqlRecord rec;
 
-    QString tableNames[8] = { "equipmentinfo", "movepartinfo", "movepartrepairinfo", "oilsampleinfo", "oilanalyzeinfo", "ferrographyinfo", "ferrographypicinfo", "abrasivemarkinfo" };
+    QString tableNames[9] = { "equipmentinfo", "movepartinfo", "movepartrepairinfo", "oilsampleinfo", "oilanalyzeinfo", "ferrographyinfo", "ferrographypicinfo", "abrasivemarkinfo", "sampleSummaryInfo" };
 
-    for(int k = 1; k <= 8; k++)
+    for(int k = 1; k <= 9; k++)
     {
         QSqlQuery query;
         ret = query.exec(QString("select * from %1").arg(tableNames[k-1]));
@@ -1256,6 +1252,11 @@ void ImageCompletionUI::showData()
                     {
                         if( j == 0 ) _bottomWindow.dBTableWidget_8->insertRow(_bottomWindow.dBTableWidget_8->rowCount());
                         _bottomWindow.dBTableWidget_8->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                    }
+                    case 9:
+                    {
+                        if( j == 0 ) _bottomWindow.dBTableWidget_9->insertRow(_bottomWindow.dBTableWidget_9->rowCount());
+                        _bottomWindow.dBTableWidget_9->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
                     }
                     }
                 }
@@ -2323,6 +2324,7 @@ QString ImageCompletionUI::labelStatus(QString imagePath)
         }
         else return "";
     }
+    return "";
 }
 
 void ImageCompletionUI::editImageProperties(QString /* fileName */)

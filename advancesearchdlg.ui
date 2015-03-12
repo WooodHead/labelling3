@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>查询</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_8">
    <item>
@@ -382,18 +382,18 @@
                 </item>
                 <item>
                  <widget class="QDateEdit" name="movepartEndDateEdit">
-                  <property name="displayFormat">
-                   <string>yyyy年/MM月/dd日</string>
-                  </property>
-                  <property name="calendarPopup">
-                   <bool>true</bool>
-                  </property>
                   <property name="date">
                    <date>
                     <year>2014</year>
                     <month>1</month>
                     <day>1</day>
                    </date>
+                  </property>
+                  <property name="displayFormat">
+                   <string>yyyy年/MM月/dd日</string>
+                  </property>
+                  <property name="calendarPopup">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -1794,7 +1794,11 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="feg_ferrographysheetidCbBox"/>
+                 <widget class="QComboBox" name="feg_ferrographysheetidCbBox">
+                  <property name="editable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </item>
@@ -1836,7 +1840,11 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="feg_ferrographymakemethodCbBox"/>
+                 <widget class="QComboBox" name="feg_ferrographymakemethodCbBox">
+                  <property name="editable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </item>
@@ -1857,7 +1865,11 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="feg_ferrographyanalyzertypeCbBox"/>
+                 <widget class="QComboBox" name="feg_ferrographyanalyzertypeCbBox">
+                  <property name="editable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </item>
@@ -2403,7 +2415,7 @@
       <item row="0" column="0">
        <widget class="QTabWidget" name="queryResultTabWidget">
         <property name="currentIndex">
-         <number>0</number>
+         <number>7</number>
         </property>
         <property name="elideMode">
          <enum>Qt::ElideNone</enum>
