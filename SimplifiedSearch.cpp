@@ -11,7 +11,6 @@ SimplifiedSearch::SimplifiedSearch(QWidget *parent) :
 
     connect(ui->_buttonCancel, SIGNAL(clicked()), this, SLOT(close()));
     connect(ui->_buttonSearch, SIGNAL(clicked()), this, SLOT(search()));
-    //connect(this, SIGNAL(flushLeftWindow()), parent, SLOT(flushLeftWindow()));
 }
 
 SimplifiedSearch::~SimplifiedSearch()

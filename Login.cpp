@@ -19,13 +19,8 @@ Login::Login(QWidget *parent) :
 
     _moving = false;
 
-    _awesome = new QtAwesome(this);
-    _awesome->initFontAwesome();
-
     setWindowTitle( tr("用户登录") );
-    setWindowFlags(Qt::Dialog | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
 
-    //this->loadDesign("default");
     this->setMinimumSize(this->size());
     this->setMaximumSize(this->size());
 
@@ -39,10 +34,10 @@ Login::Login(QWidget *parent) :
     ui->_editPasswd->setStyleSheet("border: 2px solid #708090;height: 30px;");
 
     //ui->_login->setFocus();
-    ui->_login->setIcon( _awesome->icon(signin) );
+    ui->_login->setIcon( Global::Awesome->icon(signin) );
     ui->_login->setStyleSheet("padding:5px 0;border:0px;background-color: #87CEEB;color:white;");
 
-    ui->_cancel->setIcon( _awesome->icon(remove_) );
+    ui->_cancel->setIcon( Global::Awesome->icon(remove_) );
     ui->_cancel->setStyleSheet("padding:5px 0;border:0px;background-color: #87CEEB;color:white;");
 
     ui->_login->setAutoDefault(false);

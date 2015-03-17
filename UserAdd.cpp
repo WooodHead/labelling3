@@ -13,10 +13,8 @@ UserAdd::UserAdd(QWidget *parent) :
     ui->setupUi(this);
     setModal(true);
 
-    _awesome = new QtAwesome(this);
-    _awesome->initFontAwesome();
-    ui->_add->setIcon(_awesome->icon(userplus));
-    ui->_cancel->setIcon(_awesome->icon(remove_));
+    ui->_add->setIcon(Global::Awesome->icon(userplus));
+    ui->_cancel->setIcon(Global::Awesome->icon(remove_));
     
     ui->_authorityCombo->addItem(tr("普通用户"));
     ui->_authorityCombo->addItem(tr("管理员"));
@@ -29,7 +27,6 @@ UserAdd::UserAdd(QWidget *parent) :
 UserAdd::~UserAdd()
 {
     delete ui;
-    delete _awesome;
 }
 
 void UserAdd::on__cancel_clicked()

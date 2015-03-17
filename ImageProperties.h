@@ -8,8 +8,6 @@
 #include <QDebug>
 #include <QFile>
 
-#include "QtAwesome.h"
-
 #define TABLE_N 7
 
 namespace Ui {
@@ -68,7 +66,6 @@ private:
     QString _maskImagePath;
 
     bool _bSaved[TABLE_N];
-    QtAwesome* _awesome;
     bool _bCommited;
 
 signals:

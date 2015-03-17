@@ -8,7 +8,7 @@
 #include "UserAdd.h"
 #include "UserInfo.h"
 #include "UserEdit.h"
-#include "QtAwesome.h"
+#include "Global.h"
 
 namespace Ui {
 class UserManagement;
@@ -53,7 +53,6 @@ private:
 
     UserInfo* getSelectedUserInfo();
     void setIcons();
-    QtAwesome *_awesome;
 };
 
 #endif // USERMANAGEMENT_H

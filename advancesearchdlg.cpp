@@ -12,15 +12,12 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent) :
         QMessageBox::warning(this,tr("数据库提示"),tr("不能链接数据库"),QMessageBox::Close);
         return;
     }
-    
-    _awesome = new QtAwesome(this);
-    _awesome->initFontAwesome();
 
-    ui->queryBtn->setIcon(_awesome->icon(search));
+    ui->queryBtn->setIcon(Global::Awesome->icon(search));
     ui->exportBtn->setIcon(QIcon(":/new/prefix1/icons/export.png"));
     ui->importBtn->setIcon(QIcon(":/new/prefix1/icons/import.png"));
-    ui->addtoBtn->setIcon(_awesome->icon(plus));
-    ui->modifyButton->setIcon(_awesome->icon(pluscircle));
+    ui->addtoBtn->setIcon(Global::Awesome->icon(plus));
+    ui->modifyButton->setIcon(Global::Awesome->icon(pluscircle));
 
     propertymodel = 0;
     

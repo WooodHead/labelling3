@@ -4,7 +4,7 @@
 #include <QDialog>
 
 #include "UserInfo.h"
-#include "QtAwesome.h"
+#include "Global.h"
 
 namespace Ui {
 class UserAdd;
@@ -30,8 +30,6 @@ signals:
 private:
     Ui::UserAdd *ui;
     UserInfo* getInfo();
-
-    QtAwesome* _awesome;
 };
 
 #endif // USERADD_H

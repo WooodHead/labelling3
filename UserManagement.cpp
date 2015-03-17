@@ -22,8 +22,6 @@ UserManagement::UserManagement(QWidget *parent) :
     _model = 0;
     _selectedRow = -1;
 
-    _awesome = new QtAwesome(this);
-    _awesome->initFontAwesome();
     setIcons();
     
     if(!createConnection(db))
@@ -36,10 +34,13 @@ UserManagement::UserManagement(QWidget *parent) :
 
 UserManagement::~UserManagement()
 {
-    if(_model) delete _model;
+    if(_model)
+    {
+        delete _model;
+        _model = 0;
+    }
     db.close();
     delete ui;
-    delete _awesome;
 }
 
 void UserManagement::initTableView()
@@ -66,7 +67,6 @@ void UserManagement::initTableView()
     ui->_userTableView->resizeColumnToContents(2);
     ui->_userTableView->verticalHeader()->setVisible(false);
     ui->_userTableView->setEditTriggers(QTableView::NoEditTriggers);
-    //ui->_userTableView->horizontalHeader()->setStyleSheet("QHeaderView::section{background:lightblue;}");
     ui->_userTableView->horizontalHeader()->setHighlightSections(false);
 }
 
@@ -86,10 +86,10 @@ UserInfo *UserManagement::getSelectedUserInfo()
 
 void UserManagement::setIcons()
 {
-    ui->_addUser->setIcon(_awesome->icon(userplus));
-    ui->_deleteUser->setIcon(_awesome->icon(usertimes));
-    ui->_searchUser->setIcon(_awesome->icon(search));
-    ui->_editUser->setIcon(_awesome->icon(pencilsquareo));
+    ui->_addUser->setIcon(Global::Awesome->icon(userplus));
+    ui->_deleteUser->setIcon(Global::Awesome->icon(usertimes));
+    ui->_searchUser->setIcon(Global::Awesome->icon(search));
+    ui->_editUser->setIcon(Global::Awesome->icon(pencilsquareo));
 }
 
 void UserManagement::on__deleteUser_clicked()

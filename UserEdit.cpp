@@ -11,10 +11,8 @@ useredit::useredit(QWidget *parent) :
     setWindowTitle(tr("编辑用户"));
     setModal(true);
 
-    _awesome = new QtAwesome(this);
-    _awesome->initFontAwesome();
-    ui->_edit->setIcon(_awesome->icon(edit));
-    ui->_cancel->setIcon(_awesome->icon(remove_));
+    ui->_edit->setIcon(Global::Awesome->icon(edit));
+    ui->_cancel->setIcon(Global::Awesome->icon(remove_));
 
     this->ui->_editUsername->setEnabled(false);
 
@@ -30,7 +28,6 @@ useredit::useredit(QWidget *parent) :
 useredit::~useredit()
 {
     delete ui;
-    delete _awesome;
 }
 
 void useredit::showEdit(UserInfo *userInfo)

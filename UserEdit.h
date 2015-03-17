@@ -4,7 +4,7 @@
 #include <QDialog>
 
 #include "UserInfo.h"
-#include "QtAwesome.h"
+#include "Global.h"
 
 namespace Ui {
 class useredit;
@@ -35,8 +35,6 @@ private:
     int _selectedRow;
 
     UserInfo* getInfo();
-
-    QtAwesome* _awesome;
 };
 
 #endif // USEREDIT_H

@@ -26,7 +26,6 @@
 #include "advancesearchdlg.h"
 #include "UserManagement.h"
 #include "Global.h"
-#include "QtAwesome.h"
 #include "MoliProperties.h"
 
 #define DELETEPTR(ptr) if(ptr) { delete ptr; ptr = 0; }
@@ -47,14 +46,7 @@ class ImageCompletionUI : public QMainWindow
     Q_OBJECT
 
 public:
-    ////////////////////////////////////////////////////////////////////////////////////
-    //   Default constructor
-    ////////////////////////////////////////////////////////////////////////////////////
     ImageCompletionUI(QWidget *parent = 0, Qt::WFlags flags = 0);
-
-    ////////////////////////////////////////////////////////////////////////////////////
-    //   Default destructor
-    ////////////////////////////////////////////////////////////////////////////////////
     ~ImageCompletionUI();
 
     enum EDITSTEP
@@ -67,71 +59,30 @@ public:
         LOADFAILED
     };
 
-protected:
-    ///////////////////////////////////////////////////////////////////////
-    //    Reimplementation of the event handler for close
-    //    event in order to verify if all the images opened
-    //    in the MDI interface are saved. Prompt the user
-    //    if there are unsaved images for a decision on saving or not.
-    ///////////////////////////////////////////////////////////////////////
-    void	closeEvent(QCloseEvent *event);
 
 private:
 
     bool maybeSave();
 
 public:
-    ////////////////////////////////////////////////////////////////////////////////////
-    //     Setup Main window
-    ////////////////////////////////////////////////////////////////////////////////////
-    void	setupMainWindow();
+    void setupMainWindow();
 
-    ////////////////////////////////////////////////////////////////////////////////////
-    //    The function creates all the connections between the actions to slots.
-    ////////////////////////////////////////////////////////////////////////////////////
-    void	createActions();
-
-    ////////////////////////////////////////////////////////////////////////////////////
-    //    Create Menus
-    ////////////////////////////////////////////////////////////////////////////////////
-    void	createMenus();
-
-    ////////////////////////////////////////////////////////////////////////////////////
-    //    Setup ToolBar
-    ////////////////////////////////////////////////////////////////////////////////////
+    void createActions();
+    void createMenus();
     void createToolBars();
+    void createStatusBar();
 
-    ////////////////////////////////////////////////////////////////////////////////////
-    //    Create all widgets and their layout
-    ////////////////////////////////////////////////////////////////////////////////////
-    void	setupWidgets();
+    void setupWidgets();
 
-    ////////////////////////////////////////////////////////////////////////////////////
-    //    Setup ToolBar
-    ////////////////////////////////////////////////////////////////////////////////////
-    void	createStatusBar();
+    void createConnections();
 
-    void	createConnections();
+    void setupBrush();
 
-    void	setupBrush();
+    void updateLog();
 
-    void	updateLog();
-
-    void    uncheckMethods();
-    void    uncheckStrikeOptions();
+    void uncheckMethods();
+    void uncheckStrikeOptions();
     void setStrikeOptionsEnabled(bool);
-    ////////////////////////////////////////////////////////////////////////////////////
-    //   The User Interface items automatically generated from the ui file
-    ////////////////////////////////////////////////////////////////////////////////////
-    //Ui::ImageCompletionUIClass	ui;
-
-    ////////////////////////////////////////////////////////////////////////////////////
-    //   Module selection combo box
-    ////////////////////////////////////////////////////////////////////////////////////
-    
-    ////////////////////////////////////////////////////////////////////////////////////
-    // Region Competition Operation
-    ////////////////////////////////////////////////////////////////////////////////////
 
 private:
     ////////////////////////////////////////////////////////////////////////////////////
@@ -163,8 +114,6 @@ private:
     QWidget                 *_sceneCompletionPage;
     QWidget                 *_videoCompletionPage;
     QWidget                 *_regionCompetitionPage;
-    //QTableWidget		*_logWidget;
-    //QListWidget			*_logWidget;
     QTextEdit				*_logWidget;
     QString                 *_logInformationString;
     QTimer                  *_timer;
@@ -172,20 +121,11 @@ private:
     QList<QIcon> lableIcons;
     EDITSTEP _step;
     bool IsShowDetail;
-    ////////////////////////////////////////////////////////////////////////////////////
-    //   SceneCompletionWidget,
-    //   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //   cannot be         *_sceneCompletionDialog
-    //   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //	Oh My God 花了我一个晚上的时间, shit, shit, shit, shit, shit, shit,
-    ////////////////////////////////////////////////////////////////////////////////////
+
     Ui::SceneCompletionWidget	  _sceneCompletionDialog;
     Ui::RegionCompetition         _regionCompetitionDialog;
     Ui::LeftWindow                _leftWindow;
     Ui::ButtomWindow              _bottomWindow;
-
-    //Ui::CornerWindow              _cornerWindow;
-    //Ui::Searchdata                _searchWindow;
 
     QDockWidget         *_cornerWindowWidget;
     QWidget				*_cornerDockWindowContents;
@@ -264,41 +204,18 @@ protected:
     void			keyPressEvent(QKeyEvent *e);
 
 private slots:
-    ////////////////////////////////////////////////////////////////////////////////////
-    //    Open file slot. This function will be executed when
-    //    the open file acction is triggered. (Menu File->Open or Toolbar->Open)
-    ////////////////////////////////////////////////////////////////////////////////////
     void	open();
     void    batchOpen();
-    ////////////////////////////////////////////////////////////////////////////////////
-    //    Save File slot. This function will be executed when
-    //    the save file acction is triggered. (Menu File->Save or Toolbar->Save)
-    ////////////////////////////////////////////////////////////////////////////////////
     void	save();
-
-    ////////////////////////////////////////////////////////////////////////////////////
-    //   Save As File slot. This function will be executed when
-    //   the save as file acction is triggered. (Menu File->Save As)
-    ////////////////////////////////////////////////////////////////////////////////////
     void	saveAs();
 
-    ////////////////////////////////////////////////////////////////////////////////////
-    //   Save As File slot. This function will be executed when
-    //   the save as file acction is triggered. (Menu File->Save As)
-    ////////////////////////////////////////////////////////////////////////////////////
     void	close();
 
-    void        search();
-    void        addtosql();
-    void        savemarkresult();
-    void        exportData();
-    void        importData();
-
-    ////////////////////////////////////////////////////////////////////////////////////
-    //   In this function the active/inactive logic for the menu
-    //   and toolbar items should be implemented.
-    ////////////////////////////////////////////////////////////////////////////////////
-    // void	updateMenus();
+    void    search();
+    void    addtosql();
+    void    savemarkresult();
+    void    exportData();
+    void    importData();
 
     void exitApp();
     void selectColor();
@@ -363,7 +280,7 @@ private slots:
 
 private:
     Searchdata *searchdata1;
-    AdvanceSearchDlg *advanceSearchDlg;
+    AdvanceSearchDlg *_advanceSearchDlg;
     UserManagement *userMangementDlg;
     classification class1;
     buttom buttom1;
@@ -388,8 +305,6 @@ private:
     void setBackgroundColor(QString path, QColor color);
     void setImageState(QString path, QString state);
 
-    QtAwesome* _awesome;
-
     int rowIndex(QString image);
 
 private slots:
@@ -398,7 +313,5 @@ private slots:
     void showContextMenu(QPoint);
     void editProperties();
 };
-
-
 
 #endif // IMAGECOMPLETIONUI_H

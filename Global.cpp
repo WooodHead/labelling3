@@ -6,18 +6,20 @@
 #include <QDir>
 
 QString Global::Authority = "2";
-QString Global::DisplayName = "";
+QString Global::DisplayName = QString();
 
 QString Global::Database = "bookdata";
 QString Global::Hostname = "localhost";
 QString Global::Username = "root";
 QString Global::Passwd   = "zxy082";
 
-QString Global::PathImage = "";
-QString Global::PathMask = "";
-QString Global::PathResult = "";
-QString Global::ExtMask = "";
-QString Global::ExtResult = "";
+QString Global::PathImage = QString();
+QString Global::PathMask = QString();
+QString Global::PathResult = QString();
+QString Global::ExtMask = QString();
+QString Global::ExtResult = QString();
+
+QtAwesome* Global::Awesome = 0;
 
 QColor Global::LabelledColor = QColor(255, 255, 0);
 QColor Global::UnLabelledColor = QColor(255, 0, 0);
@@ -36,6 +38,9 @@ void Global::initialize()
     {
         qFatal("配置文件不存在:\r\n%s", qPrintable(strConfigFile));
     }
+
+    Global::Awesome = new QtAwesome();
+    Global::Awesome->initFontAwesome();
 
     Global::settings = new QSettings(strConfigFile, QSettings::IniFormat);
 

@@ -12,21 +12,12 @@
 ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
     : QMainWindow(parent, flags)
 {
-    //setupUi(this);
-
-    _brushSize = 3;
-    _step = NONE;
-
-    IsShowDetail = false;
-
-    _editImageViewer = NULL;
     _cnt = -1;
-
-    _imageName = "";
-    _imagePath = "";
-
-    _awesome = new QtAwesome(this);
-    _awesome->initFontAwesome();
+    _step = NONE;
+    _brushSize = 3;
+    _editImageViewer = NULL;
+    _imageName = QString();
+    _imagePath = QString();
 
     setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
@@ -44,8 +35,6 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
 
     createConnections();
 
-    //setupBrush();
-
     _RegionupdateBrushSize();
 
     setStrikeOptionsEnabled(false);
@@ -55,18 +44,22 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
 
 ImageCompletionUI::~ImageCompletionUI()
 {
-    delete _awesome;
+    if(Global::Awesome)
+    {
+        delete Global::Awesome;
+        Global::Awesome = 0;
+    }
 }
 
-void	ImageCompletionUI::setupMainWindow()
+void ImageCompletionUI::setupMainWindow()
 {
     this->resize( 1024, 800 );
     this->setMinimumSize( QSize(1024, 0) );
     this->showMaximized();
-    this->setWindowTitle(tr("磨粒图像标注"));
+    this->setWindowTitle( tr("磨粒图像标注") );
 }
 
-void	 ImageCompletionUI::createMenus()
+void ImageCompletionUI::createMenus()
 {
     _menuFile = menuBar()->addMenu( tr("&文件") );
 
@@ -82,20 +75,20 @@ void	 ImageCompletionUI::createMenus()
     _menuFile->addAction( _exitAction );
 
     _menuLabelling = menuBar()->addMenu( tr("&图像标注") );
-    QMenu* submenu = _menuLabelling->addMenu( _awesome->icon(pencil), tr("笔画标注") );
-    submenu->addAction(_fgAction);
-    submenu->addAction(_bgAction);
-    submenu->addAction(_eraserAction);
+    QMenu* submenu = _menuLabelling->addMenu( Global::Awesome->icon(pencil), tr("笔画标注") );
+    submenu->addAction( _fgAction );
+    submenu->addAction( _bgAction );
+    submenu->addAction( _eraserAction );
 
     _menuLabelling->addAction( _rectAction );
     _menuLabelling->addAction( _polygonAction );
     _menuLabelling->addAction( _manualAction );
     _menuLabelling->addSeparator();
 
-    submenu = _menuLabelling->addMenu(_awesome->icon(circleo), tr("笔画粗细"));
+    submenu = _menuLabelling->addMenu(Global::Awesome->icon(circleo), tr("笔画粗细"));
     for(int i = 0; i < 3; i++) submenu->addAction(_strikeThickness[i]);
 
-    submenu = _menuLabelling->addMenu( _awesome->icon(minus), tr("线条粗细") );
+    submenu = _menuLabelling->addMenu( Global::Awesome->icon(minus), tr("线条粗细") );
     for(int i = 0; i < 3; i++) submenu->addAction(_lineThickness[i]);
 
     _menuData=menuBar()->addMenu(tr("&数据管理"));
@@ -114,82 +107,51 @@ void	 ImageCompletionUI::createMenus()
     _menuWindow = menuBar()->addMenu( tr("&帮助") );
 }
 
-void	ImageCompletionUI::closeEvent( QCloseEvent */*event*/ ){}
-
 void	ImageCompletionUI::createActions()
 {
-    ////////////////////////////////////////////////////////////////////////////////////
-    //   _openAction
-    ////////////////////////////////////////////////////////////////////////////////////
     _openAction = new QAction( tr("&打开"), this );
     _openAction->setObjectName(tr("_openAction"));
     QIcon icon1;
     icon1.addPixmap(QPixmap(tr(":/new/prefix1/icons/fileopen.png")), QIcon::Normal, QIcon::Off);
-    _openAction->setIcon( _awesome->icon(  folderopeno  ) );
+    _openAction->setIcon( Global::Awesome->icon(  folderopeno  ) );
     connect(_openAction, SIGNAL(triggered()), this, SLOT(open()));
 
     _openBatchAction = new QAction( tr("&打开(多)"), this );
     _openBatchAction->setObjectName(tr("_openBatchAction"));
-    _openBatchAction->setIcon( _awesome->icon( folderopeno )  );
+    _openBatchAction->setIcon( Global::Awesome->icon( folderopeno )  );
     connect(_openBatchAction, SIGNAL(triggered()), this, SLOT(batchOpen()));
 
-    ////////////////////////////////////////////////////////////////////////////////////
-    //   _saveAction
-    ////////////////////////////////////////////////////////////////////////////////////
-    _saveAction = new QAction( _awesome->icon(floppyo), tr("&保存"), this );
+    _saveAction = new QAction( Global::Awesome->icon(floppyo), tr("&保存"), this );
     _saveAction->setObjectName(tr("_saveAction"));
     QIcon icon2;
     icon2.addPixmap(QPixmap(tr(":/new/prefix1/icons/filesave.png")), QIcon::Normal, QIcon::Off);
     connect(_saveAction, SIGNAL(triggered()), this, SLOT(save()));
 
-    ////////////////////////////////////////////////////////////////////////////////////
-    //   _saveAsAction
-    ////////////////////////////////////////////////////////////////////////////////////
-    _saveAsAction = new QAction(  _awesome->icon(floppyo), tr("&另存为"), this );
+    _saveAsAction = new QAction(  Global::Awesome->icon(floppyo), tr("&另存为"), this );
     _saveAsAction->setObjectName(tr("_saveAsAction"));
     connect(_saveAsAction, SIGNAL(triggered()), this, SLOT( saveAs() ));
 
-    ////////////////////////////////////////////////////////////////////////////////////
-    //   _closeAction
-    ////////////////////////////////////////////////////////////////////////////////////
-    _closeAction = new QAction( _awesome->icon(times), tr("关闭"), this );
-    //_closeAction->setIcon( QIcon(":/new/prefix1/icons/fileclose.png") );
+    _closeAction = new QAction( Global::Awesome->icon(times), tr("关闭"), this );
     connect( _closeAction, SIGNAL(triggered()), this, SLOT( close() ));
 
-    ////////////////////////////////////////////////////////////////////////////////////
-    //   _exitAction
-    ////////////////////////////////////////////////////////////////////////////////////
-    _exitAction = new QAction( _awesome->icon(poweroff), tr("退出"), this );
+    _exitAction = new QAction( Global::Awesome->icon(poweroff), tr("退出"), this );
     _exitAction->setObjectName(tr("_exitAction"));
     connect( _exitAction, SIGNAL(triggered()), this, SLOT(exitApp()) );
 
-
-    ////////////////////////////////////////////////////////////////////////////////////
-    //   _searchAction
-    ////////////////////////////////////////////////////////////////////////////////////
     _searchAction = new QAction( tr("查询"), this );
     _searchAction->setObjectName(tr("_searchAction"));
-    _searchAction->setIcon( _awesome->icon(areachart) );
+    _searchAction->setIcon( Global::Awesome->icon(areachart) );
     connect( _searchAction, SIGNAL(triggered()), this, SLOT( search() ));
 
-    ////////////////////////////////////////////////////////////////////////////////////
-    //   _addtosqlAction
-    ////////////////////////////////////////////////////////////////////////////////////
     _addtosqlAction = new QAction( tr("属性分类"), this );
     _addtosqlAction->setObjectName(tr("_addtosqlAction"));
-    _addtosqlAction->setIcon( _awesome->icon(reorder) );
+    _addtosqlAction->setIcon( Global::Awesome->icon(reorder) );
     connect( _addtosqlAction, SIGNAL(triggered()), this, SLOT( addtosql() ));
 
-    ////////////////////////////////////////////////////////////////////////////////////
-    //   _exportDataAction
-    ////////////////////////////////////////////////////////////////////////////////////
     _exportDataAction = new QAction( QIcon(":/new/prefix1/icons/export.png"), tr("批量导出数据"),this);
     _exportDataAction->setObjectName(tr("_exportDataAction"));
     connect(_exportDataAction,SIGNAL(triggered()),this,SLOT(exportData()));
 
-    ////////////////////////////////////////////////////////////////////////////////////
-    //   _importDataAction
-    ////////////////////////////////////////////////////////////////////////////////////
     _importDataAction = new QAction(QIcon(":/new/prefix1/icons/import.png"), tr("批量导入数据"),this);
     _importDataAction->setObjectName(tr("_importDataAction"));
     connect(_importDataAction,SIGNAL(triggered()),this,SLOT(importData()));
@@ -199,15 +161,15 @@ void	ImageCompletionUI::createActions()
     _strikeToolButton->setText(tr("笔画标注"));
     _strikeToolButton->setPopupMode(QToolButton::MenuButtonPopup);
     _strikeToolButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-    _strikeToolButton->setIcon(_awesome->icon(pencil));
+    _strikeToolButton->setIcon(Global::Awesome->icon(pencil));
     _strikeToolButton->setChecked(false);
 
     // Group 1
-    _fgAction = new QAction( _awesome->icon(suno), tr("前景"), this );
+    _fgAction = new QAction( Global::Awesome->icon(suno), tr("前景"), this );
     _fgAction->setCheckable(true);
-    _bgAction = new QAction( _awesome->icon(moono), tr("背景"), this );
+    _bgAction = new QAction( Global::Awesome->icon(moono), tr("背景"), this );
     _bgAction->setCheckable(true);
-    _eraserAction = new QAction( _awesome->icon(eraser), tr("橡皮"), this );
+    _eraserAction = new QAction( Global::Awesome->icon(eraser), tr("橡皮"), this );
     _eraserAction->setCheckable(true);
 
     _strikeToolButton->addAction(_fgAction);
@@ -220,13 +182,13 @@ void	ImageCompletionUI::createActions()
     group->addAction(_eraserAction);
     connect(group, SIGNAL(triggered(QAction*)), this, SLOT(strikeChangeTriggered(QAction*)));
 
-    _rectAction = new QAction( _awesome->icon(squareo), tr("矩形标注"), this );
+    _rectAction = new QAction( Global::Awesome->icon(squareo), tr("矩形标注"), this );
     _rectAction->setCheckable(true);
 
-    _polygonAction = new QAction( _awesome->icon(staro), tr("多边形标注"), this );
+    _polygonAction = new QAction( Global::Awesome->icon(staro), tr("多边形标注"), this );
     _polygonAction->setCheckable(true);
 
-    _manualAction = new QAction( _awesome->icon(pencilsquareo), tr("手工标注"), this );
+    _manualAction = new QAction( Global::Awesome->icon(pencilsquareo), tr("手工标注"), this );
     _manualAction->setCheckable(true);
 
     QActionGroup *group2 = new QActionGroup(this);
@@ -235,11 +197,11 @@ void	ImageCompletionUI::createActions()
     group2->addAction(_manualAction);
     connect(group2, SIGNAL(triggered(QAction*)), this, SLOT(labellingMethodChanged(QAction*)));
 
-    _redo = new QAction( _awesome->icon(repeat), tr("重做"), this );
+    _redo = new QAction( Global::Awesome->icon(repeat), tr("重做"), this );
     _redo->setObjectName( tr("_redo") );
     connect( _redo, SIGNAL(triggered()), this, SLOT(redo()) );
 
-    _undo = new QAction( _awesome->icon("undo"), tr("撤销"), this );
+    _undo = new QAction( Global::Awesome->icon("undo"), tr("撤销"), this );
     _undo->setObjectName( tr("_undo") );
     connect( _undo, SIGNAL(triggered()), this, SLOT(undo()) );
 
@@ -271,7 +233,7 @@ void	ImageCompletionUI::createActions()
     _strikeThicknessToolButton->setText(tr("笔画粗细"));
     _strikeThicknessToolButton->setPopupMode(QToolButton::MenuButtonPopup);
     _strikeThicknessToolButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-    _strikeThicknessToolButton->setIcon(_awesome->icon(circlethin));
+    _strikeThicknessToolButton->setIcon(Global::Awesome->icon(circlethin));
     for(int i = 0; i < 3; i++)
     {
         _strikeThicknessToolButton->addAction(_strikeThickness[i]);
@@ -281,7 +243,7 @@ void	ImageCompletionUI::createActions()
     _lineThicknessToolButton->setText(tr("线条粗细"));
     _lineThicknessToolButton->setPopupMode(QToolButton::MenuButtonPopup);
     _lineThicknessToolButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-    _lineThicknessToolButton->setIcon(_awesome->icon(minus));
+    _lineThicknessToolButton->setIcon(Global::Awesome->icon(minus));
     for(int i = 0; i < 3; i++)
     {
         _lineThicknessToolButton->addAction(_lineThickness[i]);
@@ -290,7 +252,7 @@ void	ImageCompletionUI::createActions()
     // user
     if(Global::Authority == "1") //admin
     {
-        _userManagementAction = new QAction( _awesome->icon(user), tr("用户管理"), this );
+        _userManagementAction = new QAction( Global::Awesome->icon(user), tr("用户管理"), this );
         _userManagementAction->setObjectName(tr("_userManagementAction"));
         connect( _userManagementAction, SIGNAL(triggered()), this, SLOT(userManagement()) );
     }
@@ -380,7 +342,7 @@ void	ImageCompletionUI::setupWidgets()
     _editImageViewer->getMainWindow(this);
     _editImageViewer->setLineColor(QColor(colorTable[3], colorTable[4], colorTable[5]));
 
-    _centralTabWidget->addTab( _editTab, _awesome->icon(pictureo), QString("EditTab") );
+    _centralTabWidget->addTab( _editTab, Global::Awesome->icon(pictureo), QString("EditTab") );
     _centralTabWidget->setTabText(_centralTabWidget->indexOf(_editTab), QApplication::translate("ImageCompletionUIClass", tr("图像标注").toLocal8Bit().data(), 0));
     _centralTabWidget->setMaximumHeight(0.8 * height);
     _centralTabWidget->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -406,7 +368,7 @@ void	ImageCompletionUI::setupWidgets()
 
     _rightOperationWidget = new QDockWidget(tr("工具箱"),this );
     _rightOperationWidget->setObjectName(tr("_rightOperationWidget"));
-    _rightOperationWidget->setWindowIcon( _awesome->icon(inbox) );
+    _rightOperationWidget->setWindowIcon( Global::Awesome->icon(inbox) );
     _rightOperationWidget->setMaximumSize(QSize(0.2*width, 0.8*height));
     _rightOperationWidget->setFloating(false);
 
@@ -428,7 +390,6 @@ void	ImageCompletionUI::setupWidgets()
 
     _sceneCompletionPage = new QWidget(  );
     _sceneCompletionPage->setObjectName(tr("_sceneCompletionPage"));
-//    _operationStackedWidget->addWidget( _sceneCompletionPage );
 
     _regionCompetitionPage = new QWidget(  );
     _regionCompetitionPage->setObjectName(tr("_regionCompetitionPage"));
@@ -441,10 +402,10 @@ void	ImageCompletionUI::setupWidgets()
     ////////////////////////////////////////////////////////////////////////////////////
     _sceneCompletionDialog.setupUi( _sceneCompletionPage );
     _regionCompetitionDialog.setupUi(_regionCompetitionPage);
-    _regionCompetitionDialog.buttonSelectColor->setIcon(_awesome->icon(eyedropper));
-    _regionCompetitionDialog.radioBrightness->setIcon(_awesome->icon(adjust));
+    _regionCompetitionDialog.buttonSelectColor->setIcon(Global::Awesome->icon(eyedropper));
+    _regionCompetitionDialog.radioBrightness->setIcon(Global::Awesome->icon(adjust));
     _regionCompetitionDialog.radioScale->setIcon(QIcon(":/new/prefix1/icons/scale.png"));
-    _regionCompetitionDialog.radioNotColor->setIcon(_awesome->icon(circle));
+    _regionCompetitionDialog.radioNotColor->setIcon(Global::Awesome->icon(circle));
     _regionCompetitionDialog.radioMesuarement->setIcon(QIcon(":/new/prefix1/icons/ruler.png"));
 
     _rightOperationWidget->setWidget(_dockWidgetContents);
@@ -491,7 +452,7 @@ void	ImageCompletionUI::setupWidgets()
 
     _logWindowWidget->setWidget(_logWidget);
     _logWindowWidget->setMinimumHeight(0.27 * height);
-    _logWindowWidget->setWindowIcon(_awesome->icon(filetexto));
+    _logWindowWidget->setWindowIcon(Global::Awesome->icon(filetexto));
     addDockWidget(Qt::LeftDockWidgetArea, _logWindowWidget);
 
     ////////////////////////////////////////////////////////////////////////////////////
@@ -911,19 +872,13 @@ void	ImageCompletionUI::close()
 
 void	ImageCompletionUI::search()
 {
-    //   this->advanceSearchDlg = new advanceSearchDlg(this);
-    //   this->advanceSearchDlg->show();
-    //    this->searchdata1 = new Searchdata();
-    //    searchdata1->show();
-    //    searchdata1.show();
-    advanceSearchDlg = new AdvanceSearchDlg(this);
-    advanceSearchDlg->show();
+    _advanceSearchDlg = new AdvanceSearchDlg(this);
+    _advanceSearchDlg->show();
 }
 
 void	ImageCompletionUI::addtosql()
 {
     class1.show();
-
 }
 
 void	ImageCompletionUI::savemarkresult()

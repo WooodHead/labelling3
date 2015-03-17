@@ -3,6 +3,7 @@
 
 #include <QSettings>
 #include <QColor>
+#include "QtAwesome.h"
 
 class Global
 {
@@ -26,6 +27,9 @@ public:
     static QString PathMask;
     static QString ExtResult;
     static QString ExtMask;
+
+    // Icons
+    static QtAwesome *Awesome;
 
     static void initialize();
 

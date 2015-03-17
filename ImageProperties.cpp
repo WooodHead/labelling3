@@ -1,5 +1,6 @@
 #include "ImageProperties.h"
 #include "ui_imageproperties.h"
+#include "Global.h"
 
 ImageProperties::ImageProperties(QWidget *parent) :
     QDialog(parent),
@@ -11,16 +12,13 @@ ImageProperties::ImageProperties(QWidget *parent) :
     ui->_tabWidget->removeTab(8);
     ui->_tabWidget->removeTab(7);
 
-    _awesome = new QtAwesome(this);
-    _awesome->initFontAwesome();
-
     ui->_tabWidget->setCurrentIndex(0);
     ui->_buttonSave->setText(tr("暂时保存"));
-    ui->_buttonSave->setIcon(_awesome->icon(save));
+    ui->_buttonSave->setIcon(Global::Awesome->icon(save));
     ui->_buttonCancel->setText(tr("取消"));
-    ui->_buttonCancel->setIcon(_awesome->icon(remove_));
+    ui->_buttonCancel->setIcon(Global::Awesome->icon(remove_));
     ui->_buttonNext->setText(tr("下一张表"));
-    ui->_buttonNext->setIcon(_awesome->icon(forward));
+    ui->_buttonNext->setIcon(Global::Awesome->icon(forward));
 
     connect(this, SIGNAL(flush()), parent, SLOT(flushBottom()));
     connect(this, SIGNAL(removeImage(QString)), parent, SLOT(removeImage(QString)));

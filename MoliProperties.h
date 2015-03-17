@@ -9,8 +9,6 @@
 #include <QSqlRecord>
 #include <QBuffer>
 
-#include "QtAwesome.h"
-
 namespace Ui {
 class MoliProperties;
 }
@@ -81,8 +79,6 @@ private:
     bool _bDirty;
 
     QStringList getItems(QSqlTableModel *model, QString fieldName);
-
-    QtAwesome *_awesome;
 
 public:
     void showDlg(QString imagePath, const QImage& result, const QImage& mask);

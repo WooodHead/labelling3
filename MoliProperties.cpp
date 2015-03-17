@@ -51,10 +51,8 @@ MoliProperties::MoliProperties(QWidget *parent) :
     ui->_comboBoxMoliGivenInfo->addItems(getItems(_model, "abrasivedamagetype"));
     ui->_comboBoxMoliTypical->addItems(getItems(_model, "abrasivetypical"));
 
-    _awesome = new QtAwesome(this);
-    _awesome->initFontAwesome();
-    ui->pushButton->setIcon(_awesome->icon(save));
-    ui->pushButton_2->setIcon(_awesome->icon(remove_));
+    ui->pushButton->setIcon(Global::Awesome->icon(save));
+    ui->pushButton_2->setIcon(Global::Awesome->icon(remove_));
 }
 
 QStringList MoliProperties::getItems(QSqlTableModel *model, QString fieldName)
@@ -78,7 +76,7 @@ MoliProperties::~MoliProperties()
 
     _db.close();
     delete _model;
-    delete _awesome;
+    delete Global::Awesome;
 }
 
 void MoliProperties::on_pushButton_2_clicked()
