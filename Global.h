@@ -33,8 +33,9 @@ public:
 
     static void initialize();
 
-private:
     static QSettings *settings;
+
+private:
     static bool Init;
 };
 

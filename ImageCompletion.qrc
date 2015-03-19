@@ -25,5 +25,6 @@
         <file>icons/scale.png</file>
         <file>icons/export.png</file>
         <file>icons/import.png</file>
+        <file>icons/login_logo.png</file>
     </qresource>
 </RCC>

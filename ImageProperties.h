@@ -47,6 +47,28 @@ private slots:
 
     void closeEvent(QCloseEvent *);
 
+    void on__comboBoxEquipPlaneID_editTextChanged(const QString &arg1);
+
+    void on__comboBoxEquipPlaneType_editTextChanged(const QString &arg1);
+
+    void on__comboBoxEquipUnitID_editTextChanged(const QString &arg1);
+
+    void on__editEquipHours_textChanged(const QString &arg1);
+
+    void on__comboBoxEquipRuntime_editTextChanged(const QString &arg1);
+
+    void on__editServiceNumber_textChanged(const QString &arg1);
+
+    void on__dateEditOilSampleSampleDate_dateChanged(const QDate &date);
+
+    void on__timeEditOilSampleSampleTime_timeChanged(const QTime &date);
+
+    void on__comboBoxOilSamplePlaneID_editTextChanged(const QString &arg1);
+
+    void on__comboBoxMovepartServiceMovepartID_editTextChanged(const QString &arg1);
+
+    void on__comboBoxMentalOilSampleID_editTextChanged(const QString &arg1);
+
 private:
     Ui::ImageProperties *ui;
 
@@ -67,6 +89,8 @@ private:
 
     bool _bSaved[TABLE_N];
     bool _bCommited;
+
+    QString generateTiepupianID();
 
 signals:
     void flush();

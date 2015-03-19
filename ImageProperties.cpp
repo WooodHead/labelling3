@@ -13,7 +13,8 @@ ImageProperties::ImageProperties(QWidget *parent) :
     ui->_tabWidget->removeTab(7);
 
     ui->_tabWidget->setCurrentIndex(0);
-    ui->_buttonSave->setText(tr("暂时保存"));
+    ui->_buttonSave->setText(tr("保存"));
+    ui->_buttonSave->setEnabled(false);
     ui->_buttonSave->setIcon(Global::Awesome->icon(save));
     ui->_buttonCancel->setText(tr("取消"));
     ui->_buttonCancel->setIcon(Global::Awesome->icon(remove_));
@@ -26,7 +27,22 @@ ImageProperties::ImageProperties(QWidget *parent) :
     _bCommited = false;
     for(int i = 0; i < TABLE_N; i++ ) _models[i] = 0;
     for(int i = 0; i < TABLE_N; i++ ) _bSaved[i] = false;
+    for(int i = 1; i < TABLE_N; i++ ) ui->_tabWidget->setTabEnabled(i, false);
     load();
+
+    ui->_editEquipHours->setValidator(new QIntValidator(0, 100000000, this));
+    ui->_editServiceNumber->setValidator(new QIntValidator(0, 100000000, this));
+    ui->_editMovepartHours->setValidator(new QIntValidator(0, 100000000, this));
+    ui->_editMovepartServiceNumber->setValidator(new QIntValidator(0, 100000000, this));
+    ui->_editOilSampleHours->setValidator(new QIntValidator(0, 100000000, this));
+    ui->_editOilSampleMount->setValidator(new QDoubleValidator(0.0, 100000000.0, 5, this));
+    ui->_editOilSampleSampleMount->setValidator(new QDoubleValidator(0.0, 100000000.0, 5, this));
+    ui->_editMentalMount->setValidator(new QDoubleValidator(0.0, 100000000.0, 5, this));
+    ui->_editMentalSampleEnlarger->setValidator(new QDoubleValidator(0.0, 100.0, 5, this));
+    ui->_editMoliSize->setValidator(new QDoubleValidator(0.0, 100.0, 5, this));
+    ui->_editMoliLength->setValidator(new QDoubleValidator(0.0, 100.0, 5, this));
+
+    ui->_timeEditOilSampleSampleTime->setDisplayFormat("yyyyMMdd");
 }
 
 ImageProperties::~ImageProperties()
@@ -215,18 +231,18 @@ bool ImageProperties::isValid()
         return false;
     }
 
-    if(ui->_comboBoxMovepartServiceID->currentText().isEmpty())
-    {
-        ui->_tabWidget->setCurrentIndex(2);
-        QMessageBox::warning(this, tr("提示"), tr("动部件维修编号不能为空!"), QMessageBox::Close);
-        return false;
-    }
-    if(ui->_comboBoxMovepartServiceMovepartID->currentText().isEmpty())
-    {
-        ui->_tabWidget->setCurrentIndex(2);
-        QMessageBox::warning(this, tr("提示"), tr("动部件编号不能为空!"), QMessageBox::Close);
-        return false;
-    }
+    //    if(ui->_comboBoxMovepartServiceID->currentText().isEmpty())
+    //    {
+    //        ui->_tabWidget->setCurrentIndex(2);
+    //        QMessageBox::warning(this, tr("提示"), tr("动部件维修编号不能为空!"), QMessageBox::Close);
+    //        return false;
+    //    }
+    //    if(ui->_comboBoxMovepartServiceMovepartID->currentText().isEmpty())
+    //    {
+    //        ui->_tabWidget->setCurrentIndex(2);
+    //        QMessageBox::warning(this, tr("提示"), tr("动部件编号不能为空!"), QMessageBox::Close);
+    //        return false;
+    //    }
 
     if(ui->_comboBoxOilSampleID->currentText().isEmpty())
     {
@@ -348,18 +364,18 @@ bool ImageProperties::isValid(int index)
     }
     else if(index == 2)
     {
-        if(ui->_comboBoxMovepartServiceID->currentText().isEmpty())
-        {
-            ui->_tabWidget->setCurrentIndex(2);
-            QMessageBox::warning(this, tr("提示"), tr("动部件维修编号不能为空!"), QMessageBox::Close);
-            return false;
-        }
-        if(ui->_comboBoxMovepartServiceMovepartID->currentText().isEmpty())
-        {
-            ui->_tabWidget->setCurrentIndex(2);
-            QMessageBox::warning(this, tr("提示"), tr("动部件编号不能为空!"), QMessageBox::Close);
-            return false;
-        }
+        //        if(ui->_comboBoxMovepartServiceID->currentText().isEmpty())
+        //        {
+        //            ui->_tabWidget->setCurrentIndex(2);
+        //            QMessageBox::warning(this, tr("提示"), tr("动部件维修编号不能为空!"), QMessageBox::Close);
+        //            return false;
+        //        }
+        //        if(ui->_comboBoxMovepartServiceMovepartID->currentText().isEmpty())
+        //        {
+        //            ui->_tabWidget->setCurrentIndex(2);
+        //            QMessageBox::warning(this, tr("提示"), tr("动部件编号不能为空!"), QMessageBox::Close);
+        //            return false;
+        //        }
     }
     else if(index == 3)
     {
@@ -865,7 +881,14 @@ void ImageProperties::on__buttonNext_clicked()
     int index = ui->_tabWidget->currentIndex();
     if(index < ui->_tabWidget->count())
     {
-        ui->_tabWidget->setCurrentIndex(index + 1);
+        if(!isValid(index)) return;
+        else
+        {
+            _bSaved[index] = true;
+
+            ui->_tabWidget->setTabEnabled(index + 1, true);
+            ui->_tabWidget->setCurrentIndex(index + 1);
+        }
     }
 }
 
@@ -873,12 +896,12 @@ void ImageProperties::on__tabWidget_currentChanged(int index)
 {
     if( index == ui->_tabWidget->count() - 1 )
     {
-        ui->_buttonSave->setText(tr("保存并提交"));
+        ui->_buttonSave->setText(tr("提交"));
         ui->_buttonNext->setVisible(false);
     }
     else
     {
-        ui->_buttonSave->setText(tr("暂时保存"));
+        ui->_buttonSave->setText(tr("保存"));
         ui->_buttonNext->setVisible(true);
     }
 }
@@ -898,4 +921,93 @@ void ImageProperties::closeEvent(QCloseEvent *)
             emit removeImage(_originalImagePath);
         }
     }
+}
+
+void ImageProperties::on__comboBoxEquipPlaneID_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxEquipPlaneType_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxEquipUnitID_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__editEquipHours_textChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxEquipRuntime_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__editServiceNumber_textChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__dateEditOilSampleSampleDate_dateChanged(const QDate &date)
+{
+    if(!ui->_dateEditOilSampleSampleDate->text().isEmpty() && !ui->_comboBoxOilSamplePlaneID->currentText().isEmpty()
+        && !ui->_timeEditOilSampleSampleTime->text().isEmpty() && !ui->_comboBoxMovepartName->currentText().isEmpty())
+    {
+        QString id = ui->_comboBoxOilSamplePlaneID->currentText() + ui->_dateEditOilSampleSampleDate->date().toString("yyyyMMdd")
+                + ui->_timeEditOilSampleSampleTime->time().toString("hh") + ui->_comboBoxMovepartName->currentText()+"0";
+       ui->_comboBoxOilSampleID->setEditText(id);
+    }
+}
+
+void ImageProperties::on__timeEditOilSampleSampleTime_timeChanged(const QTime &date)
+{
+    if(!ui->_dateEditOilSampleSampleDate->text().isEmpty() && !ui->_comboBoxOilSamplePlaneID->currentText().isEmpty()
+        && !ui->_timeEditOilSampleSampleTime->text().isEmpty() && !ui->_comboBoxMovepartName->currentText().isEmpty())
+    {
+       QString id = ui->_comboBoxOilSamplePlaneID->currentText() + ui->_dateEditOilSampleSampleDate->date().toString("yyyyMMdd")
+               + ui->_timeEditOilSampleSampleTime->time().toString("hh") + ui->_comboBoxMovepartName->currentText()+"0";
+       ui->_comboBoxOilSampleID->setEditText(id);
+    }
+}
+
+void ImageProperties::on__comboBoxOilSamplePlaneID_editTextChanged(const QString &arg1)
+{
+    if(!ui->_dateEditOilSampleSampleDate->text().isEmpty() && !ui->_comboBoxOilSamplePlaneID->currentText().isEmpty()
+        && !ui->_timeEditOilSampleSampleTime->text().isEmpty() && !ui->_comboBoxMovepartName->currentText().isEmpty())
+    {
+       QString id = ui->_comboBoxOilSamplePlaneID->currentText() + ui->_dateEditOilSampleSampleDate->date().toString("yyyyMMdd")
+               + ui->_timeEditOilSampleSampleTime->time().toString("hh") + ui->_comboBoxMovepartName->currentText()+"0";
+       ui->_comboBoxOilSampleID->setEditText(id);
+    }
+}
+
+void ImageProperties::on__comboBoxMovepartServiceMovepartID_editTextChanged(const QString &arg1)
+{
+    if(!ui->_dateEditOilSampleSampleDate->text().isEmpty() && !ui->_comboBoxOilSamplePlaneID->currentText().isEmpty()
+        && !ui->_timeEditOilSampleSampleTime->text().isEmpty() && !ui->_comboBoxMovepartName->currentText().isEmpty())
+    {
+       QString id = ui->_comboBoxOilSamplePlaneID->currentText() + ui->_dateEditOilSampleSampleDate->date().toString("yyyyMMdd")
+               + ui->_timeEditOilSampleSampleTime->time().toString("hh") + ui->_comboBoxMovepartName->currentText()+"0";
+       ui->_comboBoxOilSampleID->setEditText(id);
+    }
+}
+
+void ImageProperties::on__comboBoxMentalOilSampleID_editTextChanged(const QString &arg1)
+{
+    ui->_comboBoxMentalID->setEditText(generateTiepupianID());
+}
+
+QString ImageProperties::generateTiepupianID()
+{
+    if(!ui->_comboBoxMentalOilSampleID->currentText().isEmpty() && !ui->_comboBoxMentalInstrumentType->currentText().isEmpty())
+    {
+        return ui->_comboBoxMentalOilSampleID->currentText() + "TPP" + ui->_comboBoxMentalInstrumentType->currentText() + "00";
+    }
+    else
+        return QString();
 }

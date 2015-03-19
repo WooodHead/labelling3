@@ -2,6 +2,8 @@
 #define LOGIN_H
 
 #include <QDialog>
+#include <QToolButton>
+#include <QLabel>
 
 namespace Ui {
 class Login;
@@ -34,16 +36,28 @@ private:
     void	mousePressEvent ( QMouseEvent * event );
     void	mouseReleaseEvent ( QMouseEvent * event );
 
+    void    customizeTitleBar();
+
+    QToolButton* _settingButton;
+    QToolButton* _minButton;
+    QToolButton* _closeButton;
+    QLabel* _label;
+
 public:
     void getDataForMainform();
 
 private slots:
     void login();
     void loadDesign(QString strDesign = "default");
+    void setting();
+    void showLogin();
 
 signals:
     // signal emitted when login is clicked
     void acceptLogin( QString& username, QString& password );
+
+protected:
+    void paintEvent(QPaintEvent *event);
 };
 
 #endif // LOGIN_H

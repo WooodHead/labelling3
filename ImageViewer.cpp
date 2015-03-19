@@ -325,6 +325,11 @@ bool ImageViewer::saveAsMask(QString &pathMask)
     }
 }
 
+QImage *ImageViewer::getOriginalImage()
+{
+    return IplImageToQImage(_ocvImage);
+}
+
 bool ImageViewer::openLabelImage(const QString &fileName)
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);

@@ -6,26 +6,31 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QSqlDatabase>
+#include <QBitmap>
+#include <QDesktopWidget>
 
 #include "Global.h"
 #include "Connection.h"
 #include "imagecompletionui.h"
+#include "Setting.h"
 
 Login::Login(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Login)
 {
     ui->setupUi(this);
+    customizeTitleBar();
 
     _moving = false;
-
-    setWindowTitle( tr("用户登录") );
 
     this->setMinimumSize(this->size());
     this->setMaximumSize(this->size());
 
-    ui->_icon->resize(30, 30);
-    ui->_icon->setStyleSheet("background: url(:/new/prefix1/icons/login.png);");
+    ui->_icon->resize(120, 60);
+    QImage image;
+    image.load(":/new/prefix1/icons/login_logo.png");
+    ui->_icon->setPixmap(QPixmap::fromImage(image));
+    ui->_icon->setScaledContents(true);
 
     ui->_editUsername->setPlaceholderText("用户名");
     ui->_editUsername->setStyleSheet("border: 2px solid #708090;height: 30px;");
@@ -43,6 +48,8 @@ Login::Login(QWidget *parent) :
     ui->_login->setAutoDefault(false);
     ui->_cancel->setAutoDefault(false);
 
+    QRect r = QApplication::desktop()->screenGeometry();
+    this->move( r.center() - rect().center() );
 
     connect(ui->_login, SIGNAL(clicked()), this, SLOT(login()));
     connect(ui->_cancel, SIGNAL(clicked()), this, SLOT(close()));
@@ -73,6 +80,48 @@ void Login::mousePressEvent(QMouseEvent *event)
 void Login::mouseReleaseEvent(QMouseEvent */*event*/)
 {
     _moving = false;
+}
+
+void Login::customizeTitleBar()
+{
+    setWindowFlags(Qt::FramelessWindowHint);
+    setMouseTracking(true);
+
+    int width = this->width();
+    _settingButton = new QToolButton(this);
+    _minButton = new QToolButton(this);
+    _closeButton = new QToolButton(this);
+
+    _settingButton->setIcon(Global::Awesome->icon(gear));
+    _minButton->setIcon(Global::Awesome->icon(minus));
+    _closeButton->setIcon(Global::Awesome->icon(times));
+
+    _settingButton->setGeometry(width-67,5,20,20);
+    _minButton->setGeometry(width-46,5,20,20);
+    _closeButton->setGeometry(width-25,5,20,20);
+
+    _settingButton->setStyleSheet("background-color:transparent;");
+    _minButton->setStyleSheet("background-color:transparent;");
+    _closeButton->setStyleSheet("background-color:transparent;");
+
+    connect(_settingButton, SIGNAL(clicked()), this, SLOT(setting()));
+    connect(_minButton, SIGNAL(clicked()), this, SLOT(showMinimized()));
+    connect(_closeButton, SIGNAL(clicked()), this, SLOT(close()));
+
+    _label = new QLabel(this);
+    _label->setText(tr("交互式磨粒图谱库构建系统"));
+
+    setStyleSheet("QLabel{color:#CCCCCC;font-size:12px;font-weight:bold;} QToolButton{border:0px;}");
+    _label->setStyleSheet("margin-left:6px;margin-top:5px;");
+
+    QHBoxLayout* layout = new QHBoxLayout(this);
+    layout->addWidget(_label);
+    layout->addWidget(_settingButton);
+    layout->addWidget(_minButton);
+    layout->addWidget(_closeButton);
+
+    layout->setSpacing(0);
+    setLayout(layout);
 }
 
 void Login::login()
@@ -147,6 +196,35 @@ void Login::loadDesign(QString strDesign)
     QFile file(QString("design/%1/Login/form.css").arg(strDesign));
     file.open(QFile::ReadOnly);
     this->ui->centralWidget->setStyleSheet(file.readAll());
+}
+
+void Login::setting()
+{
+    Setting* s = new Setting(this);
+    s->show();
+    this->setVisible(false);
+}
+
+void Login::showLogin()
+{
+    QRect r = QApplication::desktop()->screenGeometry();
+    this->move( r.center() - rect().center() );
+    this->setVisible(true);
+}
+
+void Login::paintEvent(QPaintEvent *event)
+{
+    QSize sz(width(), height());
+    QBitmap objBitmap(sz);
+
+    QPainter painter(&objBitmap);
+
+    painter.fillRect(rect(),Qt::white);
+    painter.setBrush(QColor(0,0,0));
+
+    painter.drawRoundedRect(this->rect(),10,10);
+
+    setMask(objBitmap);
 }
 
 

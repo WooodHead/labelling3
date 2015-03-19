@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>241</width>
+    <width>281</width>
     <height>481</height>
    </rect>
   </property>
@@ -55,7 +55,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>199</width>
+            <width>239</width>
             <height>410</height>
            </rect>
           </property>
@@ -134,7 +134,7 @@
              </row>
              <column>
               <property name="text">
-               <string>铁谱图片名称</string>
+               <string>缩略图</string>
               </property>
              </column>
              <column>

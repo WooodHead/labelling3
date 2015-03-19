@@ -56,7 +56,7 @@ void ImageCompletionUI::setupMainWindow()
     this->resize( 1024, 800 );
     this->setMinimumSize( QSize(1024, 0) );
     this->showMaximized();
-    this->setWindowTitle( tr("磨粒图像标注") );
+    this->setWindowTitle( tr("交互式磨粒图谱库构建系统") );
 }
 
 void ImageCompletionUI::createMenus()
@@ -431,6 +431,7 @@ void	ImageCompletionUI::setupWidgets()
     _leftWindow.tabWidgetLeftWindow->removeTab(1);
     _leftWindow.tabWidgetLeftWindow->removeTab(1);
     _leftWindowWidget->setWidget(_leftDockWindowContents);
+
     addDockWidget(Qt::LeftDockWidgetArea, _leftWindowWidget);
 
     ////////////////////////////////////////////////////////////////////////////////////
@@ -630,7 +631,9 @@ void ImageCompletionUI::open()
             _leftWindow.tableWidget->insertRow(_leftWindow.tableWidget->rowCount()-1);
         }
 
+        QImage* temp = _editImageViewer->getOriginalImage();
         _leftWindow.tableWidget->setItem(_cnt, 0, new QTableWidgetItem(_imageName));
+        _leftWindow.tableWidget->item(_cnt, 0)->setData(Qt::DecorationRole, QPixmap::fromImage(*temp).scaled(100, 100));
         _leftWindow.tableWidget->setItem(_cnt, 1, new QTableWidgetItem(fileName));
         _leftWindow.tableWidget->setItem(_cnt, 2, new QTableWidgetItem(status == "Y" ? "Y" : "N"));
 
@@ -838,15 +841,15 @@ void	ImageCompletionUI::saveAs()
     }
 
     //TODO: Sync Database
-//    if(ret1 && ret2)
-//    {
-//        if(syncLabelledImage(_imagePath, pathResult, pathMask))
-//        {
-//            setImageState(_imagePath, "Y");
-//            setBackgroundColor(_imagePath,  this->getColor("Y"));
-//            showData();
-//        }
-//    }
+    //    if(ret1 && ret2)
+    //    {
+    //        if(syncLabelledImage(_imagePath, pathResult, pathMask))
+    //        {
+    //            setImageState(_imagePath, "Y");
+    //            setBackgroundColor(_imagePath,  this->getColor("Y"));
+    //            showData();
+    //        }
+    //    }
 }
 
 void	ImageCompletionUI::close()

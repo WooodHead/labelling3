@@ -79,6 +79,7 @@ public:
     bool            saveMask(QString path, QString ext);
     bool            saveAsMask(QString &pathMask);
 	
+    QImage*         getOriginalImage();
 	//bool			openLabelImage(const QString &fileName);
 
 public:
