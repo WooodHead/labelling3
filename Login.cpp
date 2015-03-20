@@ -32,18 +32,14 @@ Login::Login(QWidget *parent) :
     ui->_icon->setPixmap(QPixmap::fromImage(image));
     ui->_icon->setScaledContents(true);
 
-    ui->_editUsername->setPlaceholderText("用户名");
-    ui->_editUsername->setStyleSheet("border: 2px solid #708090;height: 30px;");
+    //ui->_editUsername->setStyleSheet("border: 2px solid #708090;height: 30px;");
+    //ui->_editPasswd->setStyleSheet("border: 2px solid #708090;height: 30px;");
 
-    ui->_editPasswd->setPlaceholderText("密码");
-    ui->_editPasswd->setStyleSheet("border: 2px solid #708090;height: 30px;");
-
-    //ui->_login->setFocus();
     ui->_login->setIcon( Global::Awesome->icon(signin) );
-    ui->_login->setStyleSheet("padding:5px 0;border:0px;background-color: #87CEEB;color:white;");
+    //ui->_login->setStyleSheet("padding:5px 0;border:0px;background-color: #87CEEB;color:white;");
 
     ui->_cancel->setIcon( Global::Awesome->icon(remove_) );
-    ui->_cancel->setStyleSheet("padding:5px 0;border:0px;background-color: #87CEEB;color:white;");
+    //ui->_cancel->setStyleSheet("padding:5px 0;border:0px;background-color: #87CEEB;color:white;");
 
     ui->_login->setAutoDefault(false);
     ui->_cancel->setAutoDefault(false);
@@ -53,6 +49,8 @@ Login::Login(QWidget *parent) :
 
     connect(ui->_login, SIGNAL(clicked()), this, SLOT(login()));
     connect(ui->_cancel, SIGNAL(clicked()), this, SLOT(close()));
+
+    this->setStyleSheet("background-image: url(:/new/prefix1/icons/login_bg.jpg);");
 }
 
 Login::~Login()
@@ -109,9 +107,9 @@ void Login::customizeTitleBar()
     connect(_closeButton, SIGNAL(clicked()), this, SLOT(close()));
 
     _label = new QLabel(this);
-    _label->setText(tr("交互式磨粒图谱库构建系统"));
+    _label->setText(tr(""));
 
-    setStyleSheet("QLabel{color:#CCCCCC;font-size:12px;font-weight:bold;} QToolButton{border:0px;}");
+    //setStyleSheet("QLabel{color:#CCCCCC;font-size:12px;font-weight:bold;} QToolButton{border:0px;}");
     _label->setStyleSheet("margin-left:6px;margin-top:5px;");
 
     QHBoxLayout* layout = new QHBoxLayout(this);

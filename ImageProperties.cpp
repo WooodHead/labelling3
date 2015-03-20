@@ -899,6 +899,7 @@ void ImageProperties::on__tabWidget_currentChanged(int index)
         ui->_buttonSave->setText(tr("保存"));
         ui->_buttonNext->setVisible(true);
     }
+    ui->_buttonSave->setEnabled(false);
 }
 
 void ImageProperties::on__buttonCancel_clicked()
@@ -950,6 +951,7 @@ void ImageProperties::on__editServiceNumber_textChanged(const QString &arg1)
 
 void ImageProperties::on__dateEditOilSampleSampleDate_dateChanged(const QDate &date)
 {
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
     if(!ui->_dateEditOilSampleSampleDate->text().isEmpty() && !ui->_comboBoxOilSamplePlaneID->currentText().isEmpty()
         && !ui->_timeEditOilSampleSampleTime->text().isEmpty() && !ui->_comboBoxMovepartName->currentText().isEmpty())
     {
@@ -961,6 +963,7 @@ void ImageProperties::on__dateEditOilSampleSampleDate_dateChanged(const QDate &d
 
 void ImageProperties::on__timeEditOilSampleSampleTime_timeChanged(const QTime &date)
 {
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
     if(!ui->_dateEditOilSampleSampleDate->text().isEmpty() && !ui->_comboBoxOilSamplePlaneID->currentText().isEmpty()
         && !ui->_timeEditOilSampleSampleTime->text().isEmpty() && !ui->_comboBoxMovepartName->currentText().isEmpty())
     {
@@ -972,6 +975,7 @@ void ImageProperties::on__timeEditOilSampleSampleTime_timeChanged(const QTime &d
 
 void ImageProperties::on__comboBoxOilSamplePlaneID_editTextChanged(const QString &arg1)
 {
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
     if(!ui->_dateEditOilSampleSampleDate->text().isEmpty() && !ui->_comboBoxOilSamplePlaneID->currentText().isEmpty()
         && !ui->_timeEditOilSampleSampleTime->text().isEmpty() && !ui->_comboBoxMovepartName->currentText().isEmpty())
     {
@@ -983,6 +987,7 @@ void ImageProperties::on__comboBoxOilSamplePlaneID_editTextChanged(const QString
 
 void ImageProperties::on__comboBoxMovepartServiceMovepartID_editTextChanged(const QString &arg1)
 {
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
     if(!ui->_dateEditOilSampleSampleDate->text().isEmpty() && !ui->_comboBoxOilSamplePlaneID->currentText().isEmpty()
         && !ui->_timeEditOilSampleSampleTime->text().isEmpty() && !ui->_comboBoxMovepartName->currentText().isEmpty())
     {
@@ -994,6 +999,7 @@ void ImageProperties::on__comboBoxMovepartServiceMovepartID_editTextChanged(cons
 
 void ImageProperties::on__comboBoxMentalOilSampleID_editTextChanged(const QString &arg1)
 {
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
     ui->_comboBoxMentalID->setEditText(generateTiepupianID());
 }
 
@@ -1005,4 +1011,464 @@ QString ImageProperties::generateTiepupianID()
     }
     else
         return QString();
+}
+
+void ImageProperties::on__comboBoxMovepartID_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxMovepartName_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxMovepartType_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxMovepartMohe_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxMovepartPlaneID_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxMovepartPlaneType_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__dateEditMovepartBegin_dateChanged(const QDate &date)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__dateEditMovepartEnd_dateChanged(const QDate &date)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__editMovepartHours_textChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxMovepartServiceID_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxMovepartServiceMovepartType_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__dateEditMovepartServiceDate_dateChanged(const QDate &date)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__editMovepartServiceNumber_textChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxMovepartServiceUnit_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__editMovepartServiceReson_textChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__editMovepartServiceContent_textChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__editMovepartServiceInfo_textChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilSamplePlaneType_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilSampleMonitorPart_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilSampleMonitorPartID_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilSampleSamplePointID_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__editOilSampleHours_textChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__editOilSampleMount_textChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__editOilSampleReason_textChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilSampleSampleUnit_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilSampleSampleGuy_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilSampleID_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilSampleUnitID_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilSampleSampleMethod_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__editOilSampleSampleMount_textChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__editOilSampleInfo_textChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilSampleSendGuy_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__dateEditOilSampleSendDate_dateChanged(const QDate &date)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__timeEditOilSampleSendTime_timeChanged(const QTime &date)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilSampleSituation_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilAnalyzeOilSampleID_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+
+    if(!ui->_comboBoxOilAnalyzeOilSampleID->currentText().isEmpty())
+    {
+        QString str = ui->_comboBoxOilAnalyzeOilSampleID->currentText();
+        ui->_comboBoxOilAnalyzePolluteReportID->setEditText(str + "WRDReport");
+        ui->_comboBoxOilAnalyzeLightEquipID->setEditText(str + "GPReport");
+        ui->_comboBoxOilAnalyzeMentalEquipID->setEditText(str + "TPReport");
+        ui->_comboBoxOilAnalyzeLihuaEquipID->setEditText(str + "LHReport");
+    }
+}
+
+void ImageProperties::on__comboBoxOilAnalyzeUnitName_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilAnalyzeSendUnit_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilAnalyzeSendGuy_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__editOilAnalyzeReason_textChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__dateEditOilAnalyzeReceiveDate_dateChanged(const QDate &date)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilAnalyzeReceiveGuy_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilAnalyzePollutionLevelMethod_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilAnalyzePollutionLevelGuy_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__dateEditOilAnalyzePollutionDate_dateChanged(const QDate &date)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilAnalyzePolluteLevelEquip_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilAnalyzePolluteReportID_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilAnalyzeLightMethod_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilAnalyzeLightGuy_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__dateEditOilAnalyzeLightDate_dateChanged(const QDate &date)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilAnalyzeLightEquip_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilAnalyzeLightEquipID_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilAnalyzeMentalMethod_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilAnalyzeMentalGuy_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__dateEditOilAnalyzeMentalDate_dateChanged(const QDate &date)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilAnalyzeMentalEquip_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilAnalyzeMentalEquipID_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilAnalyzeLihuaMethod_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilAnalyzeLihuaGuy_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__dateEditOilAnalyzeLihuaDate_dateChanged(const QDate &date)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilAnalyzeLihuaEquip_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxOilAnalyzeLihuaEquipID_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxMentalInstrumentType_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxMentalID_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxMentalReportID_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__editMentalMount_textChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxMentalMethod_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxMentalGuy_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxMentalSampleImageID_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxMentalSampleID_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+
+    if(!ui->_comboBoxMentalSampleID->currentText().isEmpty() &&
+       !ui->_editMentalSampleEnlarger->text().isEmpty() &&
+       !ui->_comboBoxMentalSampleLightType->currentText().isEmpty() &&
+       !ui->_comboBoxMentalSampleArea->currentText().isEmpty())
+    {
+        QString str = ui->_comboBoxMentalSampleID->currentText() + ui->_editMentalSampleEnlarger->text() + "x"
+                + ui->_comboBoxMentalSampleLightType->currentText() + ui->_comboBoxMentalSampleArea->currentText()+"00";
+        ui->_comboBoxMentalSampleImageID->setEditText(str);
+
+    }
+}
+
+void ImageProperties::on__comboBoxMentalSampleReportID_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxMentalSampleMicroType_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxMentalSampleSamplerType_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxMentalSampleLightType_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+    if(!ui->_comboBoxMentalSampleID->currentText().isEmpty() &&
+       !ui->_editMentalSampleEnlarger->text().isEmpty() &&
+       !ui->_comboBoxMentalSampleLightType->currentText().isEmpty() &&
+       !ui->_comboBoxMentalSampleArea->currentText().isEmpty())
+    {
+        QString str = ui->_comboBoxMentalSampleID->currentText() + ui->_editMentalSampleEnlarger->text() + "x"
+                + ui->_comboBoxMentalSampleLightType->currentText() + ui->_comboBoxMentalSampleArea->currentText() + "00";
+        ui->_comboBoxMentalSampleImageID->setEditText(str);
+
+    }
+}
+
+void ImageProperties::on__editMentalSampleEnlarger_textChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+    if(!ui->_comboBoxMentalSampleID->currentText().isEmpty() &&
+       !ui->_editMentalSampleEnlarger->text().isEmpty() &&
+       !ui->_comboBoxMentalSampleLightType->currentText().isEmpty() &&
+       !ui->_comboBoxMentalSampleArea->currentText().isEmpty())
+    {
+        QString str = ui->_comboBoxMentalSampleID->currentText() + ui->_editMentalSampleEnlarger->text() + "x"
+                + ui->_comboBoxMentalSampleLightType->currentText() + ui->_comboBoxMentalSampleArea->currentText()+"00";
+        ui->_comboBoxMentalSampleImageID->setEditText(str);
+
+    }
+}
+
+void ImageProperties::on__comboBoxMentalSampleArea_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+    if(!ui->_comboBoxMentalSampleID->currentText().isEmpty() &&
+       !ui->_editMentalSampleEnlarger->text().isEmpty() &&
+       !ui->_comboBoxMentalSampleLightType->currentText().isEmpty() &&
+       !ui->_comboBoxMentalSampleArea->currentText().isEmpty())
+    {
+        QString str = ui->_comboBoxMentalSampleID->currentText() + ui->_editMentalSampleEnlarger->text() + "x"
+                + ui->_comboBoxMentalSampleLightType->currentText() + ui->_comboBoxMentalSampleArea->currentText()+"00";
+        ui->_comboBoxMentalSampleImageID->setEditText(str);
+
+    }
+}
+
+void ImageProperties::on__comboBoxMentalSampleGuy_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__editMentalSampleAnalysis_textChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxMoliID_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxMoliImageID_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxMoliPianID_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+void ImageProperties::on__comboBoxMoliReportID_editTextChanged(const QString &arg1)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
 }
