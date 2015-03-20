@@ -151,9 +151,6 @@ void ImageProperties::load()
     ui->_comboBoxMentalSampleLightType->addItems(getItems(_models[6], "lightsourcetype"));
     ui->_comboBoxMentalSampleArea->addItems(getItems(_models[6], "imageacquisitionarea"));
     ui->_comboBoxMentalSampleGuy->addItems(getItems(_models[6], "imageacquisitionstuff"));
-    QStringList list = QStringList() << "N" << "Y";
-    ui->_comboBoxMentalSampleImageTag->addItems(list);
-    ui->_comboBoxMentalSampleImageTag->setCurrentIndex(0);
 }
 
 QStringList ImageProperties::getItems(QSqlTableModel* model, int col)
@@ -764,7 +761,6 @@ void ImageProperties::on__buttonSave_clicked()
                 record.setValue("imageacquisitionstuff", ui->_comboBoxMentalSampleGuy->currentText());
                 record.setValue("ferrographypicpath", ui->_editMentalSamplePath->text());
                 record.setValue("imagerecognitioninfoanalysis", ui->_editMentalSampleAnalysis->text());
-                record.setValue("imagesymbol", ui->_comboBoxMentalSampleImageTag->currentText());
                 _models[6]->setRecord(0, record);
             }
             else if(_models[6]->rowCount() == 0)
@@ -781,7 +777,6 @@ void ImageProperties::on__buttonSave_clicked()
                 _models[6]->setData(_models[6]->index(0, 8), ui->_comboBoxMentalSampleGuy->currentText());
                 _models[6]->setData(_models[6]->index(0, 9), ui->_editMentalSamplePath->text());
                 _models[6]->setData(_models[6]->index(0, 10), ui->_editMentalSampleAnalysis->text());
-                _models[6]->setData(_models[6]->index(0, 11), ui->_comboBoxMentalSampleImageTag->currentText());
             }
         }
         for(int i = 0; i < TABLE_N; i++)
