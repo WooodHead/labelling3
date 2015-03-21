@@ -8,11 +8,11 @@
 #include <QSqlDatabase>
 #include <QBitmap>
 #include <QDesktopWidget>
+#include <QDebug>
 
 #include "Global.h"
 #include "Connection.h"
 #include "imagecompletionui.h"
-#include "Setting.h"
 
 Login::Login(QWidget *parent) :
     QDialog(parent),
@@ -26,31 +26,67 @@ Login::Login(QWidget *parent) :
     this->setMinimumSize(this->size());
     this->setMaximumSize(this->size());
 
-    ui->_icon->resize(120, 60);
+    ui->_icon->resize(180, 90);
+    ui->_icon_2->resize(180, 90);
+
     QImage image;
     image.load(":/new/prefix1/icons/login_logo.png");
     ui->_icon->setPixmap(QPixmap::fromImage(image));
     ui->_icon->setScaledContents(true);
 
-    //ui->_editUsername->setStyleSheet("border: 2px solid #708090;height: 30px;");
-    //ui->_editPasswd->setStyleSheet("border: 2px solid #708090;height: 30px;");
+//    QImage image2;
+//    image2.load(":/new/prefix1/icons/login_logo2.jpg");
+//    ui->_icon_2->setPixmap(QPixmap::fromImage(image2));
+//    ui->_icon_2->setScaledContents(true);
 
-    ui->_login->setIcon( Global::Awesome->icon(signin) );
-    //ui->_login->setStyleSheet("padding:5px 0;border:0px;background-color: #87CEEB;color:white;");
+    ui->_login->setStyleSheet("background: #993333; color: black;");
+    ui->_cancel->setStyleSheet("background: #999999; color: black;");
+    connect(ui->_login, SIGNAL(clicked()), this, SLOT(login()));
+    connect(ui->_cancel, SIGNAL(clicked()), this, SLOT(close()));
 
-    ui->_cancel->setIcon( Global::Awesome->icon(remove_) );
-    //ui->_cancel->setStyleSheet("padding:5px 0;border:0px;background-color: #87CEEB;color:white;");
+    ui->_login->setAttribute(Qt::WA_TranslucentBackground);
+    ui->_cancel->setAttribute(Qt::WA_TranslucentBackground);
+    ui->_labelMainTitle->setAttribute(Qt::WA_TranslucentBackground);
+    ui->_labelUserName->setAttribute(Qt::WA_TranslucentBackground);
+    ui->_labelPasswd->setAttribute(Qt::WA_TranslucentBackground);
+    ui->_icon->setAttribute(Qt::WA_TranslucentBackground);
+    ui->_icon_2->setAttribute(Qt::WA_TranslucentBackground);
+    ui->centralStackedWidget->setAttribute(Qt::WA_TranslucentBackground);
+    ui->centralStackedWidgetPage1->setAttribute(Qt::WA_TranslucentBackground);
+    ui->centralStackedWidgetPage2->setAttribute(Qt::WA_TranslucentBackground);
 
-    ui->_login->setAutoDefault(false);
-    ui->_cancel->setAutoDefault(false);
+    ui->label->setAttribute(Qt::WA_TranslucentBackground);
+    ui->label_2->setAttribute(Qt::WA_TranslucentBackground);
+    ui->label_3->setAttribute(Qt::WA_TranslucentBackground);
+    ui->label_4->setAttribute(Qt::WA_TranslucentBackground);
+    ui->label_5->setAttribute(Qt::WA_TranslucentBackground);
+    ui->label_6->setAttribute(Qt::WA_TranslucentBackground);
+    ui->label_7->setAttribute(Qt::WA_TranslucentBackground);
+    ui->label_8->setAttribute(Qt::WA_TranslucentBackground);
+    ui->label_9->setAttribute(Qt::WA_TranslucentBackground);
+    ui->label_10->setAttribute(Qt::WA_TranslucentBackground);
+    ui->label_11->setAttribute(Qt::WA_TranslucentBackground);
+    ui->_labelStatus->setAttribute(Qt::WA_TranslucentBackground);
+    ui->_comboBoxMask->setAttribute(Qt::WA_TranslucentBackground);
+    ui->_comboBoxResult->setAttribute(Qt::WA_TranslucentBackground);
+
+    ui->_buttonTest->setStyleSheet("background: #009966; color: black;");
+    ui->_buttonSave->setStyleSheet("background: #993333; color: black;");
+    ui->_buttonCancel2->setStyleSheet("background: #999999; color: black;");
+    ui->_buttonCopyTo->setStyleSheet("background: #cccccc; color: black;");
+    ui->_buttonResultTo->setStyleSheet("background: #cccccc; color: black;");
+    ui->_buttonMaskTo->setStyleSheet("background: #cccccc; color: black;");
+
+    ui->_comboBoxMask->addItems(QStringList() << "jpg" << "png" << "bmp");
+    ui->_comboBoxResult->addItems(QStringList() << "jpg" << "png" << "bmp");
+
 
     QRect r = QApplication::desktop()->screenGeometry();
     this->move( r.center() - rect().center() );
 
-    connect(ui->_login, SIGNAL(clicked()), this, SLOT(login()));
-    connect(ui->_cancel, SIGNAL(clicked()), this, SLOT(close()));
-
     this->setStyleSheet("background-image: url(:/new/prefix1/icons/login_bg.jpg);");
+
+    ui->centralStackedWidget->setCurrentIndex(0);
 }
 
 Login::~Login()
@@ -98,7 +134,7 @@ void Login::customizeTitleBar()
     _minButton->setGeometry(width-46,5,20,20);
     _closeButton->setGeometry(width-25,5,20,20);
 
-    _settingButton->setStyleSheet("background-color:transparent;");
+    _settingButton->setStyleSheet("background-color:rgba(0,0,0,0%)");
     _minButton->setStyleSheet("background-color:transparent;");
     _closeButton->setStyleSheet("background-color:transparent;");
 
@@ -106,14 +142,7 @@ void Login::customizeTitleBar()
     connect(_minButton, SIGNAL(clicked()), this, SLOT(showMinimized()));
     connect(_closeButton, SIGNAL(clicked()), this, SLOT(close()));
 
-    _label = new QLabel(this);
-    _label->setText(tr(""));
-
-    //setStyleSheet("QLabel{color:#CCCCCC;font-size:12px;font-weight:bold;} QToolButton{border:0px;}");
-    _label->setStyleSheet("margin-left:6px;margin-top:5px;");
-
     QHBoxLayout* layout = new QHBoxLayout(this);
-    layout->addWidget(_label);
     layout->addWidget(_settingButton);
     layout->addWidget(_minButton);
     layout->addWidget(_closeButton);
@@ -188,42 +217,92 @@ void Login::getDataForMainform()
     this->deleteLater();
 }
 
-void Login::loadDesign(QString strDesign)
-{
-    // set stylesheet
-    QFile file(QString("design/%1/Login/form.css").arg(strDesign));
-    file.open(QFile::ReadOnly);
-    this->ui->centralWidget->setStyleSheet(file.readAll());
-}
-
 void Login::setting()
 {
-    Setting* s = new Setting(this);
-    s->show();
-    this->setVisible(false);
+    ui->centralStackedWidget->setCurrentIndex(1);
+    _settingButton->hide();
+
+    loadDefaultConfigs();
 }
 
-void Login::showLogin()
+
+void Login::loadDefaultConfigs()
 {
-    QRect r = QApplication::desktop()->screenGeometry();
-    this->move( r.center() - rect().center() );
-    this->setVisible(true);
+    ui->_editIP->setText(Global::Hostname);
+    ui->_editUsername_2->setText(Global::Username);
+    ui->_editPasswd_2->setText(Global::Passwd);
+    ui->_editDatabase->setText(Global::Database);
+
+    ui->_editOriginalCopyTo->setText(Global::PathImage);
+    ui->_editResultTo->setText(Global::PathResult);
+    ui->_editMaskTo->setText(Global::PathMask);
+
+    qDebug() << Global::ExtResult;
+    int index = ui->_comboBoxResult->findText(Global::ExtResult);
+    ui->_comboBoxResult->setCurrentIndex(index);
+    index = ui->_comboBoxMask->findText(Global::ExtMask);
+    ui->_comboBoxMask->setCurrentIndex(index);
 }
 
-void Login::paintEvent(QPaintEvent *event)
+void Login::on__buttonCancel2_clicked()
 {
-    QSize sz(width(), height());
-    QBitmap objBitmap(sz);
-
-    QPainter painter(&objBitmap);
-
-    painter.fillRect(rect(),Qt::white);
-    painter.setBrush(QColor(0,0,0));
-
-    painter.drawRoundedRect(this->rect(),10,10);
-
-    setMask(objBitmap);
+    ui->centralStackedWidget->setCurrentIndex(0);
+    _settingButton->show();
 }
 
+void Login::on__buttonSave_clicked()
+{
+    Global::settings->setValue("MYSQL/databasename", ui->_editDatabase->text());
+    Global::settings->setValue("MYSQL/hostname", ui->_editIP->text());
+    Global::settings->setValue("MYSQL/username", ui->_editUsername_2->text());
+    Global::settings->setValue("MYSQL/passwd", ui->_editPasswd_2->text());
 
+    Global::settings->setValue("IMAGE/pathImage", ui->_editOriginalCopyTo->text());
+    Global::settings->setValue("IMAGE/pathMask", ui->_editMaskTo->text());
+    Global::settings->setValue("IMAGE/pathResult", ui->_editResultTo->text());
+    Global::settings->setValue("IMAGE/extMask", ui->_comboBoxMask->currentText());
+    Global::settings->setValue("IMAGE/extResult", ui->_comboBoxResult->currentText());
+}
 
+void Login::on__buttonCopyTo_clicked()
+{
+    setText(tr("设置原图像拷贝文件夹"), ui->_editOriginalCopyTo);
+}
+
+void Login::on__buttonResultTo_clicked()
+{
+    setText(tr("设置标注结果保存文件夹"), ui->_editResultTo);
+}
+
+void Login::on__buttonMaskTo_clicked()
+{
+    setText(tr("设置掩码图像保存文件夹"), ui->_editMaskTo);
+}
+
+void Login::setText(QString str, QLineEdit* edit)
+{
+    QFileDialog dlg;
+    dlg.setFileMode(QFileDialog::Directory);
+    dlg.setOption(QFileDialog::ShowDirsOnly);
+    dlg.setViewMode(QFileDialog::Detail);
+    dlg.setWindowTitle(str);
+
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        QDir dir = dlg.selectedFiles()[0];
+        edit->setText( dir.absolutePath());
+    }
+}
+
+void Login::on__buttonTest_clicked()
+{
+    QSqlDatabase db;
+    if(!createConnection(db))
+    {
+        ui->_labelStatus->setText(tr("连接失败!"));
+    }
+    else
+    {
+        ui->_labelStatus->setText(tr("连接成功!"));
+    }
+}

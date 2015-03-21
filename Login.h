@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QToolButton>
 #include <QLabel>
+#include <QLineEdit>
 
 namespace Ui {
 class Login;
@@ -41,23 +42,31 @@ private:
     QToolButton* _settingButton;
     QToolButton* _minButton;
     QToolButton* _closeButton;
-    QLabel* _label;
+
+    void loadDefaultConfigs();
+    void setText(QString str, QLineEdit* edit);
 
 public:
     void getDataForMainform();
 
 private slots:
     void login();
-    void loadDesign(QString strDesign = "default");
     void setting();
-    void showLogin();
+
+    void on__buttonCancel2_clicked();
+    void on__buttonSave_clicked();
+
+    void on__buttonCopyTo_clicked();
+
+    void on__buttonResultTo_clicked();
+
+    void on__buttonMaskTo_clicked();
+
+    void on__buttonTest_clicked();
 
 signals:
     // signal emitted when login is clicked
     void acceptLogin( QString& username, QString& password );
-
-protected:
-    void paintEvent(QPaintEvent *event);
 };
 
 #endif // LOGIN_H

@@ -26,7 +26,7 @@
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;查询&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tabImage">
       <property name="toolTip">
@@ -159,55 +159,30 @@
       <attribute name="title">
        <string>查询</string>
       </attribute>
-      <widget class="QScrollArea" name="scrollAreaSearch">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>276</width>
-         <height>401</height>
-        </rect>
-       </property>
-       <property name="widgetResizable">
-        <bool>true</bool>
-       </property>
-       <widget class="QWidget" name="scrollAreaSearchWidgetContents">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>274</width>
-          <height>399</height>
-         </rect>
-        </property>
-        <widget class="QTreeView" name="treeViewTabSearch">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>0</y>
-           <width>256</width>
-           <height>401</height>
-          </rect>
-         </property>
-         <property name="midLineWidth">
-          <number>1</number>
-         </property>
-         <property name="tabKeyNavigation">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QScrollArea" name="scrollAreaSearch">
+         <property name="widgetResizable">
           <bool>true</bool>
          </property>
+         <widget class="QWidget" name="scrollAreaSearchWidgetContents">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>239</width>
+            <height>410</height>
+           </rect>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_3">
+           <item row="0" column="0">
+            <widget class="QTreeView" name="_treeViewImages"/>
+           </item>
+          </layout>
+         </widget>
         </widget>
-        <widget class="QTreeView" name="treeView">
-         <property name="geometry">
-          <rect>
-           <x>120</x>
-           <y>280</y>
-           <width>256</width>
-           <height>192</height>
-          </rect>
-         </property>
-        </widget>
-       </widget>
-      </widget>
+       </item>
+      </layout>
      </widget>
      <widget class="QWidget" name="tabClass">
       <attribute name="title">
@@ -257,6 +232,14 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>tableWidget</tabstop>
+  <tabstop>scrollAreaSearch</tabstop>
+  <tabstop>scrollArea</tabstop>
+  <tabstop>tabWidgetLeftWindow</tabstop>
+  <tabstop>scrollAreaClass</tabstop>
+  <tabstop>treeViewTabClass</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

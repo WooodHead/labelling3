@@ -12,6 +12,7 @@
 #include <QSqlTableModel>
 #include <QSqlDatabase>
 #include <QToolButton>
+#include <QStandardItemModel>
 
 #include "ui_SceneCompletionWidget.h"
 #include "ui_RegionCompetition.h"
@@ -213,7 +214,6 @@ private slots:
 
     void    search();
     void    addtosql();
-    void    savemarkresult();
     void    exportData();
     void    importData();
 
@@ -242,15 +242,7 @@ private slots:
 
     void Excute();
 
-    void loadLabelMap();
-
-    void saveLabelMap();
-
     void updateMethod();
-
-    void updateIsShowDetail();
-
-    void UsePrior(int state);
 
     void changeLabel();
     void updateLineWidth();
@@ -262,17 +254,12 @@ private slots:
 
     char* getNewLogString();
     void strikeChangeTriggered(QAction*);
-    void saveLabelledResult();
-    void saveUserLabels();
-    void saveMask();
 
     void strikeThicknessChanged(QAction*);
     void lineThicknessChanged(QAction*);
 
     void redo();
     void undo();
-
-    void on_tableWidget_doubleClicked(const QModelIndex &index);
 
     void cellDoubleClicked_(int, int);
 
@@ -289,7 +276,9 @@ private:
     int _cnt;
 
     QString labelStatus(QString absolutePath);
-    void editImageProperties(QString fileName);
+    void showThumbnail(QString status, int row);
+
+    std::vector<QString> _fNames;
 
 private:
     bool copyFiles(QString fromDir,QString toDir,bool convertIfExits = false);
@@ -299,13 +288,15 @@ private:
     bool openImage(QString file);
     QColor getColor(QString status);
 
-    bool syncLabelledImage(QString pathOriginal, QString pathResult, QString pathMask);
     void clearBottomWindow();
     QImage loadLabelledResult(QString file);
     void setBackgroundColor(QString path, QColor color);
     void setImageState(QString path, QString state);
 
     int rowIndex(QString image);
+    void showImagesInTree();
+
+    QStandardItemModel *_treeModel;
 
 private slots:
     void flushBottom();

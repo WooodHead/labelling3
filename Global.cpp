@@ -21,8 +21,8 @@ QString Global::ExtResult = QString();
 
 QtAwesome* Global::Awesome = 0;
 
-QColor Global::LabelledColor = QColor(255, 255, 0);
-QColor Global::UnLabelledColor = QColor(255, 0, 0);
+QColor Global::LabelledColor = QColor(0, 150, 0);
+QColor Global::UnLabelledColor = QColor(125, 125, 125);
 
 QSettings* Global::settings = 0;
 bool Global::Init = false;

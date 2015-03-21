@@ -40,6 +40,7 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
     setStrikeOptionsEnabled(false);
 
     showData();
+    showImagesInTree();
 }
 
 ImageCompletionUI::~ImageCompletionUI()
@@ -64,7 +65,7 @@ void ImageCompletionUI::createMenus()
     _menuFile = menuBar()->addMenu( tr("&文件") );
 
     _menuFile->addAction( _openAction );
-    _menuFile->addAction( _openBatchAction );
+    //_menuFile->addAction( _openBatchAction );
     _menuFile->addSeparator();
     _menuFile->addAction( _saveAction );
     _menuFile->addAction( _saveAsAction );
@@ -428,11 +429,14 @@ void	ImageCompletionUI::setupWidgets()
 
     _leftWindow.setupUi(_leftDockWindowContents);
     _leftWindow.tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    _leftWindow.tabWidgetLeftWindow->removeTab(1);
-    _leftWindow.tabWidgetLeftWindow->removeTab(1);
+    _leftWindow.tabWidgetLeftWindow->removeTab(2);
     _leftWindowWidget->setWidget(_leftDockWindowContents);
 
     addDockWidget(Qt::LeftDockWidgetArea, _leftWindowWidget);
+
+    // Hide Columns (Fix it in the future)
+    _leftWindow.tableWidget->hideColumn(2);
+    _leftWindow.tableWidget->hideColumn(1);
 
     ////////////////////////////////////////////////////////////////////////////////////
     //   _logWidget
@@ -631,30 +635,104 @@ void ImageCompletionUI::open()
             _leftWindow.tableWidget->insertRow(_leftWindow.tableWidget->rowCount()-1);
         }
 
-        QImage* temp = _editImageViewer->getOriginalImage();
-        _leftWindow.tableWidget->setItem(_cnt, 0, new QTableWidgetItem(_imageName));
-        _leftWindow.tableWidget->item(_cnt, 0)->setData(Qt::DecorationRole, QPixmap::fromImage(*temp).scaled(100, 100));
-        _leftWindow.tableWidget->setItem(_cnt, 1, new QTableWidgetItem(fileName));
-        _leftWindow.tableWidget->setItem(_cnt, 2, new QTableWidgetItem(status == "Y" ? "Y" : "N"));
-
-        for(int i = 0; i < _leftWindow.tableWidget->columnCount(); i++)
-        {
-            _leftWindow.tableWidget->item(_cnt, i)->setBackgroundColor(getColor(status));
-        }
+        showThumbnail(status, _cnt);
+        _fNames.push_back(_imagePath);
     }
 }
 
 int ImageCompletionUI::rowIndex(QString image)
 {
-    for(int i = 0; i < _leftWindow.tableWidget->rowCount(); i++)
+    for(int i = 0; i < _fNames.size(); i++)
     {
-        if(_leftWindow.tableWidget->item(i,1) && image == _leftWindow.tableWidget->item(i,1)->text())
+        if(image == _fNames[i]) return i+1;
+    }
+    return -1;
+
+    //    for(int i = 0; i < _leftWindow.tableWidget->rowCount(); i++)
+    //    {
+    //        if(_leftWindow.tableWidget->item(i,1) )
+    //            if(image == _leftWindow.tableWidget->item(i,1)->text())
+    //            {
+    //                return i+1;
+    //            }
+    //    }
+
+    //    return -1;
+}
+
+void ImageCompletionUI::showImagesInTree()
+{
+    QSqlDatabase db;
+    if(!createConnection(db))
+    {
+        QMessageBox::critical(0, qApp->tr("提示"), qApp->tr("数据库连接失败!"), QMessageBox::Cancel);
+        return;
+    }
+
+    QString sql = "select * from equipmentinfo";
+
+    QSqlQuery query;
+    query.prepare(sql);
+
+    std::multimap<QString, QString> departMap;
+
+    if(query.exec())
+    {
+        while(query.next())
         {
-            return i+1;
+            departMap.insert(std::pair<QString, QString>(query.value(2).toString(), query.value(0).toString()));
         }
     }
 
-    return -1;
+    int cnt = 0;
+    std::vector<QString> departs;
+    for(std::multimap<QString, QString>::iterator it = departMap.begin(), end = departMap.end(); it != end;
+        it = departMap.upper_bound(it->first))
+    {
+        cnt++;
+        departs.push_back(it->first);
+    }
+
+    QStandardItem* item;
+    QStandardItem* items[cnt];
+    _treeModel = new QStandardItemModel(cnt,1);
+    for(int i = 0; i < cnt; i++)
+    {
+        items[i] = new QStandardItem(departs[i]);
+        items[i]->setIcon(Global::Awesome->icon(group));
+        _treeModel->setItem(i, 0, items[i]);
+
+        for(std::multimap<QString, QString>::iterator it = departMap.begin(); it != departMap.end(); it++)
+        {
+            if((*it).first == departs[i])
+            {
+                item = new QStandardItem((*it).second);
+                item->setIcon(Global::Awesome->icon(plane));
+                items[i]->appendRow(item);
+            }
+
+            // Append Images
+            QSqlQuery query;
+            QString sql = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo join ferrographyinfo join oilsampleinfo on ferrographypicinfo.ferrographysheetid = ferrographyinfo.ferrographysheetid and ferrographyinfo.oilsampleid = oilsampleinfo.oilsampleid and oilsampleinfo.sampledepartid = '%1' and oilsampleinfo.planeid = '%2'").arg(departs[i]).arg((*it).second);
+
+            qDebug() << sql;
+            query.prepare(sql);
+            if(query.exec())
+            {
+                while(query.next())
+                {
+                    QImage image(query.value(0).toString());
+
+                    QStandardItem *item2 = new QStandardItem("");
+                    item2->setIcon(QPixmap::fromImage(image));
+                    item->appendRow(item2);
+                }
+            }
+        }
+    }
+
+    _leftWindow._treeViewImages->setModel(_treeModel);
+    _leftWindow._treeViewImages->show();
 }
 
 bool ImageCompletionUI::openImage(QString fileName)
@@ -743,7 +821,6 @@ void ImageCompletionUI::batchOpen()
 
             QString status = this->labelStatus(absolutePath + "/" + file);
 
-            _leftWindow.tableWidget->setItem(_cnt, 0, new QTableWidgetItem(file));
             _leftWindow.tableWidget->setItem(_cnt, 1, new QTableWidgetItem(absolutePath + "/" + file));
             _leftWindow.tableWidget->setItem(_cnt, 2, new QTableWidgetItem(status == "Y" ? "Y" : "N"));
 
@@ -755,6 +832,14 @@ void ImageCompletionUI::batchOpen()
 
         statusBar()->showMessage(QString("打开%1个文件").arg(fileList.length()), 2000);
     }
+}
+
+void ImageCompletionUI::showThumbnail(QString status, int row)
+{
+    _leftWindow.tableWidget->setItem(row, 0, new QTableWidgetItem(""));
+    QImage* temp = _editImageViewer->getOriginalImage();
+    _leftWindow.tableWidget->item(row, 0)->setData(Qt::DecorationRole, QPixmap::fromImage(*temp).scaled(80, 80));
+    _leftWindow.tableWidget->item(_cnt, 0)->setBackgroundColor(getColor(status));
 }
 
 void	ImageCompletionUI::save()
@@ -884,217 +969,6 @@ void	ImageCompletionUI::addtosql()
     class1.show();
 }
 
-void	ImageCompletionUI::savemarkresult()
-{
-    //class1.show();
-    QSqlDatabase db;
-    createConnection(db);//连接数据库
-    QSqlQuery query1;
-    QSqlQuery query2;
-    QSqlQuery query3;
-    QSqlQuery query4;
-    QSqlQuery query5;
-    QSqlQuery query6;
-    QSqlQuery query7;
-    QSqlQuery query8;
-
-    //update equipmentinfo
-    query1.prepare("update equipmentinfo set planeid=?,planetype=?,departid=?,runhour=?,runstage=?,repairtime=? where id=?");//对数据库中Tuser中对应uid的一条记录进行修改
-    query1.addBindValue(_bottomWindow.dBTableWidget_1->item(1,1)->data(Qt::DisplayRole).toString());//对其SQL语句中的每一项进行幅值操作
-    query1.addBindValue(_bottomWindow.dBTableWidget_1->item(1,2)->data(Qt::DisplayRole).toString());
-    query1.addBindValue(_bottomWindow.dBTableWidget_1->item(1,3)->data(Qt::DisplayRole).toString());
-    query1.addBindValue(_bottomWindow.dBTableWidget_1->item(1,4)->data(Qt::DisplayRole).toString());
-    query1.addBindValue(_bottomWindow.dBTableWidget_1->item(1,5)->data(Qt::DisplayRole).toString());
-    query1.addBindValue(_bottomWindow.dBTableWidget_1->item(1,6)->data(Qt::DisplayRole).toString());
-    query1.addBindValue(_bottomWindow.dBTableWidget_1->item(1,0)->data(Qt::DisplayRole).toString());
-    if(!query1.exec())//若SQL语句没有执行，则提示错误
-        QMessageBox::warning(this,tr("failed1"),tr("Modify error"),QMessageBox::Close);
-    else{
-        QMessageBox::warning(this,tr("success1"),tr("Modify success"),QMessageBox::Close);
-    }
-
-    //update movepartinfo
-    query2.prepare("update movepartinfo set movepartid=?,moveparttype=?,movepartname=?,runhour=?,runstage=?,planeid=?,planetype=?,startdate=?,enddate=? where id=?");//对数据库中Tuser中对应uid的一条记录进行修改
-    query2.addBindValue(_bottomWindow.dBTableWidget_2->item(1,1)->data(Qt::DisplayRole).toString());//对其SQL语句中的每一项进行幅值操作
-    query2.addBindValue(_bottomWindow.dBTableWidget_2->item(1,2)->data(Qt::DisplayRole).toString());
-    query2.addBindValue(_bottomWindow.dBTableWidget_2->item(1,3)->data(Qt::DisplayRole).toString());
-    query2.addBindValue(_bottomWindow.dBTableWidget_2->item(1,4)->data(Qt::DisplayRole).toString());
-    query2.addBindValue(_bottomWindow.dBTableWidget_2->item(1,5)->data(Qt::DisplayRole).toString());
-    query2.addBindValue(_bottomWindow.dBTableWidget_2->item(1,6)->data(Qt::DisplayRole).toString());
-    query2.addBindValue(_bottomWindow.dBTableWidget_2->item(1,7)->data(Qt::DisplayRole).toString());
-    query2.addBindValue(_bottomWindow.dBTableWidget_2->item(1,8)->data(Qt::DisplayRole).toString());
-    query2.addBindValue(_bottomWindow.dBTableWidget_2->item(1,9)->data(Qt::DisplayRole).toString());
-    //query2.addBindValue("F:/abrasivemarksystem/abrasivepic/"+wholefilename);//可以保存到表8对应的数据库当中
-    query2.addBindValue(_bottomWindow.dBTableWidget_2->item(1,0)->data(Qt::DisplayRole).toString());
-    if(!query2.exec())//若SQL语句没有执行，则提示错误
-        QMessageBox::warning(this,tr("failed2"),tr("Modify error"),QMessageBox::Close);
-    else{
-        QMessageBox::warning(this,tr("success2"),tr("Modify success"),QMessageBox::Close);
-    }
-
-
-    //update oilsampleinfo
-    query4.prepare("update oilsampleinfo set oilsampleid=?,sampledepartid=?,planetype=?,planeid=?,monitorpartname=?,monitorpartid=?,sampleid=?,oilworktime=?,oiladdition=?,samplereason=?,sampledepartname=?,samplestuff=?,sampledate=?,sampletime=?,samplesituation=?,samplemethod=?,samplevolume=?,sampleinstruction=?,sendstuff=?,senddate=?,sendtime=? where id=?");//对数据库中Tuser中对应uid的一条记录进行修改
-
-    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,1)->data(Qt::DisplayRole).toString());//对其SQL语句中的每一项进行幅值操作
-    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,2)->data(Qt::DisplayRole).toString());
-    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,3)->data(Qt::DisplayRole).toString());
-    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,4)->data(Qt::DisplayRole).toString());
-    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,5)->data(Qt::DisplayRole).toString());
-    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,6)->data(Qt::DisplayRole).toString());
-    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,7)->data(Qt::DisplayRole).toString());
-    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,8)->data(Qt::DisplayRole).toString());
-    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,9)->data(Qt::DisplayRole).toString());
-    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,10)->data(Qt::DisplayRole).toString());//对其SQL语句中的每一项进行幅值操作
-    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,11)->data(Qt::DisplayRole).toString());
-    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,12)->data(Qt::DisplayRole).toString());
-    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,13)->data(Qt::DisplayRole).toString());
-    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,14)->data(Qt::DisplayRole).toString());
-    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,15)->data(Qt::DisplayRole).toString());
-    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,16)->data(Qt::DisplayRole).toString());
-    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,17)->data(Qt::DisplayRole).toString());
-    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,18)->data(Qt::DisplayRole).toString());
-    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,19)->data(Qt::DisplayRole).toString());
-    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,20)->data(Qt::DisplayRole).toString());
-    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,21)->data(Qt::DisplayRole).toString());
-
-    query4.addBindValue(_bottomWindow.dBTableWidget_4->item(1,0)->data(Qt::DisplayRole).toString());
-    if(!query4.exec())//若SQL语句没有执行，则提示错误
-        QMessageBox::warning(this,tr("failed4"),tr("Modify error"),QMessageBox::Close);
-    else{
-        QMessageBox::warning(this,tr("success4"),tr("Modify success"),QMessageBox::Close);
-    }
-
-
-    //update oilanalyzeinfo
-    query5.prepare("update oilanalyzeinfo set oilsampleid=?,analyzedepartname=?,senddepart=?,sendreason=?,sendstuff=?,receivedate=?,receivestuff=?,contaminationanalyzemethod=?,contaminationanalyzestuff=?,contaminationanalyzedate=?,contaminationanalyzeequipment=?,contaminationanalyzereportid=?,spectroscopymethod=?,spectroscopystuff=?,spectroscopydate=?,spectroscopyequipment=?,spectroscopyreportid=?,ferrographymethod=?,ferrographystuff=?,ferrographydate=?,ferrographyequipment=?,ferrographyreportid=?,physicochemicalmethod=?,physicochemicalstuff=?,physicochemicaldate=?,physicochemicalequipment=?,physicochemicalreportid=? where id=?");//对数据库中Tuser中对应uid的一条记录进行修改
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,1)->data(Qt::DisplayRole).toString());//对其SQL语句中的每一项进行幅值操作
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,2)->data(Qt::DisplayRole).toString());
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,3)->data(Qt::DisplayRole).toString());
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,4)->data(Qt::DisplayRole).toString());
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,5)->data(Qt::DisplayRole).toString());
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,6)->data(Qt::DisplayRole).toString());
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,7)->data(Qt::DisplayRole).toString());
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,8)->data(Qt::DisplayRole).toString());
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,9)->data(Qt::DisplayRole).toString());
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,10)->data(Qt::DisplayRole).toString());//对其SQL语句中的每一项进行幅值操作
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,11)->data(Qt::DisplayRole).toString());
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,12)->data(Qt::DisplayRole).toString());
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,13)->data(Qt::DisplayRole).toString());
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,14)->data(Qt::DisplayRole).toString());
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,15)->data(Qt::DisplayRole).toString());
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,16)->data(Qt::DisplayRole).toString());
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,17)->data(Qt::DisplayRole).toString());
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,18)->data(Qt::DisplayRole).toString());
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,19)->data(Qt::DisplayRole).toString());
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,20)->data(Qt::DisplayRole).toString());
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,21)->data(Qt::DisplayRole).toString());
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,22)->data(Qt::DisplayRole).toString());
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,23)->data(Qt::DisplayRole).toString());
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,24)->data(Qt::DisplayRole).toString());
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,25)->data(Qt::DisplayRole).toString());
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,26)->data(Qt::DisplayRole).toString());
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,27)->data(Qt::DisplayRole).toString());
-
-    query5.addBindValue(_bottomWindow.dBTableWidget_5->item(1,0)->data(Qt::DisplayRole).toString());
-
-    if(!query5.exec())//若SQL语句没有执行，则提示错误
-        QMessageBox::warning(this,tr("failed5"),tr("Modify error"),QMessageBox::Close);
-    else{
-        QMessageBox::warning(this,tr("success5"),tr("Modify success"),QMessageBox::Close);
-    }
-
-    //update ferrographyinfo
-    query6.prepare("update ferrographyinfo set ferrographysheetid=?,ferrographyreportid=?,oilsampleid=?,ferrographyanalyzertype=?,ferrographymakeoilconsumption=?,ferrographymakemethod=?,ferrographymakestuff=? where id=?");//对数据库中Tuser中对应uid的一条记录进行修改
-    query6.addBindValue(_bottomWindow.dBTableWidget_6->item(1,1)->data(Qt::DisplayRole).toString());//对其SQL语句中的每一项进行幅值操作
-    query6.addBindValue(_bottomWindow.dBTableWidget_6->item(1,2)->data(Qt::DisplayRole).toString());
-    query6.addBindValue(_bottomWindow.dBTableWidget_6->item(1,3)->data(Qt::DisplayRole).toString());
-    query6.addBindValue(_bottomWindow.dBTableWidget_6->item(1,4)->data(Qt::DisplayRole).toString());
-    query6.addBindValue(_bottomWindow.dBTableWidget_6->item(1,5)->data(Qt::DisplayRole).toString());
-    query6.addBindValue(_bottomWindow.dBTableWidget_6->item(1,6)->data(Qt::DisplayRole).toString());
-    query6.addBindValue(_bottomWindow.dBTableWidget_6->item(1,7)->data(Qt::DisplayRole).toString());
-    query6.addBindValue(_bottomWindow.dBTableWidget_6->item(1,0)->data(Qt::DisplayRole).toString());
-    if(!query6.exec())//若SQL语句没有执行，则提示错误
-        QMessageBox::warning(this,tr("failed6"),tr("Modify error"),QMessageBox::Close);
-    else{
-        QMessageBox::warning(this,tr("success6"),tr("Modify success"),QMessageBox::Close);
-    }
-
-    //update ferrographypicinfo
-    query7.prepare("update ferrographypicinfo set ferrographypicid=?,ferrographysheetid=?,ferrographyreportid=?,microscopictype=?,imageacquisitiontype=?,lightsourcetype=?,magnification=?,imageacquisitionarea=?,imageacquisitionstuff=?,ferrographypicpath=?,imagerecognitioninfoanalysis=?,imagesymbol=? where id=?");//对数据库中Tuser中对应uid的一条记录进行修改
-    query7.addBindValue(_bottomWindow.dBTableWidget_7->item(1,1)->data(Qt::DisplayRole).toString());//对其SQL语句中的每一项进行幅值操作
-    query7.addBindValue(_bottomWindow.dBTableWidget_7->item(1,2)->data(Qt::DisplayRole).toString());
-    query7.addBindValue(_bottomWindow.dBTableWidget_7->item(1,3)->data(Qt::DisplayRole).toString());
-    query7.addBindValue(_bottomWindow.dBTableWidget_7->item(1,4)->data(Qt::DisplayRole).toString());
-    query7.addBindValue(_bottomWindow.dBTableWidget_7->item(1,5)->data(Qt::DisplayRole).toString());
-    query7.addBindValue(_bottomWindow.dBTableWidget_7->item(1,6)->data(Qt::DisplayRole).toString());
-    query7.addBindValue(_bottomWindow.dBTableWidget_7->item(1,7)->data(Qt::DisplayRole).toString());
-    query7.addBindValue(_bottomWindow.dBTableWidget_7->item(1,8)->data(Qt::DisplayRole).toString());
-    query7.addBindValue(_bottomWindow.dBTableWidget_7->item(1,9)->data(Qt::DisplayRole).toString());
-    query7.addBindValue(_bottomWindow.dBTableWidget_7->item(1,10)->data(Qt::DisplayRole).toString());
-    query7.addBindValue(_bottomWindow.dBTableWidget_7->item(1,11)->data(Qt::DisplayRole).toString());
-    //query7.addBindValue(_bottomWindow.dBTableWidget_7->item(1,12)->data(Qt::DisplayRole).toString());
-    _bottomWindow.dBTableWidget_7->setItem(1,12,new QTableWidgetItem("Y"));
-    query7.addBindValue("Y");//默认标注过了之后都会点击保存标注结果进而将铁谱片标识符号设为Y
-    query7.addBindValue(_bottomWindow.dBTableWidget_7->item(1,0)->data(Qt::DisplayRole).toString());
-    if(!query7.exec())//若SQL语句没有执行，则提示错误
-        QMessageBox::warning(this,tr("failed7"),tr("Modify error"),QMessageBox::Close);
-    else{
-        QMessageBox::warning(this,tr("success7"),tr("Modify success"),QMessageBox::Close);
-    }
-
-
-    //update abrasivemarkinfo
-    query8.prepare("update abrasivemarkinfo set abrasiveid=?,ferrographypicid=?,ferrographysheetid=?,ferrographyreportid=?,abrasivemarkstuff=?,abrasivepicpath=?,abrasivematerial=?,abrasiveposition=?,abrasivesize=?,abrasivesperimeter=?,abrasiveshape=?,abrasivecolor=?,abrasivesurfacetexturetype=?,abrasiveweartype=?,abrasivedamagetype=?,abrasivemechanismtype=?,abrasivefaultinformationreflection=?,abrasivetypical=? where id=?");
-    query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,1)->data(Qt::DisplayRole).toString());//对其SQL语句中的每一项进行幅值操作
-    query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,2)->data(Qt::DisplayRole).toString());
-    query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,3)->data(Qt::DisplayRole).toString());
-    query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,4)->data(Qt::DisplayRole).toString());
-    query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,5)->data(Qt::DisplayRole).toString());
-    _bottomWindow.dBTableWidget_8->setItem(1,6,new QTableWidgetItem("F:/abrasivemarksystem/abrasivepic/"+_imageName));
-    //query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,6)->data(Qt::DisplayRole).toString());
-    query8.addBindValue("F:/abrasivemarksystem/abrasivepic/"+_imageName);//默认标注过了之后都会点击保存标注结果，进而将标注得到的磨粒对应的路径储存到数据库中
-    query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,7)->data(Qt::DisplayRole).toString());
-    query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,8)->data(Qt::DisplayRole).toString());
-    query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,9)->data(Qt::DisplayRole).toString());
-    query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,10)->data(Qt::DisplayRole).toString());//对其SQL语句中的每一项进行幅值操作
-    query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,11)->data(Qt::DisplayRole).toString());
-    query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,12)->data(Qt::DisplayRole).toString());
-    query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,13)->data(Qt::DisplayRole).toString());
-    query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,14)->data(Qt::DisplayRole).toString());
-    query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,15)->data(Qt::DisplayRole).toString());
-    query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,16)->data(Qt::DisplayRole).toString());
-    query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,17)->data(Qt::DisplayRole).toString());
-    query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,18)->data(Qt::DisplayRole).toString());
-    query8.addBindValue(_bottomWindow.dBTableWidget_8->item(1,0)->data(Qt::DisplayRole).toString());
-    if(!query8.exec())//若SQL语句没有执行，则提示错误
-        QMessageBox::warning(this,tr("failed8"),tr("Modify error"),QMessageBox::Close);
-    else{
-        QMessageBox::warning(this,tr("success8"),tr("Modify success"),QMessageBox::Close);
-    }
-
-    QString connection = db.connectionName();
-    db.close();
-    QSqlDatabase::removeDatabase(connection);
-
-    //_leftWindow.tableWidget->setItem(_cnt, 2, new QTableWidgetItem("Y"));
-}
-
-void ImageCompletionUI::saveLabelMap()
-{
-    QString filename = QFileDialog::getSaveFileName( this, "Save Image As...", QDir::currentPath(), tr("Images (*.bmp)") );
-    if ( filename.isEmpty() )
-    {
-        return;
-    }
-    bool bSucessOrNot;
-    bSucessOrNot = _editImageViewer->saveLabelMap(filename);
-    if ( false == bSucessOrNot )
-    {
-        QMessageBox::information(this,"Error Saving",QString("Could not save to file: %1").arg(filename));
-    }
-}
-
 void ImageCompletionUI::updateLog()
 {
     char* log_str = getNewLogString();
@@ -1146,7 +1020,7 @@ void ImageCompletionUI::showData()
     QSqlDatabase db;
     if(!createConnection(db))
     {
-        QMessageBox::critical(0, qApp->tr("Cannot open database"),
+        QMessageBox::critical(0, qApp->tr("数据库"),
                               qApp->tr("数据库连接失败!"),
                               QMessageBox::Cancel);
     }
@@ -1226,27 +1100,6 @@ void ImageCompletionUI::showData()
     QString connection = db.connectionName();
     db.close();
     QSqlDatabase::removeDatabase(connection);
-}
-
-void ImageCompletionUI::loadLabelMap()
-{
-    QSettings settings("ImageCompletion","ImageCompletion");
-    QString initialPath = settings.value("lastImportPath", QVariant(QDir::homePath())).toString();
-    if(initialPath.isEmpty())
-        initialPath = QDir::homePath() + "/untitled";
-
-    QString fileName;
-    fileName = QFileDialog::getOpenFileName( this, tr("Label Map"), initialPath, tr("Images (*.bmp)"));
-    if (!fileName.isEmpty())
-        settings.setValue("lastImportPath", QVariant(fileName));
-
-    //If the file name is not empty //
-    if (!fileName.isEmpty())
-    {
-        _editImageViewer->openLabelImage(fileName);
-    }
-
-    _step = MARKING;
 }
 
 void ImageCompletionUI::switchModule()
@@ -1397,23 +1250,6 @@ void ImageCompletionUI::updateMethod()
         _editImageViewer->setMethod(2);
         _editImageViewer->setLabelType(2);
         setStrikeOptionsEnabled(false);
-    }
-}
-
-void ImageCompletionUI::updateIsShowDetail()
-{
-    //	IsShowDetail = _regionCompetitionDialog.checkShowDetail;
-}
-
-void ImageCompletionUI::UsePrior(int state)
-{
-    if (state)
-    {
-        _editImageViewer->isUsePrior = true;
-    }
-    else
-    {
-        _editImageViewer->isUsePrior = false;
     }
 }
 
@@ -1655,21 +1491,6 @@ void ImageCompletionUI::strikeChangeTriggered(QAction *a)
     }
 }
 
-void ImageCompletionUI::saveLabelledResult()
-{
-    _editImageViewer->saveLabelledResult(_imageName, Global::ExtResult);
-}
-
-void ImageCompletionUI::saveUserLabels()
-{
-    //TODO
-}
-
-void ImageCompletionUI::saveMask()
-{
-    //_editImageViewer->saveAsMask();
-}
-
 void ImageCompletionUI::strikeThicknessChanged(QAction *a)
 {
     if ( _editImageViewer->image().isNull() ) return;
@@ -1873,108 +1694,9 @@ bool ImageCompletionUI::exportDB(const QString &path)
     return true;
 }
 
-
-
 QColor ImageCompletionUI::getColor(QString status)
 {
-    if(status == "Y")
-    {
-        return Global::LabelledColor;
-    }
-    else
-    {
-        return Global::UnLabelledColor;
-    }
-}
-
-bool ImageCompletionUI::syncLabelledImage(QString pathOriginal, QString pathResult, QString pathMask)
-{
-    if(pathResult.isEmpty() && pathMask.isEmpty()) return false;
-
-    QSqlDatabase db;
-    if(!createConnection(db))
-    {
-        QMessageBox::critical(0, qApp->tr("提示"),
-                              qApp->tr("数据库连接失败!"),
-                              QMessageBox::Cancel);
-        return false;
-    }
-
-    QSqlTableModel *_model = new QSqlTableModel(this, db);
-
-    _model->setTable("abrasivemarkinfo");
-    _model->setFilter(QString("abrasivepicpath = '%1'").arg(pathOriginal));
-
-    if(_model->select())
-    {
-        qDebug() << _model->rowCount();
-        if(_model->rowCount() == 1)
-        {
-            QSqlRecord record = _model->record(0);
-
-            if(!pathResult.isEmpty())
-            {
-                QFile *file = new QFile(pathResult);
-                if(file->open(QIODevice::ReadOnly))
-                {
-                    QByteArray data = file->readAll();
-                    file->close();
-                    record.setValue("abrasiveResultData", data);
-                }
-            }
-
-            if(!pathMask.isEmpty())
-            {
-                QFile *file = new QFile(pathMask);
-                if(file->open(QIODevice::ReadOnly))
-                {
-                    QByteArray data = file->readAll();
-                    file->close();
-                    record.setValue("abrasiveMaskData", data);
-                }
-            }
-
-            record.setValue("abrasiveResultExt", QFileInfo(pathResult).suffix());
-            record.setValue("abrasiveMaskExt", QFileInfo(pathMask).suffix());
-
-            _model->setRecord(0, record);
-        }
-
-        if(!_model->submitAll())
-        {
-            _model->revertAll();
-            QMessageBox::warning(this, "保存", QString("保存数据库失败"), QMessageBox::Close);
-            return false;
-        }
-    }
-
-    qDebug() << _model->lastError().text();
-
-    QSqlTableModel *_model2 = new QSqlTableModel(this, db);
-    _model2->setTable("ferrographypicinfo");
-    _model2->setFilter(QString("ferrographypicpath = '%1'").arg(pathOriginal));
-    if(_model2->select())
-    {
-        if(_model->rowCount() == 1)
-        {
-            QSqlRecord record = _model2->record(0);
-            record.setValue("imagesymbol", "Y");
-            _model2->setRecord(0, record);
-        }
-
-        if(!_model2->submitAll())
-        {
-            _model2->revertAll();
-            QMessageBox::warning(this, "保存", QString("保存数据库失败"), QMessageBox::Close);
-            return false;
-        }
-    }
-
-    qDebug() << _model2->lastError().text();
-    _model->deleteLater();
-    _model2->deleteLater();
-
-    return true;
+    return status == "Y" ? Global::LabelledColor : Global::UnLabelledColor;
 }
 
 void ImageCompletionUI::clearBottomWindow()
@@ -2230,18 +1952,24 @@ void ImageCompletionUI::exportData()
         QMessageBox::warning(this,tr("批量数据导出提示"),tr("批量数据导出失败"),QMessageBox::Close);
 }
 
-void ImageCompletionUI::on_tableWidget_doubleClicked(const QModelIndex & /* index */) {}
-
 void ImageCompletionUI::cellDoubleClicked_(int row, int /* col */)
 {
-    if(_leftWindow.tableWidget->item(row, 1) != 0)
+    if(_fNames.size() > row)
     {
-        QString absolutePath = _leftWindow.tableWidget->item(row, 1)->text();
-        if( !openImage(absolutePath) )
+        if(!openImage(_fNames[row]))
         {
             _leftWindow.tableWidget->removeRow(row);
         }
     }
+
+    //    if(_leftWindow.tableWidget->item(row, 1) != 0)
+    //    {
+    //        QString absolutePath = _leftWindow.tableWidget->item(row, 1)->text();
+    //        if( !openImage(absolutePath) )
+    //        {
+    //            _leftWindow.tableWidget->removeRow(row);
+    //        }
+    //    }
 }
 
 void ImageCompletionUI::removeImage(QString filename)
@@ -2284,9 +2012,3 @@ QString ImageCompletionUI::labelStatus(QString imagePath)
     }
     return "";
 }
-
-void ImageCompletionUI::editImageProperties(QString /* fileName */)
-{
-}
-
-
