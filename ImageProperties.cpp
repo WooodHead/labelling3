@@ -22,27 +22,29 @@ ImageProperties::ImageProperties(QWidget *parent) :
     ui->_buttonNext->setIcon(Global::Awesome->icon(forward));
 
     connect(this, SIGNAL(flush()), parent, SLOT(flushBottom()));
+    connect(this, SIGNAL(copyOrgImage(QString)), parent, SLOT(copyOrgImage(QString)));
     connect(this, SIGNAL(removeImage(QString)), parent, SLOT(removeImage(QString)));
 
     _bCommited = false;
     for(int i = 0; i < TABLE_N; i++ ) _models[i] = 0;
     for(int i = 0; i < TABLE_N; i++ ) _bSaved[i] = false;
     for(int i = 1; i < TABLE_N; i++ ) ui->_tabWidget->setTabEnabled(i, false);
-    load();
 
-    ui->_editEquipHours->setValidator(new QIntValidator(0, 100000000, this));
-    ui->_editServiceNumber->setValidator(new QIntValidator(0, 100000000, this));
-    ui->_editMovepartHours->setValidator(new QIntValidator(0, 100000000, this));
-    ui->_editMovepartServiceNumber->setValidator(new QIntValidator(0, 100000000, this));
-    ui->_editOilSampleHours->setValidator(new QIntValidator(0, 100000000, this));
-    ui->_editOilSampleMount->setValidator(new QDoubleValidator(0.0, 100000000.0, 5, this));
-    ui->_editOilSampleSampleMount->setValidator(new QDoubleValidator(0.0, 100000000.0, 5, this));
-    ui->_editMentalMount->setValidator(new QDoubleValidator(0.0, 100000000.0, 5, this));
-    ui->_editMentalSampleEnlarger->setValidator(new QDoubleValidator(0.0, 100.0, 5, this));
+    ui->_editEquipHours->setValidator(new QIntValidator(0, 1000000, this));
+    ui->_editServiceNumber->setValidator(new QIntValidator(0, 1000000, this));
+    ui->_editMovepartHours->setValidator(new QIntValidator(0, 1000000, this));
+    ui->_editMovepartServiceNumber->setValidator(new QIntValidator(0, 1000000, this));
+    ui->_editOilSampleHours->setValidator(new QIntValidator(0, 1000000, this));
+    ui->_editOilSampleMount->setValidator(new QDoubleValidator(0.0, 1000000.0, 5, this));
+    ui->_editOilSampleSampleMount->setValidator(new QDoubleValidator(0.0, 1000000.0, 5, this));
+    ui->_editMentalMount->setValidator(new QDoubleValidator(0.0, 1000000.0, 5, this));
+    ui->_editMentalSampleEnlarger->setValidator(new QIntValidator(1, 1000, this));
     ui->_editMoliSize->setValidator(new QDoubleValidator(0.0, 100.0, 5, this));
     ui->_editMoliLength->setValidator(new QDoubleValidator(0.0, 100.0, 5, this));
 
     ui->_timeEditOilSampleSampleTime->setDisplayFormat("yyyyMMdd");
+
+    load();
 }
 
 ImageProperties::~ImageProperties()
@@ -82,8 +84,11 @@ void ImageProperties::load()
 
     // model 1
     ui->_comboBoxMovepartID->addItems(getItems(_models[1],     "movepartid"));
-    ui->_comboBoxMovepartName->addItems(getItems(_models[1],   "moveparttype"));
-    ui->_comboBoxMovepartType->addItems(getItems(_models[1],   "movepartname"));
+    ui->_comboBoxMovepartType->addItems(getItems(_models[1],   "moveparttype"));
+
+    QStringList list = QStringList() << "" << tr("左发(A)") << tr("右发(B)") << tr("中发(C)") << tr("主减(D)") << tr("尾减(E)") << tr("中减(F)") << tr("主桨毂(G)") << tr("辅助动力装置(H)") << tr("润滑脂(J)") << tr("左液压系统(K)") << tr("右液压系统(L)") << tr("燃油系统(M)") << tr("其它(N)");
+    ui->_comboBoxMovepartName->addItems(list);
+
     ui->_comboBoxMovepartMohe->addItems(getItems(_models[1],   "runstage"));
     ui->_comboBoxMovepartPlaneID->addItems(getItems(_models[1], "planeid"));
     ui->_comboBoxMovepartPlaneType->addItems(getItems(_models[1], "planetype"));
@@ -138,7 +143,9 @@ void ImageProperties::load()
     ui->_comboBoxMentalID->addItems(getItems(_models[5], "ferrographysheetid"));
     ui->_comboBoxMentalReportID->addItems(getItems(_models[5], "ferrographyreportid"));
     ui->_comboBoxMentalOilSampleID->addItems(getItems(_models[5], "oilsampleid"));
-    ui->_comboBoxMentalInstrumentType->addItems(getItems(_models[5], "ferrographyanalyzertype"));
+
+    QStringList list2 = QStringList() << "" << tr("国产分析铁谱仪(A)") << tr("超谱蓟式分析铁谱仪(B)") << tr("美国热电分析铁谱仪(C)") << tr("旋转式分析铁谱仪(D)") << tr("滤膜制谱仪(E)");
+    ui->_comboBoxMentalInstrumentType->addItems(list2);
     ui->_comboBoxMentalMethod->addItems(getItems(_models[5], "ferrographymakemethod"));
     ui->_comboBoxMentalGuy->addItems(getItems(_models[5], "ferrographymakestuff"));
 
@@ -148,9 +155,16 @@ void ImageProperties::load()
     ui->_comboBoxMentalSampleReportID->addItems(getItems(_models[6], "ferrographyreportid"));
     ui->_comboBoxMentalSampleMicroType->addItems(getItems(_models[6], "microscopictype"));
     ui->_comboBoxMentalSampleSamplerType->addItems(getItems(_models[6], "imageacquisitiontype"));
-    ui->_comboBoxMentalSampleLightType->addItems(getItems(_models[6], "lightsourcetype"));
-    ui->_comboBoxMentalSampleArea->addItems(getItems(_models[6], "imageacquisitionarea"));
+    //ui->_comboBoxMentalSampleLightType->addItems(getItems(_models[6], "lightsourcetype"));
+    //ui->_comboBoxMentalSampleArea->addItems(getItems(_models[6], "imageacquisitionarea"));
     ui->_comboBoxMentalSampleGuy->addItems(getItems(_models[6], "imageacquisitionstuff"));
+
+    QStringList list3 = QStringList() << "" << "LA" << "LB" << "LC" << "LD" << "LE";
+    ui->_comboBoxMentalSampleLightType->addItems(list3);
+
+    QStringList list4 = QStringList() << "" << tr("预设谱片入口(QA)") << tr("谱片前半段(QB)") << tr("谱片中段(QC)") << tr("谱片后半段(QD)") << tr("谱片出口(QE)");
+    ui->_comboBoxMentalSampleArea->addItems(list4);
+
 }
 
 QStringList ImageProperties::getItems(QSqlTableModel* model, int col)
@@ -241,6 +255,20 @@ bool ImageProperties::isValid()
     //        return false;
     //    }
 
+    if(ui->_dateEditOilSampleSampleDate->text().isEmpty())
+    {
+        ui->_tabWidget->setCurrentIndex(3);
+        QMessageBox::warning(this, tr("提示"), tr("采样日期不能为空!"), QMessageBox::Close);
+        return false;
+    }
+
+    if(ui->_timeEditOilSampleSampleTime->text().isEmpty())
+    {
+        ui->_tabWidget->setCurrentIndex(3);
+        QMessageBox::warning(this, tr("提示"), tr("采样时间不能为空!"), QMessageBox::Close);
+        return false;
+    }
+
     if(ui->_comboBoxOilSampleID->currentText().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(3);
@@ -280,6 +308,13 @@ bool ImageProperties::isValid()
         return false;
     }
 
+    if(ui->_comboBoxMentalInstrumentType->currentText().isEmpty())
+    {
+        ui->_tabWidget->setCurrentIndex(5);
+        QMessageBox::warning(this, tr("提示"), tr("分析铁谱仪型号不能为空!"), QMessageBox::Close);
+        return false;
+    }
+
     if(ui->_comboBoxMentalID->currentText().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(5);
@@ -290,6 +325,27 @@ bool ImageProperties::isValid()
     {
         ui->_tabWidget->setCurrentIndex(5);
         QMessageBox::warning(this, tr("提示"), tr("油样编号不能为空!"), QMessageBox::Close);
+        return false;
+    }
+
+    if(ui->_comboBoxMentalSampleArea->currentText().isEmpty())
+    {
+        ui->_tabWidget->setCurrentIndex(6);
+        QMessageBox::warning(this, tr("提示"), tr("铁谱图片采集区域不能为空!"), QMessageBox::Close);
+        return false;
+    }
+
+    if(ui->_editMentalSampleEnlarger->text().isEmpty())
+    {
+        ui->_tabWidget->setCurrentIndex(6);
+        QMessageBox::warning(this, tr("提示"), tr("放大倍数不能为空!"), QMessageBox::Close);
+        return false;
+    }
+
+    if(ui->_comboBoxMentalSampleLightType->currentText().isEmpty())
+    {
+        ui->_tabWidget->setCurrentIndex(6);
+        QMessageBox::warning(this, tr("提示"), tr("光源类型不能为空!"), QMessageBox::Close);
         return false;
     }
 
@@ -376,6 +432,20 @@ bool ImageProperties::isValid(int index)
     }
     else if(index == 3)
     {
+        if(ui->_dateEditOilSampleSampleDate->text().isEmpty())
+        {
+            ui->_tabWidget->setCurrentIndex(3);
+            QMessageBox::warning(this, tr("提示"), tr("采样日期不能为空!"), QMessageBox::Close);
+            return false;
+        }
+
+        if(ui->_timeEditOilSampleSampleTime->text().isEmpty())
+        {
+            ui->_tabWidget->setCurrentIndex(3);
+            QMessageBox::warning(this, tr("提示"), tr("采样时间不能为空!"), QMessageBox::Close);
+            return false;
+        }
+
         if(ui->_comboBoxOilSampleID->currentText().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(3);
@@ -418,6 +488,12 @@ bool ImageProperties::isValid(int index)
     }
     else if(index == 5)
     {
+        if(ui->_comboBoxMentalInstrumentType->currentText().isEmpty())
+        {
+            ui->_tabWidget->setCurrentIndex(5);
+            QMessageBox::warning(this, tr("提示"), tr("分析铁谱仪型号不能为空!"), QMessageBox::Close);
+            return false;
+        }
         if(ui->_comboBoxMentalID->currentText().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(5);
@@ -433,6 +509,26 @@ bool ImageProperties::isValid(int index)
     }
     else if(index == 6)
     {
+        if(ui->_comboBoxMentalSampleArea->currentText().isEmpty())
+        {
+            ui->_tabWidget->setCurrentIndex(6);
+            QMessageBox::warning(this, tr("提示"), tr("铁谱图片采集区域不能为空!"), QMessageBox::Close);
+            return false;
+        }
+
+        if(ui->_editMentalSampleEnlarger->text().isEmpty())
+        {
+            ui->_tabWidget->setCurrentIndex(6);
+            QMessageBox::warning(this, tr("提示"), tr("放大倍数不能为空!"), QMessageBox::Close);
+            return false;
+        }
+
+        if(ui->_comboBoxMentalSampleLightType->currentText().isEmpty())
+        {
+            ui->_tabWidget->setCurrentIndex(6);
+            QMessageBox::warning(this, tr("提示"), tr("光源类型不能为空!"), QMessageBox::Close);
+            return false;
+        }
         if(ui->_comboBoxMentalSampleImageID->currentText().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(6);
@@ -777,6 +873,7 @@ void ImageProperties::on__buttonSave_clicked()
                 _models[6]->setData(_models[6]->index(0, 8), ui->_comboBoxMentalSampleGuy->currentText());
                 _models[6]->setData(_models[6]->index(0, 9), ui->_editMentalSamplePath->text());
                 _models[6]->setData(_models[6]->index(0, 10), ui->_editMentalSampleAnalysis->text());
+                _models[6]->setData(_models[6]->index(0, 11), "N");
             }
         }
         for(int i = 0; i < TABLE_N; i++)
@@ -827,6 +924,7 @@ void ImageProperties::on__buttonSave_clicked()
         QMessageBox::warning(this, tr("提示"), tr("保存成功!"), QMessageBox::Close);
 
         emit flush();
+        bool ret = emit copyOrgImage(ui->_comboBoxMentalSampleImageID->currentText());
 
         close();
     }
@@ -952,49 +1050,31 @@ void ImageProperties::on__editServiceNumber_textChanged(const QString &arg1)
 void ImageProperties::on__dateEditOilSampleSampleDate_dateChanged(const QDate &date)
 {
     if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
-    if(!ui->_dateEditOilSampleSampleDate->text().isEmpty() && !ui->_comboBoxOilSamplePlaneID->currentText().isEmpty()
-        && !ui->_timeEditOilSampleSampleTime->text().isEmpty() && !ui->_comboBoxMovepartName->currentText().isEmpty())
-    {
-        QString id = ui->_comboBoxOilSamplePlaneID->currentText() + ui->_dateEditOilSampleSampleDate->date().toString("yyyyMMdd")
-                + ui->_timeEditOilSampleSampleTime->time().toString("hh") + ui->_comboBoxMovepartName->currentText()+"0";
-       ui->_comboBoxOilSampleID->setEditText(id);
-    }
+    ui->_comboBoxOilSampleID->setEditText(generateOilSampleID());
 }
 
 void ImageProperties::on__timeEditOilSampleSampleTime_timeChanged(const QTime &date)
 {
     if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
-    if(!ui->_dateEditOilSampleSampleDate->text().isEmpty() && !ui->_comboBoxOilSamplePlaneID->currentText().isEmpty()
-        && !ui->_timeEditOilSampleSampleTime->text().isEmpty() && !ui->_comboBoxMovepartName->currentText().isEmpty())
-    {
-       QString id = ui->_comboBoxOilSamplePlaneID->currentText() + ui->_dateEditOilSampleSampleDate->date().toString("yyyyMMdd")
-               + ui->_timeEditOilSampleSampleTime->time().toString("hh") + ui->_comboBoxMovepartName->currentText()+"0";
-       ui->_comboBoxOilSampleID->setEditText(id);
-    }
+    ui->_comboBoxOilSampleID->setEditText(generateOilSampleID());
 }
 
 void ImageProperties::on__comboBoxOilSamplePlaneID_editTextChanged(const QString &arg1)
 {
     if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
-    if(!ui->_dateEditOilSampleSampleDate->text().isEmpty() && !ui->_comboBoxOilSamplePlaneID->currentText().isEmpty()
-        && !ui->_timeEditOilSampleSampleTime->text().isEmpty() && !ui->_comboBoxMovepartName->currentText().isEmpty())
-    {
-       QString id = ui->_comboBoxOilSamplePlaneID->currentText() + ui->_dateEditOilSampleSampleDate->date().toString("yyyyMMdd")
-               + ui->_timeEditOilSampleSampleTime->time().toString("hh") + ui->_comboBoxMovepartName->currentText()+"0";
-       ui->_comboBoxOilSampleID->setEditText(id);
-    }
+    ui->_comboBoxOilSampleID->setEditText(generateOilSampleID());
 }
 
 void ImageProperties::on__comboBoxMovepartServiceMovepartID_editTextChanged(const QString &arg1)
 {
     if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
-    if(!ui->_dateEditOilSampleSampleDate->text().isEmpty() && !ui->_comboBoxOilSamplePlaneID->currentText().isEmpty()
-        && !ui->_timeEditOilSampleSampleTime->text().isEmpty() && !ui->_comboBoxMovepartName->currentText().isEmpty())
-    {
-       QString id = ui->_comboBoxOilSamplePlaneID->currentText() + ui->_dateEditOilSampleSampleDate->date().toString("yyyyMMdd")
-               + ui->_timeEditOilSampleSampleTime->time().toString("hh") + ui->_comboBoxMovepartName->currentText()+"0";
-       ui->_comboBoxOilSampleID->setEditText(id);
-    }
+    //    if(!ui->_dateEditOilSampleSampleDate->text().isEmpty() && !ui->_comboBoxOilSamplePlaneID->currentText().isEmpty()
+    //            && !ui->_timeEditOilSampleSampleTime->text().isEmpty() && !ui->_comboBoxMovepartName->currentText().isEmpty())
+    //    {
+    //        QString id = ui->_comboBoxOilSamplePlaneID->currentText() + ui->_dateEditOilSampleSampleDate->date().toString("yyyyMMdd")
+    //                + ui->_timeEditOilSampleSampleTime->time().toString("hh") + ui->_comboBoxMovepartName->currentText()+"0";
+    //        ui->_comboBoxOilSampleID->setEditText(id);
+    //    }
 }
 
 void ImageProperties::on__comboBoxMentalOilSampleID_editTextChanged(const QString &arg1)
@@ -1007,10 +1087,40 @@ QString ImageProperties::generateTiepupianID()
 {
     if(!ui->_comboBoxMentalOilSampleID->currentText().isEmpty() && !ui->_comboBoxMentalInstrumentType->currentText().isEmpty())
     {
-        return ui->_comboBoxMentalOilSampleID->currentText() + "TPP" + ui->_comboBoxMentalInstrumentType->currentText() + "00";
+        return ui->_comboBoxMentalOilSampleID->currentText() + "TPP" + QString(QChar::fromAscii(QChar('A').toAscii() + ui->_comboBoxMentalInstrumentType->currentIndex()-1)) + "00";
     }
     else
         return QString();
+}
+
+QString ImageProperties::generateOilSampleID()
+{
+    if(!ui->_comboBoxMovepartName->currentText().isEmpty() && !ui->_dateEditOilSampleSampleDate->text().isEmpty()
+            && !ui->_timeEditOilSampleSampleTime->text().isEmpty() && !ui->_comboBoxOilSamplePlaneID->currentText().isEmpty())
+    {
+        return ui->_comboBoxOilSamplePlaneID->currentText() + ui->_dateEditOilSampleSampleDate->date().toString("yyyyMMdd")
+                + ui->_timeEditOilSampleSampleTime->time().toString("hh") + QString(QChar::fromAscii(QChar('A').toAscii() + ui->_comboBoxMovepartName->currentIndex()-1))+"0";
+    }
+    else
+    {
+        return QString();
+    }
+}
+
+QString ImageProperties::generateTieputupianID()
+{
+    if(!ui->_comboBoxMentalSampleID->currentText().isEmpty() &&
+            !ui->_editMentalSampleEnlarger->text().isEmpty() &&
+            !ui->_comboBoxMentalSampleLightType->currentText().isEmpty() &&
+            !ui->_comboBoxMentalSampleArea->currentText().isEmpty())
+    {
+        return ui->_comboBoxMentalSampleID->currentText() + ui->_editMentalSampleEnlarger->text() + "x"
+                + "L" + QString(QChar::fromAscii(QChar('A').toAscii()+ui->_comboBoxMentalSampleLightType->currentIndex()-1)) + "Q" + QString(QChar::fromAscii(QChar('A').toAscii()+ui->_comboBoxMentalSampleArea->currentIndex()-1))+"00";
+    }
+    else
+    {
+        return QString();
+    }
 }
 
 void ImageProperties::on__comboBoxMovepartID_editTextChanged(const QString &arg1)
@@ -1021,6 +1131,8 @@ void ImageProperties::on__comboBoxMovepartID_editTextChanged(const QString &arg1
 void ImageProperties::on__comboBoxMovepartName_editTextChanged(const QString &arg1)
 {
     if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+
+    ui->_comboBoxOilSampleID->setEditText(generateOilSampleID());
 }
 
 void ImageProperties::on__comboBoxMovepartType_editTextChanged(const QString &arg1)
@@ -1335,6 +1447,8 @@ void ImageProperties::on__comboBoxOilAnalyzeLihuaEquipID_editTextChanged(const Q
 void ImageProperties::on__comboBoxMentalInstrumentType_editTextChanged(const QString &arg1)
 {
     if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+
+    ui->_comboBoxMentalID->setEditText(generateTiepupianID());
 }
 
 void ImageProperties::on__comboBoxMentalID_editTextChanged(const QString &arg1)
@@ -1371,16 +1485,7 @@ void ImageProperties::on__comboBoxMentalSampleID_editTextChanged(const QString &
 {
     if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
 
-    if(!ui->_comboBoxMentalSampleID->currentText().isEmpty() &&
-       !ui->_editMentalSampleEnlarger->text().isEmpty() &&
-       !ui->_comboBoxMentalSampleLightType->currentText().isEmpty() &&
-       !ui->_comboBoxMentalSampleArea->currentText().isEmpty())
-    {
-        QString str = ui->_comboBoxMentalSampleID->currentText() + ui->_editMentalSampleEnlarger->text() + "x"
-                + ui->_comboBoxMentalSampleLightType->currentText() + ui->_comboBoxMentalSampleArea->currentText()+"00";
-        ui->_comboBoxMentalSampleImageID->setEditText(str);
-
-    }
+    ui->_comboBoxMentalSampleImageID->setEditText(generateTieputupianID());
 }
 
 void ImageProperties::on__comboBoxMentalSampleReportID_editTextChanged(const QString &arg1)
@@ -1401,46 +1506,19 @@ void ImageProperties::on__comboBoxMentalSampleSamplerType_editTextChanged(const 
 void ImageProperties::on__comboBoxMentalSampleLightType_editTextChanged(const QString &arg1)
 {
     if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
-    if(!ui->_comboBoxMentalSampleID->currentText().isEmpty() &&
-       !ui->_editMentalSampleEnlarger->text().isEmpty() &&
-       !ui->_comboBoxMentalSampleLightType->currentText().isEmpty() &&
-       !ui->_comboBoxMentalSampleArea->currentText().isEmpty())
-    {
-        QString str = ui->_comboBoxMentalSampleID->currentText() + ui->_editMentalSampleEnlarger->text() + "x"
-                + ui->_comboBoxMentalSampleLightType->currentText() + ui->_comboBoxMentalSampleArea->currentText() + "00";
-        ui->_comboBoxMentalSampleImageID->setEditText(str);
-
-    }
+    ui->_comboBoxMentalSampleImageID->setEditText(generateTieputupianID());
 }
 
 void ImageProperties::on__editMentalSampleEnlarger_textChanged(const QString &arg1)
 {
     if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
-    if(!ui->_comboBoxMentalSampleID->currentText().isEmpty() &&
-       !ui->_editMentalSampleEnlarger->text().isEmpty() &&
-       !ui->_comboBoxMentalSampleLightType->currentText().isEmpty() &&
-       !ui->_comboBoxMentalSampleArea->currentText().isEmpty())
-    {
-        QString str = ui->_comboBoxMentalSampleID->currentText() + ui->_editMentalSampleEnlarger->text() + "x"
-                + ui->_comboBoxMentalSampleLightType->currentText() + ui->_comboBoxMentalSampleArea->currentText()+"00";
-        ui->_comboBoxMentalSampleImageID->setEditText(str);
-
-    }
+    ui->_comboBoxMentalSampleImageID->setEditText(generateTieputupianID());
 }
 
 void ImageProperties::on__comboBoxMentalSampleArea_editTextChanged(const QString &arg1)
 {
     if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
-    if(!ui->_comboBoxMentalSampleID->currentText().isEmpty() &&
-       !ui->_editMentalSampleEnlarger->text().isEmpty() &&
-       !ui->_comboBoxMentalSampleLightType->currentText().isEmpty() &&
-       !ui->_comboBoxMentalSampleArea->currentText().isEmpty())
-    {
-        QString str = ui->_comboBoxMentalSampleID->currentText() + ui->_editMentalSampleEnlarger->text() + "x"
-                + ui->_comboBoxMentalSampleLightType->currentText() + ui->_comboBoxMentalSampleArea->currentText()+"00";
-        ui->_comboBoxMentalSampleImageID->setEditText(str);
-
-    }
+    ui->_comboBoxMentalSampleImageID->setEditText(generateTieputupianID());
 }
 
 void ImageProperties::on__comboBoxMentalSampleGuy_editTextChanged(const QString &arg1)

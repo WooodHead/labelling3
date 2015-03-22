@@ -9,6 +9,8 @@
 #include <QSqlRecord>
 #include <QBuffer>
 
+#include "ImageOperate.h"
+
 namespace Ui {
 class MoliProperties;
 }
@@ -79,9 +81,11 @@ private:
     bool _bDirty;
 
     QStringList getItems(QSqlTableModel *model, QString fieldName);
+    void computeMoliInfo(double imageScale, double& perimeter, double& maxLength, double& maxWidth);
+
 
 public:
-    void showDlg(QString imagePath, const QImage& result, const QImage& mask);
+    void showDlg(QString imagePath, const QImage& result, const QImage& mask, const double imageScale);
 };
 
 #endif // MOLIPROPERTIES_H

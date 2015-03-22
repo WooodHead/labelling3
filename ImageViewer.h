@@ -47,40 +47,29 @@ public:
 	~ImageViewer();
 
     bool			openImage(const QString &fileName);
-	bool			openLabelImage(const QString &fileName);
 	bool			deleteImage();
-
-    bool			saveImage(const QString &fileName, const char *fileFormat);
-	bool			saveImage(const QString &fileName);
 
 	bool			saveAsImage( const QString &fileName );
     void			setImage(const QImage &image);
-    void			insertShape(const QPainterPath &path);
-    void			setBrushColor(const QColor &color);
     void			setBrushWidth(int width);
     void			setBrush(BrushInterface *brushInterface, const QString &brush);
 
     QImage			image() const { return *_displayImage; }
-	IplImage*		getOCVImage() { return _ocvImage; }
+    IplImage*		getOCVImage() { return _ocvImage; }
 
-	QColor			brushColor() const { return brushcolor; }
-    int				brushWidth() const { return thickness; }
     QSize			sizeHint() const;
 
 	void			setPaintable( bool flag ) { bPaintable = flag; }
     //////////////////////////////////////////////////////////////////////////
 	// Region Competition Operations
 	/////////////////////////////////////////////////////////////////////////
-	QImage*			RunRegionCompetition();
 	bool			saveLabelMap(const QString &fileName, const char *fileFormat = "BMP");
     bool            saveLabelledResult(QString wholefilename, QString ext);
     bool            saveAsLabelledResult(QString &pathResult);
-    void            saveUserLabels();
     bool            saveMask(QString path, QString ext);
     bool            saveAsMask(QString &pathMask);
 	
     QImage*         getOriginalImage();
-	//bool			openLabelImage(const QString &fileName);
 
 public:
 	void			imageScaling( double scaleFactor );
@@ -88,7 +77,6 @@ public:
     void			imageNotColor(double  );
 	void            setLineColor(QColor color) { _lineColor = color; }
 	QColor          getLineColor() const { return _lineColor; }
-	int				getLineThickness() const { return _lineThickness; }
 	void			setLineThickness(int val) { _lineThickness = val; }
 
 protected:
@@ -102,15 +90,11 @@ private:
     void			setupPainter(QPainter &painter);
 	void			setupOtherPainter(QPainter &painter);
 
-	void			prepareFeature();
-	void			saveGroundTruth(char* label);
-
 	void			polygonLabelling();
 
     QImage		    *_displayImage;
 	QImage			*_labelMapImage;
 	QImage          *_result_labelImage;
-	QString			curFilename;
 	
 	IplImage		*_ocvImage;
 	IplImage        *_srcOcvImage;
@@ -135,7 +119,6 @@ private:
 	int             _labelType;
 
     ImageCompletionUI*  _mainWindow;
-    bool _bDone;
 
 
 	//////////////////////////////////////////////////////////////////////////
@@ -146,8 +129,6 @@ private:
 	int				curLabelingObject;
 
 	int				objectCount;
-
-	char*			labelMap;
     
 	QString         filepath;
 
@@ -168,7 +149,6 @@ private:
 public:
     void getMainWindow(ImageCompletionUI* m_Window){this->_mainWindow = m_Window;}
 	void setMethod(int a){m_method = a;}
-	bool isUsePrior;
 	void setLabelType(int i) { _labelType = i;}
 
 	int Method() const { return m_method; }
@@ -177,7 +157,6 @@ public:
 	double _seg_during;
 
     void redo();
-    void undo();
 
     void setDefaultCursor();
 
@@ -193,7 +172,7 @@ private slots:
 	void				updateObjectCount(int);
 
 private:
-        Ui::ButtomWindow              _bottomWindow;
+    Ui::ButtomWindow              _bottomWindow;
 
 };
 

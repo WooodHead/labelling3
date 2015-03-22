@@ -26,7 +26,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>4</number>
+    <number>7</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -36,7 +36,7 @@
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>70</y>
+       <y>30</y>
        <width>562</width>
        <height>62</height>
       </rect>
@@ -129,7 +129,7 @@
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>60</y>
+       <y>30</y>
        <width>815</width>
        <height>95</height>
       </rect>
@@ -260,7 +260,7 @@
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>50</y>
+       <y>30</y>
        <width>654</width>
        <height>187</height>
       </rect>
@@ -649,6 +649,19 @@
       </item>
      </layout>
     </widget>
+    <widget class="QLabel" name="label_63">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>310</y>
+       <width>621</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;*说明&lt;/span&gt;: 油样编号根据 采样日期 采样时间 机号 动部件类别自动生成, 最后一位为标识位默认是0, &lt;/p&gt;&lt;p&gt;如用户确认是同一时间采集的不同油样,则用户可对编号顺序编为1,2..., 不超过9.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="tab_5">
     <attribute name="title">
@@ -658,7 +671,7 @@
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>50</y>
+       <y>30</y>
        <width>1105</width>
        <height>261</height>
       </rect>
@@ -1020,16 +1033,29 @@
       </item>
      </layout>
     </widget>
+    <widget class="QLabel" name="label_120">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>310</y>
+       <width>601</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;*说明&lt;/span&gt;: 铁谱分析报告编号继承油样编号自动生成, 如油样编号为LH046072011091615B0, &lt;/p&gt;&lt;p&gt;则铁谱分析报告编号为LH046072011091615B0TPRReport, 其它分析报告编号类似&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="tab_6">
     <attribute name="title">
      <string>铁谱制谱信息</string>
     </attribute>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
-       <x>1</x>
-       <y>81</y>
+       <x>0</x>
+       <y>30</y>
        <width>691</width>
        <height>95</height>
       </rect>
@@ -1134,16 +1160,29 @@
       </item>
      </layout>
     </widget>
+    <widget class="QLabel" name="label_118">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>310</y>
+       <width>641</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;*说明&lt;/span&gt;: 铁谱片编号根据 油样编号 分析铁谱仪型号 自动生成, 最后两位是铁谱片顺序编号, 默认是00, &lt;/p&gt;&lt;p&gt;如用户确认是同一油样的不同谱片, 则用户可手工顺序编为01,02,03, ..., 不超过99.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="tab_7">
     <attribute name="title">
      <string>铁谱图片采集信息</string>
     </attribute>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>50</y>
+       <y>40</y>
        <width>741</width>
        <height>134</height>
       </rect>
@@ -1163,36 +1202,8 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="7">
-       <widget class="QLabel" name="label_57">
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;光源类型&lt;span style=&quot; color:#ff0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="8" colspan="2">
-       <widget class="QComboBox" name="_comboBoxMentalSampleLightType">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="2">
        <widget class="QComboBox" name="_comboBoxMentalSampleImageID">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="7">
-       <widget class="QLabel" name="label_54">
-        <property name="text">
-         <string>铁谱分析报告编号</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="8" colspan="2">
-       <widget class="QComboBox" name="_comboBoxMentalSampleReportID">
         <property name="editable">
          <bool>true</bool>
         </property>
@@ -1295,7 +1306,48 @@
         </property>
        </widget>
       </item>
+      <item row="2" column="9">
+       <widget class="QComboBox" name="_comboBoxMentalSampleReportID">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="9">
+       <widget class="QComboBox" name="_comboBoxMentalSampleLightType">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="7" colspan="2">
+       <widget class="QLabel" name="label_57">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;光源类型&lt;span style=&quot; color:#ff0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="7" colspan="2">
+       <widget class="QLabel" name="label_54">
+        <property name="text">
+         <string>铁谱分析报告编号</string>
+        </property>
+       </widget>
+      </item>
      </layout>
+    </widget>
+    <widget class="QLabel" name="label_121">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>310</y>
+       <width>651</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;*说明&lt;/span&gt;: 铁谱图片编号由铁谱片编号 放大倍数 光源类型 图片采集区域自动生成, 最后两位是顺序编号, &lt;/p&gt;&lt;p&gt;默认是00, 后续是01, 02, 03, ..., 不超过19.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
     </widget>
    </widget>
    <widget class="QWidget" name="tab_9">
@@ -1757,6 +1809,126 @@
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>_comboBoxEquipPlaneID</tabstop>
+  <tabstop>_comboBoxEquipPlaneType</tabstop>
+  <tabstop>_comboBoxEquipUnitID</tabstop>
+  <tabstop>_editEquipHours</tabstop>
+  <tabstop>_comboBoxEquipRuntime</tabstop>
+  <tabstop>_editServiceNumber</tabstop>
+  <tabstop>_buttonSave</tabstop>
+  <tabstop>_buttonCancel</tabstop>
+  <tabstop>_buttonNext</tabstop>
+  <tabstop>_comboBoxMovepartID</tabstop>
+  <tabstop>_comboBoxMovepartName</tabstop>
+  <tabstop>_comboBoxMovepartType</tabstop>
+  <tabstop>_comboBoxMovepartMohe</tabstop>
+  <tabstop>_comboBoxMovepartPlaneID</tabstop>
+  <tabstop>_comboBoxMovepartPlaneType</tabstop>
+  <tabstop>_dateEditMovepartBegin</tabstop>
+  <tabstop>_dateEditMovepartEnd</tabstop>
+  <tabstop>_editMovepartHours</tabstop>
+  <tabstop>_comboBoxMovepartServiceID</tabstop>
+  <tabstop>_comboBoxMovepartServiceMovepartID</tabstop>
+  <tabstop>_comboBoxMovepartServiceMovepartType</tabstop>
+  <tabstop>_dateEditMovepartServiceDate</tabstop>
+  <tabstop>_editMovepartServiceNumber</tabstop>
+  <tabstop>_comboBoxMovepartServiceUnit</tabstop>
+  <tabstop>_editMovepartServiceReson</tabstop>
+  <tabstop>_editMovepartServiceContent</tabstop>
+  <tabstop>_editMovepartServiceInfo</tabstop>
+  <tabstop>_dateEditOilSampleSampleDate</tabstop>
+  <tabstop>_timeEditOilSampleSampleTime</tabstop>
+  <tabstop>_comboBoxOilSamplePlaneType</tabstop>
+  <tabstop>_comboBoxOilSamplePlaneID</tabstop>
+  <tabstop>_comboBoxOilSampleMonitorPart</tabstop>
+  <tabstop>_comboBoxOilSampleMonitorPartID</tabstop>
+  <tabstop>_comboBoxOilSampleSamplePointID</tabstop>
+  <tabstop>_editOilSampleHours</tabstop>
+  <tabstop>_editOilSampleMount</tabstop>
+  <tabstop>_editOilSampleReason</tabstop>
+  <tabstop>_comboBoxOilSampleSampleUnit</tabstop>
+  <tabstop>_comboBoxOilSampleSampleGuy</tabstop>
+  <tabstop>_comboBoxOilSampleID</tabstop>
+  <tabstop>_comboBoxOilSampleUnitID</tabstop>
+  <tabstop>_comboBoxOilSampleSampleMethod</tabstop>
+  <tabstop>_editOilSampleSampleMount</tabstop>
+  <tabstop>_editOilSampleInfo</tabstop>
+  <tabstop>_comboBoxOilSampleSendGuy</tabstop>
+  <tabstop>_dateEditOilSampleSendDate</tabstop>
+  <tabstop>_timeEditOilSampleSendTime</tabstop>
+  <tabstop>_comboBoxOilSampleSituation</tabstop>
+  <tabstop>_comboBoxOilAnalyzeOilSampleID</tabstop>
+  <tabstop>_comboBoxOilAnalyzeUnitName</tabstop>
+  <tabstop>_comboBoxOilAnalyzeSendUnit</tabstop>
+  <tabstop>_comboBoxOilAnalyzeSendGuy</tabstop>
+  <tabstop>_editOilAnalyzeReason</tabstop>
+  <tabstop>_dateEditOilAnalyzeReceiveDate</tabstop>
+  <tabstop>_comboBoxOilAnalyzeReceiveGuy</tabstop>
+  <tabstop>_comboBoxOilAnalyzePollutionLevelMethod</tabstop>
+  <tabstop>_comboBoxOilAnalyzePollutionLevelGuy</tabstop>
+  <tabstop>_dateEditOilAnalyzePollutionDate</tabstop>
+  <tabstop>_comboBoxOilAnalyzePolluteLevelEquip</tabstop>
+  <tabstop>_comboBoxOilAnalyzePolluteReportID</tabstop>
+  <tabstop>_comboBoxOilAnalyzeLightMethod</tabstop>
+  <tabstop>_comboBoxOilAnalyzeLightGuy</tabstop>
+  <tabstop>_dateEditOilAnalyzeLightDate</tabstop>
+  <tabstop>_comboBoxOilAnalyzeLightEquip</tabstop>
+  <tabstop>_comboBoxOilAnalyzeLightEquipID</tabstop>
+  <tabstop>_comboBoxOilAnalyzeMentalMethod</tabstop>
+  <tabstop>_comboBoxOilAnalyzeMentalGuy</tabstop>
+  <tabstop>_dateEditOilAnalyzeMentalDate</tabstop>
+  <tabstop>_comboBoxOilAnalyzeMentalEquip</tabstop>
+  <tabstop>_comboBoxOilAnalyzeMentalEquipID</tabstop>
+  <tabstop>_comboBoxOilAnalyzeLihuaMethod</tabstop>
+  <tabstop>_comboBoxOilAnalyzeLihuaGuy</tabstop>
+  <tabstop>_dateEditOilAnalyzeLihuaDate</tabstop>
+  <tabstop>_comboBoxOilAnalyzeLihuaEquip</tabstop>
+  <tabstop>_comboBoxOilAnalyzeLihuaEquipID</tabstop>
+  <tabstop>_comboBoxMentalInstrumentType</tabstop>
+  <tabstop>_comboBoxMentalID</tabstop>
+  <tabstop>_comboBoxMentalReportID</tabstop>
+  <tabstop>_comboBoxMentalOilSampleID</tabstop>
+  <tabstop>_editMentalMount</tabstop>
+  <tabstop>_comboBoxMentalMethod</tabstop>
+  <tabstop>_comboBoxMentalGuy</tabstop>
+  <tabstop>_comboBoxMentalSampleArea</tabstop>
+  <tabstop>_editMentalSampleEnlarger</tabstop>
+  <tabstop>_comboBoxMentalSampleLightType</tabstop>
+  <tabstop>_comboBoxMentalSampleImageID</tabstop>
+  <tabstop>_comboBoxMentalSampleID</tabstop>
+  <tabstop>_comboBoxMentalSampleReportID</tabstop>
+  <tabstop>_comboBoxMentalSampleSamplerType</tabstop>
+  <tabstop>_comboBoxMentalSampleMicroType</tabstop>
+  <tabstop>_editMentalSampleAnalysis</tabstop>
+  <tabstop>_comboBoxMentalSampleGuy</tabstop>
+  <tabstop>_editMentalSamplePath</tabstop>
+  <tabstop>_comboBoxMoliID</tabstop>
+  <tabstop>_comboBoxMoliImageID</tabstop>
+  <tabstop>_comboBoxMoliPianID</tabstop>
+  <tabstop>_comboBoxMoliReportID</tabstop>
+  <tabstop>_comboBoxMoliGuy</tabstop>
+  <tabstop>_editMoliPath</tabstop>
+  <tabstop>_comboBoxMoliProperty</tabstop>
+  <tabstop>_comboBoxMoliPosition</tabstop>
+  <tabstop>_editMoliSize</tabstop>
+  <tabstop>_editMoliLength</tabstop>
+  <tabstop>_comboBoxMoliShape</tabstop>
+  <tabstop>_comboBoxMoliColor</tabstop>
+  <tabstop>_comboBoxMoliSurface</tabstop>
+  <tabstop>_comboBoxMoliErodeType</tabstop>
+  <tabstop>_comboBoxMoliErodePart</tabstop>
+  <tabstop>_comboBoxMoliErodeReason</tabstop>
+  <tabstop>_comboBoxMoliGivenInfo</tabstop>
+  <tabstop>_comboBoxMoliTypical</tabstop>
+  <tabstop>_tabWidget</tabstop>
+  <tabstop>comboBox_78</tabstop>
+  <tabstop>comboBox_79</tabstop>
+  <tabstop>comboBox_80</tabstop>
+  <tabstop>comboBox_81</tabstop>
+  <tabstop>comboBox_82</tabstop>
+  <tabstop>lineEdit_20</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

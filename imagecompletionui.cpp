@@ -41,6 +41,8 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
 
     showData();
     showImagesInTree();
+
+    _imageScale = 1.0;
 }
 
 ImageCompletionUI::~ImageCompletionUI()
@@ -408,6 +410,8 @@ void	ImageCompletionUI::setupWidgets()
     _regionCompetitionDialog.radioScale->setIcon(QIcon(":/new/prefix1/icons/scale.png"));
     _regionCompetitionDialog.radioNotColor->setIcon(Global::Awesome->icon(circle));
     _regionCompetitionDialog.radioMesuarement->setIcon(QIcon(":/new/prefix1/icons/ruler.png"));
+    _regionCompetitionDialog._line->setHidden(true);
+    _regionCompetitionDialog._labelRulerText->setHidden(true);
 
     _rightOperationWidget->setWidget(_dockWidgetContents);
     this->addDockWidget(static_cast<Qt::DockWidgetArea>(2), _rightOperationWidget);
@@ -512,6 +516,7 @@ void ImageCompletionUI::createConnections()
     connect(_regionCompetitionDialog.radioScale, SIGNAL(clicked()), this, SLOT(scaling()));
     connect(_regionCompetitionDialog.radioBrightness, SIGNAL(clicked()), this, SLOT(brighting()));
     connect(_regionCompetitionDialog.radioNotColor, SIGNAL(clicked()), this, SLOT(notColor()));
+    connect(_regionCompetitionDialog.radioMesuarement, SIGNAL(clicked()), this, SLOT(measure()));
 
     connect(_regionCompetitionDialog.sliderBasicOp, SIGNAL(sliderReleased()), this, SLOT(actionSliderReleased()));
 
@@ -546,7 +551,7 @@ void ImageCompletionUI::editProperties()
     QImage* result = _editImageViewer->getResult();
     QImage* mask = _editImageViewer->getMask();
 
-    (new MoliProperties(this))->showDlg(_imagePath, result != NULL ? *result : QImage(), mask != NULL ? *mask : QImage() );
+    (new MoliProperties(this))->showDlg(_imagePath, result != NULL ? *result : QImage(), mask != NULL ? *mask : QImage(), _imageScale );
 }
 
 void ImageCompletionUI::setupBrush()
@@ -647,17 +652,6 @@ int ImageCompletionUI::rowIndex(QString image)
         if(image == _fNames[i]) return i+1;
     }
     return -1;
-
-    //    for(int i = 0; i < _leftWindow.tableWidget->rowCount(); i++)
-    //    {
-    //        if(_leftWindow.tableWidget->item(i,1) )
-    //            if(image == _leftWindow.tableWidget->item(i,1)->text())
-    //            {
-    //                return i+1;
-    //            }
-    //    }
-
-    //    return -1;
 }
 
 void ImageCompletionUI::showImagesInTree()
@@ -715,15 +709,15 @@ void ImageCompletionUI::showImagesInTree()
             QSqlQuery query;
             QString sql = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo join ferrographyinfo join oilsampleinfo on ferrographypicinfo.ferrographysheetid = ferrographyinfo.ferrographysheetid and ferrographyinfo.oilsampleid = oilsampleinfo.oilsampleid and oilsampleinfo.sampledepartid = '%1' and oilsampleinfo.planeid = '%2'").arg(departs[i]).arg((*it).second);
 
-            qDebug() << sql;
             query.prepare(sql);
             if(query.exec())
             {
                 while(query.next())
                 {
-                    QImage image(query.value(0).toString());
+                    QString fName = query.value(0).toString();
+                    QImage image(fName);
 
-                    QStandardItem *item2 = new QStandardItem("");
+                    QStandardItem *item2 = new QStandardItem(QFileInfo(fName).fileName());
                     item2->setIcon(QPixmap::fromImage(image));
                     item->appendRow(item2);
                 }
@@ -731,7 +725,11 @@ void ImageCompletionUI::showImagesInTree()
         }
     }
 
+    _treeModel->setHeaderData(0, Qt::Horizontal, QString());
     _leftWindow._treeViewImages->setModel(_treeModel);
+    _leftWindow._treeViewImages->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _leftWindow._treeViewImages->setSelectionMode( QAbstractItemView::SingleSelection );
+    _leftWindow._treeViewImages->setHeaderHidden(true);
     _leftWindow._treeViewImages->show();
 }
 
@@ -1152,58 +1150,6 @@ void ImageCompletionUI::_SceneupdateBrushSize()
     _editImageViewer->setBrushWidth( _brushSize );
 }
 
-void ImageCompletionUI::Excute()
-{
-
-    if (_step == LOADFAILED)
-    {
-        QMessageBox::warning( this, tr("RegionCompetition"), tr("Load Image Error\n"));
-        return;
-    }
-
-
-    QIcon iconGo, iconNext;
-    iconGo.addPixmap(QPixmap(QString::fromUtf8("icons/go.png")), QIcon::Normal, QIcon::Off);
-    iconNext.addPixmap(QPixmap(QString::fromUtf8("icons/next.png")), QIcon::Normal, QIcon::Off);
-
-    QImage* tmp_image;
-
-    //	_regionCompetitionDialog.operationBtn->setEnabled(false);
-    tmp_image = _editImageViewer->RunRegionCompetition();
-    //	_regionCompetitionDialog.operationBtn->setEnabled(true);
-    updateLog();
-
-    //switch (m_step)
-    //{
-    //case NONE:
-    //	_regionCompetitionDialog.operationBtn->setIcon(iconGo);
-    //	_regionCompetitionDialog.operationBtn->setIconSize(QSize(32, 32));
-    //	break;
-    //case MARKING:
-    //	//_regionCompetitionDialog.operationBtn->setIcon(iconNext);
-    //	_regionCompetitionDialog.operationBtn->setEnabled(false);
-    //	tmp_image = _editImageViewer->RunRegionCompetition();
-    //	_regionCompetitionDialog.operationBtn->setEnabled(true);
-    //	//_resultImageViewer->setImage( *tmp_image );
-    //	//_resultImageViewer->repaint();
-    //	//_resultImageViewer->openImage("45454.jpg");
-    //	//_centralTabWidget->setCurrentIndex(1);
-    //	updateLog();
-    //	break;
-    //case BOOSTING:
-    //	break;
-    //case TESTING:
-    //	//		_editImageViewer->boostTesting();
-    //	break;
-    //case MARCHING:
-    //	//		_editImageViewer->fastMarching();
-    //	break;
-    //}
-
-    //if (tmp_image) delete tmp_image;
-
-}
-
 void	ImageCompletionUI::keyPressEvent(QKeyEvent */* e */){}
 
 
@@ -1301,6 +1247,9 @@ void ImageCompletionUI::scaling()
 
     _regionCompetitionDialog.labelSliderLeft->setText(tr("小"));
     _regionCompetitionDialog.labelSliderRight->setText(tr("大"));
+
+    _regionCompetitionDialog._line->setHidden(true);
+    _regionCompetitionDialog._labelRulerText->setHidden(true);
 }
 
 void ImageCompletionUI::brighting()
@@ -1311,6 +1260,9 @@ void ImageCompletionUI::brighting()
 
     _regionCompetitionDialog.labelSliderLeft->setText(tr("暗"));
     _regionCompetitionDialog.labelSliderRight->setText(tr("亮"));
+
+    _regionCompetitionDialog._line->setHidden(true);
+    _regionCompetitionDialog._labelRulerText->setHidden(true);
 }
 
 void ImageCompletionUI::notColor()
@@ -1319,6 +1271,28 @@ void ImageCompletionUI::notColor()
     _regionCompetitionDialog.labelSliderRight->setText(tr(""));
 
     _editImageViewer->imageNotColor( 0.0 );
+
+    _regionCompetitionDialog._line->setHidden(true);
+    _regionCompetitionDialog._labelRulerText->setHidden(true);
+}
+
+void ImageCompletionUI::measure()
+{
+    _regionCompetitionDialog.sliderBasicOp->setRange(0, 1000);
+    _regionCompetitionDialog.sliderBasicOp->setTickInterval(50);
+    _regionCompetitionDialog.sliderBasicOp->setTickPosition(QSlider::TicksRight);
+
+    _regionCompetitionDialog.labelSliderLeft->setText(tr("小"));
+    _regionCompetitionDialog.labelSliderLeft->setText(tr("大"));
+
+    _regionCompetitionDialog._line->show();
+    _regionCompetitionDialog._labelRulerText->show();
+    _regionCompetitionDialog._labelRulerText->setScaledContents(true);
+    _regionCompetitionDialog._labelRulerText->setText(tr("50微米(50像素)"));
+
+    _regionCompetitionDialog.sliderBasicOp->setValue(50);
+
+    _imageScale = 1.0;
 }
 
 void ImageCompletionUI::actionSliderReleased()
@@ -1342,7 +1316,8 @@ void ImageCompletionUI::actionSliderReleased()
     }
     else if(_regionCompetitionDialog.radioMesuarement->isChecked())
     {
-        // TODO
+       _regionCompetitionDialog._labelRulerText->setText(QString::number(_regionCompetitionDialog.sliderBasicOp->value()) +"微米(50像素)");
+       _imageScale = _regionCompetitionDialog.sliderBasicOp->value() * 1.0 / 50;
     }
 }
 
@@ -1748,21 +1723,31 @@ void ImageCompletionUI::flushBottom()
     showData();
 }
 
+bool ImageCompletionUI::copyOrgImage(QString name)
+{
+    if(!QDir(Global::PathImage).exists())
+    {
+        QDir().mkdir(Global::PathImage);
+    }
+
+    return QFile::copy(_imagePath, Global::PathImage + name + ".jpg");
+}
+
 void ImageCompletionUI::flushLeft(QString filename, QString label)
 {
-    for(int i = 0; i < _leftWindow.tableWidget->rowCount(); i++)
-    {
-        if(_leftWindow.tableWidget->item(i, 2) && filename == _leftWindow.tableWidget->item(i,1)->text())
-        {
-            _leftWindow.tableWidget->item(i,2)->setText(label);
+//    for(int i = 0; i < _leftWindow.tableWidget->rowCount(); i++)
+//    {
+//        if(_leftWindow.tableWidget->item(i, 2) && filename == _leftWindow.tableWidget->item(i,1)->text())
+//        {
+//            _leftWindow.tableWidget->item(i,2)->setText(label);
 
-            for(int j = 0; j < _leftWindow.tableWidget->columnCount(); j++)
-            {
-                _leftWindow.tableWidget->item(i, j)->setBackground(getColor(label));
-            }
-            return;
-        }
-    }
+//            for(int j = 0; j < _leftWindow.tableWidget->columnCount(); j++)
+//            {
+//                _leftWindow.tableWidget->item(i, j)->setBackground(getColor(label));
+//            }
+//            return;
+//        }
+//    }
 }
 
 // 拷贝文件--zhyn
@@ -2011,4 +1996,9 @@ QString ImageCompletionUI::labelStatus(QString imagePath)
         else return "";
     }
     return "";
+}
+
+void ImageCompletionUI::on__treeViewImages_doubleClicked(const QModelIndex &index)
+{
+    // TODO
 }

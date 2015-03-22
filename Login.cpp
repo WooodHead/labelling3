@@ -34,12 +34,12 @@ Login::Login(QWidget *parent) :
     ui->_icon->setPixmap(QPixmap::fromImage(image));
     ui->_icon->setScaledContents(true);
 
-//    QImage image2;
-//    image2.load(":/new/prefix1/icons/login_logo2.jpg");
-//    ui->_icon_2->setPixmap(QPixmap::fromImage(image2));
-//    ui->_icon_2->setScaledContents(true);
+    QImage image2;
+    image2.load(":/new/prefix1/icons/login_logo2.jpg");
+    ui->_icon_2->setPixmap(QPixmap::fromImage(image2));
+    ui->_icon_2->setScaledContents(true);
 
-    ui->_login->setStyleSheet("background: #993333; color: black;");
+    ui->_login->setStyleSheet("background: #99cccc; color: black;");
     ui->_cancel->setStyleSheet("background: #999999; color: black;");
     connect(ui->_login, SIGNAL(clicked()), this, SLOT(login()));
     connect(ui->_cancel, SIGNAL(clicked()), this, SLOT(close()));
@@ -71,7 +71,7 @@ Login::Login(QWidget *parent) :
     ui->_comboBoxResult->setAttribute(Qt::WA_TranslucentBackground);
 
     ui->_buttonTest->setStyleSheet("background: #009966; color: black;");
-    ui->_buttonSave->setStyleSheet("background: #993333; color: black;");
+    ui->_buttonSave->setStyleSheet("background: #99cccc; color: black;");
     ui->_buttonCancel2->setStyleSheet("background: #999999; color: black;");
     ui->_buttonCopyTo->setStyleSheet("background: #cccccc; color: black;");
     ui->_buttonResultTo->setStyleSheet("background: #cccccc; color: black;");
@@ -85,6 +85,7 @@ Login::Login(QWidget *parent) :
     this->move( r.center() - rect().center() );
 
     this->setStyleSheet("background-image: url(:/new/prefix1/icons/login_bg.jpg);");
+
 
     ui->centralStackedWidget->setCurrentIndex(0);
 }
@@ -158,12 +159,12 @@ void Login::login()
 
     if(_username.isEmpty())
     {
-        QMessageBox::warning(this, tr(""), tr("用户名不能为空!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("提示"), tr("用户名不能为空!"), QMessageBox::Close);
         return;
     }
     if(_passwd.isEmpty())
     {
-        QMessageBox::warning(this, tr(""), tr("密码不能为空!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("提示"), tr("密码不能为空!"), QMessageBox::Close);
         return;
     }
 
@@ -262,6 +263,9 @@ void Login::on__buttonSave_clicked()
     Global::settings->setValue("IMAGE/pathResult", ui->_editResultTo->text());
     Global::settings->setValue("IMAGE/extMask", ui->_comboBoxMask->currentText());
     Global::settings->setValue("IMAGE/extResult", ui->_comboBoxResult->currentText());
+
+    ui->centralStackedWidget->setCurrentIndex(0);
+    _settingButton->show();
 }
 
 void Login::on__buttonCopyTo_clicked()

@@ -59,7 +59,6 @@ ImageViewer::ImageViewer(QWidget *parent)
     updateObjectCount(0);
     isEraser        = false;
 
-    isUsePrior      = false;
     _result_labelImage = NULL;
 
     _bRectDrawing        = false;
@@ -71,8 +70,6 @@ ImageViewer::ImageViewer(QWidget *parent)
     m_method             = -1;
     _labelType           = -1;
     _seg_during          = 0;
-
-    _bDone = false;
 
     this->setMouseTracking(true);
 }
@@ -187,7 +184,6 @@ bool ImageViewer::deleteImage()
     updateObjectCount(0);
     isEraser = false;
     m_method = -1;
-    isUsePrior = false;
     _result_labelImage = NULL;
     //////////////////////////////////////////////////////////////////////////
     update();
@@ -259,11 +255,6 @@ bool ImageViewer::saveAsLabelledResult(QString &pathResult)
     else return true;
 }
 
-void ImageViewer::saveUserLabels()
-{
-    // TODO
-}
-
 bool ImageViewer::saveMask(QString path, QString ext)
 {
     if(_mask.empty()) return false;
@@ -330,78 +321,12 @@ QImage *ImageViewer::getOriginalImage()
     return IplImageToQImage(_ocvImage);
 }
 
-bool ImageViewer::openLabelImage(const QString &fileName)
-{
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    if ( !fileName.isEmpty() )
-    {
-        if ( labelImage != 0 )
-        {
-            //*
-            cvReleaseImage ( &labelImage );
-
-            std::string sstr = fileName.toUtf8().data();
-            const char* csstr = sstr.c_str();
-            labelImage = cvLoadImage( csstr, 1 );
-            //labelImage = cvLoadImage( fileName.toStdString().c_str(), 1 );
-
-            if ( labelImage == 0 )
-            {
-                QMessageBox::warning( this, tr("ImageCompletion"), tr("Cannot read file %1.\n").arg(fileName) );
-                return false;
-            }
-            //*/
-        }
-
-        if ( labelImage == 0 )
-        {
-            //*
-            std::string sstr = fileName.toUtf8().data();
-            const char* csstr = sstr.c_str();
-            labelImage = cvLoadImage( csstr, 1 );
-            //labelImage = cvLoadImage( fileName.toStdString().c_str(), 1 );
-
-            if ( labelImage == 0 )
-            {
-                QMessageBox::warning( this, tr("ImageCompletion"), tr("Cannot read file %1.\n").arg(fileName) );
-                return false;
-            }
-            //*/
-        }
-        _labelMapImage = IplImageToQImage( labelImage );
-        update();
-    }
-    QApplication::restoreOverrideCursor();
-    return true;
-}
-
-bool ImageViewer::saveImage(const QString &fileName, const char *fileFormat)
-{
-    return _displayImage->save(fileName, fileFormat);
-}
-
-bool ImageViewer::saveImage( const QString &fileName )
-{
-    return _displayImage->save(fileName);
-}
-
 void ImageViewer::setImage(const QImage &image)
 {
     *_displayImage = image.convertToFormat(QImage::Format_RGB32);
     adjustSize();
     update();
     updateGeometry();
-}
-
-void ImageViewer::insertShape(const QPainterPath &path)
-{
-    pendingPath = path;
-    setCursor(Qt::CrossCursor);
-}
-
-void ImageViewer::setBrushColor(const QColor &color)
-{
-    this->brushcolor = color;
 }
 
 void ImageViewer::setBrushWidth(int width)
@@ -470,7 +395,6 @@ void ImageViewer::paintEvent(QPaintEvent * /* event */)
         {
             polygonLabelling();
             _bPolygonEndDrawing = false;
-            bPaintable = false;
         }
     }
 }
@@ -575,12 +499,8 @@ void ImageViewer::mouseReleaseEvent(QMouseEvent *event)
     {
         if (event->button() == Qt::LeftButton && lastPos != QPoint(-1, -1))
         {
-            //QPainter painter( _labelMapImage );
             if ( _labelType == 0 && brushInterface )
             {
-                //setupPainter(painter);
-                //QRect rect = brushInterface->mouseRelease(brush, painter, event->pos());
-                //update(rect);
 
                 // Excute
                 _mask = getLabelMap(_labelMapImage);
@@ -601,10 +521,9 @@ void ImageViewer::mouseReleaseEvent(QMouseEvent *event)
                     IplImage* temp = new IplImage(res);
 
                     if(_result_labelImage) { delete _result_labelImage; _result_labelImage = NULL; }
-                    _result_labelImage = IplImageToQImage(temp);
+                    _result_labelImage = setMaskMap(_ocvImage, temp);
 
                     setImage(*_result_labelImage);
-                    bPaintable = false;
                     _mainWindow->uncheckStrikeOptions();
                 }
             }
@@ -634,11 +553,10 @@ void ImageViewer::mouseReleaseEvent(QMouseEvent *event)
                 IplImage* temp = new IplImage(res);
 
                 if (_result_labelImage) delete _result_labelImage;
-                _result_labelImage = IplImageToQImage(temp);
+                _result_labelImage = setMaskMap(_ocvImage, temp);
                 setImage(*_result_labelImage);
 
                 _bRectDrawing = false;
-                bPaintable = false;
             }
 
             lastPos = QPoint(-1, -1);
@@ -697,71 +615,6 @@ void ImageViewer::changeObjectLabeling(int i)
 void ImageViewer::updateObjectCount(int count)
 {
     objectCount = count+2;
-}
-QImage* ImageViewer::RunRegionCompetition()
-{
-
-    setCursor(Qt::ArrowCursor);
-
-#ifdef SAVERESULT
-    _labelMapImage->save(filepath+"_scribble.bmp");
-#endif
-
-    if (!(labelMap = getLabelMap(_labelMapImage, objectCount)))
-    {
-        return NULL;
-    }
-    char* result_labelmap;
-    if (m_method == 1)
-    {
-        //		result_labelmap = Run(labelMap, objectCount,isUsePrior);
-    }
-    else if(m_method == 100)
-    {
-        //		result_labelmap = RunGraphcuts(_ocvImage, labelMap, objectCount);
-    }
-    else if(m_method == 1000)
-    {
-        //		result_labelmap = RunGeodesic(_ocvImage, labelMap, objectCount);
-    }
-
-#ifdef SAVERESULT
-    saveGroundTruth(result_labelmap);
-#endif
-
-    if (_result_labelImage)
-    {
-        delete _result_labelImage;
-    }
-
-    _result_labelImage = setLabelMap(_ocvImage, result_labelmap);
-
-    setImage( *_result_labelImage );
-
-#ifdef SAVERESULT
-    if (m_method == 0)
-    {
-        _result_labelImage->save(filepath+"_RCresult.jpg");
-    }
-    else if(m_method == 1)
-    {
-        _result_labelImage->save(filepath+"_GCresult.jpg");
-    }
-    else
-    {
-        _result_labelImage->save(filepath+"_Georesult.jpg");
-    }
-
-#endif
-    delete[] labelMap;
-    delete[] result_labelmap;
-
-    return _result_labelImage;
-} 
-
-void ImageViewer::prepareFeature()
-{
-    //	prepareImageFeatures(_ocvImage);
 }
 
 void ImageViewer::setEraser()
@@ -840,55 +693,6 @@ void ImageViewer::updateLabelState()
     update();
 }
 
-void ImageViewer::saveGroundTruth(char* label)
-{
-    QString cur_path = filepath;
-    if (m_method==0)
-    {
-        cur_path = cur_path+"_rc.bmp";
-    }
-    else if(m_method == 1)
-    {
-        cur_path = cur_path+"_gc.bmp";
-    }
-    else
-    {
-        cur_path = cur_path+"_geo.bmp";
-    }
-    CvSize size = cvGetSize(_ocvImage);
-    IplImage* groundTruthImage = cvCreateImage(size, 8, 3);
-    uchar* p_l;
-    uchar* p_r = (uchar*)groundTruthImage->imageData;
-    char* _label = label;
-    for (int rows = 0; rows < groundTruthImage->height; rows++)
-    {
-        p_l = p_r;
-        for (int cols = 0; cols < groundTruthImage->width; cols++)
-        {
-            if (*_label == 0)
-            {
-                *(p_l++) = 23;
-                *(p_l++) = 149;
-                *(p_l++) = 100;
-            }
-            else
-            {
-                *(p_l++) = 80;
-                *(p_l++) = 127;
-                *(p_l++) = 255;
-            }
-            _label++;
-        }
-        p_r += groundTruthImage->widthStep;
-    }
-
-    std::string sstr = cur_path.toUtf8().data();
-    const char* csstr = sstr.c_str();
-    cvSaveImage(csstr, groundTruthImage);
-    //cvSaveImage(cur_path.toStdString().c_str(), groundTruthImage);
-    cvReleaseImage(&groundTruthImage);
-}
-
 void ImageViewer::imageScaling( double scaleFactor )
 {
     if(_srcOcvImage == NULL) return;
@@ -912,8 +716,6 @@ void ImageViewer::imageScaling( double scaleFactor )
     image = IplImageToQImage( _ocvImage );
 
     setImage( *image );
-
-    prepareFeature();
 }
 
 void ImageViewer::imageBrighting( double scaleFactor )
@@ -1005,7 +807,7 @@ void ImageViewer::polygonLabelling()
     IplImage* temp = new IplImage(res);
 
     if (_result_labelImage) delete _result_labelImage;
-    _result_labelImage = IplImageToQImage(temp);
+    _result_labelImage = setMaskMap(_ocvImage, temp);
     setImage(*_result_labelImage);
 
     lastPos = QPoint(-1, -1);
@@ -1036,7 +838,6 @@ void ImageViewer::redo()
     updateObjectCount(0);
     isEraser   = false;
     m_method   = -1;
-    isUsePrior = false;
     _result_labelImage = NULL;
 
     if(_srcOcvImage)
@@ -1052,10 +853,6 @@ void ImageViewer::redo()
     }
 
     QApplication::restoreOverrideCursor();
-}
-
-void ImageViewer::undo()
-{
 }
 
 void ImageViewer::setDefaultCursor()

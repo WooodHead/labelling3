@@ -10,9 +10,9 @@
 
 extern int colorTable[30];
 
-char* getLabelMap(QImage* labelImage, int objNum);
 cv::Mat getLabelMap(QImage* labelImage);
-QImage* setLabelMap(IplImage* ocvImage, char* labelMap);
+QImage* setMaskMap(IplImage* ocvImage, IplImage* mask);
+bool isAllZero(CvScalar color);
 
 class PointD
 {

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1067</width>
-    <height>348</height>
+    <height>404</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -106,7 +106,7 @@
     <item row="4" column="5">
      <widget class="QLabel" name="label_123">
       <property name="text">
-       <string>磨粒尺寸</string>
+       <string>磨粒尺寸(微米)</string>
       </property>
      </widget>
     </item>
@@ -157,7 +157,7 @@
     <item row="4" column="7">
      <widget class="QLabel" name="label_126">
       <property name="text">
-       <string>磨粒周长</string>
+       <string>磨粒周长(微米)</string>
       </property>
      </widget>
     </item>
@@ -317,11 +317,11 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>430</x>
-     <y>290</y>
+     <x>420</x>
+     <y>270</y>
      <width>178</width>
      <height>32</height>
     </rect>
@@ -343,10 +343,19 @@
     </item>
    </layout>
   </widget>
-  <zorder>layoutWidget_2</zorder>
-  <zorder>pushButton</zorder>
-  <zorder>pushButton_2</zorder>
-  <zorder></zorder>
+  <widget class="QLabel" name="label_133">
+   <property name="geometry">
+    <rect>
+     <x>6</x>
+     <y>350</y>
+     <width>661</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;*说明&lt;/span&gt;: 磨粒编号继承自铁谱图片编号, 最后两位是磨粒顺序编号, 默认为00, 后续为01, 02, ..., 不超过99.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

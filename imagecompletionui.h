@@ -224,6 +224,7 @@ private slots:
     void scaling();
     void brighting();
     void notColor();
+    void measure();
 
     void actionSliderReleased();
 
@@ -239,8 +240,6 @@ private slots:
     void _RegionupdateBrushSize();
 
     void _SceneupdateBrushSize();
-
-    void Excute();
 
     void updateMethod();
 
@@ -279,6 +278,7 @@ private:
     void showThumbnail(QString status, int row);
 
     std::vector<QString> _fNames;
+    double _imageScale;
 
 private:
     bool copyFiles(QString fromDir,QString toDir,bool convertIfExits = false);
@@ -300,9 +300,11 @@ private:
 
 private slots:
     void flushBottom();
+    bool copyOrgImage(QString name);
     void flushLeft(QString path, QString label);
     void showContextMenu(QPoint);
     void editProperties();
+    void on__treeViewImages_doubleClicked(const QModelIndex &index);
 };
 
 #endif // IMAGECOMPLETIONUI_H

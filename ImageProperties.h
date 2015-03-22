@@ -255,9 +255,12 @@ private:
     bool _bCommited;
 
     QString generateTiepupianID();
+    QString generateOilSampleID();
+    QString generateTieputupianID();
 
 signals:
     void flush();
+    bool copyOrgImage(QString id);
     void removeImage(QString filename);
 
 public:

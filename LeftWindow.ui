@@ -26,7 +26,7 @@
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;查询&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabImage">
       <property name="toolTip">
@@ -157,7 +157,7 @@
      </widget>
      <widget class="QWidget" name="tabSearch">
       <attribute name="title">
-       <string>查询</string>
+       <string>数据库</string>
       </attribute>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>

@@ -3,6 +3,8 @@
 
 #include "Connection.h"
 
+#include <opencv2/opencv.hpp>
+
 MoliProperties::MoliProperties(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::MoliProperties)
@@ -70,6 +72,35 @@ QStringList MoliProperties::getItems(QSqlTableModel *model, QString fieldName)
     return list;
 }
 
+void MoliProperties::computeMoliInfo(double imageScale, double &perimeter, double &maxHeight, double &maxWidth)
+{
+    if(_result.isNull()) return;
+
+    int perimeterPixels = 0;
+    int minX = _result.width(), maxX = 0, minY = _result.height(), maxY = 0;
+
+    for(int y = 0; y < _result.height(); y++)
+    {
+        for(int x = 0; x < _result.width(); x++)
+        {
+            QRgb color = _result.pixel(x, y);
+
+            if(qRed(color) == 0 && qGreen(color) == 255 && qBlue(color) == 255)
+            {
+                perimeterPixels++;
+                minX = cv::min(minX, x);
+                maxX = cv::max(maxX, x);
+                minY = cv::min(minY, y);
+                maxY = cv::max(maxY, y);
+            }
+        }
+    }
+
+    perimeter = perimeterPixels * imageScale;
+    maxWidth = (maxX - minX) * imageScale;
+    maxHeight = (maxY - minY) * imageScale;
+}
+
 MoliProperties::~MoliProperties()
 {
     delete ui;
@@ -131,7 +162,7 @@ void MoliProperties::on_pushButton_clicked()
                 record.setValue("abrasivepicpath", ui->_editMoliPath->text());
                 record.setValue("abrasivematerial", ui->_comboBoxMoliProperty->currentText());
                 record.setValue("abrasiveposition", ui->_comboBoxMoliPosition->currentText());
-                record.setValue("abrasivesize", ui->_editMoliSize->text().toInt());
+                record.setValue("abrasivesize", ui->_editMoliSize->text());
 
                 record.setValue("abrasivesperimeter", ui->_editMoliLength->text().toDouble());
                 record.setValue("abrasiveshape", ui->_comboBoxMoliShape->currentText());
@@ -189,7 +220,7 @@ void MoliProperties::on_pushButton_clicked()
                 _model->setData(_model->index(0, 5), ui->_editMoliPath->text());
                 _model->setData(_model->index(0, 6), ui->_comboBoxMoliProperty->currentText());
                 _model->setData(_model->index(0, 7), ui->_comboBoxMoliPosition->currentText());
-                _model->setData(_model->index(0, 8), ui->_editMoliSize->text().toInt());
+                _model->setData(_model->index(0, 8), ui->_editMoliSize->text());
                 _model->setData(_model->index(0, 9), ui->_editMoliLength->text().toDouble());
                 _model->setData(_model->index(0, 10), ui->_comboBoxMoliShape->currentText());
                 _model->setData(_model->index(0, 11), ui->_comboBoxMoliColor->currentText());
@@ -266,13 +297,19 @@ void MoliProperties::on_pushButton_clicked()
     }
 }
 
-void MoliProperties::showDlg(QString imagePath, const QImage& result, const QImage& mask)
+void MoliProperties::showDlg(QString imagePath, const QImage& result, const QImage& mask, const double imageScale)
 {
     _result = result;
     _mask = mask;
 
     _originalImagePath = imagePath;
     ui->_editMoliPath->setText(imagePath);
+
+    // Compute moli info
+    double perimeter = 0.0;
+    double maxHeight = 0.0;
+    double maxWidth = 0.0;
+
 
     // Check if existing
     _model->setFilter(QString("abrasivepicpath = '%1'").arg(_originalImagePath));
@@ -306,6 +343,9 @@ void MoliProperties::showDlg(QString imagePath, const QImage& result, const QIma
         if(!_result.isNull())
         {
             ui->_labelResultImage->setPixmap(QPixmap::fromImage(_result));
+            computeMoliInfo( imageScale, perimeter, maxHeight, maxWidth);
+            ui->_editMoliLength->setText(QString::number(perimeter));
+            ui->_editMoliSize->setText(QString("%1 x %2").arg(maxWidth).arg(maxHeight));
         }
         else
         {
@@ -335,6 +375,7 @@ void MoliProperties::showDlg(QString imagePath, const QImage& result, const QIma
         {
             QSqlRecord record = model->record(0);
 
+            ui->_comboBoxMoliID->setEditText(record.value("ferrographypicid").toString()+"-00");
             ui->_comboBoxMoliImageID->setEditText(record.value("ferrographypicid").toString());
             ui->_comboBoxMoliPianID->setEditText(record.value("ferrographysheetid").toString());
 
@@ -342,6 +383,11 @@ void MoliProperties::showDlg(QString imagePath, const QImage& result, const QIma
 
             if(!result.isNull()) ui->_labelResultImage->setPixmap(QPixmap::fromImage(_result));
             if(!mask.isNull()) ui->_labelMaskImage->setPixmap(QPixmap::fromImage(_mask));
+
+            computeMoliInfo( imageScale, perimeter, maxHeight, maxWidth);
+
+            ui->_editMoliLength->setText(QString::number(perimeter));
+            ui->_editMoliSize->setText(QString("%1 x %2").arg(maxWidth).arg(maxHeight));
 
             show();
         }

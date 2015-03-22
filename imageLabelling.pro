@@ -26,7 +26,6 @@ HEADERS += \
     UserInfo.h \
     UserManagement.h \
     Global.h \
-    SimplifiedSearch.h \
     MoliProperties.h
 
 
@@ -52,7 +51,6 @@ SOURCES += \
     UserInfo.cpp \
     UserManagement.cpp \
     Global.cpp \
-    SimplifiedSearch.cpp \
     MoliProperties.cpp
 
 
@@ -73,7 +71,6 @@ FORMS += \
     advancesearchdlg.ui \
     useredit.ui \
     propertynamedlg.ui \
-    SimplifiedSearch.ui \
     MoliProperties.ui
 
 RESOURCES += \
