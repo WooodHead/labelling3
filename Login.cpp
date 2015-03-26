@@ -159,20 +159,20 @@ void Login::login()
 
     if(_username.isEmpty())
     {
-        QMessageBox::warning(this, tr("æç¤º"), tr("ç”¨æˆ·åä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("ÓÃ»§Ãû²»ÄÜÎª¿Õ!"), QMessageBox::Close);
         return;
     }
     if(_passwd.isEmpty())
     {
-        QMessageBox::warning(this, tr("æç¤º"), tr("å¯†ç ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("ÃÜÂë²»ÄÜÎª¿Õ!"), QMessageBox::Close);
         return;
     }
 
     QSqlDatabase db;
     if(!createConnection(db))
     {
-        QMessageBox::critical(0, qApp->tr("æç¤º"),
-                              qApp->tr("æ•°æ®åº“è¿žæŽ¥å¤±è´¥!"),
+        QMessageBox::critical(0, qApp->tr("ÌáÊ¾"),
+                              qApp->tr("Êý¾Ý¿âÁ¬½ÓÊ§°Ü!"),
                               QMessageBox::Cancel);
         return;
     }
@@ -188,7 +188,7 @@ void Login::login()
     {
         if(query.size() == 0)
         {
-            QMessageBox::warning(this, tr("å¤±è´¥"), tr("ç™»å½•å¤±è´¥,ç”¨æˆ·åæˆ–å¯†ç ä¸æ­£ç¡®!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("Ê§°Ü"), tr("µÇÂ¼Ê§°Ü,ÓÃ»§Ãû»òÃÜÂë²»ÕýÈ·!"), QMessageBox::Close);
         }
         else
         {
@@ -205,7 +205,7 @@ void Login::login()
         }
     }
     else  {
-        QMessageBox::warning(this,tr("å¤±è´¥"),tr("æŸ¥è¯¢ç”¨æˆ·ä¿¡æ¯å¤±è´¥"),QMessageBox::Close);
+        QMessageBox::warning(this,tr("Ê§°Ü"),tr("²éÑ¯ÓÃ»§ÐÅÏ¢Ê§°Ü"),QMessageBox::Close);
         return;
     }
 }
@@ -270,17 +270,17 @@ void Login::on__buttonSave_clicked()
 
 void Login::on__buttonCopyTo_clicked()
 {
-    setText(tr("è®¾ç½®åŽŸå›¾åƒæ‹·è´æ–‡ä»¶å¤¹"), ui->_editOriginalCopyTo);
+    setText(tr("ÉèÖÃÔ­Í¼Ïñ¿½±´ÎÄ¼þ¼Ð"), ui->_editOriginalCopyTo);
 }
 
 void Login::on__buttonResultTo_clicked()
 {
-    setText(tr("è®¾ç½®æ ‡æ³¨ç»“æžœä¿å­˜æ–‡ä»¶å¤¹"), ui->_editResultTo);
+    setText(tr("ÉèÖÃ±ê×¢½á¹û±£´æÎÄ¼þ¼Ð"), ui->_editResultTo);
 }
 
 void Login::on__buttonMaskTo_clicked()
 {
-    setText(tr("è®¾ç½®æŽ©ç å›¾åƒä¿å­˜æ–‡ä»¶å¤¹"), ui->_editMaskTo);
+    setText(tr("ÉèÖÃÑÚÂëÍ¼Ïñ±£´æÎÄ¼þ¼Ð"), ui->_editMaskTo);
 }
 
 void Login::setText(QString str, QLineEdit* edit)
@@ -303,10 +303,11 @@ void Login::on__buttonTest_clicked()
     QSqlDatabase db;
     if(!createConnection(db))
     {
-        ui->_labelStatus->setText(tr("è¿žæŽ¥å¤±è´¥!"));
+        ui->_labelStatus->setText(tr("Á¬½ÓÊ§°Ü!"));
     }
     else
     {
-        ui->_labelStatus->setText(tr("è¿žæŽ¥æˆåŠŸ!"));
+        ui->_labelStatus->setText(tr("Á¬½Ó³É¹¦!"));
     }
 }
+

@@ -36,7 +36,7 @@ void Global::initialize()
     QString strConfigFile = QFileInfo(app->applicationFilePath()).baseName() + ".ini";
     if(!QFile::exists(strConfigFile))
     {
-        qFatal("é…ç½®æ–‡ä»¶ä¸å­˜åœ¨:\r\n%s", qPrintable(strConfigFile));
+        qFatal("ÅäÖÃÎÄ¼ş²»´æÔÚ:\r\n%s", qPrintable(strConfigFile));
     }
 
     Global::Awesome = new QtAwesome();
@@ -63,3 +63,4 @@ void Global::initialize()
 
     Global::Init = true;
 }
+

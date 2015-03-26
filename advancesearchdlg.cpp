@@ -6,10 +6,10 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent) :
     ui(new Ui::AdvanceSearchDlg)
 {
     ui->setupUi(this);
-    
+
     if(!createConnection(db))
     {
-        QMessageBox::warning(this,tr("æ•°æ®åº“æç¤º"),tr("ä¸èƒ½é“¾æ¥æ•°æ®åº“"),QMessageBox::Close);
+        QMessageBox::warning(this,tr("Êı¾İ¿âÌáÊ¾"),tr("²»ÄÜÁ´½ÓÊı¾İ¿â"),QMessageBox::Close);
         return;
     }
 
@@ -20,34 +20,34 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent) :
     ui->modifyButton->setIcon(Global::Awesome->icon(pluscircle));
 
     propertymodel = 0;
-    
+
     createListWidget();
-    
+
     connect(ui->tableListWidget,SIGNAL(currentRowChanged(int)),ui->conditionStackedWidget,SLOT(setCurrentIndex(int)));
-    
-    usepropertyAction = new QAction(tr("ä½¿ç”¨å±æ€§"),ui->propertylistTableView);
+
+    usepropertyAction = new QAction(tr("Ê¹ÓÃÊôĞÔ"),ui->propertylistTableView);
     ui->propertylistTableView->addAction(usepropertyAction);
     connect(usepropertyAction,SIGNAL(triggered()),this,SLOT(useproperty()));
-    
-    managepropertyAction = new QAction(tr("æ›´æ–°å±æ€§"),ui->propertylistTableView);
+
+    managepropertyAction = new QAction(tr("¸üĞÂÊôĞÔ"),ui->propertylistTableView);
     ui->propertylistTableView->addAction(managepropertyAction);;
     connect(managepropertyAction,SIGNAL(triggered()),this,SLOT(manageproperty()));
-    
+
     ui->propertylistTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
-    
+
     createTableNames();
-    
+
     createTableView();
-    
+
     initCbBox();
-    
+
     initpropertylistName();
-    
+
     query();
-    
+
     ui->modifyButton->setEnabled(false);
     ui->conditionStackedWidget->setCurrentIndex(0);
-    
+
 }
 
 AdvanceSearchDlg::~AdvanceSearchDlg()
@@ -68,7 +68,7 @@ void AdvanceSearchDlg::resetConditions()
     _oisCdtMap.clear();
     _oiaCdtMap.clear();
     _abmCdtMap.clear();
-    
+
     // eqm
     ui->PlaneIdChkBox->setChecked(false);
     ui->planeTypeChkBox->setChecked(false);
@@ -76,7 +76,7 @@ void AdvanceSearchDlg::resetConditions()
     ui->runStageChkBox->setChecked(false);
     ui->repairTimeChkBox->setChecked(false);
     ui->departIdChkBox->setChecked(false);
-    
+
     // mp
     ui->movepartIdChkBox->setChecked(false);
     ui->movepartNameChkBox->setChecked(false);
@@ -84,21 +84,21 @@ void AdvanceSearchDlg::resetConditions()
     ui->partrunHourChkBox->setChecked(false);
     ui->movepartStartDataChkBox->setChecked(false);
     ui->movepartEndDataChkBox->setChecked(false);
-    
+
     // mpr
     ui->movepartRepairIdChkBox->setChecked(false);
     ui->repairTimeChkBox->setChecked(false);
     ui->repairDateChkBox->setChecked(false);
     ui->repairDepartChkBox->setChecked(false);
-    
+
     // feg
     ui->feg_ferrographyanalyzertypeChkBox->setChecked(false);
     ui->feg_ferrographymakemethodChkBox->setChecked(false);
     ui->feg_ferrographymakeoilconsumptionChkBox->setChecked(false);
     ui->feg_ferrographymakestuffChkBox->setChecked(false);
     ui->feg_ferrographysheetidChkBox->setChecked(false);
-    
-    
+
+
     // fegp
     ui->fegp_ferrographypicidChkBox->setChecked(false);
     ui->fegp_ferrographyreportidChkBox->setChecked(false);
@@ -110,7 +110,7 @@ void AdvanceSearchDlg::resetConditions()
     ui->fegp_lightsourcetypeChkBox->setChecked(false);
     ui->fegp_magnificationChkBox->setChecked(false);
     ui->fegp_microscopictypeChkBox->setChecked(false);
-    
+
     // ois
     ui->oilsampleidChkBox->setChecked(false);
     ui->samplestuffChkBox->setChecked(false);
@@ -129,39 +129,39 @@ void AdvanceSearchDlg::resetConditions()
     ui->monitorpartnameChkBox->setChecked(false);
     ui->oilworktimeChkBox->setChecked(false);
     ui->oiladditionChkBox->setChecked(false);
-    
+
     // oia
     ui->oia_sendstuffChkBox->setChecked(false);
     ui->oia_senddepartChkBox->setChecked(false);
     ui->oia_analyzedepartnameChkBox->setChecked(false);
     ui->oia_receivedateChkBox->setChecked(false);
     ui->oia_receivestuffChkBox->setChecked(false);
-    
+
     ui->oia_contaminationanalyzedateChkBox->setChecked(false);
     ui->oia_contaminationanalyzeequipmentChkBox->setChecked(false);
     ui->oia_contaminationanalyzemethodChkBox->setChecked(false);
     ui->oia_contaminationanalyzereportidChkBox->setChecked(false);
     ui->oia_contaminationanalyzereportidChkBox->setChecked(false);
     ui->oia_contaminationanalyzestuffChkBox->setChecked(false);
-    
+
     ui->oia_spectroscopydateChkBox->setChecked(false);
     ui->oia_spectroscopyequipmentChkBox->setChecked(false);
     ui->oia_spectroscopymethodChkBox->setChecked(false);
     ui->oia_spectroscopyreportidChkBox->setChecked(false);
     ui->oia_spectroscopystuffChkBox->setChecked(false);
-    
+
     ui->oia_ferrographydateChkBox->setChecked(false);
     ui->oia_ferrographyequipmentChkBox->setChecked(false);
     ui->oia_ferrographymethodChkBox->setChecked(false);
     ui->oia_ferrographyreportidChkBox->setChecked(false);
     ui->oia_ferrographystuffChkBox->setChecked(false);
-    
+
     ui->oia_physicochemicaldateChkBox->setChecked(false);
     ui->oia_physicochemicalequipmentChkBox->setChecked(false);
     ui->oia_physicochemicalmethodChkBox->setChecked(false);
     ui->oia_physicochemicalreportidChkBox->setChecked(false);
     ui->oia_physicochemicalstuffChkBox->setChecked(false);
-    
+
     // abm
     ui->abm_abrasiveidChkBox->setChecked(false);
     ui->abm_abrasivecolorChkBox->setChecked(false);
@@ -184,28 +184,28 @@ void AdvanceSearchDlg::resetConditions()
 
 void AdvanceSearchDlg::useproperty()
 {
-    
+
     QMessageBox::StandardButton reply;
-    reply = QMessageBox::question(this, tr("QMessageBox::question()"), tr("ç¡®è®¤ä½¿ç”¨å½“å‰å±æ€§æŸ¥è¯¢?"),
+    reply = QMessageBox::question(this, tr("QMessageBox::question()"), tr("È·ÈÏÊ¹ÓÃµ±Ç°ÊôĞÔ²éÑ¯?"),
                                   QMessageBox::Yes | QMessageBox::Cancel);
-    
+
     if(reply == QMessageBox::Yes)
     {
         QModelIndex index = ui->propertylistTableView->currentIndex();
         QSqlRecord record = propertymodel->record(index.row());
         QString propertyname = record.value(0).toString();
-        
+
         QString sql = "select * from propertyinfo where propertyname = '";
         sql.append(propertyname);
         sql.append("'");
         QSqlQuery query;
         query.exec(sql);
         query.next();
-        
+
         this->resetConditions();
-        
+
         int idx;
-        
+
         QStringList eqmFields = query.value(2).toString().split("#");
         QStringList eqmValues = query.value(3).toString().split("#");
         if(!eqmFields.isEmpty())
@@ -251,7 +251,7 @@ void AdvanceSearchDlg::useproperty()
                 idx ++;
             }
         }
-        
+
         QStringList mpFields = query.value(4).toString().split("#");
         QStringList mpValues = query.value(5).toString().split("#");
         if(!mpFields.isEmpty())
@@ -264,7 +264,7 @@ void AdvanceSearchDlg::useproperty()
                     ui->movepartNameCbBox->setCurrentIndex(ui->movepartNameCbBox->findText(mpValues.at(idx)));
                     _mpCdtMap.insert("movepartname",mpValues.at(idx));
                     ui->movepartNameChkBox->setChecked(true);
-                    
+
                 }
                 else if(field == "movepartid")
                 {
@@ -308,9 +308,9 @@ void AdvanceSearchDlg::useproperty()
                 }
                 idx ++;
             }
-            
+
         }
-        
+
         QStringList mprFields = query.value(6).toString().split("#");
         QStringList mprValues = query.value(7).toString().split("#");
         if(!mprFields.isEmpty())
@@ -349,7 +349,7 @@ void AdvanceSearchDlg::useproperty()
                 idx ++;
             }
         }
-        
+
         QStringList fegFields = query.value(8).toString().split("#");
         QStringList fegValues = query.value(9).toString().split("#");
         if(!fegFields.isEmpty())
@@ -390,7 +390,7 @@ void AdvanceSearchDlg::useproperty()
                 idx ++;
             }
         }
-        
+
         QStringList fegpFields = query.value(10).toString().split("#");
         QStringList fegpValues = query.value(11).toString().split("#");
         if(!fegpFields.isEmpty())
@@ -461,7 +461,7 @@ void AdvanceSearchDlg::useproperty()
                 idx++;
             }
         }
-        
+
         QStringList oisFields = query.value(12).toString().split("#");
         QStringList oisValues = query.value(13).toString().split("#");
         if(!oisFields.isEmpty())
@@ -590,7 +590,7 @@ void AdvanceSearchDlg::useproperty()
                 idx ++;
             }
         }
-        
+
         QStringList oiaFields = query.value(14).toString().split("#");
         QStringList oiaValues = query.value(15).toString().split("#");
         if(!oiaFields.isEmpty())
@@ -776,7 +776,7 @@ void AdvanceSearchDlg::useproperty()
                 idx ++;
             }
         }
-        
+
         QStringList abmFields = query.value(16).toString().split("#");
         QStringList abmValues = query.value(17).toString().split("#");
         if(!abmFields.isEmpty())
@@ -883,7 +883,7 @@ void AdvanceSearchDlg::useproperty()
                 idx++;
             }
         }
-        
+
         this->query();
     }
 }
@@ -891,7 +891,7 @@ void AdvanceSearchDlg::useproperty()
 
 void AdvanceSearchDlg::manageproperty()
 {
-//    QMessageBox::warning(this,tr("æç¤º"),tr("ç®¡ç†å±æ€§"),QMessageBox::Close);
+//    QMessageBox::warning(this,tr("ÌáÊ¾"),tr("¹ÜÀíÊôĞÔ"),QMessageBox::Close);
     this->resetConditions();
     QModelIndex index = ui->propertylistTableView->currentIndex();
     QSqlRecord record = propertymodel->record(index.row());
@@ -908,14 +908,14 @@ bool AdvanceSearchDlg::importDB(const QString &path)
     QFile file(path);
     file.open(QFile::ReadOnly);
     int count = 0;
-    
+
     QTextStream in(&file);
     while(!in.atEnd())
     {
         QString sql=in.readLine();
-        // é€šè¿‡åˆ†ævalues(E'),åˆ¤æ–­æ˜¯å¦æœ‰äºŒè¿›åˆ¶æ•°æ®,å¦‚æ²¡æœ‰ç›´æ¥è¿è¡Œsqlè¯­å¥,å¦‚æœ‰åˆ™éœ€è¦å°†16è¿›åˆ¶æ–‡æœ¬è½¬æ¢ä¸ºblobæ•°æ®
+        // Í¨¹ı·ÖÎövalues(E'),ÅĞ¶ÏÊÇ·ñÓĞ¶ş½øÖÆÊı¾İ,ÈçÃ»ÓĞÖ±½ÓÔËĞĞsqlÓï¾ä,ÈçÓĞÔòĞèÒª½«16½øÖÆÎÄ±¾×ª»»ÎªblobÊı¾İ
         QRegExp reg("E'([0-9a-f]{1,})'");
-        
+
         if(!sql.contains(reg))
         {
             if(query.exec(sql))
@@ -924,32 +924,32 @@ bool AdvanceSearchDlg::importDB(const QString &path)
         {
             int pos=0;
             QStringList bList;
-            
-            // æ¢ç´¢æ‰€æœ‰çš„blobå­—æ®µ
+
+            // Ì½Ë÷ËùÓĞµÄblob×Ö¶Î
             while((pos=reg.indexIn(sql,pos))!=-1)
             {
                 bList.append(reg.cap(0));
-                
+
                 QString blob=reg.cap(1);
                 pos+=reg.matchedLength();
             }
-            
-            // blobå­—æ®µå¡«å……å ä½ç¬¦
+
+            // blob×Ö¶ÎÌî³äÕ¼Î»·û
             foreach(QString key,bList)
             {
                 sql.replace(key,"?");
             }
-            
+
             query.prepare(sql);
-            
-            // ç»‘å®šå ä½ç¬¦æ•°æ®
+
+            // °ó¶¨Õ¼Î»·ûÊı¾İ
             for(int i=0;i<bList.size();i++)
             {
-                // å»é™¤E''
+                // È¥³ıE''
                 QString hexBlob=bList[i].mid(2,bList[i].size()-1);
-                // è¿˜åŸ16è¿›åˆ¶æ•°æ®
+                // »¹Ô­16½øÖÆÊı¾İ
                 QByteArray ba=QByteArray::fromHex(hexBlob.toLocal8Bit());
-                
+
                 query.bindValue(i,ba);
             }
             query.exec();
@@ -966,15 +966,15 @@ bool AdvanceSearchDlg::exportDB(const QSqlQueryModel *model, const QString &tabl
     for(int i =0;i<count;++i)
     {
         QSqlRecord record = model->record(i);
-        QString prefix=QString("insert into %1(").arg(tablename); // è®°å½•å±æ€§å­—æ®µå
-        QString suffix="values(";                                 // è®°å½•å±æ€§å€¼
-        
-        // éå†å±æ€§å­—æ®µ
+        QString prefix=QString("insert into %1(").arg(tablename); // ¼ÇÂ¼ÊôĞÔ×Ö¶ÎÃû
+        QString suffix="values(";                                 // ¼ÇÂ¼ÊôĞÔÖµ
+
+        // ±éÀúÊôĞÔ×Ö¶Î
         for(int j=0;j<record.count();j++)
         {
             QSqlField field=record.field(j);
             QString fieldName=field.name();
-            
+
             switch(field.type())
             {
             case QVariant::String:
@@ -990,7 +990,7 @@ bool AdvanceSearchDlg::exportDB(const QSqlQueryModel *model, const QString &tabl
                     suffix+="null";
                 }else
                 {
-                    suffix+=QString("E'%1'").arg(data.toHex().data()); // blobæ•°æ®æŒ‰16è¿›åˆ¶æ ¼å¼å¯¼å‡º
+                    suffix+=QString("E'%1'").arg(data.toHex().data()); // blobÊı¾İ°´16½øÖÆ¸ñÊ½µ¼³ö
                 }
             }
                 break;
@@ -998,7 +998,7 @@ bool AdvanceSearchDlg::exportDB(const QSqlQueryModel *model, const QString &tabl
                 prefix+=fieldName;
                 suffix+=record.value(j).toString();
             }
-            
+
             if(record.count()==1)
             {
                 prefix+=")";
@@ -1013,15 +1013,15 @@ bool AdvanceSearchDlg::exportDB(const QSqlQueryModel *model, const QString &tabl
                 suffix+=")";
             }
         }
-        // ç»„è£…sqlè¯­å¥ insert into auth_test values(0,'hello',E'003f')
+        // ×é×°sqlÓï¾ä insert into auth_test values(0,'hello',E'003f')
         QString iSql=QString("%1 %2;").arg(prefix).arg(suffix);
         vList.append(iSql);
         //        qDebug()<<iSql;
     }
     QFile file(path);
     file.open(QIODevice::WriteOnly|QIODevice::Truncate);
-    
-    // å°†sqlè¯­å¥å†™å…¥æ–‡ä»¶
+
+    // ½«sqlÓï¾äĞ´ÈëÎÄ¼ş
     QTextStream out(&file);
     foreach(QString line,vList)
     {
@@ -1035,10 +1035,10 @@ bool AdvanceSearchDlg::copyFiles(QString fromDir, QString toDir, QStringList fil
 {
     QDir sourceDir(fromDir);
     QDir targetDir(toDir);
-    
+
     if(!targetDir.exists())
     {
-        //< å¦‚æœç›®æ ‡ç›®å½•ä¸å­˜åœ¨ï¼Œåˆ™è¿›è¡Œåˆ›å»º
+        //< Èç¹ûÄ¿±êÄ¿Â¼²»´æÔÚ£¬Ôò½øĞĞ´´½¨
         if(!targetDir.mkdir(targetDir.absolutePath()))
             return false;
     }
@@ -1050,8 +1050,8 @@ bool AdvanceSearchDlg::copyFiles(QString fromDir, QString toDir, QStringList fil
         bool fromexist = sourceDir.exists(fromFullName);
         if(!fromexist)
         {
-            QString msg = "æ–‡ä»¶ " + filename + " ä¸å­˜åœ¨ï¼Œè¯·æ£€æŸ¥æ–‡ä»¶ä¸æ•°æ®åº“ä¸€è‡´"; 
-            QMessageBox::warning(this,tr("æç¤º"),msg,QMessageBox::Close);
+            QString msg = "ÎÄ¼ş " + filename + " ²»´æÔÚ£¬Çë¼ì²éÎÄ¼şÓëÊı¾İ¿âÒ»ÖÂ";
+            QMessageBox::warning(this,tr("ÌáÊ¾"),msg,QMessageBox::Close);
             continue;
         }
         bool exist = targetDir.exists(toFullName);
@@ -1070,33 +1070,33 @@ bool AdvanceSearchDlg::copyFiles(QString fromDir, QString toDir, QStringList fil
 bool AdvanceSearchDlg::copyFiles(QString fromDir, QString toDir, bool convertIfExits)
 {
     /**
-     *@brief å°†fromDiræ–‡ä»¶å¤¹å†…çš„å›¾ç‰‡æ–‡ä»¶ï¼Œæ‹·è´åˆ°toDiræ–‡ä»¶å¤¹ä¸‹
-     *@param fromDir å›¾ç‰‡æ–‡ä»¶çš„æºç›®å½•
-     *@param toDir   æ‹·è´å›¾ç‰‡æ–‡ä»¶çš„ç›®æ ‡ç›®å½•
-     *@param convertIfExits æ˜¯å¦è¦†ç›–å·²å­˜åœ¨æ–‡ä»¶æ ‡è¯†ï¼Œé»˜è®¤å€¼æ˜¯false
+     *@brief ½«fromDirÎÄ¼ş¼ĞÄÚµÄÍ¼Æ¬ÎÄ¼ş£¬¿½±´µ½toDirÎÄ¼ş¼ĞÏÂ
+     *@param fromDir Í¼Æ¬ÎÄ¼şµÄÔ´Ä¿Â¼
+     *@param toDir   ¿½±´Í¼Æ¬ÎÄ¼şµÄÄ¿±êÄ¿Â¼
+     *@param convertIfExits ÊÇ·ñ¸²¸ÇÒÑ´æÔÚÎÄ¼ş±êÊ¶£¬Ä¬ÈÏÖµÊÇfalse
      */
     QDir sourceDir(fromDir);
     QDir targetDir(toDir);
-    
+
     if(!targetDir.exists())
     {
-        //< å¦‚æœç›®æ ‡ç›®å½•ä¸å­˜åœ¨ï¼Œåˆ™è¿›è¡Œåˆ›å»º
+        //< Èç¹ûÄ¿±êÄ¿Â¼²»´æÔÚ£¬Ôò½øĞĞ´´½¨
         if(!targetDir.mkdir(targetDir.absolutePath()))
             return false;
     }
-    
+
     QFileInfoList fileInfoList = sourceDir.entryInfoList();
-    // éå†æ‰€æœ‰æ–‡ä»¶ä¿¡æ¯
+    // ±éÀúËùÓĞÎÄ¼şĞÅÏ¢
     foreach(QFileInfo fileInfo, fileInfoList)
     {
-        // å»é™¤å½“å‰ç›®å½•å’Œçˆ¶ç›®å½•
+        // È¥³ıµ±Ç°Ä¿Â¼ºÍ¸¸Ä¿Â¼
         if(fileInfo.fileName() == "." || fileInfo.fileName() == "..")
             continue;
-        // æ•°æ®åº“æ–‡ä»¶å¤„ç†
+        // Êı¾İ¿âÎÄ¼ş´¦Àí
         if(fileInfo.fileName().split(".")[1] == "sql")
             continue;
-        
-        // å½“ä¸ºç›®å½•æ—¶ï¼Œé€’å½’çš„è¿›è¡Œcopy
+
+        // µ±ÎªÄ¿Â¼Ê±£¬µİ¹éµÄ½øĞĞcopy
         if(fileInfo.isDir())
         {
             //            if(!copyFiles(fileInfo.filePath(),
@@ -1106,12 +1106,12 @@ bool AdvanceSearchDlg::copyFiles(QString fromDir, QString toDir, bool convertIfE
             continue;
         }
         else
-        {   //å½“å…è®¸è¦†ç›–æ“ä½œæ—¶ï¼Œå°†æ—§æ–‡ä»¶è¿›è¡Œåˆ é™¤æ“ä½œ
+        {   //µ±ÔÊĞí¸²¸Ç²Ù×÷Ê±£¬½«¾ÉÎÄ¼ş½øĞĞÉ¾³ı²Ù×÷
             if(convertIfExits && targetDir.exists(fileInfo.fileName()))
             {
                 targetDir.remove(fileInfo.fileName());
             }
-            // è¿›è¡Œæ–‡ä»¶copy
+            // ½øĞĞÎÄ¼şcopy
             if(targetDir.exists(fileInfo.fileName()))
                 continue;
             if(!QFile::copy(fileInfo.filePath(),targetDir.filePath(fileInfo.fileName())))
@@ -1163,7 +1163,7 @@ QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap,QStrin
             sql.append(fieldValue);
             sql.append("'");
         }
-        
+
         return sql;
     }
 }
@@ -1171,56 +1171,56 @@ QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap,QStrin
 
 void AdvanceSearchDlg::query()
 {
-    // è£…å¤‡ä¿¡æ¯è¡¨
+    // ×°±¸ĞÅÏ¢±í
     QString eqmTableName = tableNames.value("EqmInfo");
     QString eqmSql = generateSql(_eqmCdtMap,_eqmCdtField,eqmTableName);
     _eqmInfoModel->setQuery(eqmSql);
     setModelHeaderData("EqmInfo");
     qDebug()<<eqmSql;
-    
-    // åŠ¨éƒ¨ä»¶ä¿¡æ¯è¡¨
+
+    // ¶¯²¿¼şĞÅÏ¢±í
     QString mpTableName = tableNames.value("MpInfo");
     QString mpSql = generateSql(_mpCdtMap,_mpCdtField,mpTableName);
     _mpInfoModel->setQuery(mpSql);
     setModelHeaderData("MpInfo");
     qDebug()<<mpSql;
-    
-    // åŠ¨éƒ¨ä»¶ç»´ä¿®ä¿¡æ¯è¡¨
+
+    // ¶¯²¿¼şÎ¬ĞŞĞÅÏ¢±í
     QString mprTableName = tableNames.value("MprInfo");
     QString mprSql = generateSql(_mprCdtMap,_mprCdtField,mprTableName);
     _mprInfoModel->setQuery(mprSql);
     setModelHeaderData("MprInfo");
     qDebug()<<mprSql;
-    
-    // æ²¹æ ·é‡‡é›†ä¿¡æ¯è¡¨
+
+    // ÓÍÑù²É¼¯ĞÅÏ¢±í
     QString oisTableName = tableNames.value("OisInfo");
     QString oisSql = generateSql(_oisCdtMap,_oisCdtField,oisTableName);
     _oisInfoModel->setQuery(oisSql);
     setModelHeaderData("OisInfo");
     qDebug()<<oisSql;
-    
-    // æ²¹æ ·æ£€æµ‹åˆ†æä¿¡æ¯è¡¨
+
+    // ÓÍÑù¼ì²â·ÖÎöĞÅÏ¢±í
     QString oiaTableName = tableNames.value("OiaInfo");
     QString oiaSql = generateSql(_oiaCdtMap,_oiaCdtField,oiaTableName);
     _oiaInfoModel->setQuery(oiaSql);
     setModelHeaderData("OiaInfo");
     qDebug()<<oiaSql;
-    
-    // é“è°±è´¨è°±ä¿¡æ¯è¡¨
+
+    // ÌúÆ×ÖÊÆ×ĞÅÏ¢±í
     QString fegTableName = tableNames.value("FegInfo");
     QString fegSql = generateSql(_fegCdtMap,_fegCdtField,fegTableName);
     _fegInfoModel->setQuery(fegSql);
     setModelHeaderData("FegInfo");
     qDebug()<<fegSql;
-    
-    // é“è°±å›¾ç‰‡é‡‡é›†ä¿¡æ¯è¡¨
+
+    // ÌúÆ×Í¼Æ¬²É¼¯ĞÅÏ¢±í
     QString fegpTableName = tableNames.value("FegPInfo");
     QString fegpSql = generateSql(_fegpCdtMap,_fegpCdtField,fegpTableName);
     _fegpInfoModel->setQuery(fegpSql);
     setModelHeaderData("FegPInfo");
     qDebug()<<fegpSql;
-    
-    // ç£¨ç²’æ ‡æ³¨ä¿¡æ¯è¡¨
+
+    // Ä¥Á£±ê×¢ĞÅÏ¢±í
     QString abmTableName = tableNames.value("AbmInfo");
     QString abmSql = generateSql(_abmCdtMap,_abmCdtField,abmTableName);
     _abmInfoModel->setQuery(abmSql);
@@ -1231,17 +1231,17 @@ void AdvanceSearchDlg::query()
 
 void AdvanceSearchDlg::createListWidget()
 {
-    ui->tableListWidget->insertItem(0,tr("è£…å¤‡ä¿¡æ¯è¡¨"));
-    ui->tableListWidget->insertItem(1,tr("åŠ¨éƒ¨ä»¶ä¿¡æ¯è¡¨"));
-    ui->tableListWidget->insertItem(2,tr("åŠ¨éƒ¨ä»¶ç»´ä¿®ä¿¡æ¯è¡¨"));
-    ui->tableListWidget->insertItem(3,tr("æ²¹æ ·é‡‡é›†ä¿¡æ¯è¡¨"));
-    ui->tableListWidget->insertItem(4,tr("æ²¹æ ·æ£€æµ‹åˆ†æè¡¨"));
-    ui->tableListWidget->insertItem(5,tr("é“è°±å›¾ç‰‡é‡‡é›†ä¿¡æ¯è¡¨"));
-    ui->tableListWidget->insertItem(6,tr("é“è°±åˆ¶è°±ä¿¡æ¯è¡¨"));
-    ui->tableListWidget->insertItem(7,tr("ç£¨ç²’æ ‡æ³¨ä¿¡æ¯è¡¨"));
-    
+    ui->tableListWidget->insertItem(0,tr("×°±¸ĞÅÏ¢±í"));
+    ui->tableListWidget->insertItem(1,tr("¶¯²¿¼şĞÅÏ¢±í"));
+    ui->tableListWidget->insertItem(2,tr("¶¯²¿¼şÎ¬ĞŞĞÅÏ¢±í"));
+    ui->tableListWidget->insertItem(3,tr("ÓÍÑù²É¼¯ĞÅÏ¢±í"));
+    ui->tableListWidget->insertItem(4,tr("ÓÍÑù¼ì²â·ÖÎö±í"));
+    ui->tableListWidget->insertItem(5,tr("ÌúÆ×Í¼Æ¬²É¼¯ĞÅÏ¢±í"));
+    ui->tableListWidget->insertItem(6,tr("ÌúÆ×ÖÆÆ×ĞÅÏ¢±í"));
+    ui->tableListWidget->insertItem(7,tr("Ä¥Á£±ê×¢ĞÅÏ¢±í"));
+
     ui->tableListWidget->setCurrentRow(0);
-    
+
     int wheight = this->height();
     int wwidth  = this->width();
     ui->conditionGroupBox->setMaximumHeight(wheight/3);
@@ -1252,22 +1252,22 @@ void AdvanceSearchDlg::createListWidget()
 
 void AdvanceSearchDlg::createTableNames()
 {
-    tableNames.insert("EqmInfo","equipmentinfo");       // è£…å¤‡ä¿¡æ¯è¡¨
-    tableNames.insert("AbmInfo","abrasivemarkinfo");    // ç£¨ç²’æ ‡æ³¨ä¿¡æ¯è¡¨
-    tableNames.insert("FegInfo","ferrographyinfo");     // é“è°±è´¨è°±ä¿¡æ¯è¡¨
-    tableNames.insert("FegPInfo","ferrographypicinfo"); // é“è°±å›¾ç‰‡ä¿¡æ¯è¡¨
-    tableNames.insert("MpInfo","movepartinfo");         // åŠ¨éƒ¨ä»¶ä¿¡æ¯è¡¨
-    tableNames.insert("MprInfo","movepartrepairinfo");  //åŠ¨éƒ¨ä»¶ç»´ä¿®ä¿¡æ¯è¡¨
-    tableNames.insert("OiaInfo","oilanalyzeinfo");      // æ²¹æ ·åˆ†æä¿¡æ¯è¡¨
-    tableNames.insert("OisInfo","oilsampleinfo");       // æ²¹æ ·é‡‡æ ·ä¿¡æ¯è¡¨
+    tableNames.insert("EqmInfo","equipmentinfo");       // ×°±¸ĞÅÏ¢±í
+    tableNames.insert("AbmInfo","abrasivemarkinfo");    // Ä¥Á£±ê×¢ĞÅÏ¢±í
+    tableNames.insert("FegInfo","ferrographyinfo");     // ÌúÆ×ÖÊÆ×ĞÅÏ¢±í
+    tableNames.insert("FegPInfo","ferrographypicinfo"); // ÌúÆ×Í¼Æ¬ĞÅÏ¢±í
+    tableNames.insert("MpInfo","movepartinfo");         // ¶¯²¿¼şĞÅÏ¢±í
+    tableNames.insert("MprInfo","movepartrepairinfo");  //¶¯²¿¼şÎ¬ĞŞĞÅÏ¢±í
+    tableNames.insert("OiaInfo","oilanalyzeinfo");      // ÓÍÑù·ÖÎöĞÅÏ¢±í
+    tableNames.insert("OisInfo","oilsampleinfo");       // ÓÍÑù²ÉÑùĞÅÏ¢±í
 }
 
 
 void AdvanceSearchDlg::createTableView()
 {
     ui->queryResultTabWidget->setCurrentIndex(0);
-    
-    // è£…å¤‡ä¿¡æ¯è¡¨
+
+    // ×°±¸ĞÅÏ¢±í
     _eqmInfoModel = new QSqlQueryModel;
     ui->eqmTableView->setModel(_eqmInfoModel);
     ui->eqmTableView->verticalHeader()->setVisible(false);
@@ -1275,8 +1275,8 @@ void AdvanceSearchDlg::createTableView()
     ui->eqmTableView->setSelectionMode(QTableView::SingleSelection);
     ui->eqmTableView->setAlternatingRowColors(true);
     ui->eqmTableView->resizeColumnsToContents();
-    
-    // åŠ¨éƒ¨ä»¶ä¿¡æ¯è¡¨
+
+    // ¶¯²¿¼şĞÅÏ¢±í
     _mpInfoModel = new QSqlQueryModel;
     ui->mpTableView->setModel(_mpInfoModel);
     ui->mpTableView->verticalHeader()->setVisible(false);
@@ -1284,8 +1284,8 @@ void AdvanceSearchDlg::createTableView()
     ui->mpTableView->setSelectionMode(QTableView::SingleSelection);
     ui->mpTableView->setAlternatingRowColors(true);
     ui->mpTableView->resizeColumnsToContents();
-    
-    // åŠ¨éƒ¨ä»¶ç»´ä¿®ä¿¡æ¯è¡¨
+
+    // ¶¯²¿¼şÎ¬ĞŞĞÅÏ¢±í
     _mprInfoModel = new QSqlQueryModel;
     ui->mprTableView->setModel(_mprInfoModel);
     ui->mprTableView->verticalHeader()->setVisible(false);;
@@ -1293,8 +1293,8 @@ void AdvanceSearchDlg::createTableView()
     ui->mprTableView->setSelectionMode(QTableView::SingleSelection);
     ui->mprTableView->setAlternatingRowColors(true);
     ui->mprTableView->resizeColumnsToContents();
-    
-    // æ²¹æ ·é‡‡é›†ä¿¡æ¯è¡¨
+
+    // ÓÍÑù²É¼¯ĞÅÏ¢±í
     _oisInfoModel = new QSqlQueryModel;
     ui->oisTableView->setModel(_oisInfoModel);
     ui->oisTableView->setSelectionBehavior(QTableView::SelectRows);
@@ -1302,8 +1302,8 @@ void AdvanceSearchDlg::createTableView()
     ui->oisTableView->setAlternatingRowColors(true);
     ui->oisTableView->verticalHeader()->setVisible(false);
     ui->oisTableView->resizeColumnsToContents();
-    
-    // æ²¹æ ·æ£€æµ‹åˆ†æä¿¡æ¯è¡¨
+
+    // ÓÍÑù¼ì²â·ÖÎöĞÅÏ¢±í
     _oiaInfoModel = new QSqlQueryModel;
     ui->oiaTableView->setModel(_oiaInfoModel);
     ui->oiaTableView->setSelectionBehavior(QTableView::SelectRows);
@@ -1311,8 +1311,8 @@ void AdvanceSearchDlg::createTableView()
     ui->oiaTableView->verticalHeader()->setVisible(false);
     ui->oiaTableView->setAlternatingRowColors(true);
     ui->oiaTableView->resizeColumnsToContents();
-    
-    // é“è°±è´¨è°±ä¿¡æ¯è¡¨
+
+    // ÌúÆ×ÖÊÆ×ĞÅÏ¢±í
     _fegInfoModel = new QSqlQueryModel;
     ui->fegTableView->setModel(_fegInfoModel);
     ui->fegTableView->setSelectionBehavior(QTableView::SelectRows);;
@@ -1320,8 +1320,8 @@ void AdvanceSearchDlg::createTableView()
     ui->fegTableView->verticalHeader()->setVisible(false);
     ui->fegTableView->setAlternatingRowColors(true);
     ui->fegTableView->resizeColumnsToContents();
-    
-    // é“è°±å›¾ç‰‡é‡‡é›†ä¿¡æ¯è¡¨
+
+    // ÌúÆ×Í¼Æ¬²É¼¯ĞÅÏ¢±í
     _fegpInfoModel = new QSqlQueryModel;
     ui->fegpTableView->setModel(_fegpInfoModel);
     ui->fegpTableView->setSelectionBehavior(QTableView::SelectRows);
@@ -1329,8 +1329,8 @@ void AdvanceSearchDlg::createTableView()
     ui->fegpTableView->setAlternatingRowColors(true);
     ui->fegpTableView->verticalHeader()->setVisible(false);
     ui->fegpTableView->resizeColumnsToContents();
-    
-    // ç£¨ç²’æ ‡æ³¨ä¿¡æ¯è¡¨
+
+    // Ä¥Á£±ê×¢ĞÅÏ¢±í
     _abmInfoModel = new QSqlQueryModel;
     ui->abmTableView->setModel(_abmInfoModel);
     ui->abmTableView->setSelectionBehavior(QTableView::SelectRows);
@@ -1345,151 +1345,151 @@ void AdvanceSearchDlg::setModelHeaderData(QString tablename)
 {
     if(tablename == "EqmInfo")
     {
-        _eqmInfoModel->setHeaderData(eqm_planeid,   Qt::Horizontal,tr("æœºå·"));
-        _eqmInfoModel->setHeaderData(eqm_planetype, Qt::Horizontal,tr("æœºå‹"));
-        _eqmInfoModel->setHeaderData(eqm_deoartid,  Qt::Horizontal,tr("å•ä½ç¼–å·"));
-        _eqmInfoModel->setHeaderData(eqm_runhour,   Qt::Horizontal,tr("é£è¡Œå°æ—¶æ•°"));
-        _eqmInfoModel->setHeaderData(eqm_runstage,  Qt::Horizontal,tr("è¿è¡Œé˜¶æ®µ"));
-        _eqmInfoModel->setHeaderData(eqm_repairtime,Qt::Horizontal,tr("ç»´ä¿®æ¬¡æ•°"));
+        _eqmInfoModel->setHeaderData(eqm_planeid,   Qt::Horizontal,tr("»úºÅ"));
+        _eqmInfoModel->setHeaderData(eqm_planetype, Qt::Horizontal,tr("»úĞÍ"));
+        _eqmInfoModel->setHeaderData(eqm_deoartid,  Qt::Horizontal,tr("µ¥Î»±àºÅ"));
+        _eqmInfoModel->setHeaderData(eqm_runhour,   Qt::Horizontal,tr("·ÉĞĞĞ¡Ê±Êı"));
+        _eqmInfoModel->setHeaderData(eqm_runstage,  Qt::Horizontal,tr("ÔËĞĞ½×¶Î"));
+        _eqmInfoModel->setHeaderData(eqm_repairtime,Qt::Horizontal,tr("Î¬ĞŞ´ÎÊı"));
     }
     else if(tablename == "MpInfo")
     {
-        _mpInfoModel->setHeaderData(mp_movepartid,  Qt::Horizontal,tr("åŠ¨éƒ¨ä»¶ç¼–å·"));
-        _mpInfoModel->setHeaderData(mp_moveparttype,Qt::Horizontal,tr("åŠ¨éƒ¨ä»¶ç±»å‹"));
-        _mpInfoModel->setHeaderData(mp_movepartname,Qt::Horizontal,tr("åŠ¨éƒ¨ä»¶åç§°"));
-        _mpInfoModel->setHeaderData(mp_runhour,     Qt::Horizontal,tr("è¿è¡Œæ—¶æ•°"));
-        _mpInfoModel->setHeaderData(mp_runstage,    Qt::Horizontal,tr("è¿è¡Œé˜¶æ®µ"));
-        _mpInfoModel->setHeaderData(mp_planeid,     Qt::Horizontal,tr("æœºå·"));
-        _mpInfoModel->setHeaderData(mp_planetype,   Qt::Horizontal,tr("æœºå‹"));
-        _mpInfoModel->setHeaderData(mp_startdat,    Qt::Horizontal,tr("åŠ¨éƒ¨ä»¶å¼€å§‹æ—¥æœŸ"));
-        _mpInfoModel->setHeaderData(mp_enddate,     Qt::Horizontal,tr("åŠ¨éƒ¨ä»¶ç»ˆæ­¢æ—¥æœŸ"));
+        _mpInfoModel->setHeaderData(mp_movepartid,  Qt::Horizontal,tr("¶¯²¿¼ş±àºÅ"));
+        _mpInfoModel->setHeaderData(mp_moveparttype,Qt::Horizontal,tr("¶¯²¿¼şÀàĞÍ"));
+        _mpInfoModel->setHeaderData(mp_movepartname,Qt::Horizontal,tr("¶¯²¿¼şÃû³Æ"));
+        _mpInfoModel->setHeaderData(mp_runhour,     Qt::Horizontal,tr("ÔËĞĞÊ±Êı"));
+        _mpInfoModel->setHeaderData(mp_runstage,    Qt::Horizontal,tr("ÔËĞĞ½×¶Î"));
+        _mpInfoModel->setHeaderData(mp_planeid,     Qt::Horizontal,tr("»úºÅ"));
+        _mpInfoModel->setHeaderData(mp_planetype,   Qt::Horizontal,tr("»úĞÍ"));
+        _mpInfoModel->setHeaderData(mp_startdat,    Qt::Horizontal,tr("¶¯²¿¼ş¿ªÊ¼ÈÕÆÚ"));
+        _mpInfoModel->setHeaderData(mp_enddate,     Qt::Horizontal,tr("¶¯²¿¼şÖÕÖ¹ÈÕÆÚ"));
     }
     else if(tablename == "MprInfo")
     {
-        _mprInfoModel->setHeaderData(mpr_movepartrepairid,Qt::Horizontal,tr("åŠ¨éƒ¨ä»¶ç»´ä¿®ç¼–å·"));
-        _mprInfoModel->setHeaderData(mpr_movepartid,      Qt::Horizontal,tr("åŠ¨éƒ¨ä»¶ç¼–å·"));
-        _mprInfoModel->setHeaderData(mpr_moveparttype,    Qt::Horizontal,tr("åŠ¨éƒ¨ä»¶ç±»å‹"));
-        _mprInfoModel->setHeaderData(mpr_repairreason,    Qt::Horizontal,tr("ç»´ä¿®åŸå› "));
-        _mprInfoModel->setHeaderData(mpr_repairdate,      Qt::Horizontal,tr("ç»´ä¿®æ—¥æœŸ"));
-        _mprInfoModel->setHeaderData(mpr_repairtime,      Qt::Horizontal,tr("ç»´ä¿®æ¬¡æ•°"));
-        _mprInfoModel->setHeaderData(mpr_repairdepart,    Qt::Horizontal,tr("ç»´ä¿®æ‰§è¡Œå•ä½"));
-        _mprInfoModel->setHeaderData(mpr_repaircontent,   Qt::Horizontal,tr("ç»´ä¿®å†…å®¹"));
-        _mprInfoModel->setHeaderData(mpr_repaircondition, Qt::Horizontal,tr("ç»´ä¿®æ¢ä»¶æƒ…å†µ"));
+        _mprInfoModel->setHeaderData(mpr_movepartrepairid,Qt::Horizontal,tr("¶¯²¿¼şÎ¬ĞŞ±àºÅ"));
+        _mprInfoModel->setHeaderData(mpr_movepartid,      Qt::Horizontal,tr("¶¯²¿¼ş±àºÅ"));
+        _mprInfoModel->setHeaderData(mpr_moveparttype,    Qt::Horizontal,tr("¶¯²¿¼şÀàĞÍ"));
+        _mprInfoModel->setHeaderData(mpr_repairreason,    Qt::Horizontal,tr("Î¬ĞŞÔ­Òò"));
+        _mprInfoModel->setHeaderData(mpr_repairdate,      Qt::Horizontal,tr("Î¬ĞŞÈÕÆÚ"));
+        _mprInfoModel->setHeaderData(mpr_repairtime,      Qt::Horizontal,tr("Î¬ĞŞ´ÎÊı"));
+        _mprInfoModel->setHeaderData(mpr_repairdepart,    Qt::Horizontal,tr("Î¬ĞŞÖ´ĞĞµ¥Î»"));
+        _mprInfoModel->setHeaderData(mpr_repaircontent,   Qt::Horizontal,tr("Î¬ĞŞÄÚÈİ"));
+        _mprInfoModel->setHeaderData(mpr_repaircondition, Qt::Horizontal,tr("Î¬ĞŞ»»¼şÇé¿ö"));
     }
     else if(tablename == "AbmInfo")
     {
-        _abmInfoModel->setHeaderData(abm_abrasiveid,                        Qt::Horizontal,tr("ç£¨ç²’ç¼–å·"));
-        _abmInfoModel->setHeaderData(abm_ferrographypicid,                  Qt::Horizontal,tr("é“è°±å›¾ç‰‡ç¼–å·"));
-        _abmInfoModel->setHeaderData(abm_ferrographysheetid,                Qt::Horizontal,tr("é“è°±ç‰‡ç¼–å·"));
-        _abmInfoModel->setHeaderData(abm_ferrographyreportid,               Qt::Horizontal,tr("é“è°±åˆ†ææŠ¥å‘Šç¼–å·"));
-        _abmInfoModel->setHeaderData(abm_abrasivemarkstuff,                 Qt::Horizontal,tr("ç£¨ç²’æ ‡æ³¨äºº"));
-        _abmInfoModel->setHeaderData(abm_abrasivepicpath,                   Qt::Horizontal,tr("ç£¨ç²’å›¾ç‰‡è·¯å¾„"));
-        _abmInfoModel->setHeaderData(abm_abrasivematerial,                  Qt::Horizontal,tr("ç£¨ç²’æè´¨"));
-        _abmInfoModel->setHeaderData(abm_abrasiveposition,                  Qt::Horizontal,tr("ç£¨ç²’ä½ç½®"));
-        _abmInfoModel->setHeaderData(abm_abrasivesize,                      Qt::Horizontal,tr("ç£¨ç²’å°ºå¯¸"));
-        _abmInfoModel->setHeaderData(abm_abrasivesperimeter,                Qt::Horizontal,tr("ç£¨ç²’å‘¨é•¿"));
-        _abmInfoModel->setHeaderData(abm_abrasiveshape,                     Qt::Horizontal,tr("ç£¨ç²’å½¢çŠ¶"));
-        _abmInfoModel->setHeaderData(abm_abrasivecolor,                     Qt::Horizontal,tr("ç£¨ç²’é¢œè‰²"));
-        _abmInfoModel->setHeaderData(abm_abrasivesurfacetexturetype,        Qt::Horizontal,tr("ç£¨ç²’è¡¨é¢çº¹ç†é¢œè‰²"));
-        _abmInfoModel->setHeaderData(abm_abrasiveweartype,                  Qt::Horizontal,tr("ç£¨ç²’ç£¨æŸç±»å‹"));
-        _abmInfoModel->setHeaderData(abm_abrasivedamagetype,                Qt::Horizontal,tr("ç£¨ç²’æŸä¼¤ç±»å‹"));
-        _abmInfoModel->setHeaderData(abm_abrasivemechanismtype,             Qt::Horizontal,tr("ç£¨ç²’ç£¨æŸæœºç†"));
-        _abmInfoModel->setHeaderData(abm_abrasivefaultinformationreflection,Qt::Horizontal,tr("ç£¨ç²’åæ˜ æ•…éšœä¿¡æ¯"));
-        _abmInfoModel->setHeaderData(abm_abrasivetypical,                   Qt::Horizontal,tr("ç£¨ç²’å…¸å‹æ€§"));
+        _abmInfoModel->setHeaderData(abm_abrasiveid,                        Qt::Horizontal,tr("Ä¥Á£±àºÅ"));
+        _abmInfoModel->setHeaderData(abm_ferrographypicid,                  Qt::Horizontal,tr("ÌúÆ×Í¼Æ¬±àºÅ"));
+        _abmInfoModel->setHeaderData(abm_ferrographysheetid,                Qt::Horizontal,tr("ÌúÆ×Æ¬±àºÅ"));
+        _abmInfoModel->setHeaderData(abm_ferrographyreportid,               Qt::Horizontal,tr("ÌúÆ×·ÖÎö±¨¸æ±àºÅ"));
+        _abmInfoModel->setHeaderData(abm_abrasivemarkstuff,                 Qt::Horizontal,tr("Ä¥Á£±ê×¢ÈË"));
+        _abmInfoModel->setHeaderData(abm_abrasivepicpath,                   Qt::Horizontal,tr("Ä¥Á£Í¼Æ¬Â·¾¶"));
+        _abmInfoModel->setHeaderData(abm_abrasivematerial,                  Qt::Horizontal,tr("Ä¥Á£²ÄÖÊ"));
+        _abmInfoModel->setHeaderData(abm_abrasiveposition,                  Qt::Horizontal,tr("Ä¥Á£Î»ÖÃ"));
+        _abmInfoModel->setHeaderData(abm_abrasivesize,                      Qt::Horizontal,tr("Ä¥Á£³ß´ç"));
+        _abmInfoModel->setHeaderData(abm_abrasivesperimeter,                Qt::Horizontal,tr("Ä¥Á£ÖÜ³¤"));
+        _abmInfoModel->setHeaderData(abm_abrasiveshape,                     Qt::Horizontal,tr("Ä¥Á£ĞÎ×´"));
+        _abmInfoModel->setHeaderData(abm_abrasivecolor,                     Qt::Horizontal,tr("Ä¥Á£ÑÕÉ«"));
+        _abmInfoModel->setHeaderData(abm_abrasivesurfacetexturetype,        Qt::Horizontal,tr("Ä¥Á£±íÃæÎÆÀíÑÕÉ«"));
+        _abmInfoModel->setHeaderData(abm_abrasiveweartype,                  Qt::Horizontal,tr("Ä¥Á£Ä¥ËğÀàĞÍ"));
+        _abmInfoModel->setHeaderData(abm_abrasivedamagetype,                Qt::Horizontal,tr("Ä¥Á£ËğÉËÀàĞÍ"));
+        _abmInfoModel->setHeaderData(abm_abrasivemechanismtype,             Qt::Horizontal,tr("Ä¥Á£Ä¥Ëğ»úÀí"));
+        _abmInfoModel->setHeaderData(abm_abrasivefaultinformationreflection,Qt::Horizontal,tr("Ä¥Á£·´Ó³¹ÊÕÏĞÅÏ¢"));
+        _abmInfoModel->setHeaderData(abm_abrasivetypical,                   Qt::Horizontal,tr("Ä¥Á£µäĞÍĞÔ"));
     }
     else if(tablename == "FegInfo")
     {
-        _fegInfoModel->setHeaderData(feg_ferrographysheetid,           Qt::Horizontal,tr("é“è°±ç‰‡ç¼–å·"));
-        _fegInfoModel->setHeaderData(feg_ferrographyreportid,          Qt::Horizontal,tr("é“è°±åˆ†ææŠ¥å‘Šç¼–å·"));
-        _fegInfoModel->setHeaderData(feg_oilsampleid,                  Qt::Horizontal,tr("æ²¹æ ·ç¼–å·"));
-        _fegInfoModel->setHeaderData(feg_ferrographyanalyertype,       Qt::Horizontal,tr("åˆ†æé“è°±ä»ªå‹å·"));
-        _fegInfoModel->setHeaderData(feg_ferrographymakeoilconsumption,Qt::Horizontal,tr("é“è°±ç‰‡åˆ¶å–æ²¹æ ·æ¶ˆè€—é‡"));
-        _fegInfoModel->setHeaderData(feg_ferrographymakemethod,        Qt::Horizontal,tr("é“è°±ç‰‡åˆ¶å–æ–¹æ³•"));
-        _fegInfoModel->setHeaderData(feg_ferrographymakestuff,         Qt::Horizontal,tr("é“è°±ç‰‡åˆ¶å–äºº"));
+        _fegInfoModel->setHeaderData(feg_ferrographysheetid,           Qt::Horizontal,tr("ÌúÆ×Æ¬±àºÅ"));
+        _fegInfoModel->setHeaderData(feg_ferrographyreportid,          Qt::Horizontal,tr("ÌúÆ×·ÖÎö±¨¸æ±àºÅ"));
+        _fegInfoModel->setHeaderData(feg_oilsampleid,                  Qt::Horizontal,tr("ÓÍÑù±àºÅ"));
+        _fegInfoModel->setHeaderData(feg_ferrographyanalyertype,       Qt::Horizontal,tr("·ÖÎöÌúÆ×ÒÇĞÍºÅ"));
+        _fegInfoModel->setHeaderData(feg_ferrographymakeoilconsumption,Qt::Horizontal,tr("ÌúÆ×Æ¬ÖÆÈ¡ÓÍÑùÏûºÄÁ¿"));
+        _fegInfoModel->setHeaderData(feg_ferrographymakemethod,        Qt::Horizontal,tr("ÌúÆ×Æ¬ÖÆÈ¡·½·¨"));
+        _fegInfoModel->setHeaderData(feg_ferrographymakestuff,         Qt::Horizontal,tr("ÌúÆ×Æ¬ÖÆÈ¡ÈË"));
     }
     else if(tablename == "FegPInfo")
     {
-        _fegpInfoModel->setHeaderData(fegp_ferrographypicid,            Qt::Horizontal,tr("é“è°±å›¾ç‰‡ç¼–å·"));
-        _fegpInfoModel->setHeaderData(fegp_ferrographysheetid,          Qt::Horizontal,tr("é“è°±ç‰‡ç¼–å·"));
-        _fegpInfoModel->setHeaderData(fegp_ferrographyreportid,         Qt::Horizontal,tr("é“è°±åˆ†ææŠ¥å‘Šç¼–å·"));
-        _fegpInfoModel->setHeaderData(fegp_microscopictype,             Qt::Horizontal,tr("æ˜¾å¾®é•œå‹å·"));
-        _fegpInfoModel->setHeaderData(fegp_imageacquisitiontype,        Qt::Horizontal,tr("å›¾åƒé‡‡é›†å™¨å‹å·"));
-        _fegpInfoModel->setHeaderData(fegp_lightsourcetype,             Qt::Horizontal,tr("å…‰æºç±»å‹"));
-        _fegpInfoModel->setHeaderData(fegp_magnification,               Qt::Horizontal,tr("æ”¾å¤§å€æ•°"));
-        _fegpInfoModel->setHeaderData(fegp_imageacquisitionarea,        Qt::Horizontal,tr("é“è°±å›¾ç‰‡é‡‡é›†åŒºåŸŸ"));
-        _fegpInfoModel->setHeaderData(fegp_imageacquisitionstuff,       Qt::Horizontal,tr("é“è°±å›¾ç‰‡é‡‡é›†äºº"));
-        _fegpInfoModel->setHeaderData(fegp_ferrographypicpath,          Qt::Horizontal,tr("é“è°±å›¾ç‰‡è·¯å¾„"));
-        _fegpInfoModel->setHeaderData(fegp_imagerecognitioninfoanalysis,Qt::Horizontal,tr("é“è°±å›¾ç‰‡è¯†åˆ«åˆ†æä¿¡æ¯"));
-        _fegpInfoModel->setHeaderData(fegp_imagesymbol,                 Qt::Horizontal,tr("é“è°±å›¾ç‰‡æ ‡è¯†ç¬¦å·"));
-        
+        _fegpInfoModel->setHeaderData(fegp_ferrographypicid,            Qt::Horizontal,tr("ÌúÆ×Í¼Æ¬±àºÅ"));
+        _fegpInfoModel->setHeaderData(fegp_ferrographysheetid,          Qt::Horizontal,tr("ÌúÆ×Æ¬±àºÅ"));
+        _fegpInfoModel->setHeaderData(fegp_ferrographyreportid,         Qt::Horizontal,tr("ÌúÆ×·ÖÎö±¨¸æ±àºÅ"));
+        _fegpInfoModel->setHeaderData(fegp_microscopictype,             Qt::Horizontal,tr("ÏÔÎ¢¾µĞÍºÅ"));
+        _fegpInfoModel->setHeaderData(fegp_imageacquisitiontype,        Qt::Horizontal,tr("Í¼Ïñ²É¼¯Æ÷ĞÍºÅ"));
+        _fegpInfoModel->setHeaderData(fegp_lightsourcetype,             Qt::Horizontal,tr("¹âÔ´ÀàĞÍ"));
+        _fegpInfoModel->setHeaderData(fegp_magnification,               Qt::Horizontal,tr("·Å´ó±¶Êı"));
+        _fegpInfoModel->setHeaderData(fegp_imageacquisitionarea,        Qt::Horizontal,tr("ÌúÆ×Í¼Æ¬²É¼¯ÇøÓò"));
+        _fegpInfoModel->setHeaderData(fegp_imageacquisitionstuff,       Qt::Horizontal,tr("ÌúÆ×Í¼Æ¬²É¼¯ÈË"));
+        _fegpInfoModel->setHeaderData(fegp_ferrographypicpath,          Qt::Horizontal,tr("ÌúÆ×Í¼Æ¬Â·¾¶"));
+        _fegpInfoModel->setHeaderData(fegp_imagerecognitioninfoanalysis,Qt::Horizontal,tr("ÌúÆ×Í¼Æ¬Ê¶±ğ·ÖÎöĞÅÏ¢"));
+        _fegpInfoModel->setHeaderData(fegp_imagesymbol,                 Qt::Horizontal,tr("ÌúÆ×Í¼Æ¬±êÊ¶·ûºÅ"));
+
     }
     else if(tablename == "OiaInfo")
     {
-        _oiaInfoModel->setHeaderData(oia_oilsampleid,                  Qt::Horizontal,tr("æ²¹æ ·ç¼–å·"));
-        _oiaInfoModel->setHeaderData(oia_analyzedepartname,            Qt::Horizontal,tr("æ£€æµ‹åˆ†æå•ä½åç§°"));
-        _oiaInfoModel->setHeaderData(oia_senddepart,                   Qt::Horizontal,tr("é€æ£€å•ä½"));
-        _oiaInfoModel->setHeaderData(oia_sendreason,                   Qt::Horizontal,tr("é€æ£€åŸå› "));
-        _oiaInfoModel->setHeaderData(oia_sendstuff,                    Qt::Horizontal,tr("é€æ£€äºº"));
-        _oiaInfoModel->setHeaderData(oia_receivedate,                  Qt::Horizontal,tr("æ”¶æ²¹æ ·æ—¥æœŸ"));
-        _oiaInfoModel->setHeaderData(oia_receivestuff,                 Qt::Horizontal,tr("æ”¶æ²¹æ ·äºº"));
-        _oiaInfoModel->setHeaderData(oia_contaminationanalyzemethod,   Qt::Horizontal,tr("æ±¡æŸ“åº¦åˆ†ææ–¹æ³•"));
-        _oiaInfoModel->setHeaderData(oia_contaminationanalyzestuff,    Qt::Horizontal,tr("æ±¡æŸ“åº¦åˆ†æäºº"));
-        _oiaInfoModel->setHeaderData(oia_contaminationanalyzedate,     Qt::Horizontal,tr("æ±¡æŸ“åº¦åˆ†ææ—¥æœŸ"));
-        _oiaInfoModel->setHeaderData(oia_contaminationanalyzeequipment,Qt::Horizontal,tr("æ±¡æŸ“åº¦åˆ†æè®¾å¤‡"));
-        _oiaInfoModel->setHeaderData(oia_contaminationanalyzereportid, Qt::Horizontal,tr("æ±¡æŸ“åº¦åˆ†ææŠ¥å‘Šç¼–å·"));
-        _oiaInfoModel->setHeaderData(oia_spectroscopymethod,           Qt::Horizontal,tr("å…‰è°±åˆ†ææ–¹æ³•"));
-        _oiaInfoModel->setHeaderData(oia_spectroscopystuff,            Qt::Horizontal,tr("å…‰è°±åˆ†æäºº"));
-        _oiaInfoModel->setHeaderData(oia_spectroscopydate,             Qt::Horizontal,tr("å…‰è°±åˆ†ææ—¥æœŸ"));
-        _oiaInfoModel->setHeaderData(oia_spectroscopyequipment,        Qt::Horizontal,tr("å…‰è°±åˆ†æè®¾å¤‡"));
-        _oiaInfoModel->setHeaderData(oia_spectroscopyreportid,         Qt::Horizontal,tr("å…‰è°±åˆ†ææŠ¥å‘Šç¼–å·"));
-        _oiaInfoModel->setHeaderData(oia_ferrographymethod,            Qt::Horizontal,tr("é“è°±åˆ†ææ–¹æ³•"));
-        _oiaInfoModel->setHeaderData(oia_ferrographystuff,             Qt::Horizontal,tr("é“è°±åˆ†æäºº"));
-        _oiaInfoModel->setHeaderData(oia_ferrographydate,              Qt::Horizontal,tr("é“è°±åˆ†ææ—¥æœŸ"));
-        _oiaInfoModel->setHeaderData(oia_ferrographyequipment,         Qt::Horizontal,tr("é“è°±åˆ†æè®¾å¤‡"));
-        _oiaInfoModel->setHeaderData(oia_ferrographyreportid,          Qt::Horizontal,tr("é“è°±åˆ†ææŠ¥å‘Šç¼–å·"));
-        _oiaInfoModel->setHeaderData(oia_physicochemicalmethod,        Qt::Horizontal,tr("ç†åŒ–åˆ†ææ–¹æ³•"));
-        _oiaInfoModel->setHeaderData(oia_physicochemicalstuff,         Qt::Horizontal,tr("ç†åŒ–åˆ†æäºº"));
-        _oiaInfoModel->setHeaderData(oia_physicochemicaldate,          Qt::Horizontal,tr("ç†åŒ–åˆ†ææ—¥æœŸ"));
-        _oiaInfoModel->setHeaderData(oia_physicochemicalequipment,     Qt::Horizontal,tr("ç†åŒ–åˆ†æè®¾å¤‡"));
-        _oiaInfoModel->setHeaderData(oia_physicochemicalreportid,      Qt::Horizontal,tr("ç†åŒ–åˆ†æè®¾å¤‡ç¼–å·"));
+        _oiaInfoModel->setHeaderData(oia_oilsampleid,                  Qt::Horizontal,tr("ÓÍÑù±àºÅ"));
+        _oiaInfoModel->setHeaderData(oia_analyzedepartname,            Qt::Horizontal,tr("¼ì²â·ÖÎöµ¥Î»Ãû³Æ"));
+        _oiaInfoModel->setHeaderData(oia_senddepart,                   Qt::Horizontal,tr("ËÍ¼ìµ¥Î»"));
+        _oiaInfoModel->setHeaderData(oia_sendreason,                   Qt::Horizontal,tr("ËÍ¼ìÔ­Òò"));
+        _oiaInfoModel->setHeaderData(oia_sendstuff,                    Qt::Horizontal,tr("ËÍ¼ìÈË"));
+        _oiaInfoModel->setHeaderData(oia_receivedate,                  Qt::Horizontal,tr("ÊÕÓÍÑùÈÕÆÚ"));
+        _oiaInfoModel->setHeaderData(oia_receivestuff,                 Qt::Horizontal,tr("ÊÕÓÍÑùÈË"));
+        _oiaInfoModel->setHeaderData(oia_contaminationanalyzemethod,   Qt::Horizontal,tr("ÎÛÈ¾¶È·ÖÎö·½·¨"));
+        _oiaInfoModel->setHeaderData(oia_contaminationanalyzestuff,    Qt::Horizontal,tr("ÎÛÈ¾¶È·ÖÎöÈË"));
+        _oiaInfoModel->setHeaderData(oia_contaminationanalyzedate,     Qt::Horizontal,tr("ÎÛÈ¾¶È·ÖÎöÈÕÆÚ"));
+        _oiaInfoModel->setHeaderData(oia_contaminationanalyzeequipment,Qt::Horizontal,tr("ÎÛÈ¾¶È·ÖÎöÉè±¸"));
+        _oiaInfoModel->setHeaderData(oia_contaminationanalyzereportid, Qt::Horizontal,tr("ÎÛÈ¾¶È·ÖÎö±¨¸æ±àºÅ"));
+        _oiaInfoModel->setHeaderData(oia_spectroscopymethod,           Qt::Horizontal,tr("¹âÆ×·ÖÎö·½·¨"));
+        _oiaInfoModel->setHeaderData(oia_spectroscopystuff,            Qt::Horizontal,tr("¹âÆ×·ÖÎöÈË"));
+        _oiaInfoModel->setHeaderData(oia_spectroscopydate,             Qt::Horizontal,tr("¹âÆ×·ÖÎöÈÕÆÚ"));
+        _oiaInfoModel->setHeaderData(oia_spectroscopyequipment,        Qt::Horizontal,tr("¹âÆ×·ÖÎöÉè±¸"));
+        _oiaInfoModel->setHeaderData(oia_spectroscopyreportid,         Qt::Horizontal,tr("¹âÆ×·ÖÎö±¨¸æ±àºÅ"));
+        _oiaInfoModel->setHeaderData(oia_ferrographymethod,            Qt::Horizontal,tr("ÌúÆ×·ÖÎö·½·¨"));
+        _oiaInfoModel->setHeaderData(oia_ferrographystuff,             Qt::Horizontal,tr("ÌúÆ×·ÖÎöÈË"));
+        _oiaInfoModel->setHeaderData(oia_ferrographydate,              Qt::Horizontal,tr("ÌúÆ×·ÖÎöÈÕÆÚ"));
+        _oiaInfoModel->setHeaderData(oia_ferrographyequipment,         Qt::Horizontal,tr("ÌúÆ×·ÖÎöÉè±¸"));
+        _oiaInfoModel->setHeaderData(oia_ferrographyreportid,          Qt::Horizontal,tr("ÌúÆ×·ÖÎö±¨¸æ±àºÅ"));
+        _oiaInfoModel->setHeaderData(oia_physicochemicalmethod,        Qt::Horizontal,tr("Àí»¯·ÖÎö·½·¨"));
+        _oiaInfoModel->setHeaderData(oia_physicochemicalstuff,         Qt::Horizontal,tr("Àí»¯·ÖÎöÈË"));
+        _oiaInfoModel->setHeaderData(oia_physicochemicaldate,          Qt::Horizontal,tr("Àí»¯·ÖÎöÈÕÆÚ"));
+        _oiaInfoModel->setHeaderData(oia_physicochemicalequipment,     Qt::Horizontal,tr("Àí»¯·ÖÎöÉè±¸"));
+        _oiaInfoModel->setHeaderData(oia_physicochemicalreportid,      Qt::Horizontal,tr("Àí»¯·ÖÎöÉè±¸±àºÅ"));
     }
     else if(tablename == "OisInfo")
     {
-        _oisInfoModel->setHeaderData(ois_oilsampleid,      Qt::Horizontal,tr("æ²¹æ ·ç¼–å·"));
-        _oisInfoModel->setHeaderData(ois_sampledepartid,   Qt::Horizontal,tr("é‡‡æ ·å•ä½ç¼–å·"));
-        _oisInfoModel->setHeaderData(ois_planetype,        Qt::Horizontal,tr("æœºå‹"));
-        _oisInfoModel->setHeaderData(ois_planeid,          Qt::Horizontal,tr("æœºå·"));
-        _oisInfoModel->setHeaderData(ois_monitorpartname,  Qt::Horizontal,tr("ç›‘æ§éƒ¨ä»¶åç§°"));
-        _oisInfoModel->setHeaderData(ois_monitorpartid,    Qt::Horizontal,tr("ç›‘æ§éƒ¨ä»¶ç¼–å·"));
-        _oisInfoModel->setHeaderData(ois_sampleid,         Qt::Horizontal,tr("é‡‡æ ·ç‚¹ç¼–å·"));
-        _oisInfoModel->setHeaderData(ois_oilworktime,      Qt::Horizontal,tr("æ»‘æ²¹å·¥ä½œæ—¶æ•°"));
-        _oisInfoModel->setHeaderData(ois_oiladdition,      Qt::Horizontal,tr("æ»‘æ²¹æ·»åŠ é‡"));
-        _oisInfoModel->setHeaderData(ois_samplereason,     Qt::Horizontal,tr("é‡‡æ ·åŸå› "));
-        _oisInfoModel->setHeaderData(ois_sampledepartname, Qt::Horizontal,tr("é‡‡æ ·å•ä½"));
-        _oisInfoModel->setHeaderData(ois_samplestuff,      Qt::Horizontal,tr("é‡‡æ ·äºº"));
-        _oisInfoModel->setHeaderData(ois_sampledate,       Qt::Horizontal,tr("é‡‡æ ·æ—¥æœŸ"));
-        _oisInfoModel->setHeaderData(ois_sampletime,       Qt::Horizontal,tr("é‡‡æ ·æ—¶é—´"));
-        _oisInfoModel->setHeaderData(ois_samplesituation,  Qt::Horizontal,tr("é‡‡æ ·æ—¶æœº"));
-        _oisInfoModel->setHeaderData(ois_samplemethod,     Qt::Horizontal,tr("é‡‡æ ·æ–¹å¼"));
-        _oisInfoModel->setHeaderData(ois_samplevolume,     Qt::Horizontal,tr("é‡‡æ ·é‡"));
-        _oisInfoModel->setHeaderData(ois_sampleinstruction,Qt::Horizontal,tr("é‡‡æ ·è¯´æ˜"));
-        _oisInfoModel->setHeaderData(ois_sendstuff,        Qt::Horizontal,tr("é€æ ·äºº"));
-        _oisInfoModel->setHeaderData(ois_senddate,         Qt::Horizontal,tr("é€æ ·æ—¥æœŸ"));
-        _oisInfoModel->setHeaderData(ois_sendtime,         Qt::Horizontal,tr("é€æ ·æ—¶é—´"));
+        _oisInfoModel->setHeaderData(ois_oilsampleid,      Qt::Horizontal,tr("ÓÍÑù±àºÅ"));
+        _oisInfoModel->setHeaderData(ois_sampledepartid,   Qt::Horizontal,tr("²ÉÑùµ¥Î»±àºÅ"));
+        _oisInfoModel->setHeaderData(ois_planetype,        Qt::Horizontal,tr("»úĞÍ"));
+        _oisInfoModel->setHeaderData(ois_planeid,          Qt::Horizontal,tr("»úºÅ"));
+        _oisInfoModel->setHeaderData(ois_monitorpartname,  Qt::Horizontal,tr("¼à¿Ø²¿¼şÃû³Æ"));
+        _oisInfoModel->setHeaderData(ois_monitorpartid,    Qt::Horizontal,tr("¼à¿Ø²¿¼ş±àºÅ"));
+        _oisInfoModel->setHeaderData(ois_sampleid,         Qt::Horizontal,tr("²ÉÑùµã±àºÅ"));
+        _oisInfoModel->setHeaderData(ois_oilworktime,      Qt::Horizontal,tr("»¬ÓÍ¹¤×÷Ê±Êı"));
+        _oisInfoModel->setHeaderData(ois_oiladdition,      Qt::Horizontal,tr("»¬ÓÍÌí¼ÓÁ¿"));
+        _oisInfoModel->setHeaderData(ois_samplereason,     Qt::Horizontal,tr("²ÉÑùÔ­Òò"));
+        _oisInfoModel->setHeaderData(ois_sampledepartname, Qt::Horizontal,tr("²ÉÑùµ¥Î»"));
+        _oisInfoModel->setHeaderData(ois_samplestuff,      Qt::Horizontal,tr("²ÉÑùÈË"));
+        _oisInfoModel->setHeaderData(ois_sampledate,       Qt::Horizontal,tr("²ÉÑùÈÕÆÚ"));
+        _oisInfoModel->setHeaderData(ois_sampletime,       Qt::Horizontal,tr("²ÉÑùÊ±¼ä"));
+        _oisInfoModel->setHeaderData(ois_samplesituation,  Qt::Horizontal,tr("²ÉÑùÊ±»ú"));
+        _oisInfoModel->setHeaderData(ois_samplemethod,     Qt::Horizontal,tr("²ÉÑù·½Ê½"));
+        _oisInfoModel->setHeaderData(ois_samplevolume,     Qt::Horizontal,tr("²ÉÑùÁ¿"));
+        _oisInfoModel->setHeaderData(ois_sampleinstruction,Qt::Horizontal,tr("²ÉÑùËµÃ÷"));
+        _oisInfoModel->setHeaderData(ois_sendstuff,        Qt::Horizontal,tr("ËÍÑùÈË"));
+        _oisInfoModel->setHeaderData(ois_senddate,         Qt::Horizontal,tr("ËÍÑùÈÕÆÚ"));
+        _oisInfoModel->setHeaderData(ois_sendtime,         Qt::Horizontal,tr("ËÍÑùÊ±¼ä"));
     }
 }
 
 
 void AdvanceSearchDlg::initpropertylistName()
 {
-    if(propertymodel)   
+    if(propertymodel)
     {
         delete propertymodel;
         propertymodel = 0;
     }
     propertymodel = new QSqlQueryModel;
     propertymodel->setQuery("select propertyname from propertyinfo");
-    propertymodel->setHeaderData(0,Qt::Horizontal,tr("æŸ¥è¯¢å±æ€§å"));
+    propertymodel->setHeaderData(0,Qt::Horizontal,tr("²éÑ¯ÊôĞÔÃû"));
     ui->propertylistTableView->setModel(propertymodel);
     ui->propertylistTableView->setAlternatingRowColors(true);
     ui->propertylistTableView->setSelectionMode(QTableView::SingleSelection);
@@ -1500,11 +1500,11 @@ void AdvanceSearchDlg::initpropertylistName()
 void AdvanceSearchDlg::initCbBox()
 {
     QSqlQuery query;
-    
+
     query.exec("select * from equipmentinfo");
-    
+
     while(query.next())
-    { 
+    {
         if(ui->planeidCbBox->findText(query.value(eqm_planeid).toString()) == -1)
             ui->planeidCbBox->insertItem(-1,query.value(eqm_planeid).toString());
         if(ui->planeTypeCbBox->findText(query.value(eqm_planetype).toString()) == -1)
@@ -1523,7 +1523,7 @@ void AdvanceSearchDlg::initCbBox()
     ui->departIdCbBox->setCurrentIndex(0);
     ui->runHourCbBox->setCurrentIndex(0);
     ui->runStageCbBox->setCurrentIndex(0);
-    
+
     query.exec("select * from movepartinfo");
     while(query.next())
     {
@@ -1540,7 +1540,7 @@ void AdvanceSearchDlg::initCbBox()
     ui->movepartNameCbBox->setCurrentIndex(0);
     ui->movepartTypeCbBox->setCurrentIndex(0);
     ui->partrunHourCbBox->setCurrentIndex(0);
-    
+
     query.exec("select * from movepartrepairinfo");
     while(query.next())
     {
@@ -1554,7 +1554,7 @@ void AdvanceSearchDlg::initCbBox()
     ui->movepartRepairIdCbBox->setCurrentIndex(0);
     ui->repairDepartCbBox->setCurrentIndex(0);
     ui->repairTimeCbBox->setCurrentIndex(0);
-    
+
     query.exec("select * from oilsampleinfo");
     while(query.next())
     {
@@ -1583,7 +1583,7 @@ void AdvanceSearchDlg::initCbBox()
     ui->sampledepartnameCbBox->setCurrentIndex(0);
     ui->monitorpartidCbBox->setCurrentIndex(0);
     ui->monitorpartnameCbBox->setCurrentIndex(0);
-    
+
     query.exec("select * from oilanalyzeinfo");
     while(query.next())
     {
@@ -1616,7 +1616,7 @@ void AdvanceSearchDlg::initCbBox()
         if(ui->oia_ferrographyreportidCbBox->findText(query.value(oia_ferrographyreportid).toString()) == -1)
             ui->oia_ferrographyreportidCbBox->insertItem(-1,query.value(oia_ferrographyreportid).toString());
     }
-    
+
     query.exec("select * from abrasivemarkinfo");
     while(query.next())
     {
@@ -1643,7 +1643,7 @@ void AdvanceSearchDlg::initCbBox()
         if(ui->abm_ferrographyreportidCbBox->findText(query.value(abm_ferrographyreportid).toString()) == -1)
             ui->abm_ferrographyreportidCbBox->insertItem(-1,query.value(abm_ferrographyreportid).toString());
     }
-    
+
     query.exec("select * from ferrographypicinfo");
     while(query.next())
     {
@@ -1685,7 +1685,7 @@ void AdvanceSearchDlg::on_PlaneIdChkBox_clicked()
     _mpCdtMap.remove("planeid");
     _oisCdtMap.remove("planeid");
     if(ui->PlaneIdChkBox->isChecked())
-    {   
+    {
         QString text = ui->planeidCbBox->currentText();
         _eqmCdtMap.insert("planeid",text);
         _mpCdtMap.insert("planeid",text);
@@ -1701,7 +1701,7 @@ void AdvanceSearchDlg::on_planeidCbBox_currentIndexChanged(int index)
     _mpCdtMap.remove("planeid");
     _oisCdtMap.remove("planeid");
     if(ui->PlaneIdChkBox->isChecked())
-    {   
+    {
         QString text = ui->planeidCbBox->currentText();
         _eqmCdtMap.insert("planeid",text);
         _mpCdtMap.insert("planeid",text);
@@ -1821,13 +1821,13 @@ void AdvanceSearchDlg::on_repairTimeCbBox_currentIndexChanged(int index)
 
 
 void AdvanceSearchDlg::on_addtoBtn_clicked()
-{   
+{
     ppnDlg = new ProPertyNameDlg(this);
     if(ppnDlg->exec()== QDialog::Accepted)
     {
         //        qDebug()<<"Accept";
         //        qDebug()<<this->propertyName;
-        
+
         QString eqmFields = "";
         QString eqmValues = "";
         if(!_eqmCdtMap.isEmpty())
@@ -1845,7 +1845,7 @@ void AdvanceSearchDlg::on_addtoBtn_clicked()
                 eqmValues.append(it.value());
             }
         }
-        
+
         QString mpFields = "";
         QString mpValues = "";
         if(!_mpCdtMap.isEmpty())
@@ -1863,7 +1863,7 @@ void AdvanceSearchDlg::on_addtoBtn_clicked()
                 mpValues.append(it.value());
             }
         }
-        
+
         QString mprFields = "";
         QString mprValues = "";
         if(!_mprCdtMap.isEmpty())
@@ -1881,7 +1881,7 @@ void AdvanceSearchDlg::on_addtoBtn_clicked()
                 mprValues.append(it.value());
             }
         }
-        
+
         QString fegFields = "";
         QString fegValues = "";
         if(!_fegCdtMap.isEmpty())
@@ -1899,7 +1899,7 @@ void AdvanceSearchDlg::on_addtoBtn_clicked()
                 fegValues.append(it.value());
             }
         }
-        
+
         QString fegpFields = "";
         QString fegpValues = "";
         if(!_fegpCdtMap.isEmpty())
@@ -1917,7 +1917,7 @@ void AdvanceSearchDlg::on_addtoBtn_clicked()
                 fegpValues.append(it.value());
             }
         }
-        
+
         QString oisFields = "";
         QString oisValues = "";
         if(!_oisCdtMap.isEmpty())
@@ -1935,7 +1935,7 @@ void AdvanceSearchDlg::on_addtoBtn_clicked()
                 fegpValues.append(it.value());
             }
         }
-        
+
         QString oiaFields = "";
         QString oiaValues = "";
         if(!_oiaCdtMap.isEmpty())
@@ -1953,7 +1953,7 @@ void AdvanceSearchDlg::on_addtoBtn_clicked()
                 fegpValues.append(it.value());
             }
         }
-        
+
         QString abmFields = "";
         QString abmValues = "";
         if(!_abmCdtMap.isEmpty())
@@ -1971,7 +1971,7 @@ void AdvanceSearchDlg::on_addtoBtn_clicked()
                 abmValues.append(it.value());
             }
         }
-        
+
         QSqlQuery query;
         QString count;
         query.exec("select count(*) from propertyinfo");
@@ -2015,14 +2015,14 @@ void AdvanceSearchDlg::on_addtoBtn_clicked()
         propertySql.append("','");
         propertySql.append(abmValues);
         propertySql.append("')");
-        
+
         if(query.exec(propertySql))
         {
             initpropertylistName();
-            QMessageBox::warning(this,tr("æç¤º"),tr("ä¿å­˜æŸ¥è¯¢å±æ€§æˆåŠŸ"),QMessageBox::Close);
+            QMessageBox::warning(this,tr("ÌáÊ¾"),tr("±£´æ²éÑ¯ÊôĞÔ³É¹¦"),QMessageBox::Close);
         }
         else
-            QMessageBox::warning(this,tr("æç¤º"),tr("ä¿å­˜æŸ¥è¯¢å±æ€§å¤±è´¥"),QMessageBox::Close);
+            QMessageBox::warning(this,tr("ÌáÊ¾"),tr("±£´æ²éÑ¯ÊôĞÔÊ§°Ü"),QMessageBox::Close);
     }
     else
         ;
@@ -2170,7 +2170,7 @@ void AdvanceSearchDlg::setpropertyName(QString propertyname)
 void AdvanceSearchDlg::on_exportBtn_clicked()
 {
     QFileDialog *packgeFileDlg = new QFileDialog(this,
-                                                 tr("é€‰æ‹©ä¿å­˜è·¯å¾„"),
+                                                 tr("Ñ¡Ôñ±£´æÂ·¾¶"),
                                                  tr(""),
                                                  tr(""));
     packgeFileDlg->setFileMode(QFileDialog::DirectoryOnly);
@@ -2190,14 +2190,14 @@ void AdvanceSearchDlg::on_exportBtn_clicked()
         QStringList templist = record.value(fegp_ferrographypicpath).toString().split("/");
         imgFileNames.append(templist.at(templist.count()-1));
     }
-    
+
     QString sqlfilepath = packgepath + "/backup.sql";
     QString sourceimgtopath = packgepath + "/source/";
     QString resultimgtopath = packgepath + "/result/";
     QString sourceimgfrompath = Global::PathImage;
     QString resultimgfrompath = Global::PathResult;
     QString filename = QFileDialog::getSaveFileName(this,
-                                                    tr("ä¿å­˜å¯¼å‡ºæ•°æ®"),
+                                                    tr("±£´æµ¼³öÊı¾İ"),
                                                     sqlfilepath,
                                                     tr("SqlFile(*.sql)"));
     if(filename.isEmpty())
@@ -2206,13 +2206,13 @@ void AdvanceSearchDlg::on_exportBtn_clicked()
             this->copyFiles(sourceimgfrompath,sourceimgtopath,imgFileNames) &&
             this->copyFiles(resultimgfrompath,resultimgtopath,imgFileNames))
         QMessageBox::warning(this,
-                             tr("æç¤º"),
-                             tr("æ•°æ®å¯¼å‡ºæˆåŠŸ"),
+                             tr("ÌáÊ¾"),
+                             tr("Êı¾İµ¼³ö³É¹¦"),
                              QMessageBox::Close);
     else
         QMessageBox::warning(this,
-                             tr("æç¤º"),
-                             tr("æ•°æ®å¯¼å‡ºå¤±è´¥"),
+                             tr("ÌáÊ¾"),
+                             tr("Êı¾İµ¼³öÊ§°Ü"),
                              QMessageBox::Close);
 }
 
@@ -2220,13 +2220,13 @@ void AdvanceSearchDlg::on_exportBtn_clicked()
 
 void AdvanceSearchDlg::on_importBtn_clicked()
 {
-    
+
     QFileDialog *packgeFileDlg = new QFileDialog(this,
-                                                 tr("é€‰æ‹©æ•°æ®å¯¼å…¥è·¯å¾„"),
+                                                 tr("Ñ¡ÔñÊı¾İµ¼ÈëÂ·¾¶"),
                                                  tr(""),
                                                  tr(""));
     packgeFileDlg->setFileMode(QFileDialog::DirectoryOnly);
-    
+
     QString packgefilepath;
     if(packgeFileDlg->exec())
     {
@@ -2235,32 +2235,32 @@ void AdvanceSearchDlg::on_importBtn_clicked()
     }
     else
         return;
-    
+
     QString sqlfilepath = packgefilepath + "/";
     QString sourceimgfrompath = packgefilepath + "/source/";
     QString sourceimgtopath   = Global::PathImage;
     QString resultimgfrompath = packgefilepath + "/result/";
     QString resultimgtopath   = Global::PathResult;
-    
+
     QString filename = QFileDialog::getOpenFileName(this,
-                                                    tr("å¯¼å…¥æ•°æ®"),
+                                                    tr("µ¼ÈëÊı¾İ"),
                                                     sqlfilepath,
                                                     tr("SqlFile(*.sql)"));
     if(filename.isEmpty())
         return;
-    
-    
-    if(this->importDB(filename) && 
+
+
+    if(this->importDB(filename) &&
             this->copyFiles(sourceimgfrompath,sourceimgtopath)&&
             this->copyFiles(resultimgfrompath,resultimgtopath))
         QMessageBox::warning(this,
-                             tr("æç¤º"),
-                             tr("æ•°æ®å¯¼å…¥æˆåŠŸ"),
+                             tr("ÌáÊ¾"),
+                             tr("Êı¾İµ¼Èë³É¹¦"),
                              QMessageBox::Close);
     else
         QMessageBox::warning(this,
-                             tr("æç¤º"),
-                             tr("æ•°æ®å¯¼å…¥å¤±è´¥"),
+                             tr("ÌáÊ¾"),
+                             tr("Êı¾İµ¼ÈëÊ§°Ü"),
                              QMessageBox::Close);
 }
 
@@ -2562,7 +2562,7 @@ void AdvanceSearchDlg::on_oilsampleidChkBox_clicked()
     {
         QString text = ui->oilsampleidCbBox->currentText();
         _oisCdtMap.insert("oilsampleid",text);
-        
+
         _oiaCdtMap.insert("oilsampleid",text);
         _fegCdtMap.insert("oilsampleid",text);
     }
@@ -3942,26 +3942,26 @@ void AdvanceSearchDlg::on_feg_ferrographymakeoilconsumptionLineEdit_textChanged(
 void AdvanceSearchDlg::reloadConditions(QString propertyname)
 {
     //    QMessageBox::StandardButton reply;
-    //    reply = QMessageBox::question(this, tr("QMessageBox::question()"), tr("ç¡®è®¤ä½¿ç”¨å½“å‰å±æ€§æŸ¥è¯¢?"),
+    //    reply = QMessageBox::question(this, tr("QMessageBox::question()"), tr("È·ÈÏÊ¹ÓÃµ±Ç°ÊôĞÔ²éÑ¯?"),
     //                                  QMessageBox::Yes | QMessageBox::Cancel);
-    
+
     //    if(reply == QMessageBox::Yes)
     //    {
     //        QModelIndex index = ui->propertylistTableView->currentIndex();
     //        QSqlRecord record = propertymodel->record(index.row());
     //        QString propertyname = record.value(0).toString();
-    
+
     QString sql = "select * from propertyinfo where propertyname = '";
     sql.append(propertyname);
     sql.append("'");
     QSqlQuery query;
     query.exec(sql);
     query.next();
-    
+
     this->resetConditions();
-    
+
     int idx;
-    
+
     QStringList eqmFields = query.value(2).toString().split("#");
     QStringList eqmValues = query.value(3).toString().split("#");
     if(!eqmFields.isEmpty())
@@ -4007,7 +4007,7 @@ void AdvanceSearchDlg::reloadConditions(QString propertyname)
             idx ++;
         }
     }
-    
+
     QStringList mpFields = query.value(4).toString().split("#");
     QStringList mpValues = query.value(5).toString().split("#");
     if(!mpFields.isEmpty())
@@ -4020,7 +4020,7 @@ void AdvanceSearchDlg::reloadConditions(QString propertyname)
                 ui->movepartNameCbBox->setCurrentIndex(ui->movepartNameCbBox->findText(mpValues.at(idx)));
                 _mpCdtMap.insert("movepartname",mpValues.at(idx));
                 ui->movepartNameChkBox->setChecked(true);
-                
+
             }
             else if(field == "movepartid")
             {
@@ -4064,9 +4064,9 @@ void AdvanceSearchDlg::reloadConditions(QString propertyname)
             }
             idx ++;
         }
-        
+
     }
-    
+
     QStringList mprFields = query.value(6).toString().split("#");
     QStringList mprValues = query.value(7).toString().split("#");
     if(!mprFields.isEmpty())
@@ -4105,7 +4105,7 @@ void AdvanceSearchDlg::reloadConditions(QString propertyname)
             idx ++;
         }
     }
-    
+
     QStringList fegFields = query.value(8).toString().split("#");
     QStringList fegValues = query.value(9).toString().split("#");
     if(!fegFields.isEmpty())
@@ -4146,7 +4146,7 @@ void AdvanceSearchDlg::reloadConditions(QString propertyname)
             idx ++;
         }
     }
-    
+
     QStringList fegpFields = query.value(10).toString().split("#");
     QStringList fegpValues = query.value(11).toString().split("#");
     if(!fegpFields.isEmpty())
@@ -4217,7 +4217,7 @@ void AdvanceSearchDlg::reloadConditions(QString propertyname)
             idx++;
         }
     }
-    
+
     QStringList oisFields = query.value(12).toString().split("#");
     QStringList oisValues = query.value(13).toString().split("#");
     if(!oisFields.isEmpty())
@@ -4346,7 +4346,7 @@ void AdvanceSearchDlg::reloadConditions(QString propertyname)
             idx ++;
         }
     }
-    
+
     QStringList oiaFields = query.value(14).toString().split("#");
     QStringList oiaValues = query.value(15).toString().split("#");
     if(!oiaFields.isEmpty())
@@ -4532,7 +4532,7 @@ void AdvanceSearchDlg::reloadConditions(QString propertyname)
             idx ++;
         }
     }
-    
+
     QStringList abmFields = query.value(16).toString().split("#");
     QStringList abmValues = query.value(17).toString().split("#");
     if(!abmFields.isEmpty())
@@ -4647,7 +4647,7 @@ void AdvanceSearchDlg::on_modifyButton_clicked()
     QModelIndex index = ui->propertylistTableView->currentIndex();
     QSqlRecord record = propertymodel->record(index.row());
     QString propertyname = record.value(0).toString();
-    
+
     QString uid;
     QSqlQuery *query = new QSqlQuery;
     QString uidsql = "select uid from propertyinfo where propertyname = '";
@@ -4656,15 +4656,15 @@ void AdvanceSearchDlg::on_modifyButton_clicked()
     query->exec(uidsql);
     if(query->next())
         uid = query->value(0).toString();
-    
+
     ppnDlg = new ProPertyNameDlg(this,propertyname);
     if(ppnDlg->exec()== QDialog::Accepted)
     {
-        
+
             QMessageBox::StandardButton reply;
-            reply = QMessageBox::question(this, tr("QMessageBox::question()"), tr("ç¡®è®¤ä¿®æ”¹å½“å‰å±æ€§?"),
+            reply = QMessageBox::question(this, tr("QMessageBox::question()"), tr("È·ÈÏĞŞ¸Äµ±Ç°ÊôĞÔ?"),
                                           QMessageBox::Yes | QMessageBox::Cancel);
-        
+
             if(reply == QMessageBox::Yes)
             {
                 QString eqmFields = "";
@@ -4684,7 +4684,7 @@ void AdvanceSearchDlg::on_modifyButton_clicked()
                         eqmValues.append(it.value());
                     }
                 }
-                
+
                 QString mpFields = "";
                 QString mpValues = "";
                 if(!_mpCdtMap.isEmpty())
@@ -4702,7 +4702,7 @@ void AdvanceSearchDlg::on_modifyButton_clicked()
                         mpValues.append(it.value());
                     }
                 }
-                
+
                 QString mprFields = "";
                 QString mprValues = "";
                 if(!_mprCdtMap.isEmpty())
@@ -4720,7 +4720,7 @@ void AdvanceSearchDlg::on_modifyButton_clicked()
                         mprValues.append(it.value());
                     }
                 }
-                
+
                 QString fegFields = "";
                 QString fegValues = "";
                 if(!_fegCdtMap.isEmpty())
@@ -4738,7 +4738,7 @@ void AdvanceSearchDlg::on_modifyButton_clicked()
                         fegValues.append(it.value());
                     }
                 }
-                
+
                 QString fegpFields = "";
                 QString fegpValues = "";
                 if(!_fegpCdtMap.isEmpty())
@@ -4756,7 +4756,7 @@ void AdvanceSearchDlg::on_modifyButton_clicked()
                         fegpValues.append(it.value());
                     }
                 }
-                
+
                 QString oisFields = "";
                 QString oisValues = "";
                 if(!_oisCdtMap.isEmpty())
@@ -4774,7 +4774,7 @@ void AdvanceSearchDlg::on_modifyButton_clicked()
                         fegpValues.append(it.value());
                     }
                 }
-                
+
                 QString oiaFields = "";
                 QString oiaValues = "";
                 if(!_oiaCdtMap.isEmpty())
@@ -4792,7 +4792,7 @@ void AdvanceSearchDlg::on_modifyButton_clicked()
                         fegpValues.append(it.value());
                     }
                 }
-                
+
                 QString abmFields = "";
                 QString abmValues = "";
                 if(!_abmCdtMap.isEmpty())
@@ -4810,7 +4810,7 @@ void AdvanceSearchDlg::on_modifyButton_clicked()
                         abmValues.append(it.value());
                     }
                 }
-        
+
                 QString propertySql = "update propertyinfo set propertyname = '";
                 propertySql.append(propertyName);
                 propertySql.append("', eqmfields = '");
@@ -4851,17 +4851,18 @@ void AdvanceSearchDlg::on_modifyButton_clicked()
                 if(query->exec(propertySql))
                 {
                     initpropertylistName();
-                    QMessageBox::warning(this,tr("æç¤º"),tr("æ›´æ–°æŸ¥è¯¢å±æ€§æˆåŠŸ"),QMessageBox::Close);
+                    QMessageBox::warning(this,tr("ÌáÊ¾"),tr("¸üĞÂ²éÑ¯ÊôĞÔ³É¹¦"),QMessageBox::Close);
                 }
                 else
-                    QMessageBox::warning(this,tr("æç¤º"),tr("æ›´æ–°æŸ¥è¯¢å±æ€§å¤±è´¥"),QMessageBox::Close);
+                    QMessageBox::warning(this,tr("ÌáÊ¾"),tr("¸üĞÂ²éÑ¯ÊôĞÔÊ§°Ü"),QMessageBox::Close);
             }
             else
                 this->propertyName = "";
     }
     else
         ;
-    
+
     ui->queryBtn->setEnabled(true);
     ui->modifyButton->setEnabled(false);
 }
+

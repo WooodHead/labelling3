@@ -59,12 +59,12 @@ void ImageCompletionUI::setupMainWindow()
     this->resize( 1024, 800 );
     this->setMinimumSize( QSize(1024, 0) );
     this->showMaximized();
-    this->setWindowTitle( tr("äº¤äº’å¼ç£¨ç²’å›¾è°±åº“æ„å»ºç³»ç»Ÿ") );
+    this->setWindowTitle( tr("½»»¥Ê½Ä¥Á£Í¼Æ×¿â¹¹½¨ÏµÍ³") );
 }
 
 void ImageCompletionUI::createMenus()
 {
-    _menuFile = menuBar()->addMenu( tr("&æ–‡ä»¶") );
+    _menuFile = menuBar()->addMenu( tr("&ÎÄ¼ş") );
 
     _menuFile->addAction( _openAction );
     //_menuFile->addAction( _openBatchAction );
@@ -77,8 +77,8 @@ void ImageCompletionUI::createMenus()
     _menuFile->addSeparator();
     _menuFile->addAction( _exitAction );
 
-    _menuLabelling = menuBar()->addMenu( tr("&å›¾åƒæ ‡æ³¨") );
-    QMenu* submenu = _menuLabelling->addMenu( Global::Awesome->icon(pencil), tr("ç¬”ç”»æ ‡æ³¨") );
+    _menuLabelling = menuBar()->addMenu( tr("&Í¼Ïñ±ê×¢") );
+    QMenu* submenu = _menuLabelling->addMenu( Global::Awesome->icon(pencil), tr("±Ê»­±ê×¢") );
     submenu->addAction( _fgAction );
     submenu->addAction( _bgAction );
     submenu->addAction( _eraserAction );
@@ -88,13 +88,13 @@ void ImageCompletionUI::createMenus()
     _menuLabelling->addAction( _manualAction );
     _menuLabelling->addSeparator();
 
-    submenu = _menuLabelling->addMenu(Global::Awesome->icon(circleo), tr("ç¬”ç”»ç²—ç»†"));
+    submenu = _menuLabelling->addMenu(Global::Awesome->icon(circleo), tr("±Ê»­´ÖÏ¸"));
     for(int i = 0; i < 3; i++) submenu->addAction(_strikeThickness[i]);
 
-    submenu = _menuLabelling->addMenu( Global::Awesome->icon(minus), tr("çº¿æ¡ç²—ç»†") );
+    submenu = _menuLabelling->addMenu( Global::Awesome->icon(minus), tr("ÏßÌõ´ÖÏ¸") );
     for(int i = 0; i < 3; i++) submenu->addAction(_lineThickness[i]);
 
-    _menuData=menuBar()->addMenu(tr("&æ•°æ®ç®¡ç†"));
+    _menuData=menuBar()->addMenu(tr("&Êı¾İ¹ÜÀí"));
     _menuData->addAction(_searchAction);
     _menuData->addAction(_addtosqlAction);
     _menuData->addAction(_exportDataAction);
@@ -103,76 +103,76 @@ void ImageCompletionUI::createMenus()
     // user management
     if(Global::Authority == "1") //admin
     {
-        _menuUser = menuBar()->addMenu(tr("&ç”¨æˆ·ç®¡ç†"));
+        _menuUser = menuBar()->addMenu(tr("&ÓÃ»§¹ÜÀí"));
         _menuUser->addAction(_userManagementAction);
     }
 
-    _menuWindow = menuBar()->addMenu( tr("&å¸®åŠ©") );
+    _menuWindow = menuBar()->addMenu( tr("&°ïÖú") );
 }
 
 void	ImageCompletionUI::createActions()
 {
-    _openAction = new QAction( tr("&æ‰“å¼€"), this );
+    _openAction = new QAction( tr("&´ò¿ª"), this );
     _openAction->setObjectName(tr("_openAction"));
     QIcon icon1;
     icon1.addPixmap(QPixmap(tr(":/new/prefix1/icons/fileopen.png")), QIcon::Normal, QIcon::Off);
     _openAction->setIcon( Global::Awesome->icon(  folderopeno  ) );
     connect(_openAction, SIGNAL(triggered()), this, SLOT(open()));
 
-    _openBatchAction = new QAction( tr("&æ‰“å¼€(å¤š)"), this );
+    _openBatchAction = new QAction( tr("&´ò¿ª(¶à)"), this );
     _openBatchAction->setObjectName(tr("_openBatchAction"));
     _openBatchAction->setIcon( Global::Awesome->icon( folderopeno )  );
     connect(_openBatchAction, SIGNAL(triggered()), this, SLOT(batchOpen()));
 
-    _saveAction = new QAction( Global::Awesome->icon(floppyo), tr("&ä¿å­˜"), this );
+    _saveAction = new QAction( Global::Awesome->icon(floppyo), tr("&±£´æ"), this );
     _saveAction->setObjectName(tr("_saveAction"));
     QIcon icon2;
     icon2.addPixmap(QPixmap(tr(":/new/prefix1/icons/filesave.png")), QIcon::Normal, QIcon::Off);
     connect(_saveAction, SIGNAL(triggered()), this, SLOT(save()));
 
-    _saveAsAction = new QAction(  Global::Awesome->icon(floppyo), tr("&å¦å­˜ä¸º"), this );
+    _saveAsAction = new QAction(  Global::Awesome->icon(floppyo), tr("&Áí´æÎª"), this );
     _saveAsAction->setObjectName(tr("_saveAsAction"));
     connect(_saveAsAction, SIGNAL(triggered()), this, SLOT( saveAs() ));
 
-    _closeAction = new QAction( Global::Awesome->icon(times), tr("å…³é—­"), this );
+    _closeAction = new QAction( Global::Awesome->icon(times), tr("¹Ø±Õ"), this );
     connect( _closeAction, SIGNAL(triggered()), this, SLOT( close() ));
 
-    _exitAction = new QAction( Global::Awesome->icon(poweroff), tr("é€€å‡º"), this );
+    _exitAction = new QAction( Global::Awesome->icon(poweroff), tr("ÍË³ö"), this );
     _exitAction->setObjectName(tr("_exitAction"));
     connect( _exitAction, SIGNAL(triggered()), this, SLOT(exitApp()) );
 
-    _searchAction = new QAction( tr("æŸ¥è¯¢"), this );
+    _searchAction = new QAction( tr("²éÑ¯"), this );
     _searchAction->setObjectName(tr("_searchAction"));
     _searchAction->setIcon( Global::Awesome->icon(areachart) );
     connect( _searchAction, SIGNAL(triggered()), this, SLOT( search() ));
 
-    _addtosqlAction = new QAction( tr("å±æ€§åˆ†ç±»"), this );
+    _addtosqlAction = new QAction( tr("ÊôĞÔ·ÖÀà"), this );
     _addtosqlAction->setObjectName(tr("_addtosqlAction"));
     _addtosqlAction->setIcon( Global::Awesome->icon(reorder) );
     connect( _addtosqlAction, SIGNAL(triggered()), this, SLOT( addtosql() ));
 
-    _exportDataAction = new QAction( QIcon(":/new/prefix1/icons/export.png"), tr("æ‰¹é‡å¯¼å‡ºæ•°æ®"),this);
+    _exportDataAction = new QAction( QIcon(":/new/prefix1/icons/export.png"), tr("ÅúÁ¿µ¼³öÊı¾İ"),this);
     _exportDataAction->setObjectName(tr("_exportDataAction"));
     connect(_exportDataAction,SIGNAL(triggered()),this,SLOT(exportData()));
 
-    _importDataAction = new QAction(QIcon(":/new/prefix1/icons/import.png"), tr("æ‰¹é‡å¯¼å…¥æ•°æ®"),this);
+    _importDataAction = new QAction(QIcon(":/new/prefix1/icons/import.png"), tr("ÅúÁ¿µ¼ÈëÊı¾İ"),this);
     _importDataAction->setObjectName(tr("_importDataAction"));
     connect(_importDataAction,SIGNAL(triggered()),this,SLOT(importData()));
 
     // Image Labelling
     _strikeToolButton = new QToolButton(this);
-    _strikeToolButton->setText(tr("ç¬”ç”»æ ‡æ³¨"));
+    _strikeToolButton->setText(tr("±Ê»­±ê×¢"));
     _strikeToolButton->setPopupMode(QToolButton::MenuButtonPopup);
     _strikeToolButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     _strikeToolButton->setIcon(Global::Awesome->icon(pencil));
     _strikeToolButton->setChecked(false);
 
     // Group 1
-    _fgAction = new QAction( Global::Awesome->icon(suno), tr("å‰æ™¯"), this );
+    _fgAction = new QAction( Global::Awesome->icon(suno), tr("Ç°¾°"), this );
     _fgAction->setCheckable(true);
-    _bgAction = new QAction( Global::Awesome->icon(moono), tr("èƒŒæ™¯"), this );
+    _bgAction = new QAction( Global::Awesome->icon(moono), tr("±³¾°"), this );
     _bgAction->setCheckable(true);
-    _eraserAction = new QAction( Global::Awesome->icon(eraser), tr("æ©¡çš®"), this );
+    _eraserAction = new QAction( Global::Awesome->icon(eraser), tr("ÏğÆ¤"), this );
     _eraserAction->setCheckable(true);
 
     _strikeToolButton->addAction(_fgAction);
@@ -185,13 +185,13 @@ void	ImageCompletionUI::createActions()
     group->addAction(_eraserAction);
     connect(group, SIGNAL(triggered(QAction*)), this, SLOT(strikeChangeTriggered(QAction*)));
 
-    _rectAction = new QAction( Global::Awesome->icon(squareo), tr("çŸ©å½¢æ ‡æ³¨"), this );
+    _rectAction = new QAction( Global::Awesome->icon(squareo), tr("¾ØĞÎ±ê×¢"), this );
     _rectAction->setCheckable(true);
 
-    _polygonAction = new QAction( Global::Awesome->icon(staro), tr("å¤šè¾¹å½¢æ ‡æ³¨"), this );
+    _polygonAction = new QAction( Global::Awesome->icon(staro), tr("¶à±ßĞÎ±ê×¢"), this );
     _polygonAction->setCheckable(true);
 
-    _manualAction = new QAction( Global::Awesome->icon(pencilsquareo), tr("æ‰‹å·¥æ ‡æ³¨"), this );
+    _manualAction = new QAction( Global::Awesome->icon(pencilsquareo), tr("ÊÖ¹¤±ê×¢"), this );
     _manualAction->setCheckable(true);
 
     QActionGroup *group2 = new QActionGroup(this);
@@ -200,18 +200,18 @@ void	ImageCompletionUI::createActions()
     group2->addAction(_manualAction);
     connect(group2, SIGNAL(triggered(QAction*)), this, SLOT(labellingMethodChanged(QAction*)));
 
-    _redo = new QAction( Global::Awesome->icon(repeat), tr("é‡åš"), this );
+    _redo = new QAction( Global::Awesome->icon(repeat), tr("ÖØ×ö"), this );
     _redo->setObjectName( tr("_redo") );
     connect( _redo, SIGNAL(triggered()), this, SLOT(redo()) );
 
-    _undo = new QAction( Global::Awesome->icon("undo"), tr("æ’¤é”€"), this );
+    _undo = new QAction( Global::Awesome->icon("undo"), tr("³·Ïú"), this );
     _undo->setObjectName( tr("_undo") );
     connect( _undo, SIGNAL(triggered()), this, SLOT(undo()) );
 
     //
-    _strikeThickness[0] = new QAction( tr("ç»†"), this );
-    _strikeThickness[1] = new QAction( tr("ä¸­"), this );
-    _strikeThickness[2] = new QAction( tr("ç²—"), this );
+    _strikeThickness[0] = new QAction( tr("Ï¸"), this );
+    _strikeThickness[1] = new QAction( tr("ÖĞ"), this );
+    _strikeThickness[2] = new QAction( tr("´Ö"), this );
 
     QActionGroup *group3 = new QActionGroup(this);
     for(int i = 0; i < 3; i++)
@@ -221,9 +221,9 @@ void	ImageCompletionUI::createActions()
     }
     connect(group3, SIGNAL(triggered(QAction*)), this, SLOT(strikeThicknessChanged(QAction*)) );
 
-    _lineThickness[0] = new QAction( tr("ç»†"), this );
-    _lineThickness[1] = new QAction( tr("ä¸­"), this );
-    _lineThickness[2] = new QAction( tr("ç²—"), this );
+    _lineThickness[0] = new QAction( tr("Ï¸"), this );
+    _lineThickness[1] = new QAction( tr("ÖĞ"), this );
+    _lineThickness[2] = new QAction( tr("´Ö"), this );
     QActionGroup *group4 = new QActionGroup(this);
     for(int i = 0; i < 3; i++)
     {
@@ -233,7 +233,7 @@ void	ImageCompletionUI::createActions()
     connect(group4, SIGNAL(triggered(QAction*)), this, SLOT(lineThicknessChanged(QAction*)) );
 
     _strikeThicknessToolButton = new QToolButton(this);
-    _strikeThicknessToolButton->setText(tr("ç¬”ç”»ç²—ç»†"));
+    _strikeThicknessToolButton->setText(tr("±Ê»­´ÖÏ¸"));
     _strikeThicknessToolButton->setPopupMode(QToolButton::MenuButtonPopup);
     _strikeThicknessToolButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     _strikeThicknessToolButton->setIcon(Global::Awesome->icon(circlethin));
@@ -243,7 +243,7 @@ void	ImageCompletionUI::createActions()
     }
 
     _lineThicknessToolButton = new QToolButton(this);
-    _lineThicknessToolButton->setText(tr("çº¿æ¡ç²—ç»†"));
+    _lineThicknessToolButton->setText(tr("ÏßÌõ´ÖÏ¸"));
     _lineThicknessToolButton->setPopupMode(QToolButton::MenuButtonPopup);
     _lineThicknessToolButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     _lineThicknessToolButton->setIcon(Global::Awesome->icon(minus));
@@ -255,7 +255,7 @@ void	ImageCompletionUI::createActions()
     // user
     if(Global::Authority == "1") //admin
     {
-        _userManagementAction = new QAction( Global::Awesome->icon(user), tr("ç”¨æˆ·ç®¡ç†"), this );
+        _userManagementAction = new QAction( Global::Awesome->icon(user), tr("ÓÃ»§¹ÜÀí"), this );
         _userManagementAction->setObjectName(tr("_userManagementAction"));
         connect( _userManagementAction, SIGNAL(triggered()), this, SLOT(userManagement()) );
     }
@@ -263,7 +263,7 @@ void	ImageCompletionUI::createActions()
 
 void	ImageCompletionUI::createToolBars()
 {
-    _editToolBar = addToolBar( tr("æ–‡ä»¶") );
+    _editToolBar = addToolBar( tr("ÎÄ¼ş") );
     _editToolBar->addAction( _openAction );
     _editToolBar->addAction( _saveAction );
     _editToolBar->addAction( _closeAction );
@@ -346,7 +346,7 @@ void	ImageCompletionUI::setupWidgets()
     _editImageViewer->setLineColor(QColor(colorTable[3], colorTable[4], colorTable[5]));
 
     _centralTabWidget->addTab( _editTab, Global::Awesome->icon(pictureo), QString("EditTab") );
-    _centralTabWidget->setTabText(_centralTabWidget->indexOf(_editTab), QApplication::translate("ImageCompletionUIClass", tr("å›¾åƒæ ‡æ³¨").toLocal8Bit().data(), 0));
+    _centralTabWidget->setTabText(_centralTabWidget->indexOf(_editTab), QApplication::translate("ImageCompletionUIClass", tr("Í¼Ïñ±ê×¢").toLocal8Bit().data(), 0));
     _centralTabWidget->setMaximumHeight(0.8 * height);
     _centralTabWidget->setContextMenuPolicy(Qt::CustomContextMenu);
 
@@ -369,7 +369,7 @@ void	ImageCompletionUI::setupWidgets()
     //   _rightOperationWidget
     ////////////////////////////////////////////////////////////////////////////////////
 
-    _rightOperationWidget = new QDockWidget(tr("å·¥å…·ç®±"),this );
+    _rightOperationWidget = new QDockWidget(tr("¹¤¾ßÏä"),this );
     _rightOperationWidget->setObjectName(tr("_rightOperationWidget"));
     _rightOperationWidget->setWindowIcon( Global::Awesome->icon(inbox) );
     _rightOperationWidget->setMaximumSize(QSize(0.2*width, 0.8*height));
@@ -421,7 +421,7 @@ void	ImageCompletionUI::setupWidgets()
     ////////////////////////////////////////////////////////////////////////////////////
     //   _leftWindowWidget
     ////////////////////////////////////////////////////////////////////////////////////
-    _leftWindowWidget = new QDockWidget(tr("å›¾è°±ä¿¡æ¯"),this );
+    _leftWindowWidget = new QDockWidget(tr("Í¼Æ×ĞÅÏ¢"),this );
     _leftWindowWidget->setObjectName(tr("_leftWindowWidget"));
     _leftWindowWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     _leftWindowWidget->setMaximumSize(QSize(0.2*width, height));
@@ -456,7 +456,7 @@ void	ImageCompletionUI::setupWidgets()
     _logInformationString = new QString();
     _logWidget->setReadOnly(true);
 
-    _logWindowWidget = new QDockWidget(tr("å·¥ä½œæ—¥å¿—"),this)    ;
+    _logWindowWidget = new QDockWidget(tr("¹¤×÷ÈÕÖ¾"),this)    ;
     _logWindowWidget->setObjectName("_logWindowWidget");
     _logWindowWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
@@ -469,7 +469,7 @@ void	ImageCompletionUI::setupWidgets()
     //   _bottomWindowWidget
     ////////////////////////////////////////////////////////////////////////////////////
 
-    _bottomWindowWidget = new QDockWidget(tr("æ•°æ®åº“ä¿¡æ¯"),this );
+    _bottomWindowWidget = new QDockWidget(tr("Êı¾İ¿âĞÅÏ¢"),this );
     _bottomWindowWidget->setObjectName(tr("_bottomWindowWidget"));
     _bottomWindowWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
     _bottomWindowWidget->setMinimumHeight(0.35 * height);
@@ -490,7 +490,7 @@ void	ImageCompletionUI::setupWidgets()
 
 void ImageCompletionUI::createStatusBar()
 {
-    statusBar()->showMessage(tr("å·²å°±ç»ª"));
+    statusBar()->showMessage(tr("ÒÑ¾ÍĞ÷"));
 }
 
 void ImageCompletionUI::createConnections()
@@ -532,7 +532,7 @@ void ImageCompletionUI::createConnections()
 void ImageCompletionUI::showContextMenu(QPoint pos)
 {
     QAction* triggerEdit = new QAction(this);
-    triggerEdit->setText("ç¼–è¾‘ç£¨ç²’å›¾åƒå±æ€§");
+    triggerEdit->setText("±à¼­Ä¥Á£Í¼ÏñÊôĞÔ");
     connect(triggerEdit, SIGNAL(triggered()), this, SLOT(editProperties()));
 
     if(_imageName.isEmpty())
@@ -583,7 +583,7 @@ void ImageCompletionUI::open()
         initialPath = QDir::homePath() + "/untitled";
     }
 
-    QString fileName = QFileDialog::getOpenFileName( this, tr("æ‰“å¼€å›¾åƒ"), initialPath, tr("å›¾åƒ (*.png *.bmp *.jpg *.jpeg)") );
+    QString fileName = QFileDialog::getOpenFileName( this, tr("´ò¿ªÍ¼Ïñ"), initialPath, tr("Í¼Ïñ (*.png *.bmp *.jpg *.jpeg)") );
     if(fileName.isEmpty()) return;
 
     _imagePath = fileName;
@@ -592,7 +592,7 @@ void ImageCompletionUI::open()
 
     if ( _editImageViewer->openImage(fileName) )
     {
-        statusBar()->showMessage(tr("æ‰“å¼€å›¾åƒ"), 2000);
+        statusBar()->showMessage(tr("´ò¿ªÍ¼Ïñ"), 2000);
         _editImageViewer->repaint();
         _step = NONE;
         updateLog();
@@ -614,7 +614,7 @@ void ImageCompletionUI::open()
     QString status = this->labelStatus(fileName);
     if(status != "N" && status != "Y")
     {
-        QMessageBox::StandardButton reply = QMessageBox::question(0, tr("æç¤º"), "æ­¤å›¾åƒä¸ºæ–°å›¾åƒ,æ˜¯å¦è¦å¯¼å…¥æ•°æ®åº“?", QMessageBox::Ok | QMessageBox::Cancel);
+        QMessageBox::StandardButton reply = QMessageBox::question(0, tr("ÌáÊ¾"), "´ËÍ¼ÏñÎªĞÂÍ¼Ïñ,ÊÇ·ñÒªµ¼ÈëÊı¾İ¿â?", QMessageBox::Ok | QMessageBox::Cancel);
         if(reply == QMessageBox::Ok)
         {
             (new ImageProperties(this))->showDlg(fileName);
@@ -634,14 +634,14 @@ void ImageCompletionUI::open()
         }
         else
         {
-            QMessageBox::warning(0, tr("æç¤º"), "åŠ è½½æ ‡æ³¨ç»“æœå›¾åƒå¤±è´¥,è‡ªåŠ¨æ˜¾ç¤ºåŸå§‹å›¾åƒ", QMessageBox::Close);
+            QMessageBox::warning(0, tr("ÌáÊ¾"), "¼ÓÔØ±ê×¢½á¹ûÍ¼ÏñÊ§°Ü,×Ô¶¯ÏÔÊ¾Ô­Ê¼Í¼Ïñ", QMessageBox::Close);
         }
     }
 
     int row = rowIndex(_imagePath);
     if(row > 0)
     {
-        QMessageBox::information(0, tr("æç¤º"), QString("å›¾åƒå·²æ‰“å¼€ (ç¬¬%1è¡Œ)").arg(row), QMessageBox::Close);
+        QMessageBox::information(0, tr("ÌáÊ¾"), QString("Í¼ÏñÒÑ´ò¿ª (µÚ%1ĞĞ)").arg(row), QMessageBox::Close);
     }
     else
     {
@@ -673,7 +673,7 @@ void ImageCompletionUI::showImagesInTree()
     QSqlDatabase db;
     if(!createConnection(db))
     {
-        QMessageBox::critical(0, qApp->tr("æç¤º"), qApp->tr("æ•°æ®åº“è¿æ¥å¤±è´¥!"), QMessageBox::Cancel);
+        QMessageBox::critical(0, qApp->tr("ÌáÊ¾"), qApp->tr("Êı¾İ¿âÁ¬½ÓÊ§°Ü!"), QMessageBox::Cancel);
         return;
     }
 
@@ -763,7 +763,7 @@ bool ImageCompletionUI::openImage(QString fileName)
             QString status = this->labelStatus(fileName);
             if(status != "N" && status != "Y")
             {
-                QMessageBox::StandardButton reply = QMessageBox::information(0, tr("æç¤º"), "æ­¤å›¾åƒä¸ºæ–°å›¾åƒ,æ˜¯å¦è¦å¯¼å…¥æ•°æ®åº“?", QMessageBox::Ok | QMessageBox::Cancel);
+                QMessageBox::StandardButton reply = QMessageBox::information(0, tr("ÌáÊ¾"), "´ËÍ¼ÏñÎªĞÂÍ¼Ïñ,ÊÇ·ñÒªµ¼ÈëÊı¾İ¿â?", QMessageBox::Ok | QMessageBox::Cancel);
                 if(reply == QMessageBox::Ok)
                 {
                     (new ImageProperties(this))->showDlg(fileName);
@@ -788,7 +788,7 @@ bool ImageCompletionUI::openImage(QString fileName)
                 }
                 else
                 {
-                    QMessageBox::warning(0, tr("æç¤º"), "åŠ è½½æ ‡æ³¨ç»“æœå›¾åƒå¤±è´¥,è‡ªåŠ¨æ˜¾ç¤ºåŸå§‹å›¾åƒ", QMessageBox::Close);
+                    QMessageBox::warning(0, tr("ÌáÊ¾"), "¼ÓÔØ±ê×¢½á¹ûÍ¼ÏñÊ§°Ü,×Ô¶¯ÏÔÊ¾Ô­Ê¼Í¼Ïñ", QMessageBox::Close);
                 }
 
                 return true;
@@ -846,7 +846,7 @@ void ImageCompletionUI::batchOpen()
             }
         }
 
-        statusBar()->showMessage(QString("æ‰“å¼€%1ä¸ªæ–‡ä»¶").arg(fileList.length()), 2000);
+        statusBar()->showMessage(QString("´ò¿ª%1¸öÎÄ¼ş").arg(fileList.length()), 2000);
     }
 }
 
@@ -866,12 +866,12 @@ void	ImageCompletionUI::save()
 
     if(Global::PathResult.isEmpty())
     {
-        QMessageBox::warning(this, tr("ä¿å­˜"), QString("è¯·æŒ‡å®šæ ‡æ³¨å›¾åƒä¿å­˜è·¯å¾„:%1").arg(QFileInfo(QApplication::instance()->applicationFilePath()).baseName() + ".ini"));
+        QMessageBox::warning(this, tr("±£´æ"), QString("ÇëÖ¸¶¨±ê×¢Í¼Ïñ±£´æÂ·¾¶:%1").arg(QFileInfo(QApplication::instance()->applicationFilePath()).baseName() + ".ini"));
         return;
     }
     if(Global::PathMask.isEmpty())
     {
-        QMessageBox::warning(this, tr("ä¿å­˜"), QString("è¯·æŒ‡å®šæ©ç å›¾åƒä¿å­˜è·¯å¾„:%1").arg(QFileInfo(QApplication::instance()->applicationFilePath()).baseName() + ".ini"));
+        QMessageBox::warning(this, tr("±£´æ"), QString("ÇëÖ¸¶¨ÑÚÂëÍ¼Ïñ±£´æÂ·¾¶:%1").arg(QFileInfo(QApplication::instance()->applicationFilePath()).baseName() + ".ini"));
         return;
     }
 
@@ -888,13 +888,13 @@ void	ImageCompletionUI::save()
     QString pathResult = Global::PathResult.append(QFileInfo(_imageName).baseName()).append(".").append(Global::ExtResult);
     if(!(ret1 = _editImageViewer->saveLabelledResult(pathResult, Global::ExtResult)))
     {
-        QMessageBox::warning(this, tr("ä¿å­˜"), tr("ä¿å­˜æ ‡æ³¨å›¾åƒå¤±è´¥"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("±£´æ"), tr("±£´æ±ê×¢Í¼ÏñÊ§°Ü"), QMessageBox::Close);
     }
 
     QString pathMask = Global::PathMask.append(QFileInfo(_imageName).baseName()).append(".").append(Global::ExtMask);
     if(!(ret2 = _editImageViewer->saveMask(pathMask, Global::ExtMask)))
     {
-        QMessageBox::warning(this, tr("ä¿å­˜"), tr("ä¿å­˜æ©ç å›¾åƒå¤±è´¥"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("±£´æ"), tr("±£´æÑÚÂëÍ¼ÏñÊ§°Ü"), QMessageBox::Close);
     }
 
     //TODO: Sync Database
@@ -945,11 +945,11 @@ void	ImageCompletionUI::saveAs()
 
     if(!(ret1 = _editImageViewer->saveAsLabelledResult(pathResult)))
     {
-        QMessageBox::warning(this, tr("ä¿å­˜"), tr("ä¿å­˜æ ‡æ³¨å›¾åƒå¤±è´¥"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("±£´æ"), tr("±£´æ±ê×¢Í¼ÏñÊ§°Ü"), QMessageBox::Close);
     }
     else if(!(ret2 = _editImageViewer->saveAsMask(pathMask)))
     {
-        QMessageBox::warning(this, tr("ä¿å­˜"), tr("ä¿å­˜æ©ç å›¾åƒå¤±è´¥"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("±£´æ"), tr("±£´æÑÚÂëÍ¼ÏñÊ§°Ü"), QMessageBox::Close);
     }
 
     //TODO: Sync Database
@@ -1047,8 +1047,8 @@ void ImageCompletionUI::showData()
     QSqlDatabase db;
     if(!createConnection(db))
     {
-        QMessageBox::critical(0, qApp->tr("æ•°æ®åº“"),
-                              qApp->tr("æ•°æ®åº“è¿æ¥å¤±è´¥!"),
+        QMessageBox::critical(0, qApp->tr("Êı¾İ¿â"),
+                              qApp->tr("Êı¾İ¿âÁ¬½ÓÊ§°Ü!"),
                               QMessageBox::Cancel);
     }
 
@@ -1274,8 +1274,8 @@ void ImageCompletionUI::scaling()
     _regionCompetitionDialog.sliderBasicOp->setMinimum(1);
     _regionCompetitionDialog.sliderBasicOp->setValue(10);
 
-    _regionCompetitionDialog.labelSliderLeft->setText(tr("å°"));
-    _regionCompetitionDialog.labelSliderRight->setText(tr("å¤§"));
+    _regionCompetitionDialog.labelSliderLeft->setText(tr("Ğ¡"));
+    _regionCompetitionDialog.labelSliderRight->setText(tr("´ó"));
 
     _regionCompetitionDialog._line->setHidden(true);
     _regionCompetitionDialog._labelRulerText->setHidden(true);
@@ -1287,8 +1287,8 @@ void ImageCompletionUI::brighting()
     _regionCompetitionDialog.sliderBasicOp->setMinimum(-100);
     _regionCompetitionDialog.sliderBasicOp->setValue(0);
 
-    _regionCompetitionDialog.labelSliderLeft->setText(tr("æš—"));
-    _regionCompetitionDialog.labelSliderRight->setText(tr("äº®"));
+    _regionCompetitionDialog.labelSliderLeft->setText(tr("°µ"));
+    _regionCompetitionDialog.labelSliderRight->setText(tr("ÁÁ"));
 
     _regionCompetitionDialog._line->setHidden(true);
     _regionCompetitionDialog._labelRulerText->setHidden(true);
@@ -1311,13 +1311,13 @@ void ImageCompletionUI::measure()
     _regionCompetitionDialog.sliderBasicOp->setTickInterval(50);
     _regionCompetitionDialog.sliderBasicOp->setTickPosition(QSlider::TicksRight);
 
-    _regionCompetitionDialog.labelSliderLeft->setText(tr("å°"));
-    _regionCompetitionDialog.labelSliderLeft->setText(tr("å¤§"));
+    _regionCompetitionDialog.labelSliderLeft->setText(tr("Ğ¡"));
+    _regionCompetitionDialog.labelSliderRight->setText(tr("´ó"));
 
     _regionCompetitionDialog._line->show();
     _regionCompetitionDialog._labelRulerText->show();
     _regionCompetitionDialog._labelRulerText->setScaledContents(true);
-    _regionCompetitionDialog._labelRulerText->setText(tr("50å¾®ç±³(50åƒç´ )"));
+    _regionCompetitionDialog._labelRulerText->setText(tr("50Î¢Ã×(50ÏñËØ)"));
 
     _regionCompetitionDialog.sliderBasicOp->setValue(50);
 
@@ -1345,7 +1345,7 @@ void ImageCompletionUI::actionSliderReleased()
     }
     else if(_regionCompetitionDialog.radioMesuarement->isChecked())
     {
-        _regionCompetitionDialog._labelRulerText->setText(QString::number(_regionCompetitionDialog.sliderBasicOp->value()) +"å¾®ç±³(50åƒç´ )");
+        _regionCompetitionDialog._labelRulerText->setText(QString::number(_regionCompetitionDialog.sliderBasicOp->value()) +"Î¢Ã×(50ÏñËØ)");
         _imageScale = _regionCompetitionDialog.sliderBasicOp->value() * 1.0 / 50;
     }
 }
@@ -1456,7 +1456,7 @@ char* ImageCompletionUI::getNewLogString()
     if(_editImageViewer->Method() != -1)
     {
         char* temp = new char[1000];
-        sprintf(temp, "æ ‡æ³¨ç”¨æ—¶: %.4fs", _editImageViewer->_seg_during);
+        sprintf(temp, "±ê×¢ÓÃÊ±: %.4fs", _editImageViewer->_seg_during);
 
         return temp;
     }
@@ -1541,12 +1541,12 @@ void ImageCompletionUI::undo()
     redo();
 }
 
-// ä»æ–‡ä»¶å¯¼å…¥æ•°æ®--zhyn
+// ´ÓÎÄ¼şµ¼ÈëÊı¾İ--zhyn
 bool ImageCompletionUI::importDB(const QString &path)
 {
     /**
-     *@brief è¯»å–sqlæ–‡æœ¬å†…å®¹,å¹¶å†™å…¥è‡³æ•°æ®åº“
-     *@param path sqlæ–‡ä»¶è·¯å¾„
+     *@brief ¶ÁÈ¡sqlÎÄ±¾ÄÚÈİ,²¢Ğ´ÈëÖÁÊı¾İ¿â
+     *@param path sqlÎÄ¼şÂ·¾¶
      */
     QSqlDatabase gAuthDB;
     if(!createConnection(gAuthDB))
@@ -1561,7 +1561,7 @@ bool ImageCompletionUI::importDB(const QString &path)
     while(!in.atEnd())
     {
         QString sql=in.readLine();
-        // é€šè¿‡åˆ†ævalues(E'),åˆ¤æ–­æ˜¯å¦æœ‰äºŒè¿›åˆ¶æ•°æ®,å¦‚æ²¡æœ‰ç›´æ¥è¿è¡Œsqlè¯­å¥,å¦‚æœ‰åˆ™éœ€è¦å°†16è¿›åˆ¶æ–‡æœ¬è½¬æ¢ä¸ºblobæ•°æ®
+        // Í¨¹ı·ÖÎövalues(E'),ÅĞ¶ÏÊÇ·ñÓĞ¶ş½øÖÆÊı¾İ,ÈçÃ»ÓĞÖ±½ÓÔËĞĞsqlÓï¾ä,ÈçÓĞÔòĞèÒª½«16½øÖÆÎÄ±¾×ª»»ÎªblobÊı¾İ
         QRegExp reg("E'([0-9a-f]{1,})'");
 
         if(!sql.contains(reg))
@@ -1573,7 +1573,7 @@ bool ImageCompletionUI::importDB(const QString &path)
             int pos=0;
             QStringList bList;
 
-            // æ¢ç´¢æ‰€æœ‰çš„blobå­—æ®µ
+            // Ì½Ë÷ËùÓĞµÄblob×Ö¶Î
             while((pos=reg.indexIn(sql,pos))!=-1)
             {
                 bList.append(reg.cap(0));
@@ -1582,7 +1582,7 @@ bool ImageCompletionUI::importDB(const QString &path)
                 pos+=reg.matchedLength();
             }
 
-            // blobå­—æ®µå¡«å……å ä½ç¬¦
+            // blob×Ö¶ÎÌî³äÕ¼Î»·û
             foreach(QString key,bList)
             {
                 sql.replace(key,"?");
@@ -1590,12 +1590,12 @@ bool ImageCompletionUI::importDB(const QString &path)
 
             query.prepare(sql);
 
-            // ç»‘å®šå ä½ç¬¦æ•°æ®
+            // °ó¶¨Õ¼Î»·ûÊı¾İ
             for(int i=0;i<bList.size();i++)
             {
-                // å»é™¤E''
+                // È¥³ıE''
                 QString hexBlob=bList[i].mid(2,bList[i].size()-1);
-                // è¿˜åŸ16è¿›åˆ¶æ•°æ®
+                // »¹Ô­16½øÖÆÊı¾İ
                 QByteArray ba=QByteArray::fromHex(hexBlob.toLocal8Bit());
 
                 query.bindValue(i,ba);
@@ -1606,12 +1606,12 @@ bool ImageCompletionUI::importDB(const QString &path)
     return true;
 }
 
-// å¯¼å‡ºæ•°æ®æ•°æ®åˆ°æ–‡ä»¶--zhyn
+// µ¼³öÊı¾İÊı¾İµ½ÎÄ¼ş--zhyn
 bool ImageCompletionUI::exportDB(const QString &path)
 {
     /**
-     *@brief å¯¼å‡ºæ•°æ®åº“æ•°æ®åˆ°æ–‡ä»¶ä¸­
-     *@param path æ–‡ä»¶è·¯å¾„
+     *@brief µ¼³öÊı¾İ¿âÊı¾İµ½ÎÄ¼şÖĞ
+     *@param path ÎÄ¼şÂ·¾¶
      */
     //QMessageBox::warning(this,"warning","this is private function to export SQL Data",QMessageBox::Close);
 
@@ -1621,7 +1621,7 @@ bool ImageCompletionUI::exportDB(const QString &path)
 
     QStringList vList;
 
-    // åˆ—å‡ºæ•°æ®åº“æ‰€æœ‰åç§°
+    // ÁĞ³öÊı¾İ¿âËùÓĞÃû³Æ
     QStringList tables=gAuthDB.tables();
     foreach(QString table,tables)
     {
@@ -1632,10 +1632,10 @@ bool ImageCompletionUI::exportDB(const QString &path)
         QSqlRecord record=query.record();
         while(query.next())
         {
-            QString prefix=QString("insert into %1(").arg(table); // è®°å½•å±æ€§å­—æ®µå
-            QString suffix="values(";                             // è®°å½•å±æ€§å€¼
+            QString prefix=QString("insert into %1(").arg(table); // ¼ÇÂ¼ÊôĞÔ×Ö¶ÎÃû
+            QString suffix="values(";                             // ¼ÇÂ¼ÊôĞÔÖµ
 
-            // éå†å±æ€§å­—æ®µ
+            // ±éÀúÊôĞÔ×Ö¶Î
             for(int i=0;i<record.count();i++)
             {
                 QSqlField field=record.field(i);
@@ -1656,7 +1656,7 @@ bool ImageCompletionUI::exportDB(const QString &path)
                         suffix+="null";
                     }else
                     {
-                        suffix+=QString("E'%1'").arg(data.toHex().data()); // blobæ•°æ®æŒ‰16è¿›åˆ¶æ ¼å¼å¯¼å‡º
+                        suffix+=QString("E'%1'").arg(data.toHex().data()); // blobÊı¾İ°´16½øÖÆ¸ñÊ½µ¼³ö
                     }
                 }
                     break;
@@ -1679,7 +1679,7 @@ bool ImageCompletionUI::exportDB(const QString &path)
                     suffix+=")";
                 }
             }
-            // ç»„è£…sqlè¯­å¥ insert into auth_test values(0,'hello',E'003f')
+            // ×é×°sqlÓï¾ä insert into auth_test values(0,'hello',E'003f')
             QString iSql=QString("%1 %2;").arg(prefix).arg(suffix);
             vList.append(iSql);
         }
@@ -1688,7 +1688,7 @@ bool ImageCompletionUI::exportDB(const QString &path)
     QFile file(path);
     file.open(QIODevice::WriteOnly|QIODevice::Truncate);
 
-    // å°†sqlè¯­å¥å†™å…¥æ–‡ä»¶
+    // ½«sqlÓï¾äĞ´ÈëÎÄ¼ş
     QTextStream out(&file);
     foreach(QString line,vList)
     {
@@ -1763,37 +1763,37 @@ void ImageCompletionUI::flushLeft(QString filename, QString label)
     }
 }
 
-// æ‹·è´æ–‡ä»¶--zhyn
+// ¿½±´ÎÄ¼ş--zhyn
 bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIfExits)
 {
     /**
-     *@brief å°†fromDiræ–‡ä»¶å¤¹å†…çš„å›¾ç‰‡æ–‡ä»¶ï¼Œæ‹·è´åˆ°toDiræ–‡ä»¶å¤¹ä¸‹
-     *@param fromDir å›¾ç‰‡æ–‡ä»¶çš„æºç›®å½•
-     *@param toDir   æ‹·è´å›¾ç‰‡æ–‡ä»¶çš„ç›®æ ‡ç›®å½•
-     *@param convertIfExits æ˜¯å¦è¦†ç›–å·²å­˜åœ¨æ–‡ä»¶æ ‡è¯†ï¼Œé»˜è®¤å€¼æ˜¯false
+     *@brief ½«fromDirÎÄ¼ş¼ĞÄÚµÄÍ¼Æ¬ÎÄ¼ş£¬¿½±´µ½toDirÎÄ¼ş¼ĞÏÂ
+     *@param fromDir Í¼Æ¬ÎÄ¼şµÄÔ´Ä¿Â¼
+     *@param toDir   ¿½±´Í¼Æ¬ÎÄ¼şµÄÄ¿±êÄ¿Â¼
+     *@param convertIfExits ÊÇ·ñ¸²¸ÇÒÑ´æÔÚÎÄ¼ş±êÊ¶£¬Ä¬ÈÏÖµÊÇfalse
      */
     QDir sourceDir(fromDir);
     QDir targetDir(toDir);
 
     if(!targetDir.exists())
     {
-        //< å¦‚æœç›®æ ‡ç›®å½•ä¸å­˜åœ¨ï¼Œåˆ™è¿›è¡Œåˆ›å»º
+        //< Èç¹ûÄ¿±êÄ¿Â¼²»´æÔÚ£¬Ôò½øĞĞ´´½¨
         if(!targetDir.mkdir(targetDir.absolutePath()))
             return false;
     }
 
     QFileInfoList fileInfoList = sourceDir.entryInfoList();
-    // éå†æ‰€æœ‰æ–‡ä»¶ä¿¡æ¯
+    // ±éÀúËùÓĞÎÄ¼şĞÅÏ¢
     foreach(QFileInfo fileInfo, fileInfoList)
     {
-        // å»é™¤å½“å‰ç›®å½•å’Œçˆ¶ç›®å½•
+        // È¥³ıµ±Ç°Ä¿Â¼ºÍ¸¸Ä¿Â¼
         if(fileInfo.fileName() == "." || fileInfo.fileName() == "..")
             continue;
-        // æ•°æ®åº“æ–‡ä»¶å¤„ç†
+        // Êı¾İ¿âÎÄ¼ş´¦Àí
         if(fileInfo.fileName().split(".")[1] == "sql")
             qDebug()<<fileInfo.fileName();
 
-        // å½“ä¸ºç›®å½•æ—¶ï¼Œé€’å½’çš„è¿›è¡Œcopy
+        // µ±ÎªÄ¿Â¼Ê±£¬µİ¹éµÄ½øĞĞcopy
         if(fileInfo.isDir())
         {
             if(!copyFiles(fileInfo.filePath(),
@@ -1802,12 +1802,12 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
                 return false;
         }
         else
-        {   //å½“å…è®¸è¦†ç›–æ“ä½œæ—¶ï¼Œå°†æ—§æ–‡ä»¶è¿›è¡Œåˆ é™¤æ“ä½œ
+        {   //µ±ÔÊĞí¸²¸Ç²Ù×÷Ê±£¬½«¾ÉÎÄ¼ş½øĞĞÉ¾³ı²Ù×÷
             if(convertIfExits && targetDir.exists(fileInfo.fileName()))
             {
                 targetDir.remove(fileInfo.fileName());
             }
-            // è¿›è¡Œæ–‡ä»¶copy
+            // ½øĞĞÎÄ¼şcopy
             if(!QFile::copy(fileInfo.filePath(),
                             targetDir.filePath(fileInfo.fileName()))){
                 return false;
@@ -1817,13 +1817,13 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
     return true;
 }
 
-// æ‰¹é‡æ•°æ®å¯¼å…¥--zhyn
+// ÅúÁ¿Êı¾İµ¼Èë--zhyn
 void ImageCompletionUI::importData()
-{   
-    QFileDialog *packgeDir = new QFileDialog(this,tr("é€‰æ‹©æ‰“åŒ…æ–‡ä»¶"),"","");
+{
+    QFileDialog *packgeDir = new QFileDialog(this,tr("Ñ¡Ôñ´ò°üÎÄ¼ş"),"","");
     packgeDir->setFileMode(QFileDialog::DirectoryOnly);
     packgeDir->setViewMode(QFileDialog::Detail);
-    
+
     QString packgePath;
     if(packgeDir->exec())
     {
@@ -1842,10 +1842,10 @@ void ImageCompletionUI::importData()
         fileNameList.append(fileInfo.fileName());
     }
     if(!fileNameList.contains("resultFile") || !fileNameList.contains("sourceFile") || !fileNameList.contains("databackup.sql"))
-        QMessageBox::warning(this,tr("æç¤º"),tr("æ‰“åŒ…æ–‡ä»¶å—æŸ"),QMessageBox::Close);
+        QMessageBox::warning(this,tr("ÌáÊ¾"),tr("´ò°üÎÄ¼şÊÜËğ"),QMessageBox::Close);
     else
     {
-        QFileDialog *targetDir = new QFileDialog(this,tr("é€‰æ‹©æ‰“åŒ…æ¢å¤ç›®å½•"),"","");
+        QFileDialog *targetDir = new QFileDialog(this,tr("Ñ¡Ôñ´ò°ü»Ö¸´Ä¿Â¼"),"","");
         targetDir->setFileMode(QFileDialog::DirectoryOnly);
         targetDir->setViewMode(QFileDialog::Detail);
         QString targetPath;
@@ -1860,32 +1860,32 @@ void ImageCompletionUI::importData()
         QString sourcepackgePath = packgePath + "\\sourceFile";
         QString resultpackgePath = packgePath + "\\resultFile";
         QString databackupFileName = packgePath + "\\databackup.sql";
-        
+
         QString sourcetargetPath = targetPath + "\\sourceFile";
         QString resulttargetPath = targetPath + "\\resultFile";
 #endif
-        
+
 #ifdef Q_OS_LINUX
         QString sourcepackgePath = packgePath + "/sourceFile";
         QString resultpackgePath = packgePath + "/resultFile";
         QString databackupFileName = packgePath + "/databackup.sql";
-        
+
         QString sourcetargetPath = targetPath + "/sourceFile";
         QString resulttargetPath = targetPath + "/resultFile";
 #endif
         if(this->copyFiles(sourcepackgePath,sourcetargetPath) &&
                 this->copyFiles(resultpackgePath,resulttargetPath) &&
                 this->importDB(databackupFileName))
-            QMessageBox::warning(this,tr("æç¤º"),tr("æ•°æ®æ¢å¤æˆåŠŸ"),QMessageBox::Close);
+            QMessageBox::warning(this,tr("ÌáÊ¾"),tr("Êı¾İ»Ö¸´³É¹¦"),QMessageBox::Close);
         else
-            QMessageBox::warning(this,tr("æç¤º"),tr("æ•°æ®æ¢å¤å¤±è´¥"),QMessageBox::Close);
+            QMessageBox::warning(this,tr("ÌáÊ¾"),tr("Êı¾İ»Ö¸´Ê§°Ü"),QMessageBox::Close);
     }
 }
 
-// æ‰¹é‡æ•°æ®å¯¼å‡º--zhyn
+// ÅúÁ¿Êı¾İµ¼³ö--zhyn
 void ImageCompletionUI::exportData()
 {
-    QFileDialog *sourceDir = new QFileDialog(this,tr("é€‰æ‹©é“è°±å›¾ç‰‡ç›®å½•"),"","");
+    QFileDialog *sourceDir = new QFileDialog(this,tr("Ñ¡ÔñÌúÆ×Í¼Æ¬Ä¿Â¼"),"","");
     sourceDir->setFileMode(QFileDialog::DirectoryOnly);
     sourceDir->setViewMode(QFileDialog::Detail);
     QString sourcePath;
@@ -1898,7 +1898,7 @@ void ImageCompletionUI::exportData()
     else
         return;
 
-    QFileDialog *resultDir = new QFileDialog(this,tr("é€‰æ‹©ç£¨ç²’æ ‡æ³¨ç»“æœç›®å½•"),"","");
+    QFileDialog *resultDir = new QFileDialog(this,tr("Ñ¡ÔñÄ¥Á£±ê×¢½á¹ûÄ¿Â¼"),"","");
     resultDir->setFileMode(QFileDialog::DirectoryOnly);
     resultDir->setViewMode(QFileDialog::Detail);
     QString resultPath;
@@ -1911,7 +1911,7 @@ void ImageCompletionUI::exportData()
     else
         return;
 
-    QFileDialog *targetDir = new QFileDialog(this,tr("é€‰æ‹©æ‰“åŒ…å­˜æ¡£ç›®å½•"),"","");
+    QFileDialog *targetDir = new QFileDialog(this,tr("Ñ¡Ôñ´ò°ü´æµµÄ¿Â¼"),"","");
     targetDir->setFileMode(QFileDialog::DirectoryOnly);
     targetDir->setViewMode(QFileDialog::Detail);
     QString targetPath;
@@ -1931,23 +1931,23 @@ void ImageCompletionUI::exportData()
     QString resulttargetPath = targetPath + "\\resultFile";
     QString databackupFileName = targetPath + "\\databackup.sql";
 #endif
-    
+
 #ifdef Q_OS_LINUX
     QString sourcetargetPath = targetPath + "/sourceFile";
     QString resulttargetPath = targetPath + "/resultFile";
     QString databackupFileName = targetPath + "/databackup.sql";
 #endif
 
-    // å¯¼å‡ºæ•°æ®åº“ä¿¡æ¯
+    // µ¼³öÊı¾İ¿âĞÅÏ¢
     /* edit code */
 
 
     if(this->copyFiles(sourcePath,sourcetargetPath)
             && this->copyFiles(resultPath,resulttargetPath)
             && this->exportDB(databackupFileName))
-        QMessageBox::warning(this,tr("æ‰¹é‡æ•°æ®å¯¼å‡ºæç¤º"),tr("æ‰¹é‡æ•°æ®å¯¼å‡ºæˆåŠŸ"),QMessageBox::Close);
+        QMessageBox::warning(this,tr("ÅúÁ¿Êı¾İµ¼³öÌáÊ¾"),tr("ÅúÁ¿Êı¾İµ¼³ö³É¹¦"),QMessageBox::Close);
     else
-        QMessageBox::warning(this,tr("æ‰¹é‡æ•°æ®å¯¼å‡ºæç¤º"),tr("æ‰¹é‡æ•°æ®å¯¼å‡ºå¤±è´¥"),QMessageBox::Close);
+        QMessageBox::warning(this,tr("ÅúÁ¿Êı¾İµ¼³öÌáÊ¾"),tr("ÅúÁ¿Êı¾İµ¼³öÊ§°Ü"),QMessageBox::Close);
 }
 
 void ImageCompletionUI::cellDoubleClicked_(int row, int /* col */)
@@ -1977,13 +1977,28 @@ void ImageCompletionUI::removeImage(QString filename)
 {
     close();
 
-    for(int i = 0; i < _leftWindow.tableWidget->rowCount(); i++)
+    int i;
+    for(i = 0; i < _fNames.size(); i++)
     {
-        if(_leftWindow.tableWidget->item(i,1) && filename == _leftWindow.tableWidget->item(i, 1)->text())
+        if(_leftWindow.tableWidget->item(i,0) && filename == _fNames[i])
         {
             _leftWindow.tableWidget->removeRow(i);
             _cnt--;
+            break;
         }
+    }
+
+    if(i < _fNames.size()-1)
+    {
+        for(int j = i; j < _fNames.size()-1; j++)
+        {
+            _fNames[j] = _fNames[j+1];
+        }
+        _fNames.pop_back();
+    }
+    else if( i == _fNames.size()-1)
+    {
+        _fNames.pop_back();
     }
 }
 
@@ -2013,3 +2028,4 @@ QString ImageCompletionUI::labelStatus(QString imagePath)
     }
     return "";
 }
+

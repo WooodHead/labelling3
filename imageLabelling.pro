@@ -38,20 +38,20 @@ SOURCES += \
     MyPreference.cpp \
     ImageViewer.cpp \
     LeftWindow.cpp \
-    searchdata.cpp \
     classification.cpp \
     buttom.cpp \
-    imagecompletionui.cpp \
-    advancesearchdlg.cpp \
     propertynamedlg.cpp \
+    UserInfo.cpp \
+    advancesearchdlg.cpp \
+    Global.cpp \
+    imagecompletionui.cpp \
     ImageProperties.cpp \
     Login.cpp \
+    MoliProperties.cpp \
+    searchdata.cpp \
     UserAdd.cpp \
     UserEdit.cpp \
-    UserInfo.cpp \
-    UserManagement.cpp \
-    Global.cpp \
-    MoliProperties.cpp
+    UserManagement.cpp
 
 
 FORMS += \
@@ -80,11 +80,11 @@ unix:!macx {
     LIBS += `pkg-config opencv --libs`
 }
 win32 {
-INCLUDEPATH += D:\Application\CMake_Qt_OpenCV_MinGW482\install\include\
+INCLUDEPATH += D:\opencv\build\include\
 
-LIBS += D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_core244.dll.a\
-        D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_highgui244.dll.a\
-        D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_imgproc244.dll.a\
+LIBS += D:\vendor\OpenCV243-mingw\lib\libopencv_core243.dll.a\
+        D:\vendor\OpenCV243-mingw\lib\libopencv_highgui243.dll.a\
+        D:\vendor\OpenCV243-mingw\lib\libopencv_imgproc243.dll.a\
 }
 
 OTHER_FILES += \
