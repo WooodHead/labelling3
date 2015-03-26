@@ -29,7 +29,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="centralStackedWidgetPage1">
       <widget class="QLabel" name="_icon">
@@ -80,8 +80,8 @@
       <widget class="QPushButton" name="_cancel">
        <property name="geometry">
         <rect>
-         <x>367</x>
-         <y>250</y>
+         <x>400</x>
+         <y>240</y>
          <width>85</width>
          <height>30</height>
         </rect>
@@ -115,7 +115,7 @@
        <property name="geometry">
         <rect>
          <x>262</x>
-         <y>250</y>
+         <y>240</y>
          <width>85</width>
          <height>30</height>
         </rect>
@@ -155,8 +155,8 @@
        <property name="geometry">
         <rect>
          <x>332</x>
-         <y>184</y>
-         <width>129</width>
+         <y>170</y>
+         <width>151</width>
          <height>27</height>
         </rect>
        </property>
@@ -181,7 +181,7 @@
         <rect>
          <x>332</x>
          <y>136</y>
-         <width>129</width>
+         <width>151</width>
          <height>27</height>
         </rect>
        </property>
@@ -202,7 +202,7 @@
        <property name="geometry">
         <rect>
          <x>252</x>
-         <y>184</y>
+         <y>170</y>
          <width>37</width>
          <height>22</height>
         </rect>

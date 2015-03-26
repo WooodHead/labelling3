@@ -76,6 +76,7 @@ private:
 
     QString _originalImagePath;
     QImage _result;
+    QImage _result2;
     QImage _mask;
 
     bool _bDirty;
@@ -85,7 +86,7 @@ private:
 
 
 public:
-    void showDlg(QString imagePath, const QImage& result, const QImage& mask, const double imageScale);
+    void showDlg(QString imagePath, const QImage& result, const QImage& result2, const QImage& mask, const double imageScale);
 };
 
 #endif // MOLIPROPERTIES_H

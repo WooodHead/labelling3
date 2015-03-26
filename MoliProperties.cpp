@@ -193,6 +193,20 @@ void MoliProperties::on_pushButton_clicked()
                 {
                     record.setValue("abrasiveResultData", record.value("abrasiveResultData").toByteArray());
                 }
+
+                if(!_result2.isNull())
+                {
+                    QByteArray arr;
+                    QBuffer buffer(&arr);
+                    buffer.open(QIODevice::WriteOnly);
+                    _result2.save(&buffer, Global::ExtResult.toUtf8().constData());
+                    record.setValue("abrasiveResultData2", arr);
+                }
+                else
+                {
+                    record.setValue("abrasiveResultData2", record.value("abrasiveResultData2").toByteArray());
+                }
+
                 if(!_mask.isNull())
                 {
                     QByteArray arr;
@@ -254,6 +268,14 @@ void MoliProperties::on_pushButton_clicked()
                     _mask.save(&buffer, Global::ExtMask.toUtf8().constData());
                     _model->setData(_model->index(0, 20), arr);
                 }
+                if(!_result2.isNull())
+                {
+                    QByteArray arr;
+                    QBuffer buffer(&arr);
+                    buffer.open(QIODevice::WriteOnly);
+                    _result2.save(&buffer, Global::ExtMask.toUtf8().constData());
+                    _model->setData(_model->index(0, 23), arr);
+                }
             }
 
             if(!_model->submitAll())
@@ -297,10 +319,11 @@ void MoliProperties::on_pushButton_clicked()
     }
 }
 
-void MoliProperties::showDlg(QString imagePath, const QImage& result, const QImage& mask, const double imageScale)
+void MoliProperties::showDlg(QString imagePath, const QImage& result, const QImage& result2, const QImage& mask, const double imageScale)
 {
     _result = result;
     _mask = mask;
+    _result2 = result2;
 
     _originalImagePath = imagePath;
     ui->_editMoliPath->setText(imagePath);

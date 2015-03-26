@@ -433,6 +433,7 @@ void	ImageCompletionUI::setupWidgets()
 
     _leftWindow.setupUi(_leftDockWindowContents);
     _leftWindow.tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _leftWindow.tabWidgetLeftWindow->setCurrentIndex(0);
     _leftWindow.tabWidgetLeftWindow->removeTab(2);
     _leftWindowWidget->setWidget(_leftDockWindowContents);
 
@@ -548,10 +549,20 @@ void ImageCompletionUI::editProperties()
 {
     if(_imagePath.isEmpty()) return;
 
-    QImage* result = _editImageViewer->getResult();
+    QImage* result = _editImageViewer->getResultDisplay();
     QImage* mask = _editImageViewer->getMask();
+    QImage* result2 = _editImageViewer->getResultSave();
 
-    (new MoliProperties(this))->showDlg(_imagePath, result != NULL ? *result : QImage(), mask != NULL ? *mask : QImage(), _imageScale );
+    (new MoliProperties(this))->showDlg(_imagePath, result != NULL ? *result : QImage(), result2 != NULL ? *result2 : QImage(), mask != NULL ? *mask : QImage(), _imageScale );
+}
+
+void ImageCompletionUI::synchImageName(QString fName)
+{
+    if(fName.isEmpty()) return;
+
+    if(!QFile(fName).exists()) return;
+
+    _imagePath = fName;
 }
 
 void ImageCompletionUI::setupBrush()
@@ -630,7 +641,7 @@ void ImageCompletionUI::open()
     int row = rowIndex(_imagePath);
     if(row > 0)
     {
-        QMessageBox::information(0, tr("提示"), QString("图像已打开(第%1行)").arg(row), QMessageBox::Close);
+        QMessageBox::information(0, tr("提示"), QString("图像已打开 (第%1行)").arg(row), QMessageBox::Close);
     }
     else
     {
@@ -656,6 +667,9 @@ int ImageCompletionUI::rowIndex(QString image)
 
 void ImageCompletionUI::showImagesInTree()
 {
+    _leftWindow._treeViewImages->setAlternatingRowColors(true);
+    _leftWindow._treeViewImages->setExpandsOnDoubleClick(false);
+
     QSqlDatabase db;
     if(!createConnection(db))
     {
@@ -761,6 +775,10 @@ bool ImageCompletionUI::openImage(QString fileName)
                     return false;
                 }
             }
+            else if(status == "N")
+            {
+                return true;
+            }
             else if(status == "Y")
             {
                 QImage image = this->loadLabelledResult(fileName);
@@ -787,9 +805,9 @@ bool ImageCompletionUI::openImage(QString fileName)
         }
     }
 
-    int width = _editImageViewer->image().width();
-    int height = _editImageViewer->image().height();
-    this->setMinimumSize( width < 800 ? 800 : height, height < 600 ? 600 : height );
+    //    int width = _editImageViewer->image().width();
+    //    int height = _editImageViewer->image().height();
+    //    this->setMinimumSize( width < 800 ? 800 : height, height < 600 ? 600 : height );
 }
 
 void ImageCompletionUI::batchOpen()
@@ -846,13 +864,24 @@ void	ImageCompletionUI::save()
 
     bool ret1, ret2;
 
-    if(!QDir(Global::PathResult).exists())
+    if(Global::PathResult.isEmpty())
     {
         QMessageBox::warning(this, tr("保存"), QString("请指定标注图像保存路径:%1").arg(QFileInfo(QApplication::instance()->applicationFilePath()).baseName() + ".ini"));
+        return;
+    }
+    if(Global::PathMask.isEmpty())
+    {
+        QMessageBox::warning(this, tr("保存"), QString("请指定掩码图像保存路径:%1").arg(QFileInfo(QApplication::instance()->applicationFilePath()).baseName() + ".ini"));
+        return;
+    }
+
+    if(!QDir(Global::PathResult).exists())
+    {
+        QDir().mkdir(Global::PathResult);
     }
     if(!QDir(Global::PathMask).exists())
     {
-        QMessageBox::warning(this, tr("保存"), QString("请指定掩码图像保存路径:%1").arg(QFileInfo(QApplication::instance()->applicationFilePath()).baseName() + ".ini"));
+        QDir().mkdir(Global::PathMask);
     }
 
     // Save
@@ -1316,8 +1345,8 @@ void ImageCompletionUI::actionSliderReleased()
     }
     else if(_regionCompetitionDialog.radioMesuarement->isChecked())
     {
-       _regionCompetitionDialog._labelRulerText->setText(QString::number(_regionCompetitionDialog.sliderBasicOp->value()) +"微米(50像素)");
-       _imageScale = _regionCompetitionDialog.sliderBasicOp->value() * 1.0 / 50;
+        _regionCompetitionDialog._labelRulerText->setText(QString::number(_regionCompetitionDialog.sliderBasicOp->value()) +"微米(50像素)");
+        _imageScale = _regionCompetitionDialog.sliderBasicOp->value() * 1.0 / 50;
     }
 }
 
@@ -1723,31 +1752,15 @@ void ImageCompletionUI::flushBottom()
     showData();
 }
 
-bool ImageCompletionUI::copyOrgImage(QString name)
-{
-    if(!QDir(Global::PathImage).exists())
-    {
-        QDir().mkdir(Global::PathImage);
-    }
-
-    return QFile::copy(_imagePath, Global::PathImage + name + ".jpg");
-}
-
 void ImageCompletionUI::flushLeft(QString filename, QString label)
 {
-//    for(int i = 0; i < _leftWindow.tableWidget->rowCount(); i++)
-//    {
-//        if(_leftWindow.tableWidget->item(i, 2) && filename == _leftWindow.tableWidget->item(i,1)->text())
-//        {
-//            _leftWindow.tableWidget->item(i,2)->setText(label);
-
-//            for(int j = 0; j < _leftWindow.tableWidget->columnCount(); j++)
-//            {
-//                _leftWindow.tableWidget->item(i, j)->setBackground(getColor(label));
-//            }
-//            return;
-//        }
-//    }
+    for(int i = 0; i < _fNames.size(); i++)
+    {
+        if(_leftWindow.tableWidget->item(i, 0) && _fNames[i] == filename)
+        {
+            _leftWindow.tableWidget->item(i, 0)->setBackgroundColor(getColor(label));
+        }
+    }
 }
 
 // 拷贝文件--zhyn
@@ -1939,11 +1952,14 @@ void ImageCompletionUI::exportData()
 
 void ImageCompletionUI::cellDoubleClicked_(int row, int /* col */)
 {
-    if(_fNames.size() > row)
+    if(_leftWindow.tableWidget->item(row, 0) != 0)
     {
-        if(!openImage(_fNames[row]))
+        if(_fNames.size() > row)
         {
-            _leftWindow.tableWidget->removeRow(row);
+            if(!openImage(_fNames[row]))
+            {
+                _leftWindow.tableWidget->removeRow(row);
+            }
         }
     }
 
@@ -1996,9 +2012,4 @@ QString ImageCompletionUI::labelStatus(QString imagePath)
         else return "";
     }
     return "";
-}
-
-void ImageCompletionUI::on__treeViewImages_doubleClicked(const QModelIndex &index)
-{
-    // TODO
 }

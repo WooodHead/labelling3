@@ -84,7 +84,7 @@ Login::Login(QWidget *parent) :
     QRect r = QApplication::desktop()->screenGeometry();
     this->move( r.center() - rect().center() );
 
-    this->setStyleSheet("background-image: url(:/new/prefix1/icons/login_bg.jpg);");
+    //this->setStyleSheet("background-image: url(:/new/prefix1/icons/login_bg.jpg);");
 
 
     ui->centralStackedWidget->setCurrentIndex(0);

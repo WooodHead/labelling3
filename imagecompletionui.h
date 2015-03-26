@@ -300,11 +300,10 @@ private:
 
 private slots:
     void flushBottom();
-    bool copyOrgImage(QString name);
     void flushLeft(QString path, QString label);
     void showContextMenu(QPoint);
     void editProperties();
-    void on__treeViewImages_doubleClicked(const QModelIndex &index);
+    void synchImageName(QString fName);
 };
 
 #endif // IMAGECOMPLETIONUI_H

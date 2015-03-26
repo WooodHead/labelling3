@@ -35,6 +35,8 @@
 #include "BasicDataStructure.h"
 #include "buttom.h"
 
+#define DELETE(ptr) if(ptr) {delete ptr; ptr = 0;}
+
 class BrushInterface;
 class ImageCompletionUI;
 
@@ -94,7 +96,8 @@ private:
 
     QImage		    *_displayImage;
 	QImage			*_labelMapImage;
-	QImage          *_result_labelImage;
+	QImage          *_result_display;
+    QImage          *_result_save;
 	
 	IplImage		*_ocvImage;
 	IplImage        *_srcOcvImage;
@@ -161,7 +164,8 @@ public:
     void setDefaultCursor();
 
     QImage* getMask();
-    QImage* getResult();
+    QImage* getResultDisplay();
+    QImage* getResultSave();
   
 public slots:
 	void				changeObjectLabeling(QTreeWidgetItem*); 

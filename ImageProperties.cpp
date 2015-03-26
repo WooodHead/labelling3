@@ -22,7 +22,7 @@ ImageProperties::ImageProperties(QWidget *parent) :
     ui->_buttonNext->setIcon(Global::Awesome->icon(forward));
 
     connect(this, SIGNAL(flush()), parent, SLOT(flushBottom()));
-    connect(this, SIGNAL(copyOrgImage(QString)), parent, SLOT(copyOrgImage(QString)));
+    connect(this, SIGNAL(synchImageName(QString)), parent, SLOT(synchImageName(QString)));
     connect(this, SIGNAL(removeImage(QString)), parent, SLOT(removeImage(QString)));
 
     _bCommited = false;
@@ -103,7 +103,7 @@ void ImageProperties::load()
     ui->_dateEditMovepartServiceDate->setDate(QDate::currentDate());
 
     // model 3
-    ui->_comboBoxOilSampleID->addItems(getItems(_models[3], "oilsampleid"));
+    //ui->_comboBoxOilSampleID->addItems(getItems(_models[3], "oilsampleid"));
     ui->_comboBoxOilSampleUnitID->addItems(getItems(_models[3], "sampledepartid"));
     ui->_comboBoxOilSamplePlaneType->addItems(getItems(_models[3], "planetype"));
     ui->_comboBoxOilSamplePlaneID->addItems(getItems(_models[3], "planeid"));
@@ -116,7 +116,7 @@ void ImageProperties::load()
     ui->_comboBoxOilSampleSendGuy->addItems(getItems(_models[3], "sendstuff"));
 
     // model 4
-    ui->_comboBoxOilAnalyzeOilSampleID->addItems(getItems(_models[4], "oilsampleid"));
+    //ui->_comboBoxOilAnalyzeOilSampleID->addItems(getItems(_models[4], "oilsampleid"));
     ui->_comboBoxOilAnalyzeUnitName->addItems(getItems(_models[4], "analyzedepartname"));
     ui->_comboBoxOilAnalyzeSendUnit->addItems(getItems(_models[4], "senddepart"));
     ui->_comboBoxOilAnalyzeSendGuy->addItems(getItems(_models[4], "sendstuff"));
@@ -124,23 +124,23 @@ void ImageProperties::load()
     ui->_comboBoxOilAnalyzePollutionLevelMethod->addItems(getItems(_models[4], "contaminationanalyzemethod"));
     ui->_comboBoxOilAnalyzePollutionLevelGuy->addItems(getItems(_models[4], "contaminationanalyzestuff"));
     ui->_comboBoxOilAnalyzePolluteLevelEquip->addItems(getItems(_models[4], "contaminationanalyzeequipment"));
-    ui->_comboBoxOilAnalyzePolluteReportID->addItems(getItems(_models[4], "contaminationanalyzereportid"));
+    //ui->_comboBoxOilAnalyzePolluteReportID->addItems(getItems(_models[4], "contaminationanalyzereportid"));
     ui->_comboBoxOilAnalyzeLightMethod->addItems(getItems(_models[4], "spectroscopymethod"));
     ui->_comboBoxOilAnalyzeLightGuy->addItems(getItems(_models[4], "spectroscopystuff"));
     ui->_comboBoxOilAnalyzeLightEquip->addItems(getItems(_models[4], "spectroscopyequipment"));
-    ui->_comboBoxOilAnalyzeLightEquipID->addItems(getItems(_models[4], "spectroscopyreportid"));
+    //ui->_comboBoxOilAnalyzeLightEquipID->addItems(getItems(_models[4], "spectroscopyreportid"));
     ui->_comboBoxOilAnalyzeMentalMethod->addItems(getItems(_models[4], "ferrographymethod"));
     ui->_comboBoxOilAnalyzeMentalGuy->addItems(getItems(_models[4], "ferrographystuff"));
     ui->_comboBoxOilAnalyzeMentalEquip->addItems(getItems(_models[4], "ferrographyequipment"));
-    ui->_comboBoxOilAnalyzeMentalEquipID->addItems(getItems(_models[4], "ferrographyreportid"));
+    //ui->_comboBoxOilAnalyzeMentalEquipID->addItems(getItems(_models[4], "ferrographyreportid"));
 
     ui->_comboBoxOilAnalyzeLihuaMethod->addItems(getItems(_models[4], "physicochemicalmethod"));
     ui->_comboBoxOilAnalyzeLihuaGuy->addItems(getItems(_models[4], "physicochemicalstuff"));
     ui->_comboBoxOilAnalyzeLihuaEquip->addItems(getItems(_models[4], "physicochemicalequipment"));
-    ui->_comboBoxOilAnalyzeLihuaEquipID->addItems(getItems(_models[4], "physicochemicalreportid"));
+    //ui->_comboBoxOilAnalyzeLihuaEquipID->addItems(getItems(_models[4], "physicochemicalreportid"));
 
     // model 5
-    ui->_comboBoxMentalID->addItems(getItems(_models[5], "ferrographysheetid"));
+    //ui->_comboBoxMentalID->addItems(getItems(_models[5], "ferrographysheetid"));
     ui->_comboBoxMentalReportID->addItems(getItems(_models[5], "ferrographyreportid"));
     ui->_comboBoxMentalOilSampleID->addItems(getItems(_models[5], "oilsampleid"));
 
@@ -150,13 +150,11 @@ void ImageProperties::load()
     ui->_comboBoxMentalGuy->addItems(getItems(_models[5], "ferrographymakestuff"));
 
     // model 6
-    ui->_comboBoxMentalSampleImageID->addItems(getItems(_models[6], "ferrographypicid"));
+    //ui->_comboBoxMentalSampleImageID->addItems(getItems(_models[6], "ferrographypicid"));
     ui->_comboBoxMentalSampleID->addItems(getItems(_models[6], "ferrographysheetid"));
     ui->_comboBoxMentalSampleReportID->addItems(getItems(_models[6], "ferrographyreportid"));
     ui->_comboBoxMentalSampleMicroType->addItems(getItems(_models[6], "microscopictype"));
     ui->_comboBoxMentalSampleSamplerType->addItems(getItems(_models[6], "imageacquisitiontype"));
-    //ui->_comboBoxMentalSampleLightType->addItems(getItems(_models[6], "lightsourcetype"));
-    //ui->_comboBoxMentalSampleArea->addItems(getItems(_models[6], "imageacquisitionarea"));
     ui->_comboBoxMentalSampleGuy->addItems(getItems(_models[6], "imageacquisitionstuff"));
 
     QStringList list3 = QStringList() << "" << "LA" << "LB" << "LC" << "LD" << "LE";
@@ -557,8 +555,8 @@ void ImageProperties::showDlg(QString filename)
     QPixmap image;
     if(image.load(_originalImagePath))
     {
-        ui->_labelOriginalImage->setPixmap(image);
-        ui->_labelOriginalImage->setScaledContents(true);
+        ui->_labelOriginalImage_2->setPixmap(image);
+        ui->_labelOriginalImage_2->setScaledContents(true);
     }
 }
 
@@ -857,6 +855,16 @@ void ImageProperties::on__buttonSave_clicked()
                 record.setValue("imageacquisitionstuff", ui->_comboBoxMentalSampleGuy->currentText());
                 record.setValue("ferrographypicpath", ui->_editMentalSamplePath->text());
                 record.setValue("imagerecognitioninfoanalysis", ui->_editMentalSampleAnalysis->text());
+
+                QString imagePath = ui->_editMentalSamplePath->text();
+                if(!imagePath.isEmpty())
+                {
+                    QFile *file = new QFile(imagePath);
+                    file->open(QIODevice::ReadOnly);
+                    QByteArray data = file->readAll();
+                    record.setValue("ferrographypic", data);
+                }
+
                 _models[6]->setRecord(0, record);
             }
             else if(_models[6]->rowCount() == 0)
@@ -874,6 +882,22 @@ void ImageProperties::on__buttonSave_clicked()
                 _models[6]->setData(_models[6]->index(0, 9), ui->_editMentalSamplePath->text());
                 _models[6]->setData(_models[6]->index(0, 10), ui->_editMentalSampleAnalysis->text());
                 _models[6]->setData(_models[6]->index(0, 11), "N");
+
+                QString imagePath = ui->_editMentalSamplePath->text();
+                if(!imagePath.isEmpty())
+                {
+                    QFile *file = new QFile(imagePath);
+                    file->open(QIODevice::ReadOnly);
+                    QByteArray data = file->readAll();
+                    _models[6]->setData(_models[6]->index(0, 12), data);
+                }
+                copyOrgImage(ui->_comboBoxMentalSampleImageID->currentText(), ui->_editMentalSamplePath->text());
+
+                //                if(!copyTo.isEmpty())
+                //                {
+                //                    ui->_editMentalSamplePath->setText(copyTo);
+                //                    emit synchImageName(copyTo);
+                //                }
             }
         }
         for(int i = 0; i < TABLE_N; i++)
@@ -924,7 +948,6 @@ void ImageProperties::on__buttonSave_clicked()
         QMessageBox::warning(this, tr("提示"), tr("保存成功!"), QMessageBox::Close);
 
         emit flush();
-        bool ret = emit copyOrgImage(ui->_comboBoxMentalSampleImageID->currentText());
 
         close();
     }
@@ -1417,6 +1440,8 @@ void ImageProperties::on__comboBoxOilAnalyzeMentalEquip_editTextChanged(const QS
 void ImageProperties::on__comboBoxOilAnalyzeMentalEquipID_editTextChanged(const QString &arg1)
 {
     if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+
+    ui->_comboBoxMentalReportID->setEditText(arg1);
 }
 
 void ImageProperties::on__comboBoxOilAnalyzeLihuaMethod_editTextChanged(const QString &arg1)
@@ -1549,4 +1574,15 @@ void ImageProperties::on__comboBoxMoliPianID_editTextChanged(const QString &arg1
 void ImageProperties::on__comboBoxMoliReportID_editTextChanged(const QString &arg1)
 {
     if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+}
+
+QString ImageProperties::copyOrgImage(QString name, QString org)
+{
+    if(!QDir(Global::PathImage).exists())
+    {
+        QDir().mkdir(Global::PathImage);
+    }
+
+    QString copyTo = Global::PathImage + name + ".jpg";
+    return QFile::copy(org, copyTo) == true ? copyTo : QString();
 }

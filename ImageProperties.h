@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QDebug>
 #include <QFile>
+#include <QDir>
 
 #define TABLE_N 7
 
@@ -258,10 +259,12 @@ private:
     QString generateOilSampleID();
     QString generateTieputupianID();
 
+    QString copyOrgImage(QString id, QString org);
+
 signals:
     void flush();
-    bool copyOrgImage(QString id);
-    void removeImage(QString filename);
+    void removeImage(QString fName);
+    void synchImageName(QString fName);
 
 public:
     void showDlg(QString filename);

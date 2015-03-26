@@ -59,7 +59,8 @@ ImageViewer::ImageViewer(QWidget *parent)
     updateObjectCount(0);
     isEraser        = false;
 
-    _result_labelImage = NULL;
+    _result_display = NULL;
+    _result_save = NULL;
 
     _bRectDrawing        = false;
     _bPolygonDrawing     = false;
@@ -168,6 +169,7 @@ bool ImageViewer::deleteImage()
 
     //	FinishJob();
 
+
     if(_displayImage) { delete _displayImage; _displayImage = NULL; };
     if(_labelMapImage) { delete _labelMapImage; _labelMapImage = NULL; }
 
@@ -184,7 +186,8 @@ bool ImageViewer::deleteImage()
     updateObjectCount(0);
     isEraser = false;
     m_method = -1;
-    _result_labelImage = NULL;
+    DELETE(_result_display);
+    DELETE(_result_save);
     //////////////////////////////////////////////////////////////////////////
     update();
 
@@ -221,16 +224,16 @@ bool ImageViewer::saveLabelledResult(QString path, QString ext)
 {
     if(!_srcOcvImage) return false;
     if(!_displayImage) return false;
-    if(!_result_labelImage) return false;
+    if(!_result_display) return false;
 
-    return _result_labelImage->save(path, ext.toUtf8().constData());
+    return _result_display->save(path, ext.toUtf8().constData());
 }
 
 bool ImageViewer::saveAsLabelledResult(QString &pathResult)
 {
     if(!_srcOcvImage) return false;
     if(!_displayImage) return false;
-    if(!_result_labelImage) return false;
+    if(!_result_display) return false;
 
     QFileDialog *fDlg = new QFileDialog(this);
     fDlg->setWindowTitle(tr("保存标注结果"));
@@ -245,7 +248,7 @@ bool ImageViewer::saveAsLabelledResult(QString &pathResult)
     if(fDlg->exec() == QDialog::Accepted)
     {
         QString filename = fDlg->selectedFiles()[0];
-        if(_result_labelImage->save(filename))
+        if(_result_display->save(filename))
         {
             pathResult = filename;
             return true;
@@ -368,7 +371,7 @@ void ImageViewer::paintEvent(QPaintEvent * /* event */)
     {
         setupPainter(painter);
     }
-    else if(_labelType == 1 && _bRectDrawing && bPaintable)
+    else if(_labelType == 1 && bPaintable)
     {
         setupOtherPainter(painter);
         painter.drawRect(_start_rect.x(), _start_rect.y(), _end_rect.x()-_start_rect.x(), _end_rect.y()-_start_rect.y());
@@ -501,7 +504,6 @@ void ImageViewer::mouseReleaseEvent(QMouseEvent *event)
         {
             if ( _labelType == 0 && brushInterface )
             {
-
                 // Excute
                 _mask = getLabelMap(_labelMapImage);
                 if(_mask.empty()) return;
@@ -519,11 +521,13 @@ void ImageViewer::mouseReleaseEvent(QMouseEvent *event)
 
                     _seg_during = double(end-start) / CLOCKS_PER_SEC;
                     IplImage* temp = new IplImage(res);
+                    DELETE(_result_save);
+                    _result_save = IplImageToQImage(temp);
 
-                    if(_result_labelImage) { delete _result_labelImage; _result_labelImage = NULL; }
-                    _result_labelImage = setMaskMap(_ocvImage, temp);
+                    if(_result_display) { delete _result_display; _result_display = NULL; }
+                    _result_display = setMaskMap(_ocvImage, temp);
 
-                    setImage(*_result_labelImage);
+                    setImage(*_result_display);
                     _mainWindow->uncheckStrikeOptions();
                 }
             }
@@ -551,12 +555,12 @@ void ImageViewer::mouseReleaseEvent(QMouseEvent *event)
 
                 // mat -> iplimage -> qimage
                 IplImage* temp = new IplImage(res);
+                DELETE(_result_save);
+                _result_save = IplImageToQImage(temp);
 
-                if (_result_labelImage) delete _result_labelImage;
-                _result_labelImage = setMaskMap(_ocvImage, temp);
-                setImage(*_result_labelImage);
-
-                _bRectDrawing = false;
+                DELETE(_result_display);
+                _result_display = setMaskMap(_ocvImage, temp);
+                setImage(*_result_display);
             }
 
             lastPos = QPoint(-1, -1);
@@ -805,10 +809,12 @@ void ImageViewer::polygonLabelling()
     _seg_during = (double)(end-start) / CLOCKS_PER_SEC;
 
     IplImage* temp = new IplImage(res);
+    DELETE(_result_save);
+    _result_save = IplImageToQImage(temp);
 
-    if (_result_labelImage) delete _result_labelImage;
-    _result_labelImage = setMaskMap(_ocvImage, temp);
-    setImage(*_result_labelImage);
+    DELETE(_result_display);
+    _result_display = setMaskMap(_ocvImage, temp);
+    setImage(*_result_display);
 
     lastPos = QPoint(-1, -1);
     QApplication::restoreOverrideCursor();
@@ -838,7 +844,7 @@ void ImageViewer::redo()
     updateObjectCount(0);
     isEraser   = false;
     m_method   = -1;
-    _result_labelImage = NULL;
+    _result_display = NULL;
 
     if(_srcOcvImage)
     {
@@ -899,7 +905,12 @@ QImage *ImageViewer::getMask()
     }
 }
 
-QImage *ImageViewer::getResult()
+QImage *ImageViewer::getResultDisplay()
 {
-    return _result_labelImage != NULL ? _result_labelImage : NULL;
+    return _result_display != NULL ? _result_display : NULL;
+}
+
+QImage *ImageViewer::getResultSave()
+{
+    return _result_save != NULL ? _result_save : NULL;
 }
