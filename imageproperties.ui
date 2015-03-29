@@ -26,7 +26,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>8</number>
+    <number>6</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -130,7 +130,7 @@
       <rect>
        <x>0</x>
        <y>30</y>
-       <width>651</width>
+       <width>670</width>
        <height>95</height>
       </rect>
      </property>
@@ -262,7 +262,7 @@
        <x>0</x>
        <y>31</y>
        <width>647</width>
-       <height>74</height>
+       <height>95</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout_6">
@@ -398,7 +398,7 @@
        <x>1</x>
        <y>31</y>
        <width>991</width>
-       <height>161</height>
+       <height>194</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout_7">
@@ -685,7 +685,7 @@
       <rect>
        <x>1</x>
        <y>46</y>
-       <width>1091</width>
+       <width>1105</width>
        <height>221</height>
       </rect>
      </property>
@@ -1069,8 +1069,8 @@
       <rect>
        <x>1</x>
        <y>36</y>
-       <width>611</width>
-       <height>91</height>
+       <width>643</width>
+       <height>95</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout_5">
@@ -1825,13 +1825,13 @@
     </widget>
    </widget>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>422</x>
      <y>431</y>
-     <width>239</width>
-     <height>25</height>
+     <width>308</width>
+     <height>29</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">

@@ -1,4 +1,4 @@
-#include "UserAdd.h"
+ï»¿#include "UserAdd.h"
 #include "ui_useradd.h"
 
 #include "Connection.h"
@@ -16,8 +16,8 @@ UserAdd::UserAdd(QWidget *parent) :
     ui->_add->setIcon(Global::Awesome->icon(userplus));
     ui->_cancel->setIcon(Global::Awesome->icon(remove_));
 
-    ui->_authorityCombo->addItem(tr("ÆÕÍ¨ÓÃ»§"));
-    ui->_authorityCombo->addItem(tr("¹ÜÀíÔ±"));
+    ui->_authorityCombo->addItem(tr("æ™®é€šç”¨æˆ·"));
+    ui->_authorityCombo->addItem(tr("ç®¡ç†å‘˜"));
 
     setWindowFlags(Qt::Dialog | Qt::WindowCloseButtonHint);
 
@@ -54,32 +54,32 @@ UserInfo *UserAdd::getInfo()
 
     if(username.isEmpty())
     {
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("ÓÃ»§Ãû²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("ç”¨æˆ·åä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return NULL;
     }
     else if(passwd.isEmpty())
     {
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("ÃÜÂë²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("å¯†ç ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return NULL;
     }
     else if(confirmPasswd.isEmpty())
     {
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("È·ÈÏÃÜÂë²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("ç¡®è®¤å¯†ç ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return NULL;
     }
     else if(passwd != confirmPasswd)
     {
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("Á½´ÎÊäÈëÃÜÂë²»Ò»ÖÂ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("ä¸¤æ¬¡è¾“å…¥å¯†ç ä¸ä¸€è‡´!"), QMessageBox::Close);
         return NULL;
     }
     else if(email.isEmpty())
     {
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("ÓÊÏä²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("é‚®ç®±ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return NULL;
     }
     else if(authority.isEmpty())
     {
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("È¨ÏŞ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("æƒé™ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return NULL;
     }
 

@@ -1,4 +1,4 @@
-#include "Login.h"
+ï»¿#include "Login.h"
 #include "ui_login.h"
 
 #include <QDialogButtonBox>
@@ -128,7 +128,7 @@ void Login::customizeTitleBar()
     _closeButton = new QToolButton(this);
 
     _settingButton->setIcon(Global::Awesome->icon(gear));
-    _minButton->setIcon(Global::Awesome->icon(minus));
+    _minButton->setIcon(Global::Awesome->icon(minus_));
     _closeButton->setIcon(Global::Awesome->icon(times));
 
     _settingButton->setGeometry(width-67,5,20,20);
@@ -159,20 +159,20 @@ void Login::login()
 
     if(_username.isEmpty())
     {
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("ÓÃ»§Ãû²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("ç”¨æˆ·åä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return;
     }
     if(_passwd.isEmpty())
     {
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("ÃÜÂë²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("å¯†ç ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return;
     }
 
     QSqlDatabase db;
     if(!createConnection(db))
     {
-        QMessageBox::critical(0, qApp->tr("ÌáÊ¾"),
-                              qApp->tr("Êı¾İ¿âÁ¬½ÓÊ§°Ü!"),
+        QMessageBox::critical(0, qApp->tr("æç¤º"),
+                              qApp->tr("æ•°æ®åº“è¿æ¥å¤±è´¥!"),
                               QMessageBox::Cancel);
         return;
     }
@@ -188,7 +188,7 @@ void Login::login()
     {
         if(query.size() == 0)
         {
-            QMessageBox::warning(this, tr("Ê§°Ü"), tr("µÇÂ¼Ê§°Ü,ÓÃ»§Ãû»òÃÜÂë²»ÕıÈ·!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("å¤±è´¥"), tr("ç™»å½•å¤±è´¥,ç”¨æˆ·åæˆ–å¯†ç ä¸æ­£ç¡®!"), QMessageBox::Close);
         }
         else
         {
@@ -205,7 +205,7 @@ void Login::login()
         }
     }
     else  {
-        QMessageBox::warning(this,tr("Ê§°Ü"),tr("²éÑ¯ÓÃ»§ĞÅÏ¢Ê§°Ü"),QMessageBox::Close);
+        QMessageBox::warning(this,tr("å¤±è´¥"),tr("æŸ¥è¯¢ç”¨æˆ·ä¿¡æ¯å¤±è´¥"),QMessageBox::Close);
         return;
     }
 }
@@ -270,17 +270,17 @@ void Login::on__buttonSave_clicked()
 
 void Login::on__buttonCopyTo_clicked()
 {
-    setText(tr("ÉèÖÃÔ­Í¼Ïñ¿½±´ÎÄ¼ş¼Ğ"), ui->_editOriginalCopyTo);
+    setText(tr("è®¾ç½®åŸå›¾åƒæ‹·è´æ–‡ä»¶å¤¹"), ui->_editOriginalCopyTo);
 }
 
 void Login::on__buttonResultTo_clicked()
 {
-    setText(tr("ÉèÖÃ±ê×¢½á¹û±£´æÎÄ¼ş¼Ğ"), ui->_editResultTo);
+    setText(tr("è®¾ç½®æ ‡æ³¨ç»“æœä¿å­˜æ–‡ä»¶å¤¹"), ui->_editResultTo);
 }
 
 void Login::on__buttonMaskTo_clicked()
 {
-    setText(tr("ÉèÖÃÑÚÂëÍ¼Ïñ±£´æÎÄ¼ş¼Ğ"), ui->_editMaskTo);
+    setText(tr("è®¾ç½®æ©ç å›¾åƒä¿å­˜æ–‡ä»¶å¤¹"), ui->_editMaskTo);
 }
 
 void Login::setText(QString str, QLineEdit* edit)
@@ -303,11 +303,11 @@ void Login::on__buttonTest_clicked()
     QSqlDatabase db;
     if(!createConnection(db))
     {
-        ui->_labelStatus->setText(tr("Á¬½ÓÊ§°Ü!"));
+        ui->_labelStatus->setText(tr("è¿æ¥å¤±è´¥!"));
     }
     else
     {
-        ui->_labelStatus->setText(tr("Á¬½Ó³É¹¦!"));
+        ui->_labelStatus->setText(tr("è¿æ¥æˆåŠŸ!"));
     }
 }
 

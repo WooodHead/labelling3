@@ -132,8 +132,6 @@ private:
 	int				curLabelingObject;
 
 	int				objectCount;
-    
-	QString         filepath;
 
 	bool			isEraser;
 

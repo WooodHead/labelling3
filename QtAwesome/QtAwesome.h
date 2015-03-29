@@ -364,7 +364,7 @@ enum QtFontAwesomeName {
     mercury                 =           0xf223,
     microphone              =           0xf130,
     microphoneslash         =           0xf131,
-    minus                   =           0xf068,
+    minus_                  =           0xf068,
     minuscircle             =           0xf056,
     minussquare             =           0xf146,
     minussquareo            =           0xf147,

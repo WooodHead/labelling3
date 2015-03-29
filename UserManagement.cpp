@@ -1,4 +1,4 @@
-#include "UserManagement.h"
+ï»¿#include "UserManagement.h"
 #include "ui_usermanagement.h"
 
 #include "Connection.h"
@@ -13,11 +13,11 @@ UserManagement::UserManagement(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    setWindowTitle(tr("ÓÃ»§¹ÜÀí"));
+    setWindowTitle(tr("ç”¨æˆ·ç®¡ç†"));
 
     ui->_authorityCombo->addItem(tr(""));
-    ui->_authorityCombo->addItem(tr("ÆÕÍ¨ÓÃ»§"));
-    ui->_authorityCombo->addItem(tr("¹ÜÀíÔ±"));
+    ui->_authorityCombo->addItem(tr("æ™®é€šç”¨æˆ·"));
+    ui->_authorityCombo->addItem(tr("ç®¡ç†å‘˜"));
 
     _model = 0;
     _selectedRow = -1;
@@ -26,7 +26,7 @@ UserManagement::UserManagement(QWidget *parent) :
 
     if(!createConnection(db))
     {
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("²»ÄÜ´ò¿ªÊý¾Ý¿âÁ´½Ó"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("ä¸èƒ½æ‰“å¼€æ•°æ®åº“é“¾æŽ¥"), QMessageBox::Close);
         return;
     }
     else initTableView();
@@ -51,12 +51,12 @@ void UserManagement::initTableView()
     _model->database().transaction();
     _model->select();
 
-    _model->setHeaderData(0, Qt::Horizontal, tr("ÐòºÅ"));
-    _model->setHeaderData(1, Qt::Horizontal, tr("ÓÃ»§Ãû"));
-    _model->setHeaderData(2, Qt::Horizontal, tr("ÓÊÏä"));
-    _model->setHeaderData(3, Qt::Horizontal, tr("ÊÖ»úºÅÂë"));
-    _model->setHeaderData(4, Qt::Horizontal, tr("ÃÜÂë"));
-    _model->setHeaderData(5, Qt::Horizontal, tr("È¨ÏÞ"));
+    _model->setHeaderData(0, Qt::Horizontal, tr("åºå·"));
+    _model->setHeaderData(1, Qt::Horizontal, tr("ç”¨æˆ·å"));
+    _model->setHeaderData(2, Qt::Horizontal, tr("é‚®ç®±"));
+    _model->setHeaderData(3, Qt::Horizontal, tr("æ‰‹æœºå·ç "));
+    _model->setHeaderData(4, Qt::Horizontal, tr("å¯†ç "));
+    _model->setHeaderData(5, Qt::Horizontal, tr("æƒé™"));
 
     ui->_userTableView->setModel(_model);
     ui->_userTableView->setAlternatingRowColors(true);
@@ -96,7 +96,7 @@ void UserManagement::on__deleteUser_clicked()
 {
     if(ui->_userTableView->selectionModel()->selection().count()<=0)
     {
-        QMessageBox::warning(this, tr(""), tr("µ±Ç°Î´Ñ¡ÖÐÈÎºÎ¼ÇÂ¼!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr(""), tr("å½“å‰æœªé€‰ä¸­ä»»ä½•è®°å½•!"), QMessageBox::Close);
         return;
     }
     else
@@ -105,7 +105,7 @@ void UserManagement::on__deleteUser_clicked()
         int curRow = index.row();
 
         QMessageBox::StandardButton reply;
-        reply = QMessageBox::question(this, tr("QMessageBox::question()"), tr("È·ÈÏÒªÉ¾³ýµ±Ç°ÐÐ?"), QMessageBox::Yes | QMessageBox::Cancel);
+        reply = QMessageBox::question(this, tr("QMessageBox::question()"), tr("ç¡®è®¤è¦åˆ é™¤å½“å‰è¡Œ?"), QMessageBox::Yes | QMessageBox::Cancel);
         if(reply == QMessageBox::Yes)
         {
             _model->removeRow(curRow);
@@ -150,13 +150,13 @@ void UserManagement::addUser(UserInfo *userInfo)
     if(_model->submitAll())
     {
         db.commit();
-        QMessageBox::warning(this->_userAddDialog, tr("ÌáÊ¾"), tr("Ìí¼Ó³É¹¦"), QMessageBox::Close);
+        QMessageBox::warning(this->_userAddDialog, tr("æç¤º"), tr("æ·»åŠ æˆåŠŸ"), QMessageBox::Close);
     }
     else
     {
         _model->revert();
         db.rollback();
-        QMessageBox::warning(this->_userAddDialog, tr("ÌáÊ¾"), tr("Ìí¼ÓÊ§°Ü"), QMessageBox::Close);
+        QMessageBox::warning(this->_userAddDialog, tr("æç¤º"), tr("æ·»åŠ å¤±è´¥"), QMessageBox::Close);
     }
     emit closeAddDialog();
 }
@@ -192,13 +192,13 @@ void UserManagement::editUser(UserInfo *userInfo)
             {
                 db.commit();
                 initTableView();
-                QMessageBox::warning(this->_userEditDialog, tr("ÌáÊ¾"), tr("ÐÞ¸Ä³É¹¦"), QMessageBox::Close);
+                QMessageBox::warning(this->_userEditDialog, tr("æç¤º"), tr("ä¿®æ”¹æˆåŠŸ"), QMessageBox::Close);
             }
             else
             {
                 _model->revert();
                 db.rollback();
-                QMessageBox::warning(this->_userEditDialog, tr("ÌáÊ¾"), tr("ÐÞ¸ÄÊ§°Ü"), QMessageBox::Close);
+                QMessageBox::warning(this->_userEditDialog, tr("æç¤º"), tr("ä¿®æ”¹å¤±è´¥"), QMessageBox::Close);
             }
         }
     }
@@ -210,13 +210,13 @@ void UserManagement::on__editUser_clicked()
 {
     if(ui->_userTableView->selectionModel()->selection().count()<=0)
     {
-        QMessageBox::warning(this, tr(""), tr("µ±Ç°Î´Ñ¡ÖÐÈÎºÎ¼ÇÂ¼!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr(""), tr("å½“å‰æœªé€‰ä¸­ä»»ä½•è®°å½•!"), QMessageBox::Close);
         return;
     }
     else
     {
         QMessageBox::StandardButton reply;
-        reply = QMessageBox::question(this, tr("ÌáÊ¾"), tr("È·ÈÏÒªÐÞ¸Äµ±Ç°ÓÃ»§ÐÅÏ¢?"), QMessageBox::Yes | QMessageBox::Cancel);
+        reply = QMessageBox::question(this, tr("æç¤º"), tr("ç¡®è®¤è¦ä¿®æ”¹å½“å‰ç”¨æˆ·ä¿¡æ¯?"), QMessageBox::Yes | QMessageBox::Cancel);
         if(reply == QMessageBox::Yes)
         {
             this->_userEditDialog = new useredit(this);

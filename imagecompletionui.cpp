@@ -1,4 +1,4 @@
-#include <QtGui>
+ï»¿#include <QtGui>
 #include <QPixmap>
 #include <QSqlQuery>
 #include <QSqlError>
@@ -12,12 +12,9 @@
 ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
     : QMainWindow(parent, flags)
 {
-    _cnt = -1;
-    _step = NONE;
     _brushSize = 3;
     _editImageViewer = NULL;
-    _imageName = QString();
-    _imagePath = QString();
+    _strCurrentImagePath = QString();
 
     setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
@@ -35,7 +32,7 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
 
     createConnections();
 
-    _RegionupdateBrushSize();
+    updateBrushSize();
 
     setStrikeOptionsEnabled(false);
 
@@ -59,15 +56,14 @@ void ImageCompletionUI::setupMainWindow()
     this->resize( 1024, 800 );
     this->setMinimumSize( QSize(1024, 0) );
     this->showMaximized();
-    this->setWindowTitle( tr("½»»¥Ê½Ä¥Á£Í¼Æ×¿â¹¹½¨ÏµÍ³") );
+    this->setWindowTitle( tr("äº¤äº’å¼ç£¨ç²’å›¾è°±åº“æ„å»ºç³»ç»Ÿ") );
 }
 
 void ImageCompletionUI::createMenus()
 {
-    _menuFile = menuBar()->addMenu( tr("&ÎÄ¼ş") );
+    _menuFile = menuBar()->addMenu( tr("&æ–‡ä»¶") );
 
     _menuFile->addAction( _openAction );
-    //_menuFile->addAction( _openBatchAction );
     _menuFile->addSeparator();
     _menuFile->addAction( _saveAction );
     _menuFile->addAction( _saveAsAction );
@@ -77,8 +73,8 @@ void ImageCompletionUI::createMenus()
     _menuFile->addSeparator();
     _menuFile->addAction( _exitAction );
 
-    _menuLabelling = menuBar()->addMenu( tr("&Í¼Ïñ±ê×¢") );
-    QMenu* submenu = _menuLabelling->addMenu( Global::Awesome->icon(pencil), tr("±Ê»­±ê×¢") );
+    _menuLabelling = menuBar()->addMenu( tr("&å›¾åƒæ ‡æ³¨") );
+    QMenu* submenu = _menuLabelling->addMenu( Global::Awesome->icon(pencil), tr("ç¬”ç”»æ ‡æ³¨") );
     submenu->addAction( _fgAction );
     submenu->addAction( _bgAction );
     submenu->addAction( _eraserAction );
@@ -88,13 +84,13 @@ void ImageCompletionUI::createMenus()
     _menuLabelling->addAction( _manualAction );
     _menuLabelling->addSeparator();
 
-    submenu = _menuLabelling->addMenu(Global::Awesome->icon(circleo), tr("±Ê»­´ÖÏ¸"));
+    submenu = _menuLabelling->addMenu(Global::Awesome->icon(circleo), tr("ç¬”ç”»ç²—ç»†"));
     for(int i = 0; i < 3; i++) submenu->addAction(_strikeThickness[i]);
 
-    submenu = _menuLabelling->addMenu( Global::Awesome->icon(minus), tr("ÏßÌõ´ÖÏ¸") );
+    submenu = _menuLabelling->addMenu( Global::Awesome->icon(minus_), tr("çº¿æ¡ç²—ç»†") );
     for(int i = 0; i < 3; i++) submenu->addAction(_lineThickness[i]);
 
-    _menuData=menuBar()->addMenu(tr("&Êı¾İ¹ÜÀí"));
+    _menuData=menuBar()->addMenu(tr("&æ•°æ®ç®¡ç†"));
     _menuData->addAction(_searchAction);
     _menuData->addAction(_addtosqlAction);
     _menuData->addAction(_exportDataAction);
@@ -103,76 +99,71 @@ void ImageCompletionUI::createMenus()
     // user management
     if(Global::Authority == "1") //admin
     {
-        _menuUser = menuBar()->addMenu(tr("&ÓÃ»§¹ÜÀí"));
+        _menuUser = menuBar()->addMenu(tr("&ç”¨æˆ·ç®¡ç†"));
         _menuUser->addAction(_userManagementAction);
     }
 
-    _menuWindow = menuBar()->addMenu( tr("&°ïÖú") );
+    _menuWindow = menuBar()->addMenu( tr("&å¸®åŠ©") );
 }
 
 void	ImageCompletionUI::createActions()
 {
-    _openAction = new QAction( tr("&´ò¿ª"), this );
+    _openAction = new QAction( tr("&æ‰“å¼€"), this );
     _openAction->setObjectName(tr("_openAction"));
     QIcon icon1;
     icon1.addPixmap(QPixmap(tr(":/new/prefix1/icons/fileopen.png")), QIcon::Normal, QIcon::Off);
     _openAction->setIcon( Global::Awesome->icon(  folderopeno  ) );
     connect(_openAction, SIGNAL(triggered()), this, SLOT(open()));
 
-    _openBatchAction = new QAction( tr("&´ò¿ª(¶à)"), this );
-    _openBatchAction->setObjectName(tr("_openBatchAction"));
-    _openBatchAction->setIcon( Global::Awesome->icon( folderopeno )  );
-    connect(_openBatchAction, SIGNAL(triggered()), this, SLOT(batchOpen()));
-
-    _saveAction = new QAction( Global::Awesome->icon(floppyo), tr("&±£´æ"), this );
+    _saveAction = new QAction( Global::Awesome->icon(floppyo), tr("&ä¿å­˜"), this );
     _saveAction->setObjectName(tr("_saveAction"));
     QIcon icon2;
     icon2.addPixmap(QPixmap(tr(":/new/prefix1/icons/filesave.png")), QIcon::Normal, QIcon::Off);
     connect(_saveAction, SIGNAL(triggered()), this, SLOT(save()));
 
-    _saveAsAction = new QAction(  Global::Awesome->icon(floppyo), tr("&Áí´æÎª"), this );
+    _saveAsAction = new QAction(  Global::Awesome->icon(floppyo), tr("&å¦å­˜ä¸º"), this );
     _saveAsAction->setObjectName(tr("_saveAsAction"));
     connect(_saveAsAction, SIGNAL(triggered()), this, SLOT( saveAs() ));
 
-    _closeAction = new QAction( Global::Awesome->icon(times), tr("¹Ø±Õ"), this );
+    _closeAction = new QAction( Global::Awesome->icon(times), tr("å…³é—­"), this );
     connect( _closeAction, SIGNAL(triggered()), this, SLOT( close() ));
 
-    _exitAction = new QAction( Global::Awesome->icon(poweroff), tr("ÍË³ö"), this );
+    _exitAction = new QAction( Global::Awesome->icon(poweroff), tr("é€€å‡º"), this );
     _exitAction->setObjectName(tr("_exitAction"));
     connect( _exitAction, SIGNAL(triggered()), this, SLOT(exitApp()) );
 
-    _searchAction = new QAction( tr("²éÑ¯"), this );
+    _searchAction = new QAction( tr("æŸ¥è¯¢"), this );
     _searchAction->setObjectName(tr("_searchAction"));
     _searchAction->setIcon( Global::Awesome->icon(areachart) );
     connect( _searchAction, SIGNAL(triggered()), this, SLOT( search() ));
 
-    _addtosqlAction = new QAction( tr("ÊôĞÔ·ÖÀà"), this );
+    _addtosqlAction = new QAction( tr("å±æ€§åˆ†ç±»"), this );
     _addtosqlAction->setObjectName(tr("_addtosqlAction"));
     _addtosqlAction->setIcon( Global::Awesome->icon(reorder) );
     connect( _addtosqlAction, SIGNAL(triggered()), this, SLOT( addtosql() ));
 
-    _exportDataAction = new QAction( QIcon(":/new/prefix1/icons/export.png"), tr("ÅúÁ¿µ¼³öÊı¾İ"),this);
+    _exportDataAction = new QAction( QIcon(":/new/prefix1/icons/export.png"), tr("æ‰¹é‡å¯¼å‡ºæ•°æ®"),this);
     _exportDataAction->setObjectName(tr("_exportDataAction"));
     connect(_exportDataAction,SIGNAL(triggered()),this,SLOT(exportData()));
 
-    _importDataAction = new QAction(QIcon(":/new/prefix1/icons/import.png"), tr("ÅúÁ¿µ¼ÈëÊı¾İ"),this);
+    _importDataAction = new QAction(QIcon(":/new/prefix1/icons/import.png"), tr("æ‰¹é‡å¯¼å…¥æ•°æ®"),this);
     _importDataAction->setObjectName(tr("_importDataAction"));
     connect(_importDataAction,SIGNAL(triggered()),this,SLOT(importData()));
 
     // Image Labelling
     _strikeToolButton = new QToolButton(this);
-    _strikeToolButton->setText(tr("±Ê»­±ê×¢"));
+    _strikeToolButton->setText(tr("ç¬”ç”»æ ‡æ³¨"));
     _strikeToolButton->setPopupMode(QToolButton::MenuButtonPopup);
     _strikeToolButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     _strikeToolButton->setIcon(Global::Awesome->icon(pencil));
     _strikeToolButton->setChecked(false);
 
     // Group 1
-    _fgAction = new QAction( Global::Awesome->icon(suno), tr("Ç°¾°"), this );
+    _fgAction = new QAction( Global::Awesome->icon(suno), tr("å‰æ™¯"), this );
     _fgAction->setCheckable(true);
-    _bgAction = new QAction( Global::Awesome->icon(moono), tr("±³¾°"), this );
+    _bgAction = new QAction( Global::Awesome->icon(moono), tr("èƒŒæ™¯"), this );
     _bgAction->setCheckable(true);
-    _eraserAction = new QAction( Global::Awesome->icon(eraser), tr("ÏğÆ¤"), this );
+    _eraserAction = new QAction( Global::Awesome->icon(eraser), tr("æ©¡çš®"), this );
     _eraserAction->setCheckable(true);
 
     _strikeToolButton->addAction(_fgAction);
@@ -185,33 +176,33 @@ void	ImageCompletionUI::createActions()
     group->addAction(_eraserAction);
     connect(group, SIGNAL(triggered(QAction*)), this, SLOT(strikeChangeTriggered(QAction*)));
 
-    _rectAction = new QAction( Global::Awesome->icon(squareo), tr("¾ØĞÎ±ê×¢"), this );
+    _rectAction = new QAction( Global::Awesome->icon(squareo), tr("çŸ©å½¢æ ‡æ³¨"), this );
     _rectAction->setCheckable(true);
 
-    _polygonAction = new QAction( Global::Awesome->icon(staro), tr("¶à±ßĞÎ±ê×¢"), this );
+    _polygonAction = new QAction( Global::Awesome->icon(staro), tr("å¤šè¾¹å½¢æ ‡æ³¨"), this );
     _polygonAction->setCheckable(true);
 
-    _manualAction = new QAction( Global::Awesome->icon(pencilsquareo), tr("ÊÖ¹¤±ê×¢"), this );
+    _manualAction = new QAction( Global::Awesome->icon(pencilsquareo), tr("æ‰‹å·¥æ ‡æ³¨"), this );
     _manualAction->setCheckable(true);
 
     QActionGroup *group2 = new QActionGroup(this);
     group2->addAction(_rectAction);
     group2->addAction(_polygonAction);
     group2->addAction(_manualAction);
-    connect(group2, SIGNAL(triggered(QAction*)), this, SLOT(labellingMethodChanged(QAction*)));
+    connect(group2, SIGNAL(triggered(QAction*)), this, SLOT(methodChangeTriggered(QAction*)));
 
-    _redo = new QAction( Global::Awesome->icon(repeat), tr("ÖØ×ö"), this );
+    _redo = new QAction( Global::Awesome->icon(repeat), tr("é‡åš"), this );
     _redo->setObjectName( tr("_redo") );
     connect( _redo, SIGNAL(triggered()), this, SLOT(redo()) );
 
-    _undo = new QAction( Global::Awesome->icon("undo"), tr("³·Ïú"), this );
+    _undo = new QAction( Global::Awesome->icon("undo"), tr("æ’¤é”€"), this );
     _undo->setObjectName( tr("_undo") );
     connect( _undo, SIGNAL(triggered()), this, SLOT(undo()) );
 
     //
-    _strikeThickness[0] = new QAction( tr("Ï¸"), this );
-    _strikeThickness[1] = new QAction( tr("ÖĞ"), this );
-    _strikeThickness[2] = new QAction( tr("´Ö"), this );
+    _strikeThickness[0] = new QAction( tr("ç»†"), this );
+    _strikeThickness[1] = new QAction( tr("ä¸­"), this );
+    _strikeThickness[2] = new QAction( tr("ç²—"), this );
 
     QActionGroup *group3 = new QActionGroup(this);
     for(int i = 0; i < 3; i++)
@@ -219,21 +210,21 @@ void	ImageCompletionUI::createActions()
         _strikeThickness[i]->setCheckable(true);
         group3->addAction(_strikeThickness[i]);
     }
-    connect(group3, SIGNAL(triggered(QAction*)), this, SLOT(strikeThicknessChanged(QAction*)) );
+    connect(group3, SIGNAL(triggered(QAction*)), this, SLOT(strikeThicknessChangeTriggered(QAction*)) );
 
-    _lineThickness[0] = new QAction( tr("Ï¸"), this );
-    _lineThickness[1] = new QAction( tr("ÖĞ"), this );
-    _lineThickness[2] = new QAction( tr("´Ö"), this );
+    _lineThickness[0] = new QAction( tr("ç»†"), this );
+    _lineThickness[1] = new QAction( tr("ä¸­"), this );
+    _lineThickness[2] = new QAction( tr("ç²—"), this );
     QActionGroup *group4 = new QActionGroup(this);
     for(int i = 0; i < 3; i++)
     {
         _lineThickness[i]->setCheckable(true);
         group4->addAction(_lineThickness[i]);
     }
-    connect(group4, SIGNAL(triggered(QAction*)), this, SLOT(lineThicknessChanged(QAction*)) );
+    connect(group4, SIGNAL(triggered(QAction*)), this, SLOT(lineThicknessChangeTriggered(QAction*)) );
 
     _strikeThicknessToolButton = new QToolButton(this);
-    _strikeThicknessToolButton->setText(tr("±Ê»­´ÖÏ¸"));
+    _strikeThicknessToolButton->setText(tr("ç¬”ç”»ç²—ç»†"));
     _strikeThicknessToolButton->setPopupMode(QToolButton::MenuButtonPopup);
     _strikeThicknessToolButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     _strikeThicknessToolButton->setIcon(Global::Awesome->icon(circlethin));
@@ -243,10 +234,10 @@ void	ImageCompletionUI::createActions()
     }
 
     _lineThicknessToolButton = new QToolButton(this);
-    _lineThicknessToolButton->setText(tr("ÏßÌõ´ÖÏ¸"));
+    _lineThicknessToolButton->setText(tr("çº¿æ¡ç²—ç»†"));
     _lineThicknessToolButton->setPopupMode(QToolButton::MenuButtonPopup);
     _lineThicknessToolButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-    _lineThicknessToolButton->setIcon(Global::Awesome->icon(minus));
+    _lineThicknessToolButton->setIcon(Global::Awesome->icon(minus_));
     for(int i = 0; i < 3; i++)
     {
         _lineThicknessToolButton->addAction(_lineThickness[i]);
@@ -255,7 +246,7 @@ void	ImageCompletionUI::createActions()
     // user
     if(Global::Authority == "1") //admin
     {
-        _userManagementAction = new QAction( Global::Awesome->icon(user), tr("ÓÃ»§¹ÜÀí"), this );
+        _userManagementAction = new QAction( Global::Awesome->icon(user), tr("ç”¨æˆ·ç®¡ç†"), this );
         _userManagementAction->setObjectName(tr("_userManagementAction"));
         connect( _userManagementAction, SIGNAL(triggered()), this, SLOT(userManagement()) );
     }
@@ -263,7 +254,7 @@ void	ImageCompletionUI::createActions()
 
 void	ImageCompletionUI::createToolBars()
 {
-    _editToolBar = addToolBar( tr("ÎÄ¼ş") );
+    _editToolBar = addToolBar( tr("æ–‡ä»¶") );
     _editToolBar->addAction( _openAction );
     _editToolBar->addAction( _saveAction );
     _editToolBar->addAction( _closeAction );
@@ -304,6 +295,7 @@ void	ImageCompletionUI::setupWidgets()
     int width = this->width();
     int height = this->height();
 
+    _centralStackedWidget = new QStackedWidget(this);
     ////////////////////////////////////////////////////////////////////////////////////
     //   _centralwidget
     ////////////////////////////////////////////////////////////////////////////////////
@@ -313,20 +305,19 @@ void	ImageCompletionUI::setupWidgets()
     ////////////////////////////////////////////////////////////////////////////////////
     //   _centralTabWidget
     ////////////////////////////////////////////////////////////////////////////////////
-    _centralTabWidget = new QTabWidget( _centralwidget );
+    _centralTabWidget = new QTabWidget( _centralStackedWidget );
     _centralTabWidget->setObjectName( tr( "_centralTabWidget") );
 
     QVBoxLayout *centralwigetLayout = new QVBoxLayout;
     centralwigetLayout->addWidget(_centralTabWidget);
     centralwigetLayout->setAlignment(Qt::AlignTop);
-    _centralwidget->setLayout(centralwigetLayout);
+    _centralStackedWidget->setLayout(centralwigetLayout);
 
     ////////////////////////////////////////////////////////////////////////////////////
     //   _editTab
     ////////////////////////////////////////////////////////////////////////////////////
     _editTab = new QWidget();
     _editTab->setObjectName(tr("_editTab"));
-
 
     _editScrollArea = new QScrollArea(_editTab);
     _editScrollArea->setObjectName(tr("scrollArea"));
@@ -346,7 +337,7 @@ void	ImageCompletionUI::setupWidgets()
     _editImageViewer->setLineColor(QColor(colorTable[3], colorTable[4], colorTable[5]));
 
     _centralTabWidget->addTab( _editTab, Global::Awesome->icon(pictureo), QString("EditTab") );
-    _centralTabWidget->setTabText(_centralTabWidget->indexOf(_editTab), QApplication::translate("ImageCompletionUIClass", tr("Í¼Ïñ±ê×¢").toLocal8Bit().data(), 0));
+    _centralTabWidget->setTabText(_centralTabWidget->indexOf(_editTab), QApplication::translate("ImageCompletionUIClass", tr("å›¾åƒæ ‡æ³¨").toLocal8Bit().data(), 0));
     _centralTabWidget->setMaximumHeight(0.8 * height);
     _centralTabWidget->setContextMenuPolicy(Qt::CustomContextMenu);
 
@@ -362,14 +353,43 @@ void	ImageCompletionUI::setupWidgets()
     palette1.setBrush(QPalette::Disabled, QPalette::Base, brush2);
 
     _centralTabWidget->setPalette(palette);
-    setCentralWidget(_centralwidget);
-    _centralTabWidget->setCurrentIndex(0);
+
+    // thumbnail widget
+    _centralThumbnailTabWidget = new QTabWidget(_centralStackedWidget);
+    QVBoxLayout *centralThumbnailTabWidgetLayout = new QVBoxLayout;
+    centralThumbnailTabWidgetLayout->addWidget(_centralThumbnailTabWidget);
+    _centralStackedWidget->setLayout(centralThumbnailTabWidgetLayout);
+
+    _thumbnailTab = new QWidget();
+    _thumbnailTab->setObjectName(tr("_thumbnailTab"));
+
+    _thumbnailScrollArea = new QScrollArea(_thumbnailTab);
+    _thumbnailScrollArea->setObjectName(tr("_thumbnailScrollArea"));
+
+    QGridLayout *tabLayout2 = new QGridLayout;
+    tabLayout2->addWidget(_thumbnailScrollArea);
+    _thumbnailTab->setLayout(tabLayout2);
+
+    _thumbnailScrollArea->setAlignment( Qt::AlignCenter );
+    _thumbnailScrollArea->setAutoFillBackground( true );
+    _thumbnailScrollArea->setBackgroundRole(  QPalette::Dark );
+
+    _centralThumbnailTabWidget->addTab( _thumbnailTab, Global::Awesome->icon(pictureo), QString("ç¼©ç•¥å›¾") );
+    _centralThumbnailTabWidget->setMaximumHeight(0.8 * height);
+    _centralThumbnailTabWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+    _centralThumbnailTabWidget->setPalette(palette);
+
+    _centralStackedWidget->addWidget(_centralTabWidget);
+    _centralStackedWidget->addWidget(_centralThumbnailTabWidget);
+    _centralStackedWidget->setCurrentIndex(0);
+    setCentralWidget(_centralStackedWidget);
+
 
     ////////////////////////////////////////////////////////////////////////////////////
     //   _rightOperationWidget
     ////////////////////////////////////////////////////////////////////////////////////
 
-    _rightOperationWidget = new QDockWidget(tr("¹¤¾ßÏä"),this );
+    _rightOperationWidget = new QDockWidget(tr("å·¥å…·ç®±"),this );
     _rightOperationWidget->setObjectName(tr("_rightOperationWidget"));
     _rightOperationWidget->setWindowIcon( Global::Awesome->icon(inbox) );
     _rightOperationWidget->setMaximumSize(QSize(0.2*width, 0.8*height));
@@ -421,7 +441,7 @@ void	ImageCompletionUI::setupWidgets()
     ////////////////////////////////////////////////////////////////////////////////////
     //   _leftWindowWidget
     ////////////////////////////////////////////////////////////////////////////////////
-    _leftWindowWidget = new QDockWidget(tr("Í¼Æ×ĞÅÏ¢"),this );
+    _leftWindowWidget = new QDockWidget(tr("å›¾è°±ä¿¡æ¯"),this );
     _leftWindowWidget->setObjectName(tr("_leftWindowWidget"));
     _leftWindowWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     _leftWindowWidget->setMaximumSize(QSize(0.2*width, height));
@@ -456,7 +476,7 @@ void	ImageCompletionUI::setupWidgets()
     _logInformationString = new QString();
     _logWidget->setReadOnly(true);
 
-    _logWindowWidget = new QDockWidget(tr("¹¤×÷ÈÕÖ¾"),this)    ;
+    _logWindowWidget = new QDockWidget(tr("å·¥ä½œæ—¥å¿—"),this)    ;
     _logWindowWidget->setObjectName("_logWindowWidget");
     _logWindowWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
@@ -469,13 +489,44 @@ void	ImageCompletionUI::setupWidgets()
     //   _bottomWindowWidget
     ////////////////////////////////////////////////////////////////////////////////////
 
-    _bottomWindowWidget = new QDockWidget(tr("Êı¾İ¿âĞÅÏ¢"),this );
+    _bottomWindowWidget = new QDockWidget(tr("æ•°æ®åº“ä¿¡æ¯"),this );
     _bottomWindowWidget->setObjectName(tr("_bottomWindowWidget"));
     _bottomWindowWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
     _bottomWindowWidget->setMinimumHeight(0.35 * height);
     _bottomDockWindowContents = new QWidget( );
     _bottomDockWindowContents->setObjectName(tr("_bottomDockWindowContents"));
+
     _bottomWindow.setupUi(_bottomDockWindowContents);
+
+    _bottomWindow.dBTableWidget_1->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _bottomWindow.dBTableWidget_2->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _bottomWindow.dBTableWidget_3->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _bottomWindow.dBTableWidget_4->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _bottomWindow.dBTableWidget_5->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _bottomWindow.dBTableWidget_6->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _bottomWindow.dBTableWidget_7->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _bottomWindow.dBTableWidget_8->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    _bottomWindow.dBTableWidget_9->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    _bottomWindow.dBTableWidget_1->setSelectionBehavior(QAbstractItemView::SelectRows);
+    _bottomWindow.dBTableWidget_2->setSelectionBehavior(QAbstractItemView::SelectRows);
+    _bottomWindow.dBTableWidget_3->setSelectionBehavior(QAbstractItemView::SelectRows);
+    _bottomWindow.dBTableWidget_4->setSelectionBehavior(QAbstractItemView::SelectRows);
+    _bottomWindow.dBTableWidget_5->setSelectionBehavior(QAbstractItemView::SelectRows);
+    _bottomWindow.dBTableWidget_6->setSelectionBehavior(QAbstractItemView::SelectRows);
+    _bottomWindow.dBTableWidget_7->setSelectionBehavior(QAbstractItemView::SelectRows);
+    _bottomWindow.dBTableWidget_8->setSelectionBehavior(QAbstractItemView::SelectRows);
+    _bottomWindow.dBTableWidget_9->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    _bottomWindow.dBTableWidget_1->setSelectionMode ( QAbstractItemView::SingleSelection);
+    _bottomWindow.dBTableWidget_2->setSelectionMode ( QAbstractItemView::SingleSelection);
+    _bottomWindow.dBTableWidget_3->setSelectionMode ( QAbstractItemView::SingleSelection);
+    _bottomWindow.dBTableWidget_4->setSelectionMode ( QAbstractItemView::SingleSelection);
+    _bottomWindow.dBTableWidget_5->setSelectionMode ( QAbstractItemView::SingleSelection);
+    _bottomWindow.dBTableWidget_6->setSelectionMode ( QAbstractItemView::SingleSelection);
+    _bottomWindow.dBTableWidget_7->setSelectionMode ( QAbstractItemView::SingleSelection);
+    _bottomWindow.dBTableWidget_8->setSelectionMode ( QAbstractItemView::SingleSelection);
+    _bottomWindow.dBTableWidget_9->setSelectionMode ( QAbstractItemView::SingleSelection);
 
     _bottomWindowWidget->setWidget(_bottomDockWindowContents);
     addDockWidget(Qt::BottomDockWidgetArea, _bottomWindowWidget);
@@ -490,17 +541,16 @@ void	ImageCompletionUI::setupWidgets()
 
 void ImageCompletionUI::createStatusBar()
 {
-    statusBar()->showMessage(tr("ÒÑ¾ÍĞ÷"));
+    statusBar()->showMessage(tr("å·²å°±ç»ª"));
 }
 
 void ImageCompletionUI::createConnections()
 {
     connect( _centralTabWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
 
-    connect( _sceneCompletionDialog._brushSizeHSlider, SIGNAL(sliderMoved(int)), this, SLOT(_SceneupdateBrushSize()) );
-    connect( _regionCompetitionDialog.brushSizeSmallRadio, SIGNAL(clicked()), this, SLOT(_RegionupdateBrushSize()) );
-    connect( _regionCompetitionDialog.brushSizeMediumRadio, SIGNAL(clicked()), this, SLOT(_RegionupdateBrushSize()) );
-    connect( _regionCompetitionDialog.brushSizeLargeRadio, SIGNAL(clicked()), this, SLOT(_RegionupdateBrushSize()) );
+    connect( _regionCompetitionDialog.brushSizeSmallRadio, SIGNAL(clicked()), this, SLOT(updateBrushSize()) );
+    connect( _regionCompetitionDialog.brushSizeMediumRadio, SIGNAL(clicked()), this, SLOT(updateBrushSize()) );
+    connect( _regionCompetitionDialog.brushSizeLargeRadio, SIGNAL(clicked()), this, SLOT(updateBrushSize()) );
 
     connect(_regionCompetitionDialog.radioStrikeLabelling, SIGNAL(clicked()), this, SLOT(updateMethod()));
     connect(_regionCompetitionDialog.radioRectLabelling, SIGNAL(clicked()), this, SLOT(updateMethod()));
@@ -521,21 +571,28 @@ void ImageCompletionUI::createConnections()
 
     connect(_regionCompetitionDialog.sliderBasicOp, SIGNAL(sliderReleased()), this, SLOT(actionSliderReleased()));
 
-    connect(_regionCompetitionDialog.radioLineWidthThin, SIGNAL(clicked()), this, SLOT(updateLineWidth()));
-    connect(_regionCompetitionDialog.radioLineWidthMedium, SIGNAL(clicked()), this, SLOT(updateLineWidth()));
-    connect(_regionCompetitionDialog.radioLineWidthThick, SIGNAL(clicked()), this, SLOT(updateLineWidth()));
+    connect(_regionCompetitionDialog.radioLineWidthThin, SIGNAL(clicked()), this, SLOT(updateLineThickness()));
+    connect(_regionCompetitionDialog.radioLineWidthMedium, SIGNAL(clicked()), this, SLOT(updateLineThickness()));
+    connect(_regionCompetitionDialog.radioLineWidthThick, SIGNAL(clicked()), this, SLOT(updateLineThickness()));
 
-    connect(_leftWindow.tableWidget, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(cellDoubleClicked_(int, int)));
+    connect(_leftWindow.tableWidget, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(cellDoubleClickedLeftWindow(int, int)));
+    connect(_bottomWindow.dBTableWidget_8, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_dBTableWidget_8_cellDoubleClicked(int, int)));
+    connect(_bottomWindow.dBTableWidget_7, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_dBTableWidget_7_cellDoubleClicked(int, int)));
+    connect(_bottomWindow.dBTableWidget_6, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_dBTableWidget_6_cellDoubleClicked(int, int)));
+    connect(_bottomWindow.dBTableWidget_5, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_dBTableWidget_5_cellDoubleClicked(int, int)));
+    connect(_bottomWindow.dBTableWidget_4, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_dBTableWidget_4_cellDoubleClicked(int, int)));
+    connect(_bottomWindow.dBTableWidget_3, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_dBTableWidget_3_cellDoubleClicked(int, int)));
+    connect(_bottomWindow.dBTableWidget_2, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_dBTableWidget_2_cellDoubleClicked(int, int)));
+    connect(_bottomWindow.dBTableWidget_1, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_dBTableWidget_1_cellDoubleClicked(int, int)));
 }
-
 
 void ImageCompletionUI::showContextMenu(QPoint pos)
 {
     QAction* triggerEdit = new QAction(this);
-    triggerEdit->setText("±à¼­Ä¥Á£Í¼ÏñÊôĞÔ");
+    triggerEdit->setText("ç¼–è¾‘ç£¨ç²’å›¾åƒå±æ€§");
     connect(triggerEdit, SIGNAL(triggered()), this, SLOT(editProperties()));
 
-    if(_imageName.isEmpty())
+    if(_editImageViewer->image().isNull())
     {
         triggerEdit->setEnabled(false);
     }
@@ -547,22 +604,36 @@ void ImageCompletionUI::showContextMenu(QPoint pos)
 
 void ImageCompletionUI::editProperties()
 {
-    if(_imagePath.isEmpty()) return;
+    if(_strCurrentImagePath.isEmpty()) return;
 
     QImage* result = _editImageViewer->getResultDisplay();
     QImage* mask = _editImageViewer->getMask();
     QImage* result2 = _editImageViewer->getResultSave();
 
-    (new MoliProperties(this))->showDlg(_imagePath, result != NULL ? *result : QImage(), result2 != NULL ? *result2 : QImage(), mask != NULL ? *mask : QImage(), _imageScale );
+    (new MoliProperties(this))->showDlg(_strCurrentImagePath, result != NULL ? *result : QImage(), result2 != NULL ? *result2 : QImage(), mask != NULL ? *mask : QImage(), _imageScale );
 }
 
-void ImageCompletionUI::synchImageName(QString fName)
+void ImageCompletionUI::syncFilePathStr(QString strFilePath)
 {
-    if(fName.isEmpty()) return;
+    if(strFilePath.isEmpty() || !QFile::exists(strFilePath)) return;
 
-    if(!QFile(fName).exists()) return;
+    int pos = in(strFilePath, _dequeTodo);
+    if( -1 == pos )
+    {
+        inDeque(strFilePath, _dequeTodo);
+        pos = in(strFilePath, _dequeTodo);
+        showThumbnail(MOLI_UNLABELLED_STATUS_CHAR, pos);
+    }
 
-    _imagePath = fName;
+    _strCurrentImagePath = strFilePath;
+}
+
+void ImageCompletionUI::next()
+{
+    if(!_dequeTodo.empty())
+    {
+        this->openImage(_dequeTodo[0]);
+    }
 }
 
 void ImageCompletionUI::setupBrush()
@@ -577,92 +648,87 @@ void ImageCompletionUI::open()
     close();
 
     QSettings settings("ImageCompletion", "ImageCompletion");
-    QString initialPath = settings.value("lastImportPath", QVariant(QDir::homePath())).toString();
-    if(initialPath.isEmpty())
-    {
-        initialPath = QDir::homePath() + "/untitled";
-    }
+    QString strLastImportPath = settings.value("lastImportPath", QDir::homePath()).toString();
 
-    QString fileName = QFileDialog::getOpenFileName( this, tr("´ò¿ªÍ¼Ïñ"), initialPath, tr("Í¼Ïñ (*.png *.bmp *.jpg *.jpeg)") );
-    if(fileName.isEmpty()) return;
-
-    _imagePath = fileName;
-    _imageName = QFileInfo(fileName).fileName();
-    settings.setValue("lastImportPath", QVariant(fileName));
-
-    if ( _editImageViewer->openImage(fileName) )
+    QString strFilePath = QFileDialog::getOpenFileName( this,
+                                                        tr("æ‰“å¼€å›¾åƒ"),
+                                                        strLastImportPath,
+                                                        MOLI_IMAGE_FILTER );
+    if( strFilePath.isEmpty() )
     {
-        statusBar()->showMessage(tr("´ò¿ªÍ¼Ïñ"), 2000);
-        _editImageViewer->repaint();
-        _step = NONE;
-        updateLog();
-    }
-    else
-    {
-        _editImageViewer->close();
-        _step = LOADFAILED;
-        _regionCompetitionDialog.radioForeground->setEnabled(false);
-        _regionCompetitionDialog.radioBackground->setEnabled(false);
-        _regionCompetitionDialog.radioErazer->setEnabled(false);
         return;
     }
 
-    int width  = _editImageViewer->image().width();
-    int height = _editImageViewer->image().height();
-    this->setMinimumSize( width < 800 ? 800 : height, height < 600 ? 600 : height );
-
-    QString status = this->labelStatus(fileName);
-    if(status != "N" && status != "Y")
+    if( !QFile::exists(strFilePath) )
     {
-        QMessageBox::StandardButton reply = QMessageBox::question(0, tr("ÌáÊ¾"), "´ËÍ¼ÏñÎªĞÂÍ¼Ïñ,ÊÇ·ñÒªµ¼ÈëÊı¾İ¿â?", QMessageBox::Ok | QMessageBox::Cancel);
-        if(reply == QMessageBox::Ok)
+        return;
+    }
+
+    settings.setValue("lastImportPath", QVariant(strFilePath));
+
+    this->openImage(strFilePath);
+}
+
+void ImageCompletionUI::openImage(QString strFilePath)
+{
+    if( strFilePath.isEmpty() ) return;
+
+    bool ok = _editImageViewer->openImage( strFilePath );
+    if( !ok )
+    {
+        close();
+        this->setStrikeOptionsEnabled( false );
+        return;
+    }
+
+    _strCurrentImagePath = strFilePath;
+    _editImageViewer->repaint();
+
+    QString status = this->status( strFilePath );
+    // New image
+    if(status != MOLI_LABELLED_STATUS_CHAR && status != MOLI_UNLABELLED_STATUS_CHAR)
+    {
+        QMessageBox::StandardButton reply = QMessageBox::information(0,
+                                                                     MOLI_MESSAGEBOX_TITLE_PROMPT_STRING,
+                                                                     "æ­¤å›¾åƒä¸ºæ–°å›¾åƒ,æ˜¯å¦è¦å¯¼å…¥æ•°æ®åº“?",
+                                                                     QMessageBox::Ok | QMessageBox::Cancel);
+        if(QMessageBox::Ok == reply)
         {
-            (new ImageProperties(this))->showDlg(fileName);
+            (new ImageProperties(this))->showDlg( strFilePath );
         }
         else
         {
             close();
+        }
+    }
+    // Labelled image
+    else if(MOLI_LABELLED_STATUS_CHAR == status)
+    {
+        if(-1 == in(strFilePath, _dequeDone))
+        {
+            this->inDeque(strFilePath, _dequeDone);
+            this->showThumbnailForLabelled(strFilePath);
+        }
+
+        QImage image = this->loadLabelledResult( strFilePath );
+        if(image.isNull())
+        {
+            QMessageBox::warning(0,
+                                 MOLI_MESSAGEBOX_TITLE_PROMPT_STRING,
+                                 "åŠ è½½æ ‡æ³¨ç»“æœå›¾åƒå¤±è´¥,è‡ªåŠ¨æ˜¾ç¤ºåŸå§‹å›¾åƒ",
+                                 QMessageBox::Close);
             return;
         }
+        _editImageViewer->setImage(image);
     }
-    else if( status == "Y" )
+    else if(MOLI_UNLABELLED_STATUS_CHAR == status)
     {
-        QImage image = loadLabelledResult(fileName);
-        if(!image.isNull())
+        if(-1 == in(strFilePath, _dequeTodo))
         {
-            _editImageViewer->setImage(image);
-        }
-        else
-        {
-            QMessageBox::warning(0, tr("ÌáÊ¾"), "¼ÓÔØ±ê×¢½á¹ûÍ¼ÏñÊ§°Ü,×Ô¶¯ÏÔÊ¾Ô­Ê¼Í¼Ïñ", QMessageBox::Close);
+            this->inDeque(strFilePath, _dequeTodo);
+            this->showThumbnailForUnLabelled( strFilePath );
         }
     }
-
-    int row = rowIndex(_imagePath);
-    if(row > 0)
-    {
-        QMessageBox::information(0, tr("ÌáÊ¾"), QString("Í¼ÏñÒÑ´ò¿ª (µÚ%1ĞĞ)").arg(row), QMessageBox::Close);
-    }
-    else
-    {
-        _cnt++;
-        if(_leftWindow.tableWidget->rowCount() <= _cnt + 1)
-        {
-            _leftWindow.tableWidget->insertRow(_leftWindow.tableWidget->rowCount()-1);
-        }
-
-        showThumbnail(status, _cnt);
-        _fNames.push_back(_imagePath);
-    }
-}
-
-int ImageCompletionUI::rowIndex(QString image)
-{
-    for(int i = 0; i < _fNames.size(); i++)
-    {
-        if(image == _fNames[i]) return i+1;
-    }
-    return -1;
 }
 
 void ImageCompletionUI::showImagesInTree()
@@ -673,7 +739,10 @@ void ImageCompletionUI::showImagesInTree()
     QSqlDatabase db;
     if(!createConnection(db))
     {
-        QMessageBox::critical(0, qApp->tr("ÌáÊ¾"), qApp->tr("Êı¾İ¿âÁ¬½ÓÊ§°Ü!"), QMessageBox::Cancel);
+        QMessageBox::critical(0,
+                              tr("æç¤º"),
+                              tr("æ•°æ®åº“è¿æ¥å¤±è´¥!"),
+                              QMessageBox::Close);
         return;
     }
 
@@ -721,7 +790,7 @@ void ImageCompletionUI::showImagesInTree()
 
             // Append Images
             QSqlQuery query;
-            QString sql = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo join ferrographyinfo join oilsampleinfo on ferrographypicinfo.ferrographysheetid = ferrographyinfo.ferrographysheetid and ferrographyinfo.oilsampleid = oilsampleinfo.oilsampleid and oilsampleinfo.sampledepartid = '%1' and oilsampleinfo.planeid = '%2'").arg(departs[i]).arg((*it).second);
+            QString sql = QString("select ferrographypicinfo.ferrographypicid from ferrographypicinfo join ferrographyinfo join oilsampleinfo on ferrographypicinfo.ferrographysheetid = ferrographyinfo.ferrographysheetid and ferrographyinfo.oilsampleid = oilsampleinfo.oilsampleid and oilsampleinfo.sampledepartid = '%1' and oilsampleinfo.planeid = '%2'").arg(departs[i]).arg((*it).second);
 
             query.prepare(sql);
             if(query.exec())
@@ -729,9 +798,9 @@ void ImageCompletionUI::showImagesInTree()
                 while(query.next())
                 {
                     QString fName = query.value(0).toString();
-                    QImage image(fName);
+                    QImage image(Global::PathImage + fName + ".jpg");
 
-                    QStandardItem *item2 = new QStandardItem(QFileInfo(fName).fileName());
+                    QStandardItem *item2 = new QStandardItem(fName + ".jpg");
                     item2->setIcon(QPixmap::fromImage(image));
                     item->appendRow(item2);
                 }
@@ -747,131 +816,89 @@ void ImageCompletionUI::showImagesInTree()
     _leftWindow._treeViewImages->show();
 }
 
-bool ImageCompletionUI::openImage(QString fileName)
+void ImageCompletionUI::inDeque(const QString &elem, std::deque<QString> &d)
 {
-    if(!fileName.isEmpty())
+    if(in(elem, d) >= 0) return;
+
+    deque_it it;
+    for(it = d.begin(); it != d.end(); it++)
     {
-        if ( _editImageViewer->openImage(fileName) )
+        if(elem < *it)
         {
-            _imagePath = fileName;
-            _imageName = QFileInfo(fileName).fileName();
-
-            _editImageViewer->repaint();
-            _step = NONE;
-            updateLog();
-
-            QString status = this->labelStatus(fileName);
-            if(status != "N" && status != "Y")
-            {
-                QMessageBox::StandardButton reply = QMessageBox::information(0, tr("ÌáÊ¾"), "´ËÍ¼ÏñÎªĞÂÍ¼Ïñ,ÊÇ·ñÒªµ¼ÈëÊı¾İ¿â?", QMessageBox::Ok | QMessageBox::Cancel);
-                if(reply == QMessageBox::Ok)
-                {
-                    (new ImageProperties(this))->showDlg(fileName);
-                    return true;
-                }
-                else
-                {
-                    close();
-                    return false;
-                }
-            }
-            else if(status == "N")
-            {
-                return true;
-            }
-            else if(status == "Y")
-            {
-                QImage image = this->loadLabelledResult(fileName);
-                if(!image.isNull())
-                {
-                    _editImageViewer->setImage(image);
-                }
-                else
-                {
-                    QMessageBox::warning(0, tr("ÌáÊ¾"), "¼ÓÔØ±ê×¢½á¹ûÍ¼ÏñÊ§°Ü,×Ô¶¯ÏÔÊ¾Ô­Ê¼Í¼Ïñ", QMessageBox::Close);
-                }
-
-                return true;
-            }
-        }
-        else
-        {
-            close();
-            _step = LOADFAILED;
-            _regionCompetitionDialog.radioForeground->setEnabled(false);
-            _regionCompetitionDialog.radioBackground->setEnabled(false);
-            _regionCompetitionDialog.radioErazer->setEnabled(false);
-            return false;
+            d.insert(it, elem);
+            break;
         }
     }
 
-    //    int width = _editImageViewer->image().width();
-    //    int height = _editImageViewer->image().height();
-    //    this->setMinimumSize( width < 800 ? 800 : height, height < 600 ? 600 : height );
+    if(it == d.end())
+    {
+        d.insert(it, elem);
+    }
 }
 
-void ImageCompletionUI::batchOpen()
+int ImageCompletionUI::in(const QString& strFilePath, std::deque<QString> &d)
 {
-    QFileDialog batchFileDialog;
-    batchFileDialog.setFileMode(QFileDialog::Directory);
-    batchFileDialog.setOption(QFileDialog::ShowDirsOnly);
-    batchFileDialog.setViewMode(QFileDialog::Detail);
-
-    QDir dir;
-
-    if(batchFileDialog.exec())
+    int k;
+    deque_it it;
+    for(it = d.begin(), k = 0; it != d.end(); it++)
     {
-        dir = batchFileDialog.selectedFiles()[0];
-        dir.setNameFilters(QStringList() << "*.jpg" << "*.png" << "*.bmp" << "*.jpeg");
-        QStringList fileList = dir.entryList(QDir::Files);
-        QString absolutePath = dir.absolutePath();
-
-        foreach(QString file, fileList)
-        {
-            _cnt++;
-
-            if(_leftWindow.tableWidget->rowCount() <= _cnt + 1)
-            {
-                _leftWindow.tableWidget->insertRow(_leftWindow.tableWidget->rowCount()-1);
-            }
-
-            QString status = this->labelStatus(absolutePath + "/" + file);
-
-            _leftWindow.tableWidget->setItem(_cnt, 1, new QTableWidgetItem(absolutePath + "/" + file));
-            _leftWindow.tableWidget->setItem(_cnt, 2, new QTableWidgetItem(status == "Y" ? "Y" : "N"));
-
-            for(int i = 0; i < _leftWindow.tableWidget->columnCount(); i++)
-            {
-                _leftWindow.tableWidget->item(_cnt, i)->setBackgroundColor(getColor(status));
-            }
-        }
-
-        statusBar()->showMessage(QString("´ò¿ª%1¸öÎÄ¼ş").arg(fileList.length()), 2000);
+        if(*it == strFilePath) return k;
+        k++;
     }
+
+    return -1;
 }
 
 void ImageCompletionUI::showThumbnail(QString status, int row)
 {
+    _leftWindow.tableWidget->insertRow(row);
     _leftWindow.tableWidget->setItem(row, 0, new QTableWidgetItem(""));
     QImage* temp = _editImageViewer->getOriginalImage();
     _leftWindow.tableWidget->item(row, 0)->setData(Qt::DecorationRole, QPixmap::fromImage(*temp).scaled(80, 80));
-    _leftWindow.tableWidget->item(_cnt, 0)->setBackgroundColor(getColor(status));
+    _leftWindow.tableWidget->item(row, 0)->setBackgroundColor(color(status));
+}
+
+//FIXME
+void ImageCompletionUI::showThumbnailForLabelled(QString strFilePath)
+{
+    if(strFilePath.isEmpty() || !QFile::exists(strFilePath) ) return;
+
+    int pos = this->in(strFilePath, _dequeDone);
+    if(pos >= 0)
+    {
+        this->showThumbnail(MOLI_LABELLED_STATUS_CHAR, pos + _dequeTodo.size());
+    }
+}
+
+void ImageCompletionUI::showThumbnailForUnLabelled(QString strFilePath)
+{
+    if(strFilePath.isEmpty() || !QFile::exists(strFilePath) ) return;
+
+    int pos = this->in(strFilePath, _dequeTodo);
+    if(pos >= 0)
+    {
+        this->showThumbnail(MOLI_UNLABELLED_STATUS_CHAR, pos);
+    }
 }
 
 void	ImageCompletionUI::save()
 {
-    if ( _imageName.isEmpty() ) return;
+    if ( Global::NewName.isEmpty() ) return;
 
     bool ret1, ret2;
 
     if(Global::PathResult.isEmpty())
     {
-        QMessageBox::warning(this, tr("±£´æ"), QString("ÇëÖ¸¶¨±ê×¢Í¼Ïñ±£´æÂ·¾¶:%1").arg(QFileInfo(QApplication::instance()->applicationFilePath()).baseName() + ".ini"));
+        QMessageBox::warning(this,
+                             tr("ä¿å­˜"),
+                             QString("è¯·æŒ‡å®šæ ‡æ³¨å›¾åƒä¿å­˜è·¯å¾„:%1").arg(QFileInfo(QApplication::instance()->applicationFilePath()).baseName() + ".ini"));
         return;
     }
     if(Global::PathMask.isEmpty())
     {
-        QMessageBox::warning(this, tr("±£´æ"), QString("ÇëÖ¸¶¨ÑÚÂëÍ¼Ïñ±£´æÂ·¾¶:%1").arg(QFileInfo(QApplication::instance()->applicationFilePath()).baseName() + ".ini"));
+        QMessageBox::warning(this,
+                             tr("ä¿å­˜"),
+                             QString("è¯·æŒ‡å®šæ©ç å›¾åƒä¿å­˜è·¯å¾„:%1").arg(QFileInfo(QApplication::instance()->applicationFilePath()).baseName() + ".ini"));
         return;
     }
 
@@ -885,83 +912,46 @@ void	ImageCompletionUI::save()
     }
 
     // Save
-    QString pathResult = Global::PathResult.append(QFileInfo(_imageName).baseName()).append(".").append(Global::ExtResult);
+    QString pathResult = Global::PathResult + Global::NewName + "." + Global::ExtResult;
     if(!(ret1 = _editImageViewer->saveLabelledResult(pathResult, Global::ExtResult)))
     {
-        QMessageBox::warning(this, tr("±£´æ"), tr("±£´æ±ê×¢Í¼ÏñÊ§°Ü"), QMessageBox::Close);
+        QMessageBox::warning(this,
+                             tr("ä¿å­˜"),
+                             tr("ä¿å­˜æ ‡æ³¨å›¾åƒå¤±è´¥"),
+                             QMessageBox::Close);
     }
 
-    QString pathMask = Global::PathMask.append(QFileInfo(_imageName).baseName()).append(".").append(Global::ExtMask);
+    QString pathMask = Global::PathMask + Global::NewName + "." + Global::ExtMask;
     if(!(ret2 = _editImageViewer->saveMask(pathMask, Global::ExtMask)))
     {
-        QMessageBox::warning(this, tr("±£´æ"), tr("±£´æÑÚÂëÍ¼ÏñÊ§°Ü"), QMessageBox::Close);
-    }
-
-    //TODO: Sync Database
-    //    if(ret1 && ret2)
-    //    {
-    //        if(syncLabelledImage(_imagePath, pathResult, pathMask))
-    //        {
-    //            setImageState(_imagePath, "Y");
-    //            setBackgroundColor(_imagePath,  this->getColor("Y"));
-    //            showData();
-    //        }
-    //    }
-}
-
-void ImageCompletionUI::setBackgroundColor(QString path, QColor color)
-{
-    for(int i = 0; i < _leftWindow.tableWidget->rowCount(); i++)
-    {
-        if(_leftWindow.tableWidget->item(i, 1)->text() == path)
-        {
-            for(int j = 0; j < _leftWindow.tableWidget->columnCount(); j++)
-            {
-                _leftWindow.tableWidget->item(i, j)->setBackgroundColor( color );
-            }
-            return;
-        }
+        QMessageBox::warning(this,
+                             tr("ä¿å­˜"),
+                             tr("ä¿å­˜æ©ç å›¾åƒå¤±è´¥"),
+                             QMessageBox::Close);
     }
 }
 
-void ImageCompletionUI::setImageState(QString path, QString state)
+void ImageCompletionUI::saveAs()
 {
-    for(int i = 0; i < _leftWindow.tableWidget->rowCount(); i++)
-    {
-        if(_leftWindow.tableWidget->item(i, 1)->text() == path)
-        {
-            _leftWindow.tableWidget->item(i, 2)->setText(state);
-            return;
-        }
-    }
-}
-
-void	ImageCompletionUI::saveAs()
-{
-    if(_imageName.isEmpty()) return;
+    if(_strCurrentImagePath.isEmpty()) return;
 
     QString pathResult, pathMask;
     bool ret1, ret2;
 
     if(!(ret1 = _editImageViewer->saveAsLabelledResult(pathResult)))
     {
-        QMessageBox::warning(this, tr("±£´æ"), tr("±£´æ±ê×¢Í¼ÏñÊ§°Ü"), QMessageBox::Close);
+        QMessageBox::warning(this,
+                             tr("ä¿å­˜"),
+                             tr("ä¿å­˜æ ‡æ³¨å›¾åƒå¤±è´¥"),
+                             QMessageBox::Close);
     }
     else if(!(ret2 = _editImageViewer->saveAsMask(pathMask)))
     {
-        QMessageBox::warning(this, tr("±£´æ"), tr("±£´æÑÚÂëÍ¼ÏñÊ§°Ü"), QMessageBox::Close);
+        QMessageBox::warning(this,
+                             tr("ä¿å­˜"),
+                             tr("ä¿å­˜æ©ç å›¾åƒå¤±è´¥"),
+                             QMessageBox::Close);
     }
-
-    //TODO: Sync Database
-    //    if(ret1 && ret2)
-    //    {
-    //        if(syncLabelledImage(_imagePath, pathResult, pathMask))
-    //        {
-    //            setImageState(_imagePath, "Y");
-    //            setBackgroundColor(_imagePath,  this->getColor("Y"));
-    //            showData();
-    //        }
-    //    }
 }
 
 void	ImageCompletionUI::close()
@@ -977,8 +967,7 @@ void	ImageCompletionUI::close()
     _regionCompetitionDialog.radioBackground->setChecked(false);
     _regionCompetitionDialog.radioErazer->setChecked(false);
 
-    _imageName = "";
-    _imagePath = "";
+    _strCurrentImagePath = QString();
 
     uncheckMethods();
 
@@ -1047,9 +1036,10 @@ void ImageCompletionUI::showData()
     QSqlDatabase db;
     if(!createConnection(db))
     {
-        QMessageBox::critical(0, qApp->tr("Êı¾İ¿â"),
-                              qApp->tr("Êı¾İ¿âÁ¬½ÓÊ§°Ü!"),
-                              QMessageBox::Cancel);
+        QMessageBox::warning(0,
+                             tr("æ•°æ®åº“"),
+                             tr("æ•°æ®åº“è¿æ¥å¤±è´¥!"),
+                             QMessageBox::Cancel);
     }
 
     bool ret;
@@ -1129,26 +1119,7 @@ void ImageCompletionUI::showData()
     QSqlDatabase::removeDatabase(connection);
 }
 
-void ImageCompletionUI::switchModule()
-{
-    switch( _moduleSelectBox->currentIndex() )
-    {
-    case 0 :
-        _operationStackedWidget->setCurrentIndex(0);
-        break;
-    case 1 :
-        _operationStackedWidget->setCurrentIndex(1);
-        break;
-    case 2 :
-        _operationStackedWidget->setCurrentIndex(2);
-        break;
-    case 3 :
-        _operationStackedWidget->setCurrentIndex(3);
-        break;
-    }
-}
-
-void ImageCompletionUI::_RegionupdateBrushSize()
+void ImageCompletionUI::updateBrushSize()
 {
     if ( _editImageViewer->image().isNull() )
         return;
@@ -1168,19 +1139,6 @@ void ImageCompletionUI::_RegionupdateBrushSize()
 
     _editImageViewer->setBrushWidth( _brushSize );
 }
-
-void ImageCompletionUI::_SceneupdateBrushSize()
-{
-    if ( _editImageViewer->image().isNull() )
-        return;
-
-    _brushSize = _sceneCompletionDialog._brushSizeHSlider->value();
-
-    _editImageViewer->setBrushWidth( _brushSize );
-}
-
-void	ImageCompletionUI::keyPressEvent(QKeyEvent */* e */){}
-
 
 void ImageCompletionUI::setStrikeOptionsEnabled(bool b)
 {
@@ -1274,8 +1232,8 @@ void ImageCompletionUI::scaling()
     _regionCompetitionDialog.sliderBasicOp->setMinimum(1);
     _regionCompetitionDialog.sliderBasicOp->setValue(10);
 
-    _regionCompetitionDialog.labelSliderLeft->setText(tr("Ğ¡"));
-    _regionCompetitionDialog.labelSliderRight->setText(tr("´ó"));
+    _regionCompetitionDialog.labelSliderLeft->setText(tr("å°"));
+    _regionCompetitionDialog.labelSliderRight->setText(tr("å¤§"));
 
     _regionCompetitionDialog._line->setHidden(true);
     _regionCompetitionDialog._labelRulerText->setHidden(true);
@@ -1287,8 +1245,8 @@ void ImageCompletionUI::brighting()
     _regionCompetitionDialog.sliderBasicOp->setMinimum(-100);
     _regionCompetitionDialog.sliderBasicOp->setValue(0);
 
-    _regionCompetitionDialog.labelSliderLeft->setText(tr("°µ"));
-    _regionCompetitionDialog.labelSliderRight->setText(tr("ÁÁ"));
+    _regionCompetitionDialog.labelSliderLeft->setText(tr("æš—"));
+    _regionCompetitionDialog.labelSliderRight->setText(tr("äº®"));
 
     _regionCompetitionDialog._line->setHidden(true);
     _regionCompetitionDialog._labelRulerText->setHidden(true);
@@ -1311,13 +1269,13 @@ void ImageCompletionUI::measure()
     _regionCompetitionDialog.sliderBasicOp->setTickInterval(50);
     _regionCompetitionDialog.sliderBasicOp->setTickPosition(QSlider::TicksRight);
 
-    _regionCompetitionDialog.labelSliderLeft->setText(tr("Ğ¡"));
-    _regionCompetitionDialog.labelSliderRight->setText(tr("´ó"));
+    _regionCompetitionDialog.labelSliderLeft->setText(tr("å°"));
+    _regionCompetitionDialog.labelSliderRight->setText(tr("å¤§"));
 
     _regionCompetitionDialog._line->show();
     _regionCompetitionDialog._labelRulerText->show();
     _regionCompetitionDialog._labelRulerText->setScaledContents(true);
-    _regionCompetitionDialog._labelRulerText->setText(tr("50Î¢Ã×(50ÏñËØ)"));
+    _regionCompetitionDialog._labelRulerText->setText(tr("50å¾®ç±³(50åƒç´ )"));
 
     _regionCompetitionDialog.sliderBasicOp->setValue(50);
 
@@ -1345,7 +1303,7 @@ void ImageCompletionUI::actionSliderReleased()
     }
     else if(_regionCompetitionDialog.radioMesuarement->isChecked())
     {
-        _regionCompetitionDialog._labelRulerText->setText(QString::number(_regionCompetitionDialog.sliderBasicOp->value()) +"Î¢Ã×(50ÏñËØ)");
+        _regionCompetitionDialog._labelRulerText->setText(QString::number(_regionCompetitionDialog.sliderBasicOp->value()) +"å¾®ç±³(50åƒç´ )");
         _imageScale = _regionCompetitionDialog.sliderBasicOp->value() * 1.0 / 50;
     }
 }
@@ -1357,12 +1315,7 @@ void ImageCompletionUI::userManagement()
     userMangementDlg->show();
 }
 
-bool ImageCompletionUI::maybeSave()
-{
-    return true;
-}
-
-void ImageCompletionUI::updateLineWidth()
+void ImageCompletionUI::updateLineThickness()
 {
     if ( _editImageViewer->image().isNull() ) return;
     int w;
@@ -1373,61 +1326,7 @@ void ImageCompletionUI::updateLineWidth()
     _editImageViewer->setLineThickness( w );
 }
 
-void ImageCompletionUI::strikeComboChanged(int index)
-{
-    if(index != 0)
-    {
-        _editImageViewer->setPaintable(true);
-        _editImageViewer->setMethod(0);
-        _editImageViewer->setLabelType(0);
-        setStrikeOptionsEnabled(true);
-
-        if(index == 2)
-        {
-            _editImageViewer->changeObjectLabeling(0);
-            QPixmap pixmap(30,30);
-            pixmap.fill(qRgb(colorTable[0], colorTable[1], colorTable[2]));
-            _regionCompetitionDialog.showColorLabel->setPixmap(pixmap);
-        }
-        else if(index == 1)
-        {
-            _editImageViewer->changeObjectLabeling(1);
-            QPixmap pixmap(30,30);
-            pixmap.fill(qRgb(colorTable[3], colorTable[4], colorTable[5]));
-            _regionCompetitionDialog.showColorLabel->setPixmap(pixmap);
-        }
-        else if(index == 3)
-        {
-            _editImageViewer->setEraser();
-            QPixmap pixmap(0,0);
-            _regionCompetitionDialog.showColorLabel->setPixmap(pixmap);
-        }
-    }
-}
-
-void ImageCompletionUI::strikeThicknessComboboxChanged(int index)
-{
-    if ( !_editImageViewer || _editImageViewer->image().isNull() ) return;
-
-    if(index == 0 || index == 1) _brushSize = 5;
-    else if(index == 2) _brushSize = 15;
-    else if(index == 3) _brushSize = 30;
-
-    _editImageViewer->setBrushWidth( _brushSize );
-}
-
-void ImageCompletionUI::lineThicknessComboboxChanged(int index)
-{
-    if ( !_editImageViewer || _editImageViewer->image().isNull() ) return;
-    int w;
-    if(index == 0 || index == 1) w = 3;
-    else if(index == 2) w = 5;
-    else if(index == 3) w = 7;
-
-    _editImageViewer->setLineThickness( w );
-}
-
-void ImageCompletionUI::labellingMethodChanged(QAction *a)
+void ImageCompletionUI::methodChangeTriggered(QAction *a)
 {
     a->setChecked(true);
 
@@ -1456,7 +1355,7 @@ char* ImageCompletionUI::getNewLogString()
     if(_editImageViewer->Method() != -1)
     {
         char* temp = new char[1000];
-        sprintf(temp, "±ê×¢ÓÃÊ±: %.4fs", _editImageViewer->_seg_during);
+        sprintf(temp, "æ ‡æ³¨ç”¨æ—¶: %.4fs", _editImageViewer->_seg_during);
 
         return temp;
     }
@@ -1495,7 +1394,7 @@ void ImageCompletionUI::strikeChangeTriggered(QAction *a)
     }
 }
 
-void ImageCompletionUI::strikeThicknessChanged(QAction *a)
+void ImageCompletionUI::strikeThicknessChangeTriggered(QAction *a)
 {
     if ( _editImageViewer->image().isNull() ) return;
 
@@ -1508,7 +1407,7 @@ void ImageCompletionUI::strikeThicknessChanged(QAction *a)
     _editImageViewer->setBrushWidth( _brushSize );
 }
 
-void ImageCompletionUI::lineThicknessChanged(QAction *a)
+void ImageCompletionUI::lineThicknessChangeTriggered(QAction *a)
 {
     a->setChecked(true);
 
@@ -1541,12 +1440,12 @@ void ImageCompletionUI::undo()
     redo();
 }
 
-// ´ÓÎÄ¼şµ¼ÈëÊı¾İ--zhyn
+// ä»æ–‡ä»¶å¯¼å…¥æ•°æ®--zhyn
 bool ImageCompletionUI::importDB(const QString &path)
 {
     /**
-     *@brief ¶ÁÈ¡sqlÎÄ±¾ÄÚÈİ,²¢Ğ´ÈëÖÁÊı¾İ¿â
-     *@param path sqlÎÄ¼şÂ·¾¶
+     *@brief è¯»å–sqlæ–‡æœ¬å†…å®¹,å¹¶å†™å…¥è‡³æ•°æ®åº“
+     *@param path sqlæ–‡ä»¶è·¯å¾„
      */
     QSqlDatabase gAuthDB;
     if(!createConnection(gAuthDB))
@@ -1561,7 +1460,7 @@ bool ImageCompletionUI::importDB(const QString &path)
     while(!in.atEnd())
     {
         QString sql=in.readLine();
-        // Í¨¹ı·ÖÎövalues(E'),ÅĞ¶ÏÊÇ·ñÓĞ¶ş½øÖÆÊı¾İ,ÈçÃ»ÓĞÖ±½ÓÔËĞĞsqlÓï¾ä,ÈçÓĞÔòĞèÒª½«16½øÖÆÎÄ±¾×ª»»ÎªblobÊı¾İ
+        // é€šè¿‡åˆ†ævalues(E'),åˆ¤æ–­æ˜¯å¦æœ‰äºŒè¿›åˆ¶æ•°æ®,å¦‚æ²¡æœ‰ç›´æ¥è¿è¡Œsqlè¯­å¥,å¦‚æœ‰åˆ™éœ€è¦å°†16è¿›åˆ¶æ–‡æœ¬è½¬æ¢ä¸ºblobæ•°æ®
         QRegExp reg("E'([0-9a-f]{1,})'");
 
         if(!sql.contains(reg))
@@ -1573,7 +1472,7 @@ bool ImageCompletionUI::importDB(const QString &path)
             int pos=0;
             QStringList bList;
 
-            // Ì½Ë÷ËùÓĞµÄblob×Ö¶Î
+            // æ¢ç´¢æ‰€æœ‰çš„blobå­—æ®µ
             while((pos=reg.indexIn(sql,pos))!=-1)
             {
                 bList.append(reg.cap(0));
@@ -1582,7 +1481,7 @@ bool ImageCompletionUI::importDB(const QString &path)
                 pos+=reg.matchedLength();
             }
 
-            // blob×Ö¶ÎÌî³äÕ¼Î»·û
+            // blobå­—æ®µå¡«å……å ä½ç¬¦
             foreach(QString key,bList)
             {
                 sql.replace(key,"?");
@@ -1590,12 +1489,12 @@ bool ImageCompletionUI::importDB(const QString &path)
 
             query.prepare(sql);
 
-            // °ó¶¨Õ¼Î»·ûÊı¾İ
+            // ç»‘å®šå ä½ç¬¦æ•°æ®
             for(int i=0;i<bList.size();i++)
             {
-                // È¥³ıE''
+                // å»é™¤E''
                 QString hexBlob=bList[i].mid(2,bList[i].size()-1);
-                // »¹Ô­16½øÖÆÊı¾İ
+                // è¿˜åŸ16è¿›åˆ¶æ•°æ®
                 QByteArray ba=QByteArray::fromHex(hexBlob.toLocal8Bit());
 
                 query.bindValue(i,ba);
@@ -1606,12 +1505,12 @@ bool ImageCompletionUI::importDB(const QString &path)
     return true;
 }
 
-// µ¼³öÊı¾İÊı¾İµ½ÎÄ¼ş--zhyn
+// å¯¼å‡ºæ•°æ®æ•°æ®åˆ°æ–‡ä»¶--zhyn
 bool ImageCompletionUI::exportDB(const QString &path)
 {
     /**
-     *@brief µ¼³öÊı¾İ¿âÊı¾İµ½ÎÄ¼şÖĞ
-     *@param path ÎÄ¼şÂ·¾¶
+     *@brief å¯¼å‡ºæ•°æ®åº“æ•°æ®åˆ°æ–‡ä»¶ä¸­
+     *@param path æ–‡ä»¶è·¯å¾„
      */
     //QMessageBox::warning(this,"warning","this is private function to export SQL Data",QMessageBox::Close);
 
@@ -1621,7 +1520,7 @@ bool ImageCompletionUI::exportDB(const QString &path)
 
     QStringList vList;
 
-    // ÁĞ³öÊı¾İ¿âËùÓĞÃû³Æ
+    // åˆ—å‡ºæ•°æ®åº“æ‰€æœ‰åç§°
     QStringList tables=gAuthDB.tables();
     foreach(QString table,tables)
     {
@@ -1632,10 +1531,10 @@ bool ImageCompletionUI::exportDB(const QString &path)
         QSqlRecord record=query.record();
         while(query.next())
         {
-            QString prefix=QString("insert into %1(").arg(table); // ¼ÇÂ¼ÊôĞÔ×Ö¶ÎÃû
-            QString suffix="values(";                             // ¼ÇÂ¼ÊôĞÔÖµ
+            QString prefix=QString("insert into %1(").arg(table); // è®°å½•å±æ€§å­—æ®µå
+            QString suffix="values(";                             // è®°å½•å±æ€§å€¼
 
-            // ±éÀúÊôĞÔ×Ö¶Î
+            // éå†å±æ€§å­—æ®µ
             for(int i=0;i<record.count();i++)
             {
                 QSqlField field=record.field(i);
@@ -1656,7 +1555,7 @@ bool ImageCompletionUI::exportDB(const QString &path)
                         suffix+="null";
                     }else
                     {
-                        suffix+=QString("E'%1'").arg(data.toHex().data()); // blobÊı¾İ°´16½øÖÆ¸ñÊ½µ¼³ö
+                        suffix+=QString("E'%1'").arg(data.toHex().data()); // blobæ•°æ®æŒ‰16è¿›åˆ¶æ ¼å¼å¯¼å‡º
                     }
                 }
                     break;
@@ -1679,7 +1578,7 @@ bool ImageCompletionUI::exportDB(const QString &path)
                     suffix+=")";
                 }
             }
-            // ×é×°sqlÓï¾ä insert into auth_test values(0,'hello',E'003f')
+            // ç»„è£…sqlè¯­å¥ insert into auth_test values(0,'hello',E'003f')
             QString iSql=QString("%1 %2;").arg(prefix).arg(suffix);
             vList.append(iSql);
         }
@@ -1688,7 +1587,7 @@ bool ImageCompletionUI::exportDB(const QString &path)
     QFile file(path);
     file.open(QIODevice::WriteOnly|QIODevice::Truncate);
 
-    // ½«sqlÓï¾äĞ´ÈëÎÄ¼ş
+    // å°†sqlè¯­å¥å†™å…¥æ–‡ä»¶
     QTextStream out(&file);
     foreach(QString line,vList)
     {
@@ -1698,7 +1597,7 @@ bool ImageCompletionUI::exportDB(const QString &path)
     return true;
 }
 
-QColor ImageCompletionUI::getColor(QString status)
+QColor ImageCompletionUI::color(QString status)
 {
     return status == "Y" ? Global::LabelledColor : Global::UnLabelledColor;
 }
@@ -1752,48 +1651,55 @@ void ImageCompletionUI::flushBottom()
     showData();
 }
 
-void ImageCompletionUI::flushLeft(QString filename, QString label)
+void ImageCompletionUI::flushLeft(QString strFilePath, QString label)
 {
-    for(int i = 0; i < _fNames.size(); i++)
+    int k = 0;
+    deque_it it;
+
+    for(it = _dequeTodo.begin(); it != _dequeTodo.end(); it++, k++)
     {
-        if(_leftWindow.tableWidget->item(i, 0) && _fNames[i] == filename)
+        if(*it == strFilePath)
         {
-            _leftWindow.tableWidget->item(i, 0)->setBackgroundColor(getColor(label));
+            _dequeTodo.erase(it);
+            _leftWindow.tableWidget->removeRow(k);
         }
     }
+
+    this->inDeque(strFilePath, _dequeDone);
+    this->showThumbnailForLabelled(strFilePath);
 }
 
-// ¿½±´ÎÄ¼ş--zhyn
+// æ‹·è´æ–‡ä»¶--zhyn
 bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIfExits)
 {
     /**
-     *@brief ½«fromDirÎÄ¼ş¼ĞÄÚµÄÍ¼Æ¬ÎÄ¼ş£¬¿½±´µ½toDirÎÄ¼ş¼ĞÏÂ
-     *@param fromDir Í¼Æ¬ÎÄ¼şµÄÔ´Ä¿Â¼
-     *@param toDir   ¿½±´Í¼Æ¬ÎÄ¼şµÄÄ¿±êÄ¿Â¼
-     *@param convertIfExits ÊÇ·ñ¸²¸ÇÒÑ´æÔÚÎÄ¼ş±êÊ¶£¬Ä¬ÈÏÖµÊÇfalse
+     *@brief å°†fromDiræ–‡ä»¶å¤¹å†…çš„å›¾ç‰‡æ–‡ä»¶ï¼Œæ‹·è´åˆ°toDiræ–‡ä»¶å¤¹ä¸‹
+     *@param fromDir å›¾ç‰‡æ–‡ä»¶çš„æºç›®å½•
+     *@param toDir   æ‹·è´å›¾ç‰‡æ–‡ä»¶çš„ç›®æ ‡ç›®å½•
+     *@param convertIfExits æ˜¯å¦è¦†ç›–å·²å­˜åœ¨æ–‡ä»¶æ ‡è¯†ï¼Œé»˜è®¤å€¼æ˜¯false
      */
     QDir sourceDir(fromDir);
     QDir targetDir(toDir);
 
     if(!targetDir.exists())
     {
-        //< Èç¹ûÄ¿±êÄ¿Â¼²»´æÔÚ£¬Ôò½øĞĞ´´½¨
+        //< å¦‚æœç›®æ ‡ç›®å½•ä¸å­˜åœ¨ï¼Œåˆ™è¿›è¡Œåˆ›å»º
         if(!targetDir.mkdir(targetDir.absolutePath()))
             return false;
     }
 
     QFileInfoList fileInfoList = sourceDir.entryInfoList();
-    // ±éÀúËùÓĞÎÄ¼şĞÅÏ¢
+    // éå†æ‰€æœ‰æ–‡ä»¶ä¿¡æ¯
     foreach(QFileInfo fileInfo, fileInfoList)
     {
-        // È¥³ıµ±Ç°Ä¿Â¼ºÍ¸¸Ä¿Â¼
+        // å»é™¤å½“å‰ç›®å½•å’Œçˆ¶ç›®å½•
         if(fileInfo.fileName() == "." || fileInfo.fileName() == "..")
             continue;
-        // Êı¾İ¿âÎÄ¼ş´¦Àí
+        // æ•°æ®åº“æ–‡ä»¶å¤„ç†
         if(fileInfo.fileName().split(".")[1] == "sql")
             qDebug()<<fileInfo.fileName();
 
-        // µ±ÎªÄ¿Â¼Ê±£¬µİ¹éµÄ½øĞĞcopy
+        // å½“ä¸ºç›®å½•æ—¶ï¼Œé€’å½’çš„è¿›è¡Œcopy
         if(fileInfo.isDir())
         {
             if(!copyFiles(fileInfo.filePath(),
@@ -1802,12 +1708,12 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
                 return false;
         }
         else
-        {   //µ±ÔÊĞí¸²¸Ç²Ù×÷Ê±£¬½«¾ÉÎÄ¼ş½øĞĞÉ¾³ı²Ù×÷
+        {   //å½“å…è®¸è¦†ç›–æ“ä½œæ—¶ï¼Œå°†æ—§æ–‡ä»¶è¿›è¡Œåˆ é™¤æ“ä½œ
             if(convertIfExits && targetDir.exists(fileInfo.fileName()))
             {
                 targetDir.remove(fileInfo.fileName());
             }
-            // ½øĞĞÎÄ¼şcopy
+            // è¿›è¡Œæ–‡ä»¶copy
             if(!QFile::copy(fileInfo.filePath(),
                             targetDir.filePath(fileInfo.fileName()))){
                 return false;
@@ -1817,10 +1723,10 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
     return true;
 }
 
-// ÅúÁ¿Êı¾İµ¼Èë--zhyn
+// æ‰¹é‡æ•°æ®å¯¼å…¥--zhyn
 void ImageCompletionUI::importData()
 {
-    QFileDialog *packgeDir = new QFileDialog(this,tr("Ñ¡Ôñ´ò°üÎÄ¼ş"),"","");
+    QFileDialog *packgeDir = new QFileDialog(this,tr("é€‰æ‹©æ‰“åŒ…æ–‡ä»¶"),"","");
     packgeDir->setFileMode(QFileDialog::DirectoryOnly);
     packgeDir->setViewMode(QFileDialog::Detail);
 
@@ -1842,10 +1748,10 @@ void ImageCompletionUI::importData()
         fileNameList.append(fileInfo.fileName());
     }
     if(!fileNameList.contains("resultFile") || !fileNameList.contains("sourceFile") || !fileNameList.contains("databackup.sql"))
-        QMessageBox::warning(this,tr("ÌáÊ¾"),tr("´ò°üÎÄ¼şÊÜËğ"),QMessageBox::Close);
+        QMessageBox::warning(this,tr("æç¤º"),tr("æ‰“åŒ…æ–‡ä»¶å—æŸ"),QMessageBox::Close);
     else
     {
-        QFileDialog *targetDir = new QFileDialog(this,tr("Ñ¡Ôñ´ò°ü»Ö¸´Ä¿Â¼"),"","");
+        QFileDialog *targetDir = new QFileDialog(this,tr("é€‰æ‹©æ‰“åŒ…æ¢å¤ç›®å½•"),"","");
         targetDir->setFileMode(QFileDialog::DirectoryOnly);
         targetDir->setViewMode(QFileDialog::Detail);
         QString targetPath;
@@ -1876,16 +1782,16 @@ void ImageCompletionUI::importData()
         if(this->copyFiles(sourcepackgePath,sourcetargetPath) &&
                 this->copyFiles(resultpackgePath,resulttargetPath) &&
                 this->importDB(databackupFileName))
-            QMessageBox::warning(this,tr("ÌáÊ¾"),tr("Êı¾İ»Ö¸´³É¹¦"),QMessageBox::Close);
+            QMessageBox::warning(this,tr("æç¤º"),tr("æ•°æ®æ¢å¤æˆåŠŸ"),QMessageBox::Close);
         else
-            QMessageBox::warning(this,tr("ÌáÊ¾"),tr("Êı¾İ»Ö¸´Ê§°Ü"),QMessageBox::Close);
+            QMessageBox::warning(this,tr("æç¤º"),tr("æ•°æ®æ¢å¤å¤±è´¥"),QMessageBox::Close);
     }
 }
 
-// ÅúÁ¿Êı¾İµ¼³ö--zhyn
+// æ‰¹é‡æ•°æ®å¯¼å‡º--zhyn
 void ImageCompletionUI::exportData()
 {
-    QFileDialog *sourceDir = new QFileDialog(this,tr("Ñ¡ÔñÌúÆ×Í¼Æ¬Ä¿Â¼"),"","");
+    QFileDialog *sourceDir = new QFileDialog(this,tr("é€‰æ‹©é“è°±å›¾ç‰‡ç›®å½•"),"","");
     sourceDir->setFileMode(QFileDialog::DirectoryOnly);
     sourceDir->setViewMode(QFileDialog::Detail);
     QString sourcePath;
@@ -1898,7 +1804,7 @@ void ImageCompletionUI::exportData()
     else
         return;
 
-    QFileDialog *resultDir = new QFileDialog(this,tr("Ñ¡ÔñÄ¥Á£±ê×¢½á¹ûÄ¿Â¼"),"","");
+    QFileDialog *resultDir = new QFileDialog(this,tr("é€‰æ‹©ç£¨ç²’æ ‡æ³¨ç»“æœç›®å½•"),"","");
     resultDir->setFileMode(QFileDialog::DirectoryOnly);
     resultDir->setViewMode(QFileDialog::Detail);
     QString resultPath;
@@ -1911,7 +1817,7 @@ void ImageCompletionUI::exportData()
     else
         return;
 
-    QFileDialog *targetDir = new QFileDialog(this,tr("Ñ¡Ôñ´ò°ü´æµµÄ¿Â¼"),"","");
+    QFileDialog *targetDir = new QFileDialog(this,tr("é€‰æ‹©æ‰“åŒ…å­˜æ¡£ç›®å½•"),"","");
     targetDir->setFileMode(QFileDialog::DirectoryOnly);
     targetDir->setViewMode(QFileDialog::Detail);
     QString targetPath;
@@ -1938,73 +1844,43 @@ void ImageCompletionUI::exportData()
     QString databackupFileName = targetPath + "/databackup.sql";
 #endif
 
-    // µ¼³öÊı¾İ¿âĞÅÏ¢
+    // å¯¼å‡ºæ•°æ®åº“ä¿¡æ¯
     /* edit code */
 
 
     if(this->copyFiles(sourcePath,sourcetargetPath)
             && this->copyFiles(resultPath,resulttargetPath)
             && this->exportDB(databackupFileName))
-        QMessageBox::warning(this,tr("ÅúÁ¿Êı¾İµ¼³öÌáÊ¾"),tr("ÅúÁ¿Êı¾İµ¼³ö³É¹¦"),QMessageBox::Close);
+        QMessageBox::warning(this,tr("æ‰¹é‡æ•°æ®å¯¼å‡ºæç¤º"),tr("æ‰¹é‡æ•°æ®å¯¼å‡ºæˆåŠŸ"),QMessageBox::Close);
     else
-        QMessageBox::warning(this,tr("ÅúÁ¿Êı¾İµ¼³öÌáÊ¾"),tr("ÅúÁ¿Êı¾İµ¼³öÊ§°Ü"),QMessageBox::Close);
+        QMessageBox::warning(this,tr("æ‰¹é‡æ•°æ®å¯¼å‡ºæç¤º"),tr("æ‰¹é‡æ•°æ®å¯¼å‡ºå¤±è´¥"),QMessageBox::Close);
 }
 
-void ImageCompletionUI::cellDoubleClicked_(int row, int /* col */)
+void ImageCompletionUI::cellDoubleClickedLeftWindow(int row, int /* col */)
 {
-    if(_leftWindow.tableWidget->item(row, 0) != 0)
+    QString strFilePath = QString();
+
+    if(_leftWindow.tableWidget->item(row, 0))
     {
-        if(_fNames.size() > row)
+        if(row < _dequeTodo.size())
         {
-            if(!openImage(_fNames[row]))
-            {
-                _leftWindow.tableWidget->removeRow(row);
-            }
+            strFilePath = _dequeTodo[row];
         }
-    }
-
-    //    if(_leftWindow.tableWidget->item(row, 1) != 0)
-    //    {
-    //        QString absolutePath = _leftWindow.tableWidget->item(row, 1)->text();
-    //        if( !openImage(absolutePath) )
-    //        {
-    //            _leftWindow.tableWidget->removeRow(row);
-    //        }
-    //    }
-}
-
-void ImageCompletionUI::removeImage(QString filename)
-{
-    close();
-
-    int i;
-    for(i = 0; i < _fNames.size(); i++)
-    {
-        if(_leftWindow.tableWidget->item(i,0) && filename == _fNames[i])
+        else if(row < _dequeDone.size() + _dequeTodo.size())
         {
-            _leftWindow.tableWidget->removeRow(i);
-            _cnt--;
-            break;
+            strFilePath = _dequeDone[row - _dequeTodo.size()];
         }
-    }
 
-    if(i < _fNames.size()-1)
-    {
-        for(int j = i; j < _fNames.size()-1; j++)
+        if(!strFilePath.isEmpty())
         {
-            _fNames[j] = _fNames[j+1];
+            openImage(strFilePath);
         }
-        _fNames.pop_back();
-    }
-    else if( i == _fNames.size()-1)
-    {
-        _fNames.pop_back();
     }
 }
 
-QString ImageCompletionUI::labelStatus(QString imagePath)
+QString ImageCompletionUI::status(QString imagePath)
 {
-    if(imagePath.isEmpty()) return "";
+    if(imagePath.isEmpty()) return QString();
 
     QSqlDatabase db;
     if( createConnection(db) )
@@ -2022,10 +1898,261 @@ QString ImageCompletionUI::labelStatus(QString imagePath)
                     return query.value(index).toString();
                 }
             }
-            return "";
         }
-        else return "";
     }
-    return "";
+    return QString();
 }
 
+void ImageCompletionUI::on_dBTableWidget_8_cellDoubleClicked(int row, int column)
+{
+    QString strFilePath;
+    QTableWidgetItem* item = _bottomWindow.dBTableWidget_8->item(row, 5);
+    if(item)
+    {
+        strFilePath = item->text();
+    }
+
+    if(!strFilePath.isEmpty() && QFile::exists(strFilePath) )
+    {
+        this->openImage(strFilePath);
+    }
+}
+
+void ImageCompletionUI::on_dBTableWidget_7_cellDoubleClicked(int row, int column)
+{
+    QString strFilePath;
+    QTableWidgetItem* item = _bottomWindow.dBTableWidget_7->item(row, 9);
+    if(item)
+    {
+        strFilePath = item->text();
+    }
+
+    if(!strFilePath.isEmpty() && QFile::exists(strFilePath) )
+    {
+        this->openImage(strFilePath);
+    }
+}
+
+void ImageCompletionUI::on_dBTableWidget_6_cellDoubleClicked(int row, int column)
+{
+    QStringList list;
+    QTableWidgetItem* item = _bottomWindow.dBTableWidget_6->item(row, 0);
+    if(item)
+    {
+        QString id = item->text();
+
+        QSqlDatabase db;
+        if(createConnection(db))
+        {
+            QSqlQuery query;
+            QString str = QString("select ferrographypicpath from ferrographypicinfo where ferrographysheetid='%1'").arg(id);
+            query.prepare(str);
+
+            if(query.exec())
+            {
+                while(query.next())
+                {
+                    list << query.value(0).toString();
+                }
+            }
+        }
+    }
+
+    showThumbnailsInCentral(list);
+}
+
+void ImageCompletionUI::on_dBTableWidget_5_cellDoubleClicked(int row, int column)
+{
+    QStringList list;
+    QTableWidgetItem* item = _bottomWindow.dBTableWidget_5->item(row, 0);
+    if(item)
+    {
+        QString id = item->text();
+
+        QSqlDatabase db;
+        if(createConnection(db))
+        {
+            QSqlQuery query;
+            QString str = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo where ferrographyinfo.oilsampleid='%1'").arg(id);
+            query.prepare(str);
+
+            if(query.exec())
+            {
+                while(query.next())
+                {
+                    list << query.value(0).toString();
+                }
+            }
+        }
+    }
+    showThumbnailsInCentral(list);
+}
+
+void ImageCompletionUI::on_dBTableWidget_4_cellDoubleClicked(int row, int column)
+{
+    QStringList list;
+    QTableWidgetItem* item = _bottomWindow.dBTableWidget_4->item(row, 0);
+    if(item)
+    {
+        QString id = item->text();
+
+        QSqlDatabase db;
+        if(createConnection(db))
+        {
+            QSqlQuery query;
+            QString str = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo where ferrographypicinfo.oilsampleid='%1'").arg(id);
+            query.prepare(str);
+
+            if(query.exec())
+            {
+                while(query.next())
+                {
+                    list << query.value(0).toString();
+                }
+            }
+        }
+    }
+    showThumbnailsInCentral(list);
+}
+
+void ImageCompletionUI::on_dBTableWidget_3_cellDoubleClicked(int row, int column)
+{
+    QStringList list;
+    QTableWidgetItem* item = _bottomWindow.dBTableWidget_3->item(row, 1);
+    if(item)
+    {
+        QString id = item->text();
+        QString id2 = item->text();
+
+        QSqlDatabase db;
+        if(createConnection(db))
+        {
+            QSqlQuery query;
+            QString str = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo join oilsampleinfo join movepartinfo on ferrographypicinfo.oilsampleid=oilsampleinfo.oilsampleid and oilsampleinfo.planeid = movepartinfo.planeid and movepartinfo.planetype = oilsampleinfo.planeid and movepartinfo.movepartid = '%1'").arg(id);
+            query.prepare(str);
+
+            if(query.exec())
+            {
+                while(query.next())
+                {
+                    list << query.value(0).toString();
+                }
+            }
+        }
+    }
+    showThumbnailsInCentral(list);
+}
+
+void ImageCompletionUI::on_dBTableWidget_2_cellDoubleClicked(int row, int column)
+{
+    QStringList list;
+    QTableWidgetItem* item = _bottomWindow.dBTableWidget_2->item(row, 5);
+    QTableWidgetItem* item2 = _bottomWindow.dBTableWidget_2->item(row, 6);
+    if(item && item2)
+    {
+        QString id = item->text();
+        QString id2 = item->text();
+
+        QSqlDatabase db;
+        if(createConnection(db))
+        {
+            QSqlQuery query;
+            QString str = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo join oilsampleinfo on ferrographypicinfo.oilsampleid=oilsampleinfo.oilsampleid and oilsampleinfo.planeid = '%1' and oilsampleinfo.planetype = '%2'").arg(id).arg(id2);
+            query.prepare(str);
+
+            if(query.exec())
+            {
+                while(query.next())
+                {
+                    list << query.value(0).toString();
+                }
+            }
+        }
+    }
+    showThumbnailsInCentral(list);
+}
+
+void ImageCompletionUI::on_dBTableWidget_1_cellDoubleClicked(int row, int column)
+{
+    QStringList list;
+    QTableWidgetItem* item = _bottomWindow.dBTableWidget_1->item(row, 0);
+    QTableWidgetItem* item2 = _bottomWindow.dBTableWidget_1->item(row, 1);
+    if(item && item2)
+    {
+        QString id = item->text();
+        QString id2 = item2->text();
+
+        QSqlDatabase db;
+        if(createConnection(db))
+        {
+            QSqlQuery query;
+            QString str = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo join oilsampleinfo on ferrographypicinfo.oilsampleid=oilsampleinfo.oilsampleid and oilsampleinfo.planeid = '%1'").arg(id);
+                                  // and oilsampleinfo.planetype = '%2'").arg(id).arg(id2);
+            query.prepare(str);
+
+            if(query.exec())
+            {
+                while(query.next())
+                {
+                    list << query.value(0).toString();
+                }
+            }
+        }
+    }
+    showThumbnailsInCentral(list);
+}
+
+void ImageCompletionUI::showThumbnailsInCentral(QStringList list)
+{
+    if(list.empty()) return;
+
+    close();
+
+    QFormLayout* formLayout = new QFormLayout;
+
+    int nRow = list.size() / THUMBNAILS_PER_ROW + 1;
+
+    for(int i = 0; i < nRow; i++)
+    {
+        QHBoxLayout* lll = new QHBoxLayout;
+        for(int j = 0; j < THUMBNAILS_PER_ROW; j++)
+        {
+            int index = i * THUMBNAILS_PER_ROW + j;
+            if( index < list.size())
+            {
+                QLabel* label = new QLabel(list[index]);
+                label->installEventFilter(this);
+                label->setObjectName(list[index]);
+                label->setFixedSize(200, 100);
+                label->setScaledContents(true);
+                QPixmap image;
+                if(image.load(list[index]))
+                {
+                    label->setPixmap(image);
+                }
+                lll->addWidget(label);
+            }
+            else
+            {
+                break;
+            }
+        }
+        formLayout->addRow(lll);
+    }
+
+    _thumbnailScrollArea->setLayout(formLayout);
+    _centralStackedWidget->setCurrentIndex(1);
+}
+
+bool ImageCompletionUI::eventFilter(QObject *target, QEvent *event)
+{
+    if(event->type() == QEvent::MouseButtonDblClick)
+    {
+        QString strFilePath = target->objectName();
+        if(QFile::exists(strFilePath))
+        {
+            _centralStackedWidget->setCurrentIndex(0);
+            this->openImage(strFilePath);
+        }
+    }
+}

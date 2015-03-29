@@ -1,4 +1,4 @@
-#include "searchdata.h"
+ï»¿#include "searchdata.h"
 #include "ui_searchdata.h"
 #include "Connection.h"
 #include <QApplication>
@@ -15,171 +15,171 @@ Searchdata::Searchdata(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->twLend->clear();
-    ui->twLend->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    ui->twLend->setItem(0,1,new QTableWidgetItem("»úºÅ"));
-    ui->twLend->setItem(0,2,new QTableWidgetItem("»úĞÍ"));
-    ui->twLend->setItem(0,3,new QTableWidgetItem("µ¥Î»±àºÅ"));
-    ui->twLend->setItem(0,4,new QTableWidgetItem("·ÉĞĞĞ¡Ê±Êı"));
-    ui->twLend->setItem(0,5,new QTableWidgetItem("ÔËĞĞ½×¶Î"));
-    ui->twLend->setItem(0,6,new QTableWidgetItem("ĞŞÀí´ÎÊı"));
-    ui->twLend_2->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    ui->twLend_2->setItem(0,1,new QTableWidgetItem("¶¯²¿¼ş±àºÅ"));
-    ui->twLend_2->setItem(0,2,new QTableWidgetItem("¶¯²¿¼şĞÍºÅ"));
-    ui->twLend_2->setItem(0,3,new QTableWidgetItem("¶¯²¿¼şÃû³Æ"));
-    ui->twLend_2->setItem(0,4,new QTableWidgetItem("ÔËĞĞÊ±Êı"));
-    ui->twLend_2->setItem(0,5,new QTableWidgetItem("ÔËĞĞ½×¶Î"));
-    ui->twLend_2->setItem(0,6,new QTableWidgetItem("»úºÅ"));
-    ui->twLend_2->setItem(0,7,new QTableWidgetItem("»úĞÍ"));
-    ui->twLend_2->setItem(0,8,new QTableWidgetItem("¶¯²¿¼şÆğÊ¼ÈÕÆÚ"));
-    ui->twLend_2->setItem(0,9,new QTableWidgetItem("¶¯²¿¼şÖÕÖ¹ÈÕÆÚ"));
-    ui->twLend_3->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    ui->twLend_3->setItem(0,1,new QTableWidgetItem("¶¯²¿¼şÎ¬ĞŞ±àºÅ"));
-    ui->twLend_3->setItem(0,2,new QTableWidgetItem("¶¯²¿¼ş±àºÅ"));
-    ui->twLend_3->setItem(0,3,new QTableWidgetItem("¶¯²¿¼şĞÍºÅ"));
-    ui->twLend_3->setItem(0,4,new QTableWidgetItem("Î¬ĞŞÔ­Òò"));
-    ui->twLend_3->setItem(0,5,new QTableWidgetItem("Î¬ĞŞÈÕÆÚ"));
-    ui->twLend_3->setItem(0,6,new QTableWidgetItem("Î¬ĞŞ´ÎÊı"));
-    ui->twLend_3->setItem(0,7,new QTableWidgetItem("Î¬ĞŞÖ´ĞĞµ¥Î»"));
-    ui->twLend_3->setItem(0,8,new QTableWidgetItem("Î¬ĞŞÄÚÈİ"));
-    ui->twLend_3->setItem(0,9,new QTableWidgetItem("Î¬ĞŞ»»¼şÇé¿ö"));
-    ui->twLend_4->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    ui->twLend_4->setItem(0,1,new QTableWidgetItem("ÓÍÑù±àºÅ"));
-    ui->twLend_4->setItem(0,2,new QTableWidgetItem("²ÉÑùµ¥Î»±àºÅ"));
-    ui->twLend_4->setItem(0,3,new QTableWidgetItem("»úĞÍ"));
-    ui->twLend_4->setItem(0,4,new QTableWidgetItem("»úºÅ"));
-    ui->twLend_4->setItem(0,5,new QTableWidgetItem("¼à¿Ø²¿¼şÃû³Æ"));
-    ui->twLend_4->setItem(0,6,new QTableWidgetItem("¼à¿Ø²¿¼ş±àºÅ"));
-    ui->twLend_4->setItem(0,7,new QTableWidgetItem("²ÉÑùµã±àºÅ"));
-    ui->twLend_4->setItem(0,8,new QTableWidgetItem("»¬ÓÍ¹¤×÷Ê±Êı"));
-    ui->twLend_4->setItem(0,9,new QTableWidgetItem("»¬ÓÍÌí¼ÓÁ¿"));
-    ui->twLend_4->setItem(0,10,new QTableWidgetItem("²ÉÑùÔ­Òò"));
-    ui->twLend_4->setItem(0,11,new QTableWidgetItem("²ÉÑùµ¥Î»"));
-    ui->twLend_4->setItem(0,12,new QTableWidgetItem("²ÉÑùÈË"));
-    ui->twLend_4->setItem(0,13,new QTableWidgetItem("²ÉÑùÈÕÆÚ"));
-    ui->twLend_4->setItem(0,14,new QTableWidgetItem("²ÉÑùÊ±¼ä"));
-    ui->twLend_4->setItem(0,15,new QTableWidgetItem("²ÉÑùÊ±»ú"));
-    ui->twLend_4->setItem(0,16,new QTableWidgetItem("²ÉÑù·½Ê½"));
-    ui->twLend_4->setItem(0,17,new QTableWidgetItem("²ÉÑùÁ¿"));
-    ui->twLend_4->setItem(0,18,new QTableWidgetItem("²ÉÑùËµÃ÷"));
-    ui->twLend_4->setItem(0,19,new QTableWidgetItem("ËÍÑùÈË"));
-    ui->twLend_4->setItem(0,20,new QTableWidgetItem("ËÍÑùÈÕÆÚ"));
-    ui->twLend_4->setItem(0,21,new QTableWidgetItem("ËÍÑùÊ±¼ä"));
-    ui->twLend_4->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    ui->twLend_4->setItem(0,1,new QTableWidgetItem("ÓÍÑù±àºÅ"));
-    ui->twLend_4->setItem(0,2,new QTableWidgetItem("²ÉÑùµ¥Î»±àºÅ"));
-    ui->twLend_4->setItem(0,3,new QTableWidgetItem("»úĞÍ"));
-    ui->twLend_4->setItem(0,4,new QTableWidgetItem("»úºÅ"));
-    ui->twLend_4->setItem(0,5,new QTableWidgetItem("¼à¿Ø²¿¼şÃû³Æ"));
-    ui->twLend_4->setItem(0,6,new QTableWidgetItem("¼à¿Ø²¿¼ş±àºÅ"));
-    ui->twLend_4->setItem(0,7,new QTableWidgetItem("²ÉÑùµã±àºÅ"));
-    ui->twLend_4->setItem(0,8,new QTableWidgetItem("»¬ÓÍ¹¤×÷Ê±Êı"));
-    ui->twLend_4->setItem(0,9,new QTableWidgetItem("»¬ÓÍÌí¼ÓÁ¿"));
-    ui->twLend_4->setItem(0,10,new QTableWidgetItem("²ÉÑùÔ­Òò"));
-    ui->twLend_4->setItem(0,11,new QTableWidgetItem("²ÉÑùµ¥Î»"));
-    ui->twLend_4->setItem(0,12,new QTableWidgetItem("²ÉÑùÈË"));
-    ui->twLend_4->setItem(0,13,new QTableWidgetItem("²ÉÑùÈÕÆÚ"));
-    ui->twLend_4->setItem(0,14,new QTableWidgetItem("²ÉÑùÊ±¼ä"));
-    ui->twLend_4->setItem(0,15,new QTableWidgetItem("²ÉÑùÊ±»ú"));
-    ui->twLend_4->setItem(0,16,new QTableWidgetItem("²ÉÑù·½Ê½"));
-    ui->twLend_4->setItem(0,17,new QTableWidgetItem("²ÉÑùÁ¿"));
-    ui->twLend_4->setItem(0,18,new QTableWidgetItem("²ÉÑùËµÃ÷"));
-    ui->twLend_4->setItem(0,19,new QTableWidgetItem("ËÍÑùÈË"));
-    ui->twLend_4->setItem(0,20,new QTableWidgetItem("ËÍÑùÈÕÆÚ"));
-    ui->twLend_4->setItem(0,21,new QTableWidgetItem("ËÍÑùÊ±¼ä"));
-    ui->twLend_4->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    ui->twLend_4->setItem(0,1,new QTableWidgetItem("ÓÍÑù±àºÅ"));
-    ui->twLend_4->setItem(0,2,new QTableWidgetItem("²ÉÑùµ¥Î»±àºÅ"));
-    ui->twLend_4->setItem(0,3,new QTableWidgetItem("»úĞÍ"));
-    ui->twLend_4->setItem(0,4,new QTableWidgetItem("»úºÅ"));
-    ui->twLend_4->setItem(0,5,new QTableWidgetItem("¼à¿Ø²¿¼şÃû³Æ"));
-    ui->twLend_4->setItem(0,6,new QTableWidgetItem("¼à¿Ø²¿¼ş±àºÅ"));
-    ui->twLend_4->setItem(0,7,new QTableWidgetItem("²ÉÑùµã±àºÅ"));
-    ui->twLend_4->setItem(0,8,new QTableWidgetItem("»¬ÓÍ¹¤×÷Ê±Êı"));
-    ui->twLend_4->setItem(0,9,new QTableWidgetItem("»¬ÓÍÌí¼ÓÁ¿"));
-    ui->twLend_4->setItem(0,10,new QTableWidgetItem("²ÉÑùÔ­Òò"));
-    ui->twLend_4->setItem(0,11,new QTableWidgetItem("²ÉÑùµ¥Î»"));
-    ui->twLend_4->setItem(0,12,new QTableWidgetItem("²ÉÑùÈË"));
-    ui->twLend_4->setItem(0,13,new QTableWidgetItem("²ÉÑùÈÕÆÚ"));
-    ui->twLend_4->setItem(0,14,new QTableWidgetItem("²ÉÑùÊ±¼ä"));
-    ui->twLend_4->setItem(0,15,new QTableWidgetItem("²ÉÑùÊ±»ú"));
-    ui->twLend_4->setItem(0,16,new QTableWidgetItem("²ÉÑù·½Ê½"));
-    ui->twLend_4->setItem(0,17,new QTableWidgetItem("²ÉÑùÁ¿"));
-    ui->twLend_4->setItem(0,18,new QTableWidgetItem("²ÉÑùËµÃ÷"));
-    ui->twLend_4->setItem(0,19,new QTableWidgetItem("ËÍÑùÈË"));
-    ui->twLend_4->setItem(0,20,new QTableWidgetItem("ËÍÑùÈÕÆÚ"));
-    ui->twLend_4->setItem(0,21,new QTableWidgetItem("ËÍÑùÊ±¼ä"));
-    ui->twLend_5->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    ui->twLend_5->setItem(0,1,new QTableWidgetItem("ÓÍÑù±àºÅ"));
-    ui->twLend_5->setItem(0,2,new QTableWidgetItem("¼ì²â·ÖÎöµ¥Î»Ãû³Æ"));
-    ui->twLend_5->setItem(0,3,new QTableWidgetItem("ËÍ¼ìµ¥Î»"));
-    ui->twLend_5->setItem(0,4,new QTableWidgetItem("ËÍ¼ìÔ­Òò"));
-    ui->twLend_5->setItem(0,5,new QTableWidgetItem("ËÍÑùÈË"));
-    ui->twLend_5->setItem(0,6,new QTableWidgetItem("ÊÕÓÍÑùÈÕÆÚ"));
-    ui->twLend_5->setItem(0,7,new QTableWidgetItem("ÊÕÓÍÑùÈË"));
-    ui->twLend_5->setItem(0,8,new QTableWidgetItem("ÎÛÈ¾¶È·ÖÎö·½·¨"));
-    ui->twLend_5->setItem(0,9,new QTableWidgetItem("ÎÛÈ¾¶È·ÖÎöÈË"));
-    ui->twLend_5->setItem(0,10,new QTableWidgetItem("ÎÛÈ¾¶È·ÖÎöÈÕÆÚ"));
-    ui->twLend_5->setItem(0,11,new QTableWidgetItem("ÎÛÈ¾¶È·ÖÎöÉè±¸"));
-    ui->twLend_5->setItem(0,12,new QTableWidgetItem("ÎÛÈ¾¶È·ÖÎö±¨¸æ±àºÅ"));
-    ui->twLend_5->setItem(0,13,new QTableWidgetItem("¹âÆ×·ÖÎö·½·¨"));
-    ui->twLend_5->setItem(0,14,new QTableWidgetItem("¹âÆ×·ÖÎöÈË"));
-    ui->twLend_5->setItem(0,15,new QTableWidgetItem("¹âÆ×·ÖÎöÈÕÆÚ"));
-    ui->twLend_5->setItem(0,16,new QTableWidgetItem("¹âÆ×·ÖÎöÉè±¸"));
-    ui->twLend_5->setItem(0,17,new QTableWidgetItem("¹âÆ×·ÖÎö±¨¸æ±àºÅ"));
-    ui->twLend_5->setItem(0,18,new QTableWidgetItem("ÌúÆ×·ÖÎö·½·¨"));
-    ui->twLend_5->setItem(0,19,new QTableWidgetItem("ÌúÆ×·ÖÎöÈË"));
-    ui->twLend_5->setItem(0,20,new QTableWidgetItem("ÌúÆ×·ÖÎöÈÕÆÚ"));
-    ui->twLend_5->setItem(0,21,new QTableWidgetItem("ÌúÆ×·ÖÎöÉè±¸"));
-    ui->twLend_5->setItem(0,22,new QTableWidgetItem("ÌúÆ×·ÖÎö±¨¸æ±àºÅ"));
-    ui->twLend_5->setItem(0,23,new QTableWidgetItem("Àí»¯·ÖÎö·½·¨"));
-    ui->twLend_5->setItem(0,24,new QTableWidgetItem("Àí»¯·ÖÎöÈË"));
-    ui->twLend_5->setItem(0,25,new QTableWidgetItem("Àí»¯·ÖÎöÈÕÆÚ"));
-    ui->twLend_5->setItem(0,26,new QTableWidgetItem("Àí»¯·ÖÎöÉè±¸"));
-    ui->twLend_5->setItem(0,27,new QTableWidgetItem("Àí»¯·ÖÎö±¨¸æ±àºÅ"));
-    ui->twLend_6->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    ui->twLend_6->setItem(0,1,new QTableWidgetItem("ÌúÆ×Æ¬±àºÅ"));
-    ui->twLend_6->setItem(0,2,new QTableWidgetItem("ÌúÆ×·ÖÎö±¨¸æ±àºÅ"));
-    ui->twLend_6->setItem(0,3,new QTableWidgetItem("ÓÍÑù±àºÅ"));
-    ui->twLend_6->setItem(0,4,new QTableWidgetItem("·ÖÎöÌúÆ×ÒÇĞÍºÅ"));
-    ui->twLend_6->setItem(0,5,new QTableWidgetItem("ÌúÆ×Æ¬ÖÆÈ¡ÓÍÑùÏûºÄÁ¿"));
-    ui->twLend_6->setItem(0,6,new QTableWidgetItem("ÌúÆ×Æ¬ÖÆÈ¡·½·¨"));
-    ui->twLend_6->setItem(0,7,new QTableWidgetItem("ÌúÆ×Æ¬ÖÆÈ¡ÈË"));
-    ui->twLend_7->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    ui->twLend_7->setItem(0,1,new QTableWidgetItem("ÌúÆ×Í¼Æ¬±àºÅ"));
-    ui->twLend_7->setItem(0,2,new QTableWidgetItem("ÌúÆ×Æ¬±àºÅ"));
-    ui->twLend_7->setItem(0,3,new QTableWidgetItem("ÌúÆ×·ÖÎö±¨¸æ±àºÅ"));
-    ui->twLend_7->setItem(0,4,new QTableWidgetItem("ÏÔÎ¢¾µĞÍºÅ"));
-    ui->twLend_7->setItem(0,5,new QTableWidgetItem("Í¼Ïñ²É¼¯Æ÷ĞÍºÅ"));
-    ui->twLend_7->setItem(0,6,new QTableWidgetItem("¹âÔ´ÀàĞÍ"));
-    ui->twLend_7->setItem(0,7,new QTableWidgetItem("·Å´ó±¶Êı"));
-    ui->twLend_7->setItem(0,8,new QTableWidgetItem("ÌúÆ×Í¼Æ¬²É¼¯ÇøÓò"));
-    ui->twLend_7->setItem(0,9,new QTableWidgetItem("ÌúÆ×Í¼Æ¬²É¼¯ÈË"));
-    ui->twLend_7->setItem(0,10,new QTableWidgetItem("ÌúÆ×Í¼Æ¬(Â·¾¶)"));
-    ui->twLend_7->setItem(0,11,new QTableWidgetItem("ÌúÆ×Í¼Æ¬Ê¶±ğ·ÖÎöĞÅÏ¢"));
-    ui->twLend_7->setItem(0,12,new QTableWidgetItem("ÌúÆ×Í¼Æ¬±êÊ¶·ûºÅ"));
-    ui->twLend_8->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    ui->twLend_8->setItem(0,1,new QTableWidgetItem("Ä¥Á£±àºÅ"));
-    ui->twLend_8->setItem(0,2,new QTableWidgetItem("ÌúÆ×Í¼Æ¬±àºÅ"));
-    ui->twLend_8->setItem(0,3,new QTableWidgetItem("ÌúÆ×Æ¬±àºÅ"));
-    ui->twLend_8->setItem(0,4,new QTableWidgetItem("ÌúÆ×·ÖÎö±¨¸æ±àºÅ"));
-    ui->twLend_8->setItem(0,5,new QTableWidgetItem("Ä¥Á£±ê×¢ÈË"));
-    ui->twLend_8->setItem(0,6,new QTableWidgetItem("Ä¥Á£Í¼Æ¬£¨Â·¾¶£©"));
-    ui->twLend_8->setItem(0,7,new QTableWidgetItem("Ä¥Á£²ÄÖÊ"));
-    ui->twLend_8->setItem(0,8,new QTableWidgetItem("Ä¥Á£Î»ÖÃ"));
-    ui->twLend_8->setItem(0,9,new QTableWidgetItem("Ä¥Á£³ß´ç"));
-    ui->twLend_8->setItem(0,10,new QTableWidgetItem("Ä¥Á£ÖÜ³¤"));
-    ui->twLend_8->setItem(0,11,new QTableWidgetItem("Ä¥Á£ĞÎ×´"));
-    ui->twLend_8->setItem(0,12,new QTableWidgetItem("Ä¥Á£ÑÕÉ«"));
-    ui->twLend_8->setItem(0,13,new QTableWidgetItem("Ä¥Á£±íÃæÎÆÀíÀàĞÍ"));
-    ui->twLend_8->setItem(0,14,new QTableWidgetItem("Ä¥Á£Ä¥ËğÀàĞÍ"));
-    ui->twLend_8->setItem(0,15,new QTableWidgetItem("Ä¥Á£ËğÉË²¿Î»"));
-    ui->twLend_8->setItem(0,16,new QTableWidgetItem("Ä¥Á£Ä¥Ëğ»úÀí"));
-    ui->twLend_8->setItem(0,17,new QTableWidgetItem("Ä¥Á£·´Ó³¹ÊÕÏĞÅÏ¢"));
-    ui->twLend_8->setItem(0,18,new QTableWidgetItem("Ä¥Á£µäĞÍĞÔ"));
-    QSqlDatabase db2;//´´½¨Ò»¸öSQLÊı¾İ¿âÊµÀı
+    ui->twLend->setItem(0,0,new QTableWidgetItem("åºå·"));
+    ui->twLend->setItem(0,1,new QTableWidgetItem("æœºå·"));
+    ui->twLend->setItem(0,2,new QTableWidgetItem("æœºå‹"));
+    ui->twLend->setItem(0,3,new QTableWidgetItem("å•ä½ç¼–å·"));
+    ui->twLend->setItem(0,4,new QTableWidgetItem("é£è¡Œå°æ—¶æ•°"));
+    ui->twLend->setItem(0,5,new QTableWidgetItem("è¿è¡Œé˜¶æ®µ"));
+    ui->twLend->setItem(0,6,new QTableWidgetItem("ä¿®ç†æ¬¡æ•°"));
+    ui->twLend_2->setItem(0,0,new QTableWidgetItem("åºå·"));
+    ui->twLend_2->setItem(0,1,new QTableWidgetItem("åŠ¨éƒ¨ä»¶ç¼–å·"));
+    ui->twLend_2->setItem(0,2,new QTableWidgetItem("åŠ¨éƒ¨ä»¶å‹å·"));
+    ui->twLend_2->setItem(0,3,new QTableWidgetItem("åŠ¨éƒ¨ä»¶åç§°"));
+    ui->twLend_2->setItem(0,4,new QTableWidgetItem("è¿è¡Œæ—¶æ•°"));
+    ui->twLend_2->setItem(0,5,new QTableWidgetItem("è¿è¡Œé˜¶æ®µ"));
+    ui->twLend_2->setItem(0,6,new QTableWidgetItem("æœºå·"));
+    ui->twLend_2->setItem(0,7,new QTableWidgetItem("æœºå‹"));
+    ui->twLend_2->setItem(0,8,new QTableWidgetItem("åŠ¨éƒ¨ä»¶èµ·å§‹æ—¥æœŸ"));
+    ui->twLend_2->setItem(0,9,new QTableWidgetItem("åŠ¨éƒ¨ä»¶ç»ˆæ­¢æ—¥æœŸ"));
+    ui->twLend_3->setItem(0,0,new QTableWidgetItem("åºå·"));
+    ui->twLend_3->setItem(0,1,new QTableWidgetItem("åŠ¨éƒ¨ä»¶ç»´ä¿®ç¼–å·"));
+    ui->twLend_3->setItem(0,2,new QTableWidgetItem("åŠ¨éƒ¨ä»¶ç¼–å·"));
+    ui->twLend_3->setItem(0,3,new QTableWidgetItem("åŠ¨éƒ¨ä»¶å‹å·"));
+    ui->twLend_3->setItem(0,4,new QTableWidgetItem("ç»´ä¿®åŸå› "));
+    ui->twLend_3->setItem(0,5,new QTableWidgetItem("ç»´ä¿®æ—¥æœŸ"));
+    ui->twLend_3->setItem(0,6,new QTableWidgetItem("ç»´ä¿®æ¬¡æ•°"));
+    ui->twLend_3->setItem(0,7,new QTableWidgetItem("ç»´ä¿®æ‰§è¡Œå•ä½"));
+    ui->twLend_3->setItem(0,8,new QTableWidgetItem("ç»´ä¿®å†…å®¹"));
+    ui->twLend_3->setItem(0,9,new QTableWidgetItem("ç»´ä¿®æ¢ä»¶æƒ…å†µ"));
+    ui->twLend_4->setItem(0,0,new QTableWidgetItem("åºå·"));
+    ui->twLend_4->setItem(0,1,new QTableWidgetItem("æ²¹æ ·ç¼–å·"));
+    ui->twLend_4->setItem(0,2,new QTableWidgetItem("é‡‡æ ·å•ä½ç¼–å·"));
+    ui->twLend_4->setItem(0,3,new QTableWidgetItem("æœºå‹"));
+    ui->twLend_4->setItem(0,4,new QTableWidgetItem("æœºå·"));
+    ui->twLend_4->setItem(0,5,new QTableWidgetItem("ç›‘æ§éƒ¨ä»¶åç§°"));
+    ui->twLend_4->setItem(0,6,new QTableWidgetItem("ç›‘æ§éƒ¨ä»¶ç¼–å·"));
+    ui->twLend_4->setItem(0,7,new QTableWidgetItem("é‡‡æ ·ç‚¹ç¼–å·"));
+    ui->twLend_4->setItem(0,8,new QTableWidgetItem("æ»‘æ²¹å·¥ä½œæ—¶æ•°"));
+    ui->twLend_4->setItem(0,9,new QTableWidgetItem("æ»‘æ²¹æ·»åŠ é‡"));
+    ui->twLend_4->setItem(0,10,new QTableWidgetItem("é‡‡æ ·åŸå› "));
+    ui->twLend_4->setItem(0,11,new QTableWidgetItem("é‡‡æ ·å•ä½"));
+    ui->twLend_4->setItem(0,12,new QTableWidgetItem("é‡‡æ ·äºº"));
+    ui->twLend_4->setItem(0,13,new QTableWidgetItem("é‡‡æ ·æ—¥æœŸ"));
+    ui->twLend_4->setItem(0,14,new QTableWidgetItem("é‡‡æ ·æ—¶é—´"));
+    ui->twLend_4->setItem(0,15,new QTableWidgetItem("é‡‡æ ·æ—¶æœº"));
+    ui->twLend_4->setItem(0,16,new QTableWidgetItem("é‡‡æ ·æ–¹å¼"));
+    ui->twLend_4->setItem(0,17,new QTableWidgetItem("é‡‡æ ·é‡"));
+    ui->twLend_4->setItem(0,18,new QTableWidgetItem("é‡‡æ ·è¯´æ˜"));
+    ui->twLend_4->setItem(0,19,new QTableWidgetItem("é€æ ·äºº"));
+    ui->twLend_4->setItem(0,20,new QTableWidgetItem("é€æ ·æ—¥æœŸ"));
+    ui->twLend_4->setItem(0,21,new QTableWidgetItem("é€æ ·æ—¶é—´"));
+    ui->twLend_4->setItem(0,0,new QTableWidgetItem("åºå·"));
+    ui->twLend_4->setItem(0,1,new QTableWidgetItem("æ²¹æ ·ç¼–å·"));
+    ui->twLend_4->setItem(0,2,new QTableWidgetItem("é‡‡æ ·å•ä½ç¼–å·"));
+    ui->twLend_4->setItem(0,3,new QTableWidgetItem("æœºå‹"));
+    ui->twLend_4->setItem(0,4,new QTableWidgetItem("æœºå·"));
+    ui->twLend_4->setItem(0,5,new QTableWidgetItem("ç›‘æ§éƒ¨ä»¶åç§°"));
+    ui->twLend_4->setItem(0,6,new QTableWidgetItem("ç›‘æ§éƒ¨ä»¶ç¼–å·"));
+    ui->twLend_4->setItem(0,7,new QTableWidgetItem("é‡‡æ ·ç‚¹ç¼–å·"));
+    ui->twLend_4->setItem(0,8,new QTableWidgetItem("æ»‘æ²¹å·¥ä½œæ—¶æ•°"));
+    ui->twLend_4->setItem(0,9,new QTableWidgetItem("æ»‘æ²¹æ·»åŠ é‡"));
+    ui->twLend_4->setItem(0,10,new QTableWidgetItem("é‡‡æ ·åŸå› "));
+    ui->twLend_4->setItem(0,11,new QTableWidgetItem("é‡‡æ ·å•ä½"));
+    ui->twLend_4->setItem(0,12,new QTableWidgetItem("é‡‡æ ·äºº"));
+    ui->twLend_4->setItem(0,13,new QTableWidgetItem("é‡‡æ ·æ—¥æœŸ"));
+    ui->twLend_4->setItem(0,14,new QTableWidgetItem("é‡‡æ ·æ—¶é—´"));
+    ui->twLend_4->setItem(0,15,new QTableWidgetItem("é‡‡æ ·æ—¶æœº"));
+    ui->twLend_4->setItem(0,16,new QTableWidgetItem("é‡‡æ ·æ–¹å¼"));
+    ui->twLend_4->setItem(0,17,new QTableWidgetItem("é‡‡æ ·é‡"));
+    ui->twLend_4->setItem(0,18,new QTableWidgetItem("é‡‡æ ·è¯´æ˜"));
+    ui->twLend_4->setItem(0,19,new QTableWidgetItem("é€æ ·äºº"));
+    ui->twLend_4->setItem(0,20,new QTableWidgetItem("é€æ ·æ—¥æœŸ"));
+    ui->twLend_4->setItem(0,21,new QTableWidgetItem("é€æ ·æ—¶é—´"));
+    ui->twLend_4->setItem(0,0,new QTableWidgetItem("åºå·"));
+    ui->twLend_4->setItem(0,1,new QTableWidgetItem("æ²¹æ ·ç¼–å·"));
+    ui->twLend_4->setItem(0,2,new QTableWidgetItem("é‡‡æ ·å•ä½ç¼–å·"));
+    ui->twLend_4->setItem(0,3,new QTableWidgetItem("æœºå‹"));
+    ui->twLend_4->setItem(0,4,new QTableWidgetItem("æœºå·"));
+    ui->twLend_4->setItem(0,5,new QTableWidgetItem("ç›‘æ§éƒ¨ä»¶åç§°"));
+    ui->twLend_4->setItem(0,6,new QTableWidgetItem("ç›‘æ§éƒ¨ä»¶ç¼–å·"));
+    ui->twLend_4->setItem(0,7,new QTableWidgetItem("é‡‡æ ·ç‚¹ç¼–å·"));
+    ui->twLend_4->setItem(0,8,new QTableWidgetItem("æ»‘æ²¹å·¥ä½œæ—¶æ•°"));
+    ui->twLend_4->setItem(0,9,new QTableWidgetItem("æ»‘æ²¹æ·»åŠ é‡"));
+    ui->twLend_4->setItem(0,10,new QTableWidgetItem("é‡‡æ ·åŸå› "));
+    ui->twLend_4->setItem(0,11,new QTableWidgetItem("é‡‡æ ·å•ä½"));
+    ui->twLend_4->setItem(0,12,new QTableWidgetItem("é‡‡æ ·äºº"));
+    ui->twLend_4->setItem(0,13,new QTableWidgetItem("é‡‡æ ·æ—¥æœŸ"));
+    ui->twLend_4->setItem(0,14,new QTableWidgetItem("é‡‡æ ·æ—¶é—´"));
+    ui->twLend_4->setItem(0,15,new QTableWidgetItem("é‡‡æ ·æ—¶æœº"));
+    ui->twLend_4->setItem(0,16,new QTableWidgetItem("é‡‡æ ·æ–¹å¼"));
+    ui->twLend_4->setItem(0,17,new QTableWidgetItem("é‡‡æ ·é‡"));
+    ui->twLend_4->setItem(0,18,new QTableWidgetItem("é‡‡æ ·è¯´æ˜"));
+    ui->twLend_4->setItem(0,19,new QTableWidgetItem("é€æ ·äºº"));
+    ui->twLend_4->setItem(0,20,new QTableWidgetItem("é€æ ·æ—¥æœŸ"));
+    ui->twLend_4->setItem(0,21,new QTableWidgetItem("é€æ ·æ—¶é—´"));
+    ui->twLend_5->setItem(0,0,new QTableWidgetItem("åºå·"));
+    ui->twLend_5->setItem(0,1,new QTableWidgetItem("æ²¹æ ·ç¼–å·"));
+    ui->twLend_5->setItem(0,2,new QTableWidgetItem("æ£€æµ‹åˆ†æå•ä½åç§°"));
+    ui->twLend_5->setItem(0,3,new QTableWidgetItem("é€æ£€å•ä½"));
+    ui->twLend_5->setItem(0,4,new QTableWidgetItem("é€æ£€åŸå› "));
+    ui->twLend_5->setItem(0,5,new QTableWidgetItem("é€æ ·äºº"));
+    ui->twLend_5->setItem(0,6,new QTableWidgetItem("æ”¶æ²¹æ ·æ—¥æœŸ"));
+    ui->twLend_5->setItem(0,7,new QTableWidgetItem("æ”¶æ²¹æ ·äºº"));
+    ui->twLend_5->setItem(0,8,new QTableWidgetItem("æ±¡æŸ“åº¦åˆ†ææ–¹æ³•"));
+    ui->twLend_5->setItem(0,9,new QTableWidgetItem("æ±¡æŸ“åº¦åˆ†æäºº"));
+    ui->twLend_5->setItem(0,10,new QTableWidgetItem("æ±¡æŸ“åº¦åˆ†ææ—¥æœŸ"));
+    ui->twLend_5->setItem(0,11,new QTableWidgetItem("æ±¡æŸ“åº¦åˆ†æè®¾å¤‡"));
+    ui->twLend_5->setItem(0,12,new QTableWidgetItem("æ±¡æŸ“åº¦åˆ†ææŠ¥å‘Šç¼–å·"));
+    ui->twLend_5->setItem(0,13,new QTableWidgetItem("å…‰è°±åˆ†ææ–¹æ³•"));
+    ui->twLend_5->setItem(0,14,new QTableWidgetItem("å…‰è°±åˆ†æäºº"));
+    ui->twLend_5->setItem(0,15,new QTableWidgetItem("å…‰è°±åˆ†ææ—¥æœŸ"));
+    ui->twLend_5->setItem(0,16,new QTableWidgetItem("å…‰è°±åˆ†æè®¾å¤‡"));
+    ui->twLend_5->setItem(0,17,new QTableWidgetItem("å…‰è°±åˆ†ææŠ¥å‘Šç¼–å·"));
+    ui->twLend_5->setItem(0,18,new QTableWidgetItem("é“è°±åˆ†ææ–¹æ³•"));
+    ui->twLend_5->setItem(0,19,new QTableWidgetItem("é“è°±åˆ†æäºº"));
+    ui->twLend_5->setItem(0,20,new QTableWidgetItem("é“è°±åˆ†ææ—¥æœŸ"));
+    ui->twLend_5->setItem(0,21,new QTableWidgetItem("é“è°±åˆ†æè®¾å¤‡"));
+    ui->twLend_5->setItem(0,22,new QTableWidgetItem("é“è°±åˆ†ææŠ¥å‘Šç¼–å·"));
+    ui->twLend_5->setItem(0,23,new QTableWidgetItem("ç†åŒ–åˆ†ææ–¹æ³•"));
+    ui->twLend_5->setItem(0,24,new QTableWidgetItem("ç†åŒ–åˆ†æäºº"));
+    ui->twLend_5->setItem(0,25,new QTableWidgetItem("ç†åŒ–åˆ†ææ—¥æœŸ"));
+    ui->twLend_5->setItem(0,26,new QTableWidgetItem("ç†åŒ–åˆ†æè®¾å¤‡"));
+    ui->twLend_5->setItem(0,27,new QTableWidgetItem("ç†åŒ–åˆ†ææŠ¥å‘Šç¼–å·"));
+    ui->twLend_6->setItem(0,0,new QTableWidgetItem("åºå·"));
+    ui->twLend_6->setItem(0,1,new QTableWidgetItem("é“è°±ç‰‡ç¼–å·"));
+    ui->twLend_6->setItem(0,2,new QTableWidgetItem("é“è°±åˆ†ææŠ¥å‘Šç¼–å·"));
+    ui->twLend_6->setItem(0,3,new QTableWidgetItem("æ²¹æ ·ç¼–å·"));
+    ui->twLend_6->setItem(0,4,new QTableWidgetItem("åˆ†æé“è°±ä»ªå‹å·"));
+    ui->twLend_6->setItem(0,5,new QTableWidgetItem("é“è°±ç‰‡åˆ¶å–æ²¹æ ·æ¶ˆè€—é‡"));
+    ui->twLend_6->setItem(0,6,new QTableWidgetItem("é“è°±ç‰‡åˆ¶å–æ–¹æ³•"));
+    ui->twLend_6->setItem(0,7,new QTableWidgetItem("é“è°±ç‰‡åˆ¶å–äºº"));
+    ui->twLend_7->setItem(0,0,new QTableWidgetItem("åºå·"));
+    ui->twLend_7->setItem(0,1,new QTableWidgetItem("é“è°±å›¾ç‰‡ç¼–å·"));
+    ui->twLend_7->setItem(0,2,new QTableWidgetItem("é“è°±ç‰‡ç¼–å·"));
+    ui->twLend_7->setItem(0,3,new QTableWidgetItem("é“è°±åˆ†ææŠ¥å‘Šç¼–å·"));
+    ui->twLend_7->setItem(0,4,new QTableWidgetItem("æ˜¾å¾®é•œå‹å·"));
+    ui->twLend_7->setItem(0,5,new QTableWidgetItem("å›¾åƒé‡‡é›†å™¨å‹å·"));
+    ui->twLend_7->setItem(0,6,new QTableWidgetItem("å…‰æºç±»å‹"));
+    ui->twLend_7->setItem(0,7,new QTableWidgetItem("æ”¾å¤§å€æ•°"));
+    ui->twLend_7->setItem(0,8,new QTableWidgetItem("é“è°±å›¾ç‰‡é‡‡é›†åŒºåŸŸ"));
+    ui->twLend_7->setItem(0,9,new QTableWidgetItem("é“è°±å›¾ç‰‡é‡‡é›†äºº"));
+    ui->twLend_7->setItem(0,10,new QTableWidgetItem("é“è°±å›¾ç‰‡(è·¯å¾„)"));
+    ui->twLend_7->setItem(0,11,new QTableWidgetItem("é“è°±å›¾ç‰‡è¯†åˆ«åˆ†æä¿¡æ¯"));
+    ui->twLend_7->setItem(0,12,new QTableWidgetItem("é“è°±å›¾ç‰‡æ ‡è¯†ç¬¦å·"));
+    ui->twLend_8->setItem(0,0,new QTableWidgetItem("åºå·"));
+    ui->twLend_8->setItem(0,1,new QTableWidgetItem("ç£¨ç²’ç¼–å·"));
+    ui->twLend_8->setItem(0,2,new QTableWidgetItem("é“è°±å›¾ç‰‡ç¼–å·"));
+    ui->twLend_8->setItem(0,3,new QTableWidgetItem("é“è°±ç‰‡ç¼–å·"));
+    ui->twLend_8->setItem(0,4,new QTableWidgetItem("é“è°±åˆ†ææŠ¥å‘Šç¼–å·"));
+    ui->twLend_8->setItem(0,5,new QTableWidgetItem("ç£¨ç²’æ ‡æ³¨äºº"));
+    ui->twLend_8->setItem(0,6,new QTableWidgetItem("ç£¨ç²’å›¾ç‰‡ï¼ˆè·¯å¾„ï¼‰"));
+    ui->twLend_8->setItem(0,7,new QTableWidgetItem("ç£¨ç²’æè´¨"));
+    ui->twLend_8->setItem(0,8,new QTableWidgetItem("ç£¨ç²’ä½ç½®"));
+    ui->twLend_8->setItem(0,9,new QTableWidgetItem("ç£¨ç²’å°ºå¯¸"));
+    ui->twLend_8->setItem(0,10,new QTableWidgetItem("ç£¨ç²’å‘¨é•¿"));
+    ui->twLend_8->setItem(0,11,new QTableWidgetItem("ç£¨ç²’å½¢çŠ¶"));
+    ui->twLend_8->setItem(0,12,new QTableWidgetItem("ç£¨ç²’é¢œè‰²"));
+    ui->twLend_8->setItem(0,13,new QTableWidgetItem("ç£¨ç²’è¡¨é¢çº¹ç†ç±»å‹"));
+    ui->twLend_8->setItem(0,14,new QTableWidgetItem("ç£¨ç²’ç£¨æŸç±»å‹"));
+    ui->twLend_8->setItem(0,15,new QTableWidgetItem("ç£¨ç²’æŸä¼¤éƒ¨ä½"));
+    ui->twLend_8->setItem(0,16,new QTableWidgetItem("ç£¨ç²’ç£¨æŸæœºç†"));
+    ui->twLend_8->setItem(0,17,new QTableWidgetItem("ç£¨ç²’åæ˜ æ•…éšœä¿¡æ¯"));
+    ui->twLend_8->setItem(0,18,new QTableWidgetItem("ç£¨ç²’å…¸å‹æ€§"));
+    QSqlDatabase db2;//åˆ›å»ºä¸€ä¸ªSQLæ•°æ®åº“å®ä¾‹
 
     uid=0;
-    if(!createConnection(db2))//µ÷ÓÃconnection.hÍ·ÎÄ¼şÖĞ¶¨ÒåµÄcreateConnectionº¯ÊıÁ¬½ÓÊı¾İ¿â
+    if(!createConnection(db2))//è°ƒç”¨connection.hå¤´æ–‡ä»¶ä¸­å®šä¹‰çš„createConnectionå‡½æ•°è¿æ¥æ•°æ®åº“
     {
         QMessageBox::critical(0, qApp->tr("Cannot open database"),
                                       qApp->tr("Unable to establish a database connection."),
@@ -190,8 +190,8 @@ Searchdata::Searchdata(QWidget *parent) :
     do
     {
         uid++;
-        query3.prepare(SQL3);//´ÓTuser±íÖĞ»ñÈ¡È«²¿ÓÃ»§Êı¾İ
-        query3.addBindValue(uid);//»ñÈ¡uidµÄÖµ×÷ÎªkeyÖµ
+        query3.prepare(SQL3);//ä»Tuserè¡¨ä¸­è·å–å…¨éƒ¨ç”¨æˆ·æ•°æ®
+        query3.addBindValue(uid);//è·å–uidçš„å€¼ä½œä¸ºkeyå€¼
         query3.exec();
     }while(query3.next());
     uid=uid-1;
@@ -209,7 +209,7 @@ Searchdata::~Searchdata()
     QString sql1;
     sql1="select * from Equipmentinfo where id=?";
 
-    if(!createConnection(db))//ºÍÊı¾İ¿â½¨Á¢Á¬½Ó
+    if(!createConnection(db))//å’Œæ•°æ®åº“å»ºç«‹è¿æ¥
     {
         QMessageBox::critical(0, qApp->tr("Cannot open database"),
                           qApp->tr("Unable to establish a database connection."),
@@ -231,7 +231,7 @@ Searchdata::~Searchdata()
 
 }*/
 
-void Searchdata::on_linkbutton_clicked()//µã»÷µÇÂ¼°´Å¥
+void Searchdata::on_linkbutton_clicked()//ç‚¹å‡»ç™»å½•æŒ‰é’®
 {
     ui->twLend->clear();
     ui->twLend_2->clear();
@@ -241,125 +241,125 @@ void Searchdata::on_linkbutton_clicked()//µã»÷µÇÂ¼°´Å¥
     ui->twLend_6->clear();
     ui->twLend_7->clear();
     ui->twLend_8->clear();
-    ui->twLend->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    ui->twLend->setItem(0,1,new QTableWidgetItem("»úºÅ"));
-    ui->twLend->setItem(0,2,new QTableWidgetItem("»úĞÍ"));
-    ui->twLend->setItem(0,3,new QTableWidgetItem("µ¥Î»±àºÅ"));
-    ui->twLend->setItem(0,4,new QTableWidgetItem("·ÉĞĞĞ¡Ê±Êı"));
-    ui->twLend->setItem(0,5,new QTableWidgetItem("ÔËĞĞ½×¶Î"));
-    ui->twLend->setItem(0,6,new QTableWidgetItem("ĞŞÀí´ÎÊı"));
-    ui->twLend_2->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    ui->twLend_2->setItem(0,1,new QTableWidgetItem("¶¯²¿¼ş±àºÅ"));
-    ui->twLend_2->setItem(0,2,new QTableWidgetItem("¶¯²¿¼şĞÍºÅ"));
-    ui->twLend_2->setItem(0,3,new QTableWidgetItem("¶¯²¿¼şÃû³Æ"));
-    ui->twLend_2->setItem(0,4,new QTableWidgetItem("ÔËĞĞÊ±Êı"));
-    ui->twLend_2->setItem(0,5,new QTableWidgetItem("ÔËĞĞ½×¶Î"));
-    ui->twLend_2->setItem(0,6,new QTableWidgetItem("»úºÅ"));
-    ui->twLend_2->setItem(0,7,new QTableWidgetItem("»úĞÍ"));
-    ui->twLend_2->setItem(0,8,new QTableWidgetItem("¶¯²¿¼şÆğÊ¼ÈÕÆÚ"));
-    ui->twLend_2->setItem(0,9,new QTableWidgetItem("¶¯²¿¼şÖÕÖ¹ÈÕÆÚ"));
-    ui->twLend_3->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    ui->twLend_3->setItem(0,1,new QTableWidgetItem("¶¯²¿¼şÎ¬ĞŞ±àºÅ"));
-    ui->twLend_3->setItem(0,2,new QTableWidgetItem("¶¯²¿¼ş±àºÅ"));
-    ui->twLend_3->setItem(0,3,new QTableWidgetItem("¶¯²¿¼şĞÍºÅ"));
-    ui->twLend_3->setItem(0,4,new QTableWidgetItem("Î¬ĞŞÔ­Òò"));
-    ui->twLend_3->setItem(0,5,new QTableWidgetItem("Î¬ĞŞÈÕÆÚ"));
-    ui->twLend_3->setItem(0,6,new QTableWidgetItem("Î¬ĞŞ´ÎÊı"));
-    ui->twLend_3->setItem(0,7,new QTableWidgetItem("Î¬ĞŞÖ´ĞĞµ¥Î»"));
-    ui->twLend_3->setItem(0,8,new QTableWidgetItem("Î¬ĞŞÄÚÈİ"));
-    ui->twLend_3->setItem(0,9,new QTableWidgetItem("Î¬ĞŞ»»¼şÇé¿ö"));
-    ui->twLend_4->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    ui->twLend_4->setItem(0,1,new QTableWidgetItem("ÓÍÑù±àºÅ"));
-    ui->twLend_4->setItem(0,2,new QTableWidgetItem("²ÉÑùµ¥Î»±àºÅ"));
-    ui->twLend_4->setItem(0,3,new QTableWidgetItem("»úĞÍ"));
-    ui->twLend_4->setItem(0,4,new QTableWidgetItem("»úºÅ"));
-    ui->twLend_4->setItem(0,5,new QTableWidgetItem("¼à¿Ø²¿¼şÃû³Æ"));
-    ui->twLend_4->setItem(0,6,new QTableWidgetItem("¼à¿Ø²¿¼ş±àºÅ"));
-    ui->twLend_4->setItem(0,7,new QTableWidgetItem("²ÉÑùµã±àºÅ"));
-    ui->twLend_4->setItem(0,8,new QTableWidgetItem("»¬ÓÍ¹¤×÷Ê±Êı"));
-    ui->twLend_4->setItem(0,9,new QTableWidgetItem("»¬ÓÍÌí¼ÓÁ¿"));
-    ui->twLend_4->setItem(0,10,new QTableWidgetItem("²ÉÑùÔ­Òò"));
-    ui->twLend_4->setItem(0,11,new QTableWidgetItem("²ÉÑùµ¥Î»"));
-    ui->twLend_4->setItem(0,12,new QTableWidgetItem("²ÉÑùÈË"));
-    ui->twLend_4->setItem(0,13,new QTableWidgetItem("²ÉÑùÈÕÆÚ"));
-    ui->twLend_4->setItem(0,14,new QTableWidgetItem("²ÉÑùÊ±¼ä"));
-    ui->twLend_4->setItem(0,15,new QTableWidgetItem("²ÉÑùÊ±»ú"));
-    ui->twLend_4->setItem(0,16,new QTableWidgetItem("²ÉÑù·½Ê½"));
-    ui->twLend_4->setItem(0,17,new QTableWidgetItem("²ÉÑùÁ¿"));
-    ui->twLend_4->setItem(0,18,new QTableWidgetItem("²ÉÑùËµÃ÷"));
-    ui->twLend_4->setItem(0,19,new QTableWidgetItem("ËÍÑùÈË"));
-    ui->twLend_4->setItem(0,20,new QTableWidgetItem("ËÍÑùÈÕÆÚ"));
-    ui->twLend_4->setItem(0,21,new QTableWidgetItem("ËÍÑùÊ±¼ä"));
-    ui->twLend_5->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    ui->twLend_5->setItem(0,1,new QTableWidgetItem("ÓÍÑù±àºÅ"));
-    ui->twLend_5->setItem(0,2,new QTableWidgetItem("¼ì²â·ÖÎöµ¥Î»Ãû³Æ"));
-    ui->twLend_5->setItem(0,3,new QTableWidgetItem("ËÍ¼ìµ¥Î»"));
-    ui->twLend_5->setItem(0,4,new QTableWidgetItem("ËÍ¼ìÔ­Òò"));
-    ui->twLend_5->setItem(0,5,new QTableWidgetItem("ËÍÑùÈË"));
-    ui->twLend_5->setItem(0,6,new QTableWidgetItem("ÊÕÓÍÑùÈÕÆÚ"));
-    ui->twLend_5->setItem(0,7,new QTableWidgetItem("ÊÕÓÍÑùÈË"));
-    ui->twLend_5->setItem(0,8,new QTableWidgetItem("ÎÛÈ¾¶È·ÖÎö·½·¨"));
-    ui->twLend_5->setItem(0,9,new QTableWidgetItem("ÎÛÈ¾¶È·ÖÎöÈË"));
-    ui->twLend_5->setItem(0,10,new QTableWidgetItem("ÎÛÈ¾¶È·ÖÎöÈÕÆÚ"));
-    ui->twLend_5->setItem(0,11,new QTableWidgetItem("ÎÛÈ¾¶È·ÖÎöÉè±¸"));
-    ui->twLend_5->setItem(0,12,new QTableWidgetItem("ÎÛÈ¾¶È·ÖÎö±¨¸æ±àºÅ"));
-    ui->twLend_5->setItem(0,13,new QTableWidgetItem("¹âÆ×·ÖÎö·½·¨"));
-    ui->twLend_5->setItem(0,14,new QTableWidgetItem("¹âÆ×·ÖÎöÈË"));
-    ui->twLend_5->setItem(0,15,new QTableWidgetItem("¹âÆ×·ÖÎöÈÕÆÚ"));
-    ui->twLend_5->setItem(0,16,new QTableWidgetItem("¹âÆ×·ÖÎöÉè±¸"));
-    ui->twLend_5->setItem(0,17,new QTableWidgetItem("¹âÆ×·ÖÎö±¨¸æ±àºÅ"));
-    ui->twLend_5->setItem(0,18,new QTableWidgetItem("ÌúÆ×·ÖÎö·½·¨"));
-    ui->twLend_5->setItem(0,19,new QTableWidgetItem("ÌúÆ×·ÖÎöÈË"));
-    ui->twLend_5->setItem(0,20,new QTableWidgetItem("ÌúÆ×·ÖÎöÈÕÆÚ"));
-    ui->twLend_5->setItem(0,21,new QTableWidgetItem("ÌúÆ×·ÖÎöÉè±¸"));
-    ui->twLend_5->setItem(0,22,new QTableWidgetItem("ÌúÆ×·ÖÎö±¨¸æ±àºÅ"));
-    ui->twLend_5->setItem(0,23,new QTableWidgetItem("Àí»¯·ÖÎö·½·¨"));
-    ui->twLend_5->setItem(0,24,new QTableWidgetItem("Àí»¯·ÖÎöÈË"));
-    ui->twLend_5->setItem(0,25,new QTableWidgetItem("Àí»¯·ÖÎöÈÕÆÚ"));
-    ui->twLend_5->setItem(0,26,new QTableWidgetItem("Àí»¯·ÖÎöÉè±¸"));
-    ui->twLend_5->setItem(0,27,new QTableWidgetItem("Àí»¯·ÖÎö±¨¸æ±àºÅ"));
-    ui->twLend_6->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    ui->twLend_6->setItem(0,1,new QTableWidgetItem("ÌúÆ×Æ¬±àºÅ"));
-    ui->twLend_6->setItem(0,2,new QTableWidgetItem("ÌúÆ×·ÖÎö±¨¸æ±àºÅ"));
-    ui->twLend_6->setItem(0,3,new QTableWidgetItem("ÓÍÑù±àºÅ"));
-    ui->twLend_6->setItem(0,4,new QTableWidgetItem("·ÖÎöÌúÆ×ÒÇĞÍºÅ"));
-    ui->twLend_6->setItem(0,5,new QTableWidgetItem("ÌúÆ×Æ¬ÖÆÈ¡ÓÍÑùÏûºÄÁ¿"));
-    ui->twLend_6->setItem(0,6,new QTableWidgetItem("ÌúÆ×Æ¬ÖÆÈ¡·½·¨"));
-    ui->twLend_6->setItem(0,7,new QTableWidgetItem("ÌúÆ×Æ¬ÖÆÈ¡ÈË"));
-    ui->twLend_7->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    ui->twLend_7->setItem(0,1,new QTableWidgetItem("ÌúÆ×Í¼Æ¬±àºÅ"));
-    ui->twLend_7->setItem(0,2,new QTableWidgetItem("ÌúÆ×Æ¬±àºÅ"));
-    ui->twLend_7->setItem(0,3,new QTableWidgetItem("ÌúÆ×·ÖÎö±¨¸æ±àºÅ"));
-    ui->twLend_7->setItem(0,4,new QTableWidgetItem("ÏÔÎ¢¾µĞÍºÅ"));
-    ui->twLend_7->setItem(0,5,new QTableWidgetItem("Í¼Ïñ²É¼¯Æ÷ĞÍºÅ"));
-    ui->twLend_7->setItem(0,6,new QTableWidgetItem("¹âÔ´ÀàĞÍ"));
-    ui->twLend_7->setItem(0,7,new QTableWidgetItem("·Å´ó±¶Êı"));
-    ui->twLend_7->setItem(0,8,new QTableWidgetItem("ÌúÆ×Í¼Æ¬²É¼¯ÇøÓò"));
-    ui->twLend_7->setItem(0,9,new QTableWidgetItem("ÌúÆ×Í¼Æ¬²É¼¯ÈË"));
-    ui->twLend_7->setItem(0,10,new QTableWidgetItem("ÌúÆ×Í¼Æ¬(Â·¾¶)"));
-    ui->twLend_7->setItem(0,11,new QTableWidgetItem("ÌúÆ×Í¼Æ¬Ê¶±ğ·ÖÎöĞÅÏ¢"));
-    ui->twLend_7->setItem(0,12,new QTableWidgetItem("ÌúÆ×Í¼Æ¬±êÊ¶·ûºÅ"));
-    ui->twLend_8->setItem(0,0,new QTableWidgetItem("ĞòºÅ"));
-    ui->twLend_8->setItem(0,1,new QTableWidgetItem("Ä¥Á£±àºÅ"));
-    ui->twLend_8->setItem(0,2,new QTableWidgetItem("ÌúÆ×Í¼Æ¬±àºÅ"));
-    ui->twLend_8->setItem(0,3,new QTableWidgetItem("ÌúÆ×Æ¬±àºÅ"));
-    ui->twLend_8->setItem(0,4,new QTableWidgetItem("ÌúÆ×·ÖÎö±¨¸æ±àºÅ"));
-    ui->twLend_8->setItem(0,5,new QTableWidgetItem("Ä¥Á£±ê×¢ÈË"));
-    ui->twLend_8->setItem(0,6,new QTableWidgetItem("Ä¥Á£Í¼Æ¬£¨Â·¾¶£©"));
-    ui->twLend_8->setItem(0,7,new QTableWidgetItem("Ä¥Á£²ÄÖÊ"));
-    ui->twLend_8->setItem(0,8,new QTableWidgetItem("Ä¥Á£Î»ÖÃ"));
-    ui->twLend_8->setItem(0,9,new QTableWidgetItem("Ä¥Á£³ß´ç"));
-    ui->twLend_8->setItem(0,10,new QTableWidgetItem("Ä¥Á£ÖÜ³¤"));
-    ui->twLend_8->setItem(0,11,new QTableWidgetItem("Ä¥Á£ĞÎ×´"));
-    ui->twLend_8->setItem(0,12,new QTableWidgetItem("Ä¥Á£ÑÕÉ«"));
-    ui->twLend_8->setItem(0,13,new QTableWidgetItem("Ä¥Á£±íÃæÎÆÀíÀàĞÍ"));
-    ui->twLend_8->setItem(0,14,new QTableWidgetItem("Ä¥Á£Ä¥ËğÀàĞÍ"));
-    ui->twLend_8->setItem(0,15,new QTableWidgetItem("Ä¥Á£ËğÉË²¿Î»"));
-    ui->twLend_8->setItem(0,16,new QTableWidgetItem("Ä¥Á£Ä¥Ëğ»úÀí"));
-    ui->twLend_8->setItem(0,17,new QTableWidgetItem("Ä¥Á£·´Ó³¹ÊÕÏĞÅÏ¢"));
-    ui->twLend_8->setItem(0,18,new QTableWidgetItem("Ä¥Á£µäĞÍĞÔ"));
+    ui->twLend->setItem(0,0,new QTableWidgetItem("åºå·"));
+    ui->twLend->setItem(0,1,new QTableWidgetItem("æœºå·"));
+    ui->twLend->setItem(0,2,new QTableWidgetItem("æœºå‹"));
+    ui->twLend->setItem(0,3,new QTableWidgetItem("å•ä½ç¼–å·"));
+    ui->twLend->setItem(0,4,new QTableWidgetItem("é£è¡Œå°æ—¶æ•°"));
+    ui->twLend->setItem(0,5,new QTableWidgetItem("è¿è¡Œé˜¶æ®µ"));
+    ui->twLend->setItem(0,6,new QTableWidgetItem("ä¿®ç†æ¬¡æ•°"));
+    ui->twLend_2->setItem(0,0,new QTableWidgetItem("åºå·"));
+    ui->twLend_2->setItem(0,1,new QTableWidgetItem("åŠ¨éƒ¨ä»¶ç¼–å·"));
+    ui->twLend_2->setItem(0,2,new QTableWidgetItem("åŠ¨éƒ¨ä»¶å‹å·"));
+    ui->twLend_2->setItem(0,3,new QTableWidgetItem("åŠ¨éƒ¨ä»¶åç§°"));
+    ui->twLend_2->setItem(0,4,new QTableWidgetItem("è¿è¡Œæ—¶æ•°"));
+    ui->twLend_2->setItem(0,5,new QTableWidgetItem("è¿è¡Œé˜¶æ®µ"));
+    ui->twLend_2->setItem(0,6,new QTableWidgetItem("æœºå·"));
+    ui->twLend_2->setItem(0,7,new QTableWidgetItem("æœºå‹"));
+    ui->twLend_2->setItem(0,8,new QTableWidgetItem("åŠ¨éƒ¨ä»¶èµ·å§‹æ—¥æœŸ"));
+    ui->twLend_2->setItem(0,9,new QTableWidgetItem("åŠ¨éƒ¨ä»¶ç»ˆæ­¢æ—¥æœŸ"));
+    ui->twLend_3->setItem(0,0,new QTableWidgetItem("åºå·"));
+    ui->twLend_3->setItem(0,1,new QTableWidgetItem("åŠ¨éƒ¨ä»¶ç»´ä¿®ç¼–å·"));
+    ui->twLend_3->setItem(0,2,new QTableWidgetItem("åŠ¨éƒ¨ä»¶ç¼–å·"));
+    ui->twLend_3->setItem(0,3,new QTableWidgetItem("åŠ¨éƒ¨ä»¶å‹å·"));
+    ui->twLend_3->setItem(0,4,new QTableWidgetItem("ç»´ä¿®åŸå› "));
+    ui->twLend_3->setItem(0,5,new QTableWidgetItem("ç»´ä¿®æ—¥æœŸ"));
+    ui->twLend_3->setItem(0,6,new QTableWidgetItem("ç»´ä¿®æ¬¡æ•°"));
+    ui->twLend_3->setItem(0,7,new QTableWidgetItem("ç»´ä¿®æ‰§è¡Œå•ä½"));
+    ui->twLend_3->setItem(0,8,new QTableWidgetItem("ç»´ä¿®å†…å®¹"));
+    ui->twLend_3->setItem(0,9,new QTableWidgetItem("ç»´ä¿®æ¢ä»¶æƒ…å†µ"));
+    ui->twLend_4->setItem(0,0,new QTableWidgetItem("åºå·"));
+    ui->twLend_4->setItem(0,1,new QTableWidgetItem("æ²¹æ ·ç¼–å·"));
+    ui->twLend_4->setItem(0,2,new QTableWidgetItem("é‡‡æ ·å•ä½ç¼–å·"));
+    ui->twLend_4->setItem(0,3,new QTableWidgetItem("æœºå‹"));
+    ui->twLend_4->setItem(0,4,new QTableWidgetItem("æœºå·"));
+    ui->twLend_4->setItem(0,5,new QTableWidgetItem("ç›‘æ§éƒ¨ä»¶åç§°"));
+    ui->twLend_4->setItem(0,6,new QTableWidgetItem("ç›‘æ§éƒ¨ä»¶ç¼–å·"));
+    ui->twLend_4->setItem(0,7,new QTableWidgetItem("é‡‡æ ·ç‚¹ç¼–å·"));
+    ui->twLend_4->setItem(0,8,new QTableWidgetItem("æ»‘æ²¹å·¥ä½œæ—¶æ•°"));
+    ui->twLend_4->setItem(0,9,new QTableWidgetItem("æ»‘æ²¹æ·»åŠ é‡"));
+    ui->twLend_4->setItem(0,10,new QTableWidgetItem("é‡‡æ ·åŸå› "));
+    ui->twLend_4->setItem(0,11,new QTableWidgetItem("é‡‡æ ·å•ä½"));
+    ui->twLend_4->setItem(0,12,new QTableWidgetItem("é‡‡æ ·äºº"));
+    ui->twLend_4->setItem(0,13,new QTableWidgetItem("é‡‡æ ·æ—¥æœŸ"));
+    ui->twLend_4->setItem(0,14,new QTableWidgetItem("é‡‡æ ·æ—¶é—´"));
+    ui->twLend_4->setItem(0,15,new QTableWidgetItem("é‡‡æ ·æ—¶æœº"));
+    ui->twLend_4->setItem(0,16,new QTableWidgetItem("é‡‡æ ·æ–¹å¼"));
+    ui->twLend_4->setItem(0,17,new QTableWidgetItem("é‡‡æ ·é‡"));
+    ui->twLend_4->setItem(0,18,new QTableWidgetItem("é‡‡æ ·è¯´æ˜"));
+    ui->twLend_4->setItem(0,19,new QTableWidgetItem("é€æ ·äºº"));
+    ui->twLend_4->setItem(0,20,new QTableWidgetItem("é€æ ·æ—¥æœŸ"));
+    ui->twLend_4->setItem(0,21,new QTableWidgetItem("é€æ ·æ—¶é—´"));
+    ui->twLend_5->setItem(0,0,new QTableWidgetItem("åºå·"));
+    ui->twLend_5->setItem(0,1,new QTableWidgetItem("æ²¹æ ·ç¼–å·"));
+    ui->twLend_5->setItem(0,2,new QTableWidgetItem("æ£€æµ‹åˆ†æå•ä½åç§°"));
+    ui->twLend_5->setItem(0,3,new QTableWidgetItem("é€æ£€å•ä½"));
+    ui->twLend_5->setItem(0,4,new QTableWidgetItem("é€æ£€åŸå› "));
+    ui->twLend_5->setItem(0,5,new QTableWidgetItem("é€æ ·äºº"));
+    ui->twLend_5->setItem(0,6,new QTableWidgetItem("æ”¶æ²¹æ ·æ—¥æœŸ"));
+    ui->twLend_5->setItem(0,7,new QTableWidgetItem("æ”¶æ²¹æ ·äºº"));
+    ui->twLend_5->setItem(0,8,new QTableWidgetItem("æ±¡æŸ“åº¦åˆ†ææ–¹æ³•"));
+    ui->twLend_5->setItem(0,9,new QTableWidgetItem("æ±¡æŸ“åº¦åˆ†æäºº"));
+    ui->twLend_5->setItem(0,10,new QTableWidgetItem("æ±¡æŸ“åº¦åˆ†ææ—¥æœŸ"));
+    ui->twLend_5->setItem(0,11,new QTableWidgetItem("æ±¡æŸ“åº¦åˆ†æè®¾å¤‡"));
+    ui->twLend_5->setItem(0,12,new QTableWidgetItem("æ±¡æŸ“åº¦åˆ†ææŠ¥å‘Šç¼–å·"));
+    ui->twLend_5->setItem(0,13,new QTableWidgetItem("å…‰è°±åˆ†ææ–¹æ³•"));
+    ui->twLend_5->setItem(0,14,new QTableWidgetItem("å…‰è°±åˆ†æäºº"));
+    ui->twLend_5->setItem(0,15,new QTableWidgetItem("å…‰è°±åˆ†ææ—¥æœŸ"));
+    ui->twLend_5->setItem(0,16,new QTableWidgetItem("å…‰è°±åˆ†æè®¾å¤‡"));
+    ui->twLend_5->setItem(0,17,new QTableWidgetItem("å…‰è°±åˆ†ææŠ¥å‘Šç¼–å·"));
+    ui->twLend_5->setItem(0,18,new QTableWidgetItem("é“è°±åˆ†ææ–¹æ³•"));
+    ui->twLend_5->setItem(0,19,new QTableWidgetItem("é“è°±åˆ†æäºº"));
+    ui->twLend_5->setItem(0,20,new QTableWidgetItem("é“è°±åˆ†ææ—¥æœŸ"));
+    ui->twLend_5->setItem(0,21,new QTableWidgetItem("é“è°±åˆ†æè®¾å¤‡"));
+    ui->twLend_5->setItem(0,22,new QTableWidgetItem("é“è°±åˆ†ææŠ¥å‘Šç¼–å·"));
+    ui->twLend_5->setItem(0,23,new QTableWidgetItem("ç†åŒ–åˆ†ææ–¹æ³•"));
+    ui->twLend_5->setItem(0,24,new QTableWidgetItem("ç†åŒ–åˆ†æäºº"));
+    ui->twLend_5->setItem(0,25,new QTableWidgetItem("ç†åŒ–åˆ†ææ—¥æœŸ"));
+    ui->twLend_5->setItem(0,26,new QTableWidgetItem("ç†åŒ–åˆ†æè®¾å¤‡"));
+    ui->twLend_5->setItem(0,27,new QTableWidgetItem("ç†åŒ–åˆ†ææŠ¥å‘Šç¼–å·"));
+    ui->twLend_6->setItem(0,0,new QTableWidgetItem("åºå·"));
+    ui->twLend_6->setItem(0,1,new QTableWidgetItem("é“è°±ç‰‡ç¼–å·"));
+    ui->twLend_6->setItem(0,2,new QTableWidgetItem("é“è°±åˆ†ææŠ¥å‘Šç¼–å·"));
+    ui->twLend_6->setItem(0,3,new QTableWidgetItem("æ²¹æ ·ç¼–å·"));
+    ui->twLend_6->setItem(0,4,new QTableWidgetItem("åˆ†æé“è°±ä»ªå‹å·"));
+    ui->twLend_6->setItem(0,5,new QTableWidgetItem("é“è°±ç‰‡åˆ¶å–æ²¹æ ·æ¶ˆè€—é‡"));
+    ui->twLend_6->setItem(0,6,new QTableWidgetItem("é“è°±ç‰‡åˆ¶å–æ–¹æ³•"));
+    ui->twLend_6->setItem(0,7,new QTableWidgetItem("é“è°±ç‰‡åˆ¶å–äºº"));
+    ui->twLend_7->setItem(0,0,new QTableWidgetItem("åºå·"));
+    ui->twLend_7->setItem(0,1,new QTableWidgetItem("é“è°±å›¾ç‰‡ç¼–å·"));
+    ui->twLend_7->setItem(0,2,new QTableWidgetItem("é“è°±ç‰‡ç¼–å·"));
+    ui->twLend_7->setItem(0,3,new QTableWidgetItem("é“è°±åˆ†ææŠ¥å‘Šç¼–å·"));
+    ui->twLend_7->setItem(0,4,new QTableWidgetItem("æ˜¾å¾®é•œå‹å·"));
+    ui->twLend_7->setItem(0,5,new QTableWidgetItem("å›¾åƒé‡‡é›†å™¨å‹å·"));
+    ui->twLend_7->setItem(0,6,new QTableWidgetItem("å…‰æºç±»å‹"));
+    ui->twLend_7->setItem(0,7,new QTableWidgetItem("æ”¾å¤§å€æ•°"));
+    ui->twLend_7->setItem(0,8,new QTableWidgetItem("é“è°±å›¾ç‰‡é‡‡é›†åŒºåŸŸ"));
+    ui->twLend_7->setItem(0,9,new QTableWidgetItem("é“è°±å›¾ç‰‡é‡‡é›†äºº"));
+    ui->twLend_7->setItem(0,10,new QTableWidgetItem("é“è°±å›¾ç‰‡(è·¯å¾„)"));
+    ui->twLend_7->setItem(0,11,new QTableWidgetItem("é“è°±å›¾ç‰‡è¯†åˆ«åˆ†æä¿¡æ¯"));
+    ui->twLend_7->setItem(0,12,new QTableWidgetItem("é“è°±å›¾ç‰‡æ ‡è¯†ç¬¦å·"));
+    ui->twLend_8->setItem(0,0,new QTableWidgetItem("åºå·"));
+    ui->twLend_8->setItem(0,1,new QTableWidgetItem("ç£¨ç²’ç¼–å·"));
+    ui->twLend_8->setItem(0,2,new QTableWidgetItem("é“è°±å›¾ç‰‡ç¼–å·"));
+    ui->twLend_8->setItem(0,3,new QTableWidgetItem("é“è°±ç‰‡ç¼–å·"));
+    ui->twLend_8->setItem(0,4,new QTableWidgetItem("é“è°±åˆ†ææŠ¥å‘Šç¼–å·"));
+    ui->twLend_8->setItem(0,5,new QTableWidgetItem("ç£¨ç²’æ ‡æ³¨äºº"));
+    ui->twLend_8->setItem(0,6,new QTableWidgetItem("ç£¨ç²’å›¾ç‰‡ï¼ˆè·¯å¾„ï¼‰"));
+    ui->twLend_8->setItem(0,7,new QTableWidgetItem("ç£¨ç²’æè´¨"));
+    ui->twLend_8->setItem(0,8,new QTableWidgetItem("ç£¨ç²’ä½ç½®"));
+    ui->twLend_8->setItem(0,9,new QTableWidgetItem("ç£¨ç²’å°ºå¯¸"));
+    ui->twLend_8->setItem(0,10,new QTableWidgetItem("ç£¨ç²’å‘¨é•¿"));
+    ui->twLend_8->setItem(0,11,new QTableWidgetItem("ç£¨ç²’å½¢çŠ¶"));
+    ui->twLend_8->setItem(0,12,new QTableWidgetItem("ç£¨ç²’é¢œè‰²"));
+    ui->twLend_8->setItem(0,13,new QTableWidgetItem("ç£¨ç²’è¡¨é¢çº¹ç†ç±»å‹"));
+    ui->twLend_8->setItem(0,14,new QTableWidgetItem("ç£¨ç²’ç£¨æŸç±»å‹"));
+    ui->twLend_8->setItem(0,15,new QTableWidgetItem("ç£¨ç²’æŸä¼¤éƒ¨ä½"));
+    ui->twLend_8->setItem(0,16,new QTableWidgetItem("ç£¨ç²’ç£¨æŸæœºç†"));
+    ui->twLend_8->setItem(0,17,new QTableWidgetItem("ç£¨ç²’åæ˜ æ•…éšœä¿¡æ¯"));
+    ui->twLend_8->setItem(0,18,new QTableWidgetItem("ç£¨ç²’å…¸å‹æ€§"));
 
-    QSqlDatabase db;//´´½¨Ò»¸öSQLÊı¾İ¿âÊµÀı
+    QSqlDatabase db;//åˆ›å»ºä¸€ä¸ªSQLæ•°æ®åº“å®ä¾‹
     int i1=1;
     int i2=1;
     int i3=1;
@@ -383,7 +383,7 @@ void Searchdata::on_linkbutton_clicked()//µã»÷µÇÂ¼°´Å¥
     int arrayid6[1000];
     int arrayid7[1000];
     int arrayid8[1000];
-    if(!createConnection(db))//µ÷ÓÃconnection.hÍ·ÎÄ¼şÖĞ¶¨ÒåµÄcreateConnectionº¯ÊıÁ¬½ÓÊı¾İ¿â
+    if(!createConnection(db))//è°ƒç”¨connection.hå¤´æ–‡ä»¶ä¸­å®šä¹‰çš„createConnectionå‡½æ•°è¿æ¥æ•°æ®åº“
     {
         QMessageBox::critical(0, qApp->tr("Cannot open database"),
                                       qApp->tr("Unable to establish a database connection."),
@@ -1655,11 +1655,11 @@ void Searchdata::on_linkbutton_clicked()//µã»÷µÇÂ¼°´Å¥
 
     }
 
-    query.prepare(SQL1);//´ÓTuser±íÖĞ»ñÈ¡È«²¿ÓÃ»§Êı¾İ
+    query.prepare(SQL1);//ä»Tuserè¡¨ä¸­è·å–å…¨éƒ¨ç”¨æˆ·æ•°æ®
     //query.addBindValue("LH04-567");
     if(ui->checkBox->isChecked())
     {
-        query.addBindValue(ui->lineEdit->text().trimmed());//»ñÈ¡uidµÄÖµ×÷ÎªkeyÖµ
+        query.addBindValue(ui->lineEdit->text().trimmed());//è·å–uidçš„å€¼ä½œä¸ºkeyå€¼
     }
     if(ui->checkBox_2->isChecked())
     {
@@ -2305,17 +2305,17 @@ void Searchdata::on_linkbutton_clicked()//µã»÷µÇÂ¼°´Å¥
     db.close();
 }
 
-void Searchdata::on_addtobutton_clicked()//µã»÷µÇÂ¼°´Å¥
+void Searchdata::on_addtobutton_clicked()//ç‚¹å‡»ç™»å½•æŒ‰é’®
 {
      uid++;
-     QSqlDatabase db1;//´´½¨Ò»¸öSQLÊı¾İ¿âÊµÀı
+     QSqlDatabase db1;//åˆ›å»ºä¸€ä¸ªSQLæ•°æ®åº“å®ä¾‹
      int j=0;
      QString arraysql[10];
      QString SQL2="select equipmentinfo.*,movepartinfo.*,movepartrepairinfo.*,oilsampleinfo.*,oilanalyzeinfo.* from equipmentinfo,movepartinfo,movepartrepairinfo,oilsampleinfo,oilanalyzeinfo where equipmentinfo.planeid=movepartinfo.planeid and movepartinfo.movepartid=movepartrepairinfo.movepartid and movepartinfo.movepartid=oilsampleinfo.monitorpartid and oilsampleinfo.oilsampleid=oilanalyzeinfo.oilsampleid and ";
      if(ui->checkBox->isChecked())
      {
          SQL2=SQL2+"equipmentinfo.planeid=?";
-         arraysql[j]="»úºÅ";
+         arraysql[j]="æœºå·";
          j++;
      }
      if(ui->checkBox_2->isChecked())
@@ -2328,7 +2328,7 @@ void Searchdata::on_addtobutton_clicked()//µã»÷µÇÂ¼°´Å¥
          {
              SQL2=SQL2+" and equipmentinfo.planetype=?";
          }
-         arraysql[j]="»úĞÍ";
+         arraysql[j]="æœºå‹";
          j++;
 
      }
@@ -2342,7 +2342,7 @@ void Searchdata::on_addtobutton_clicked()//µã»÷µÇÂ¼°´Å¥
          {
              SQL2=SQL2+" and equipmentinfo.departid=?";
          }
-         arraysql[j]="µ¥Î»±àºÅ";
+         arraysql[j]="å•ä½ç¼–å·";
          j++;
 
      }
@@ -2356,7 +2356,7 @@ void Searchdata::on_addtobutton_clicked()//µã»÷µÇÂ¼°´Å¥
          {
              SQL2=SQL2+" and equipmentinfo.runhour=?";
          }
-         arraysql[j]="·ÉĞĞĞ¡Ê±Êı";
+         arraysql[j]="é£è¡Œå°æ—¶æ•°";
          j++;
 
      }
@@ -2370,7 +2370,7 @@ void Searchdata::on_addtobutton_clicked()//µã»÷µÇÂ¼°´Å¥
          {
              SQL2=SQL2+" and equipmentinfo.runstage=?";
          }
-         arraysql[j]="ÔËĞĞ½×¶Î";
+         arraysql[j]="è¿è¡Œé˜¶æ®µ";
          j++;
 
      }
@@ -2384,7 +2384,7 @@ void Searchdata::on_addtobutton_clicked()//µã»÷µÇÂ¼°´Å¥
          {
              SQL2=SQL2+" and equipmentinfo.repairtime=?";
          }
-         arraysql[j]="Î¬ĞŞ´ÎÊı";
+         arraysql[j]="ç»´ä¿®æ¬¡æ•°";
          j++;
 
      }
@@ -2399,7 +2399,7 @@ void Searchdata::on_addtobutton_clicked()//µã»÷µÇÂ¼°´Å¥
              {
                  SQL2=SQL2+" and movepartinfo.movepartid=?";
              }
-             arraysql[j]="¶¯²¿¼ş±àºÅ";
+             arraysql[j]="åŠ¨éƒ¨ä»¶ç¼–å·";
              j++;
 
          }
@@ -2414,7 +2414,7 @@ void Searchdata::on_addtobutton_clicked()//µã»÷µÇÂ¼°´Å¥
              {
                  SQL2=SQL2+" and movepartinfo.movepartname=?";
              }
-             arraysql[j]="¶¯²¿¼şÃû³Æ";
+             arraysql[j]="åŠ¨éƒ¨ä»¶åç§°";
              j++;
 
          }
@@ -2428,7 +2428,7 @@ void Searchdata::on_addtobutton_clicked()//µã»÷µÇÂ¼°´Å¥
              {
                  SQL2=SQL2+" and movepartinfo.moveparttype=?";
              }
-             arraysql[j]="¶¯²¿¼şĞÍºÅ";
+             arraysql[j]="åŠ¨éƒ¨ä»¶å‹å·";
              j++;
 
          }
@@ -2442,7 +2442,7 @@ void Searchdata::on_addtobutton_clicked()//µã»÷µÇÂ¼°´Å¥
              {
                  SQL2=SQL2+" and movepartinfo.runhour=?";
              }
-             arraysql[j]="ÔËĞĞÊ±Êı";
+             arraysql[j]="è¿è¡Œæ—¶æ•°";
              j++;
 
          }
@@ -2456,7 +2456,7 @@ void Searchdata::on_addtobutton_clicked()//µã»÷µÇÂ¼°´Å¥
              {
                  SQL2=SQL2+" and movepartinfo.startdate=?";
              }
-             arraysql[j]="¶¯²¿¼şÆğÊ¼ÈÕÆÚ";
+             arraysql[j]="åŠ¨éƒ¨ä»¶èµ·å§‹æ—¥æœŸ";
              j++;
 
          }
@@ -2470,7 +2470,7 @@ void Searchdata::on_addtobutton_clicked()//µã»÷µÇÂ¼°´Å¥
              {
                  SQL2=SQL2+" and movepartinfo.enddate=?";
              }
-             arraysql[j]="¶¯²¿¼şÖÕÖ¹ÈÕÆÚ";
+             arraysql[j]="åŠ¨éƒ¨ä»¶ç»ˆæ­¢æ—¥æœŸ";
              j++;
 
          }
@@ -2485,7 +2485,7 @@ void Searchdata::on_addtobutton_clicked()//µã»÷µÇÂ¼°´Å¥
                  {
                      SQL2=SQL2+" and movepartrepairinfo.movepartrepairid=?";
                  }
-                 arraysql[j]="¶¯²¿¼şÎ¬ĞŞ±àºÅ";
+                 arraysql[j]="åŠ¨éƒ¨ä»¶ç»´ä¿®ç¼–å·";
                  j++;
 
              }
@@ -2499,7 +2499,7 @@ void Searchdata::on_addtobutton_clicked()//µã»÷µÇÂ¼°´Å¥
                  {
                      SQL2=SQL2+" and movepartrepairinfo.repairdate=?";
                  }
-                 arraysql[j]="Î¬ĞŞÈÕÆÚ";
+                 arraysql[j]="ç»´ä¿®æ—¥æœŸ";
                  j++;
 
              }
@@ -2513,7 +2513,7 @@ void Searchdata::on_addtobutton_clicked()//µã»÷µÇÂ¼°´Å¥
                  {
                      SQL2=SQL2+" and movepartrepairinfo.repairtime=?";
                  }
-                 arraysql[j]="Î¬ĞŞ´ÎÊı";
+                 arraysql[j]="ç»´ä¿®æ¬¡æ•°";
                  j++;
 
              }
@@ -2527,7 +2527,7 @@ void Searchdata::on_addtobutton_clicked()//µã»÷µÇÂ¼°´Å¥
                  {
                      SQL2=SQL2+" and movepartrepairinfo.repairdepart=?";
                  }
-                 arraysql[j]="Î¬ĞŞÖ´ĞĞµ¥Î»";
+                 arraysql[j]="ç»´ä¿®æ‰§è¡Œå•ä½";
                  j++;
 
              }
@@ -2779,7 +2779,7 @@ void Searchdata::on_addtobutton_clicked()//µã»÷µÇÂ¼°´Å¥
                  j++;
 
              }
-     if(!createConnection(db1))//µ÷ÓÃconnection.hÍ·ÎÄ¼şÖĞ¶¨ÒåµÄcreateConnectionº¯ÊıÁ¬½ÓÊı¾İ¿â
+     if(!createConnection(db1))//è°ƒç”¨connection.hå¤´æ–‡ä»¶ä¸­å®šä¹‰çš„createConnectionå‡½æ•°è¿æ¥æ•°æ®åº“
      {
          QMessageBox::critical(0, qApp->tr("Cannot open database"),
                                        qApp->tr("Unable to establish a database connection."),
@@ -2787,8 +2787,8 @@ void Searchdata::on_addtobutton_clicked()//µã»÷µÇÂ¼°´Å¥
      }
 
      QSqlQuery query1;
-     query1.prepare("insert into addtosql(uid,sqlcommand,key1,key2,key3,key4,key5,key6,key7,key8,key9,key10)" "values(:uid,:sqlcommand,:key1,:key2,:key3,:key4,:key5,:key6,:key7,:key8,:key9,:key10)");//SQLÓï¾ä£¬ÏòÊı¾İ¿âÖĞ²åÈë¼ÇÂ¼
-             query1.bindValue(":uid",uid);//°ó¶¨Öµ
+     query1.prepare("insert into addtosql(uid,sqlcommand,key1,key2,key3,key4,key5,key6,key7,key8,key9,key10)" "values(:uid,:sqlcommand,:key1,:key2,:key3,:key4,:key5,:key6,:key7,:key8,:key9,:key10)");//SQLè¯­å¥ï¼Œå‘æ•°æ®åº“ä¸­æ’å…¥è®°å½•
+             query1.bindValue(":uid",uid);//ç»‘å®šå€¼
              query1.bindValue(":sqlcommand",SQL2);
              query1.bindValue(":key1",arraysql[0]);
              query1.bindValue(":key2",arraysql[1]);
@@ -2800,17 +2800,17 @@ void Searchdata::on_addtobutton_clicked()//µã»÷µÇÂ¼°´Å¥
              query1.bindValue(":key8",arraysql[7]);
              query1.bindValue(":key9",arraysql[8]);
              query1.bindValue(":key10",arraysql[9]);
-             /*query1.bindValue(":key1","·ÉĞĞĞ¡Ê±Êı");
-             query1.bindValue(":key2","·ÉĞĞĞ¡Ê±Êı");
-             query1.bindValue(":key3","·ÉĞĞĞ¡Ê±Êı");
-             query1.bindValue(":key4","·ÉĞĞĞ¡Ê±Êı");
-             query1.bindValue(":key5","ÔËĞĞ½×¶Î");
-                          query1.bindValue(":key6","Î¬ĞŞ´ÎÊı");
+             /*query1.bindValue(":key1","é£è¡Œå°æ—¶æ•°");
+             query1.bindValue(":key2","é£è¡Œå°æ—¶æ•°");
+             query1.bindValue(":key3","é£è¡Œå°æ—¶æ•°");
+             query1.bindValue(":key4","é£è¡Œå°æ—¶æ•°");
+             query1.bindValue(":key5","è¿è¡Œé˜¶æ®µ");
+                          query1.bindValue(":key6","ç»´ä¿®æ¬¡æ•°");
                           query1.bindValue(":key7","222");
                           query1.bindValue(":key8","222");
                           query1.bindValue(":key9","222");
                           query1.bindValue(":key10","222");*/
-             if(!query1.exec())//Èô·ÃÎÊÊı¾İ¿âÃ»ÓĞÔËĞĞ
+             if(!query1.exec())//è‹¥è®¿é—®æ•°æ®åº“æ²¡æœ‰è¿è¡Œ
                  QMessageBox::warning(this,tr("failed"),tr("insert error"),QMessageBox::Close);
              else
              {

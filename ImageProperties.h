@@ -8,6 +8,9 @@
 #include <QDebug>
 #include <QFile>
 #include <QDir>
+#include <QCloseEvent>
+
+#include "def.h"
 
 #define TABLE_N 7
 
@@ -234,18 +237,12 @@ private slots:
 
     void on__comboBoxMoliReportID_editTextChanged(const QString &arg1);
 
+    void toChangeId();
+
 private:
     Ui::ImageProperties *ui;
 
-    void load();
-
     QSqlTableModel* _models[TABLE_N];
-
-    QStringList getItems(QSqlTableModel* model, int col);
-    QStringList getItems(QSqlTableModel* model, QString fieldName);
-
-    bool isValid();
-    bool isValid(int index);
     QString _filename;
 
     QString _originalImagePath;
@@ -255,16 +252,27 @@ private:
     bool _bSaved[TABLE_N];
     bool _bCommited;
 
+    void load();
+
+    QStringList getItems(QSqlTableModel* model, int col);
+    QStringList getItems(QSqlTableModel* model, QString fieldName);
+
+    bool isValid();
+    bool isValid(int index);
+
     QString generateTiepupianID();
     QString generateOilSampleID();
     QString generateTieputupianID();
 
     QString copyOrgImage(QString id, QString org);
 
+    bool isExistID(QString id);
+    void setupUiAgain();
+
 signals:
     void flush();
-    void removeImage(QString fName);
-    void synchImageName(QString fName);
+    void closeViewer();
+    void syncFilePathStr(QString fName);
 
 public:
     void showDlg(QString filename);

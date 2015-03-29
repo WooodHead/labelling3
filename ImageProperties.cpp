@@ -1,36 +1,42 @@
-#include "ImageProperties.h"
+ï»¿#include "ImageProperties.h"
 #include "ui_imageproperties.h"
 #include "Global.h"
-
-#include <QCloseEvent>
+#include "ImageComparison.h"
 
 ImageProperties::ImageProperties(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ImageProperties)
 {
     ui->setupUi(this);
-    setWindowTitle(tr("±à¼­Í¼ÏñÊôÐÔ"));
+    this->setupUiAgain();
+
+    connect(this, SIGNAL(flush()), parent, SLOT(flushBottom()));
+    connect(this, SIGNAL(syncFilePathStr(QString)), parent, SLOT(syncFilePathStr(QString)));
+    connect(this, SIGNAL(closeViewer()), parent, SLOT(close()));
+
+    _bCommited = false;
+    for(int i = 0; i < TABLE_N; i++ ) _models[i] = 0;
+    for(int i = 0; i < TABLE_N; i++ ) _bSaved[i] = false;
+
+    load();
+}
+
+
+void ImageProperties::setupUiAgain()
+{
+    setWindowTitle(tr("ç¼–è¾‘å›¾åƒå±žæ€§"));
 
     ui->_tabWidget->removeTab(8);
     ui->_tabWidget->removeTab(7);
 
     ui->_tabWidget->setCurrentIndex(0);
-    ui->_buttonSave->setText(tr("±£´æ"));
+    ui->_buttonSave->setText(tr("ä¿å­˜"));
     ui->_buttonSave->setEnabled(false);
     ui->_buttonSave->setIcon(Global::Awesome->icon(save));
-    ui->_buttonCancel->setText(tr("È¡Ïû"));
+    ui->_buttonCancel->setText(tr("å–æ¶ˆ"));
     ui->_buttonCancel->setIcon(Global::Awesome->icon(remove_));
-    ui->_buttonNext->setText(tr("ÏÂÒ»ÕÅ±í"));
+    ui->_buttonNext->setText(tr("ä¸‹ä¸€å¼ è¡¨"));
     ui->_buttonNext->setIcon(Global::Awesome->icon(forward));
-
-    connect(this, SIGNAL(flush()), parent, SLOT(flushBottom()));
-    connect(this, SIGNAL(synchImageName(QString)), parent, SLOT(synchImageName(QString)));
-    connect(this, SIGNAL(removeImage(QString)), parent, SLOT(removeImage(QString)));
-
-    _bCommited = false;
-    for(int i = 0; i < TABLE_N; i++ ) _models[i] = 0;
-    for(int i = 0; i < TABLE_N; i++ ) _bSaved[i] = false;
-    for(int i = 1; i < TABLE_N; i++ ) ui->_tabWidget->setTabEnabled(i, false);
 
     ui->_editEquipHours->setValidator(new QIntValidator(0, 1000000, this));
     ui->_editServiceNumber->setValidator(new QIntValidator(0, 1000000, this));
@@ -46,7 +52,7 @@ ImageProperties::ImageProperties(QWidget *parent) :
 
     ui->_timeEditOilSampleSampleTime->setDisplayFormat("yyyyMMdd");
 
-    load();
+    for(int i = 1; i < TABLE_N; i++ ) ui->_tabWidget->setTabEnabled(i, false);
 }
 
 ImageProperties::~ImageProperties()
@@ -88,7 +94,7 @@ void ImageProperties::load()
     ui->_comboBoxMovepartID->addItems(getItems(_models[1],     "movepartid"));
     ui->_comboBoxMovepartType->addItems(getItems(_models[1],   "moveparttype"));
 
-    QStringList list = QStringList() << "" << tr("×ó·¢(A)") << tr("ÓÒ·¢(B)") << tr("ÖÐ·¢(C)") << tr("Ö÷¼õ(D)") << tr("Î²¼õ(E)") << tr("ÖÐ¼õ(F)") << tr("Ö÷½°ì±(G)") << tr("¸¨Öú¶¯Á¦×°ÖÃ(H)") << tr("Èó»¬Ö¬(J)") << tr("×óÒºÑ¹ÏµÍ³(K)") << tr("ÓÒÒºÑ¹ÏµÍ³(L)") << tr("È¼ÓÍÏµÍ³(M)") << tr("ÆäËü(N)");
+    QStringList list = QStringList() << "" << tr("å·¦å‘(A)") << tr("å³å‘(B)") << tr("ä¸­å‘(C)") << tr("ä¸»å‡(D)") << tr("å°¾å‡(E)") << tr("ä¸­å‡(F)") << tr("ä¸»æ¡¨æ¯‚(G)") << tr("è¾…åŠ©åŠ¨åŠ›è£…ç½®(H)") << tr("æ¶¦æ»‘è„‚(J)") << tr("å·¦æ¶²åŽ‹ç³»ç»Ÿ(K)") << tr("å³æ¶²åŽ‹ç³»ç»Ÿ(L)") << tr("ç‡ƒæ²¹ç³»ç»Ÿ(M)") << tr("å…¶å®ƒ(N)");
     ui->_comboBoxMovepartName->addItems(list);
 
     ui->_comboBoxMovepartMohe->addItems(getItems(_models[1],   "runstage"));
@@ -146,7 +152,7 @@ void ImageProperties::load()
     ui->_comboBoxMentalReportID->addItems(getItems(_models[5], "ferrographyreportid"));
     ui->_comboBoxMentalOilSampleID->addItems(getItems(_models[5], "oilsampleid"));
 
-    QStringList list2 = QStringList() << "" << tr("¹ú²ú·ÖÎöÌúÆ×ÒÇ(A)") << tr("³¬Æ×¼»Ê½·ÖÎöÌúÆ×ÒÇ(B)") << tr("ÃÀ¹úÈÈµç·ÖÎöÌúÆ×ÒÇ(C)") << tr("Ðý×ªÊ½·ÖÎöÌúÆ×ÒÇ(D)") << tr("ÂËÄ¤ÖÆÆ×ÒÇ(E)");
+    QStringList list2 = QStringList() << "" << tr("å›½äº§åˆ†æžé“è°±ä»ª(A)") << tr("è¶…è°±è“Ÿå¼åˆ†æžé“è°±ä»ª(B)") << tr("ç¾Žå›½çƒ­ç”µåˆ†æžé“è°±ä»ª(C)") << tr("æ—‹è½¬å¼åˆ†æžé“è°±ä»ª(D)") << tr("æ»¤è†œåˆ¶è°±ä»ª(E)");
     ui->_comboBoxMentalInstrumentType->addItems(list2);
     ui->_comboBoxMentalMethod->addItems(getItems(_models[5], "ferrographymakemethod"));
     ui->_comboBoxMentalGuy->addItems(getItems(_models[5], "ferrographymakestuff"));
@@ -162,7 +168,7 @@ void ImageProperties::load()
     QStringList list3 = QStringList() << "" << "LA" << "LB" << "LC" << "LD" << "LE";
     ui->_comboBoxMentalSampleLightType->addItems(list3);
 
-    QStringList list4 = QStringList() << "" << tr("Ô¤ÉèÆ×Æ¬Èë¿Ú(QA)") << tr("Æ×Æ¬Ç°°ë¶Î(QB)") << tr("Æ×Æ¬ÖÐ¶Î(QC)") << tr("Æ×Æ¬ºó°ë¶Î(QD)") << tr("Æ×Æ¬³ö¿Ú(QE)");
+    QStringList list4 = QStringList() << "" << tr("é¢„è®¾è°±ç‰‡å…¥å£(QA)") << tr("è°±ç‰‡å‰åŠæ®µ(QB)") << tr("è°±ç‰‡ä¸­æ®µ(QC)") << tr("è°±ç‰‡åŽåŠæ®µ(QD)") << tr("è°±ç‰‡å‡ºå£(QE)");
     ui->_comboBoxMentalSampleArea->addItems(list4);
 
 }
@@ -201,164 +207,164 @@ bool ImageProperties::isValid()
     if(ui->_comboBoxEquipPlaneID->currentText().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(0);
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("»úºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("æœºå·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return false;
     }
     if(ui->_comboBoxEquipPlaneType->currentText().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(0);
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("»úÐÍ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("æœºåž‹ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return false;
     }
     if(ui->_comboBoxEquipUnitID->currentText().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(0);
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("µ¥Î»±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("å•ä½ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return false;
     }
 
     if(ui->_comboBoxMovepartID->currentText().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(1);
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("¶¯²¿¼þ±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("åŠ¨éƒ¨ä»¶ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return false;
     }
     if(ui->_comboBoxMovepartName->currentText().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(1);
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("¶¯²¿¼þÃû³Æ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("åŠ¨éƒ¨ä»¶åç§°ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return false;
     }
     if(ui->_comboBoxMovepartPlaneID->currentText().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(1);
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("»úºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("æœºå·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return false;
     }
     if(ui->_comboBoxMovepartPlaneType->currentText().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(1);
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("»úÐÍ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("æœºåž‹ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return false;
     }
 
     //    if(ui->_comboBoxMovepartServiceID->currentText().isEmpty())
     //    {
     //        ui->_tabWidget->setCurrentIndex(2);
-    //        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("¶¯²¿¼þÎ¬ÐÞ±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+    //        QMessageBox::warning(this, tr("æç¤º"), tr("åŠ¨éƒ¨ä»¶ç»´ä¿®ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
     //        return false;
     //    }
     //    if(ui->_comboBoxMovepartServiceMovepartID->currentText().isEmpty())
     //    {
     //        ui->_tabWidget->setCurrentIndex(2);
-    //        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("¶¯²¿¼þ±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+    //        QMessageBox::warning(this, tr("æç¤º"), tr("åŠ¨éƒ¨ä»¶ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
     //        return false;
     //    }
 
     if(ui->_dateEditOilSampleSampleDate->text().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(3);
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("²ÉÑùÈÕÆÚ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("é‡‡æ ·æ—¥æœŸä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return false;
     }
 
     if(ui->_timeEditOilSampleSampleTime->text().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(3);
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("²ÉÑùÊ±¼ä²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("é‡‡æ ·æ—¶é—´ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return false;
     }
 
     if(ui->_comboBoxOilSampleID->currentText().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(3);
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("ÓÍÑù±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("æ²¹æ ·ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return false;
     }
     if(ui->_comboBoxOilSampleUnitID->currentText().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(3);
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("µ¥Î»±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("å•ä½ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return false;
     }
     if(ui->_comboBoxOilSamplePlaneID->currentText().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(3);
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("»úºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("æœºå·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return false;
     }
     if(ui->_comboBoxOilSamplePlaneType->currentText().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(3);
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("»úÐÍ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("æœºåž‹ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return false;
     }
 
     if(ui->_comboBoxOilSampleSamplePointID->currentText().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(3);
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("²ÉÑùµã±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("é‡‡æ ·ç‚¹ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return false;
     }
 
     if(ui->_comboBoxOilAnalyzeOilSampleID->currentText().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(4);
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("ÓÍÑù±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("æ²¹æ ·ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return false;
     }
 
     if(ui->_comboBoxMentalInstrumentType->currentText().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(5);
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("·ÖÎöÌúÆ×ÒÇÐÍºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("åˆ†æžé“è°±ä»ªåž‹å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return false;
     }
 
     if(ui->_comboBoxMentalID->currentText().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(5);
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("ÌúÆ×Æ¬±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("é“è°±ç‰‡ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return false;
     }
     if(ui->_comboBoxMentalOilSampleID->currentText().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(5);
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("ÓÍÑù±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("æ²¹æ ·ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return false;
     }
 
     if(ui->_comboBoxMentalSampleArea->currentText().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(6);
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("ÌúÆ×Í¼Æ¬²É¼¯ÇøÓò²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("é“è°±å›¾ç‰‡é‡‡é›†åŒºåŸŸä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return false;
     }
 
     if(ui->_editMentalSampleEnlarger->text().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(6);
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("·Å´ó±¶Êý²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("æ”¾å¤§å€æ•°ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return false;
     }
 
     if(ui->_comboBoxMentalSampleLightType->currentText().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(6);
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("¹âÔ´ÀàÐÍ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("å…‰æºç±»åž‹ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return false;
     }
 
     if(ui->_comboBoxMentalSampleImageID->currentText().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(6);
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("ÌúÆ×Í¼Æ¬±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("é“è°±å›¾ç‰‡ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return false;
     }
     if(ui->_comboBoxMentalSampleID->currentText().isEmpty())
     {
         ui->_tabWidget->setCurrentIndex(6);
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("ÌúÆ×Æ¬±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("é“è°±ç‰‡ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return false;
     }
 
@@ -372,19 +378,19 @@ bool ImageProperties::isValid(int index)
         if(ui->_comboBoxEquipPlaneID->currentText().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(0);
-            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("»úºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("æç¤º"), tr("æœºå·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
             return false;
         }
         if(ui->_comboBoxEquipPlaneType->currentText().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(0);
-            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("»úÐÍ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("æç¤º"), tr("æœºåž‹ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
             return false;
         }
         if(ui->_comboBoxEquipUnitID->currentText().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(0);
-            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("µ¥Î»±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("æç¤º"), tr("å•ä½ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
             return false;
         }
     }
@@ -393,25 +399,25 @@ bool ImageProperties::isValid(int index)
         if(ui->_comboBoxMovepartID->currentText().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(1);
-            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("¶¯²¿¼þ±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("æç¤º"), tr("åŠ¨éƒ¨ä»¶ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
             return false;
         }
         if(ui->_comboBoxMovepartName->currentText().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(1);
-            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("¶¯²¿¼þÃû³Æ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("æç¤º"), tr("åŠ¨éƒ¨ä»¶åç§°ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
             return false;
         }
         if(ui->_comboBoxMovepartPlaneID->currentText().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(1);
-            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("»úºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("æç¤º"), tr("æœºå·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
             return false;
         }
         if(ui->_comboBoxMovepartPlaneType->currentText().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(1);
-            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("»úÐÍ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("æç¤º"), tr("æœºåž‹ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
             return false;
         }
     }
@@ -420,13 +426,13 @@ bool ImageProperties::isValid(int index)
         //        if(ui->_comboBoxMovepartServiceID->currentText().isEmpty())
         //        {
         //            ui->_tabWidget->setCurrentIndex(2);
-        //            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("¶¯²¿¼þÎ¬ÐÞ±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        //            QMessageBox::warning(this, tr("æç¤º"), tr("åŠ¨éƒ¨ä»¶ç»´ä¿®ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         //            return false;
         //        }
         //        if(ui->_comboBoxMovepartServiceMovepartID->currentText().isEmpty())
         //        {
         //            ui->_tabWidget->setCurrentIndex(2);
-        //            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("¶¯²¿¼þ±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        //            QMessageBox::warning(this, tr("æç¤º"), tr("åŠ¨éƒ¨ä»¶ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         //            return false;
         //        }
     }
@@ -435,45 +441,45 @@ bool ImageProperties::isValid(int index)
         if(ui->_dateEditOilSampleSampleDate->text().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(3);
-            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("²ÉÑùÈÕÆÚ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("æç¤º"), tr("é‡‡æ ·æ—¥æœŸä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
             return false;
         }
 
         if(ui->_timeEditOilSampleSampleTime->text().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(3);
-            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("²ÉÑùÊ±¼ä²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("æç¤º"), tr("é‡‡æ ·æ—¶é—´ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
             return false;
         }
 
         if(ui->_comboBoxOilSampleID->currentText().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(3);
-            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("ÓÍÑù±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("æç¤º"), tr("æ²¹æ ·ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
             return false;
         }
         if(ui->_comboBoxOilSampleUnitID->currentText().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(3);
-            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("µ¥Î»±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("æç¤º"), tr("å•ä½ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
             return false;
         }
         if(ui->_comboBoxOilSamplePlaneID->currentText().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(3);
-            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("»úºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("æç¤º"), tr("æœºå·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
             return false;
         }
         if(ui->_comboBoxOilSamplePlaneType->currentText().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(3);
-            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("»úÐÍ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("æç¤º"), tr("æœºåž‹ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
             return false;
         }
         if(ui->_comboBoxOilSampleSamplePointID->currentText().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(3);
-            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("²ÉÑùµã±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("æç¤º"), tr("é‡‡æ ·ç‚¹ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
             return false;
         }
     }
@@ -482,7 +488,7 @@ bool ImageProperties::isValid(int index)
         if(ui->_comboBoxOilAnalyzeOilSampleID->currentText().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(4);
-            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("ÓÍÑù±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("æç¤º"), tr("æ²¹æ ·ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
             return false;
         }
     }
@@ -491,19 +497,19 @@ bool ImageProperties::isValid(int index)
         if(ui->_comboBoxMentalInstrumentType->currentText().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(5);
-            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("·ÖÎöÌúÆ×ÒÇÐÍºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("æç¤º"), tr("åˆ†æžé“è°±ä»ªåž‹å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
             return false;
         }
         if(ui->_comboBoxMentalID->currentText().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(5);
-            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("ÌúÆ×Æ¬±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("æç¤º"), tr("é“è°±ç‰‡ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
             return false;
         }
         if(ui->_comboBoxMentalOilSampleID->currentText().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(5);
-            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("ÓÍÑù±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("æç¤º"), tr("æ²¹æ ·ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
             return false;
         }
     }
@@ -512,33 +518,33 @@ bool ImageProperties::isValid(int index)
         if(ui->_comboBoxMentalSampleArea->currentText().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(6);
-            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("ÌúÆ×Í¼Æ¬²É¼¯ÇøÓò²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("æç¤º"), tr("é“è°±å›¾ç‰‡é‡‡é›†åŒºåŸŸä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
             return false;
         }
 
         if(ui->_editMentalSampleEnlarger->text().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(6);
-            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("·Å´ó±¶Êý²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("æç¤º"), tr("æ”¾å¤§å€æ•°ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
             return false;
         }
 
         if(ui->_comboBoxMentalSampleLightType->currentText().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(6);
-            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("¹âÔ´ÀàÐÍ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("æç¤º"), tr("å…‰æºç±»åž‹ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
             return false;
         }
         if(ui->_comboBoxMentalSampleImageID->currentText().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(6);
-            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("ÌúÆ×Í¼Æ¬±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("æç¤º"), tr("é“è°±å›¾ç‰‡ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
             return false;
         }
         if(ui->_comboBoxMentalSampleID->currentText().isEmpty())
         {
             ui->_tabWidget->setCurrentIndex(6);
-            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("ÌúÆ×Æ¬±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("æç¤º"), tr("é“è°±ç‰‡ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
             return false;
         }
     }
@@ -577,7 +583,7 @@ void ImageProperties::on__buttonSave_clicked()
         {
             if(_bSaved[i] == false)
             {
-                QMessageBox::warning(this, tr("ÌáÊ¾"), QString("±í%1Î´±£´æ").arg(i+1), QMessageBox::Close);
+                QMessageBox::warning(this, tr("æç¤º"), QString("è¡¨%1æœªä¿å­˜").arg(i+1), QMessageBox::Close);
                 return;
             }
         }
@@ -844,6 +850,35 @@ void ImageProperties::on__buttonSave_clicked()
         {
             if(_models[6]->rowCount() == 1)
             {
+                QMessageBox::StandardButton r = QMessageBox::warning(this, tr("æç¤º"), tr("å½“å‰é“è°±IDå·²å­˜åœ¨, è¯·ä¸Žå½“å‰å›¾åƒæ¯”å¯¹åŽå†³å®šæ˜¯å¦è¦†ç›–æˆ–ä¿®æ”¹å½“å‰ID"), QMessageBox::Ok | QMessageBox::Cancel);
+                if(r == QMessageBox::Ok)
+                {
+                    QByteArray old_, new_;
+                    old_ = _models[6]->index(0, 12).data().toByteArray();
+
+                    QString imagePath = ui->_editMentalSamplePath->text();
+                    if(!imagePath.isEmpty())
+                    {
+                        QFile *file = new QFile(imagePath);
+                        file->open(QIODevice::ReadOnly);
+                        new_ = file->readAll();
+                    }
+
+                    ImageComparison* dlg = new ImageComparison(this);
+                    dlg->setData(old_, new_);
+                    dlg->setAttribute(Qt::WA_DeleteOnClose);
+
+                    if(dlg->exec() == QDialog::Rejected)
+                    {
+                        ui->_comboBoxMentalSampleImageID->setFocus();
+                        return;
+                    }
+                }
+                else if(r == QMessageBox::Cancel)
+                {
+                    return;
+                }
+
                 QSqlRecord record = _models[6]->record();
                 record.setValue("ferrographypicid", ui->_comboBoxMentalSampleImageID->currentText());
                 record.setValue("ferrographysheetid", ui->_comboBoxMentalSampleID->currentText());
@@ -893,13 +928,13 @@ void ImageProperties::on__buttonSave_clicked()
                     QByteArray data = file->readAll();
                     _models[6]->setData(_models[6]->index(0, 12), data);
                 }
-                copyOrgImage(ui->_comboBoxMentalSampleImageID->currentText(), ui->_editMentalSamplePath->text());
+                QString copyTo = copyOrgImage(ui->_comboBoxMentalSampleImageID->currentText(), ui->_editMentalSamplePath->text());
 
-                //                if(!copyTo.isEmpty())
-                //                {
-                //                    ui->_editMentalSamplePath->setText(copyTo);
-                //                    emit synchImageName(copyTo);
-                //                }
+                if(!copyTo.isEmpty() && QFile::exists(copyTo))
+                {
+                    _models[6]->setData(_models[6]->index(0, 9), copyTo);
+                    emit syncFilePathStr(copyTo);
+                }
             }
         }
         for(int i = 0; i < TABLE_N; i++)
@@ -912,7 +947,7 @@ void ImageProperties::on__buttonSave_clicked()
                 {
                     _models[k]->revertAll();
                 }
-                QMessageBox::warning(this, tr("ÌáÊ¾"), tr("±£´æÊ§°Ü!"), QMessageBox::Close);
+                QMessageBox::warning(this, tr("æç¤º"), tr("ä¿å­˜å¤±è´¥!"), QMessageBox::Close);
                 return;
             }
         }
@@ -949,9 +984,9 @@ void ImageProperties::on__buttonSave_clicked()
         }
 
         _bCommited = true;
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("±£´æ³É¹¦!"), QMessageBox::Close);
-
+        Global::NewName = ui->_comboBoxMentalSampleImageID->currentText();
         emit flush();
+        QMessageBox::warning(this, tr("æç¤º"), tr("ä¿å­˜æˆåŠŸ!"), QMessageBox::Close);
 
         close();
     }
@@ -1016,12 +1051,12 @@ void ImageProperties::on__tabWidget_currentChanged(int index)
 {
     if( index == ui->_tabWidget->count() - 1 )
     {
-        ui->_buttonSave->setText(tr("Ìá½»"));
+        ui->_buttonSave->setText(tr("æäº¤"));
         ui->_buttonNext->setVisible(false);
     }
     else
     {
-        ui->_buttonSave->setText(tr("±£´æ"));
+        ui->_buttonSave->setText(tr("ä¿å­˜"));
         ui->_buttonNext->setVisible(true);
     }
     ui->_buttonSave->setEnabled(false);
@@ -1036,13 +1071,15 @@ void ImageProperties::closeEvent(QCloseEvent *event)
 {
     if(!_bCommited)
     {
-        QMessageBox::StandardButton reply = QMessageBox::warning(0, tr("ÌáÊ¾"), tr("¹Ø±Õ½«µ¼ÖÂËùÌîÐ´µÄÊý¾Ý¶ªÊ§, ÊÇ·ñÈ·ÈÏÍË³ö?"), QMessageBox::Ok | QMessageBox::Cancel);
+        QMessageBox::StandardButton reply = QMessageBox::warning(0, MOLI_MESSAGEBOX_TITLE_PROMPT_STRING, tr("å…³é—­å°†å¯¼è‡´æ‰€å¡«å†™çš„æ•°æ®ä¸¢å¤±, æ˜¯å¦ç¡®è®¤é€€å‡º?"), QMessageBox::Ok | QMessageBox::Cancel);
         if(reply == QMessageBox::Ok)
         {
-            emit removeImage(_originalImagePath);
+            emit closeViewer();
         }
         else if(reply == QMessageBox::Cancel)
+        {
             event->ignore();
+        }
     }
 }
 
@@ -1097,13 +1134,6 @@ void ImageProperties::on__comboBoxOilSamplePlaneID_editTextChanged(const QString
 void ImageProperties::on__comboBoxMovepartServiceMovepartID_editTextChanged(const QString &arg1)
 {
     if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
-    //    if(!ui->_dateEditOilSampleSampleDate->text().isEmpty() && !ui->_comboBoxOilSamplePlaneID->currentText().isEmpty()
-    //            && !ui->_timeEditOilSampleSampleTime->text().isEmpty() && !ui->_comboBoxMovepartName->currentText().isEmpty())
-    //    {
-    //        QString id = ui->_comboBoxOilSamplePlaneID->currentText() + ui->_dateEditOilSampleSampleDate->date().toString("yyyyMMdd")
-    //                + ui->_timeEditOilSampleSampleTime->time().toString("hh") + ui->_comboBoxMovepartName->currentText()+"0";
-    //        ui->_comboBoxOilSampleID->setEditText(id);
-    //    }
 }
 
 void ImageProperties::on__comboBoxMentalOilSampleID_editTextChanged(const QString &arg1)
@@ -1582,6 +1612,11 @@ void ImageProperties::on__comboBoxMoliReportID_editTextChanged(const QString &ar
     if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
 }
 
+void ImageProperties::toChangeId()
+{
+    ui->_comboBoxMentalSampleImageID->setFocus();
+}
+
 QString ImageProperties::copyOrgImage(QString name, QString org)
 {
     if(!QDir(Global::PathImage).exists())
@@ -1592,4 +1627,20 @@ QString ImageProperties::copyOrgImage(QString name, QString org)
     QString copyTo = Global::PathImage + name + ".jpg";
     return QFile::copy(org, copyTo) == true ? copyTo : QString();
 }
+
+bool ImageProperties::isExistID(QString id)
+{
+    QSqlTableModel* model = new QSqlTableModel;
+    model->setTable("ferrographypicinfo");
+    model->setFilter("'ferrographypicid'=" + id);
+    if(model->select() && model->rowCount() == 1)
+    {
+        delete model;
+        return true;
+    }
+
+    delete model;
+    return false;
+}
+
 

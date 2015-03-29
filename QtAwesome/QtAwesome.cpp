@@ -536,7 +536,7 @@ bool QtAwesome::initFontAwesome( )
     m.insert("mercury",             mercury);
     m.insert("microphone",          microphone);
     m.insert("microphoneslash",     microphoneslash);
-    m.insert("minus",               minus);
+    m.insert("minus",               minus_);
     m.insert("minuscircle",         minuscircle);
     m.insert("minussquare",         minussquare);
     m.insert("minussquareo",        minussquareo);

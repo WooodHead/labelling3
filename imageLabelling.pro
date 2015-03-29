@@ -26,7 +26,9 @@ HEADERS += \
     UserInfo.h \
     UserManagement.h \
     Global.h \
-    MoliProperties.h
+    MoliProperties.h \
+    ImageComparison.h \
+    Util/def.h
 
 
 SOURCES += \
@@ -51,7 +53,8 @@ SOURCES += \
     searchdata.cpp \
     UserAdd.cpp \
     UserEdit.cpp \
-    UserManagement.cpp
+    UserManagement.cpp \
+    ImageComparison.cpp
 
 
 FORMS += \
@@ -71,16 +74,20 @@ FORMS += \
     advancesearchdlg.ui \
     useredit.ui \
     propertynamedlg.ui \
-    MoliProperties.ui
+    MoliProperties.ui \
+    ImageComparison.ui
 
 RESOURCES += \
     ImageCompletion.qrc
 
 unix:!macx {
     LIBS += `pkg-config opencv --libs`
+
+    INCLUDEPATH += Util
 }
 win32 {
 INCLUDEPATH += D:\opencv\build\include\
+               Util \
 
 LIBS += D:\vendor\OpenCV243-mingw\lib\libopencv_core243.dll.a\
         D:\vendor\OpenCV243-mingw\lib\libopencv_highgui243.dll.a\
@@ -91,3 +98,7 @@ OTHER_FILES += \
     imageLabelling.ini
 
 include(QtAwesome/QtAwesome.pri)
+
+QMAKE_CXXFLAGS += -Wno-unused-parameter
+QMAKE_CXXFLAGS += -Wno-unused-variable
+

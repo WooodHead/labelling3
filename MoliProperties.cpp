@@ -1,4 +1,4 @@
-#include "MoliProperties.h"
+ï»¿#include "MoliProperties.h"
 #include "ui_MoliProperties.h"
 
 #include "Connection.h"
@@ -17,18 +17,20 @@ MoliProperties::MoliProperties(QWidget *parent) :
     ui->_labelMaskImage->setFixedSize(100, 50);
     ui->_labelMaskImage->setScaledContents(true);
 
-    _bDirty = false;
-
     setWindowFlags(Qt::Tool | Qt::WindowCloseButtonHint);
     this->move(250, 250);
 
+    _bDirty = false;
+
     connect(this, SIGNAL(flushLeft(QString, QString)), parent, SLOT(flushLeft(QString, QString)));
-    connect(this, SIGNAL(flush()), parent, SLOT(flushBottom()));
+    connect(this, SIGNAL(flushBottom()), parent, SLOT(flushBottom()));
+    connect(this, SIGNAL(saveImages()), parent, SLOT(save()));
+    connect(this, SIGNAL(next()), parent, SLOT(next()));
 
     if(!createConnection(_db))
     {
-        QMessageBox::critical(0, qApp->tr("ÌáÊ¾"),
-                              qApp->tr("Êı¾İ¿âÁ¬½ÓÊ§°Ü!"),
+        QMessageBox::critical(0, qApp->tr("æç¤º"),
+                              qApp->tr("æ•°æ®åº“è¿æ¥å¤±è´¥!"),
                               QMessageBox::Cancel);
         return;
     }
@@ -114,7 +116,7 @@ void MoliProperties::on_pushButton_2_clicked()
 {
     if(_bDirty)
     {
-        QMessageBox::StandardButton reply = QMessageBox::warning(0, tr("ÌáÊ¾"), tr("¹Ø±Õ½«µ¼ÖÂËùÌîĞ´µÄÊı¾İ¶ªÊ§, ÊÇ·ñÈ·ÈÏÍË³ö?"), QMessageBox::Ok | QMessageBox::Cancel);
+        QMessageBox::StandardButton reply = QMessageBox::warning(0, tr("æç¤º"), tr("å…³é—­å°†å¯¼è‡´æ‰€å¡«å†™çš„æ•°æ®ä¸¢å¤±, æ˜¯å¦ç¡®è®¤é€€å‡º?"), QMessageBox::Ok | QMessageBox::Cancel);
         if(reply == QMessageBox::Ok)  close();
         else return;
     }
@@ -128,22 +130,22 @@ void MoliProperties::on_pushButton_clicked()
 {
     if(ui->_comboBoxMoliID->currentText().isEmpty())
     {
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("Ä¥Á£±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("ç£¨ç²’ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return;
     }
     else if(ui->_comboBoxMoliImageID->currentText().isEmpty())
     {
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("ÌúÆ×Í¼Æ¬±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("é“è°±å›¾ç‰‡ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return;
     }
     else if(ui->_comboBoxMoliPianID->currentText().isEmpty())
     {
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("ÌúÆ×Æ¬±àºÅ²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("é“è°±ç‰‡ç¼–å·ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return;
     }
     else if(ui->_editMoliPath->text().isEmpty())
     {
-        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("ÌúÆ×Í¼Æ¬Â·¾¶²»ÄÜÎª¿Õ!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("æç¤º"), tr("é“è°±å›¾ç‰‡è·¯å¾„ä¸èƒ½ä¸ºç©º!"), QMessageBox::Close);
         return;
     }
     else
@@ -281,7 +283,7 @@ void MoliProperties::on_pushButton_clicked()
             if(!_model->submitAll())
             {
                 _model->revertAll();
-                QMessageBox::warning(this, tr("ÌáÊ¾"), tr("±£´æÊ§°Ü!"), QMessageBox::Close);
+                QMessageBox::warning(this, tr("æç¤º"), tr("ä¿å­˜å¤±è´¥!"), QMessageBox::Close);
             }
             else
             {
@@ -304,15 +306,19 @@ void MoliProperties::on_pushButton_clicked()
                     {
                         _model->revertAll();
                         model->revertAll();
-                        QMessageBox::warning(this, tr("ÌáÊ¾"), tr("±£´æÊ§°Ü!"), QMessageBox::Close);
+                        QMessageBox::warning(this, tr("æç¤º"), tr("ä¿å­˜å¤±è´¥!"), QMessageBox::Close);
                         return;
                     }
                 }
 
-                emit flush();
-                emit flushLeft(_originalImagePath, "Y");
+                Global::NewName = ui->_comboBoxMoliImageID->currentText();
 
-                QMessageBox::information(this, tr("ÌáÊ¾"), tr("±£´æ³É¹¦!"), QMessageBox::Close);
+                emit saveImages();
+                emit flushBottom();
+                emit flushLeft(_originalImagePath, "Y");
+                emit next();
+
+                QMessageBox::information(this, tr("æç¤º"), tr("ä¿å­˜æˆåŠŸ!"), QMessageBox::Close);
                 close();
             }
         }
@@ -333,7 +339,6 @@ void MoliProperties::showDlg(QString imagePath, const QImage& result, const QIma
     double maxHeight = 0.0;
     double maxWidth = 0.0;
 
-
     // Check if existing
     _model->setFilter(QString("abrasivepicpath = '%1'").arg(_originalImagePath));
     if(_model->select() && _model->rowCount() == 1)
@@ -341,7 +346,7 @@ void MoliProperties::showDlg(QString imagePath, const QImage& result, const QIma
         QSqlRecord record = _model->record(0);
 
         ui->_comboBoxMoliID->setEditText(record.value("abrasiveid").toString());
-        ui->_comboBoxMoliImageID->setEditText(record.value("abrasiveid").toString());
+        ui->_comboBoxMoliImageID->setEditText(record.value("ferrographypicid").toString());
         ui->_comboBoxMoliPianID->setEditText(record.value("ferrographysheetid").toString());
         ui->_comboBoxMoliReportID->setEditText(record.value("ferrographyreportid").toString());
         ui->_comboBoxMoliGuy->setEditText(record.value("abrasivemarkstuff").toString());
@@ -416,7 +421,7 @@ void MoliProperties::showDlg(QString imagePath, const QImage& result, const QIma
         }
         else
         {
-            QMessageBox::warning(this, tr("ÌáÊ¾"), tr("ÇëÏÈÌîĞ´Í¼Ïñ»ù±¾ĞÅÏ¢!"), QMessageBox::Close);
+            QMessageBox::warning(this, tr("æç¤º"), tr("è¯·å…ˆå¡«å†™å›¾åƒåŸºæœ¬ä¿¡æ¯!"), QMessageBox::Close);
         }
 
         delete model;

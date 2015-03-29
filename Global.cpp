@@ -1,4 +1,4 @@
-#include "Global.h"
+ï»¿#include "Global.h"
 
 #include <QCoreApplication>
 #include <QApplication>
@@ -19,6 +19,8 @@ QString Global::PathResult = QString();
 QString Global::ExtMask = QString();
 QString Global::ExtResult = QString();
 
+QString Global::NewName = QString();
+
 QtAwesome* Global::Awesome = 0;
 
 QColor Global::LabelledColor = QColor(0, 150, 0);
@@ -36,7 +38,7 @@ void Global::initialize()
     QString strConfigFile = QFileInfo(app->applicationFilePath()).baseName() + ".ini";
     if(!QFile::exists(strConfigFile))
     {
-        qFatal("ÅäÖÃÎÄ¼ş²»´æÔÚ:\r\n%s", qPrintable(strConfigFile));
+        qFatal("é…ç½®æ–‡ä»¶ä¸å­˜åœ¨:\r\n%s", qPrintable(strConfigFile));
     }
 
     Global::Awesome = new QtAwesome();

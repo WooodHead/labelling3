@@ -82,39 +82,33 @@ ImageViewer::~ImageViewer()
 
 bool ImageViewer::openImage(const QString &fileName)
 {
-    //	FinishJob();
-    filepath = fileName;
-    QApplication::setOverrideCursor(Qt::WaitCursor);
     if ( !fileName.isEmpty() )
     {
-        if ( _ocvImage != 0 )
-        {
-            cvReleaseImage ( &_ocvImage );
-        }
+        deleteImage();
 
         std::string sstr = fileName.toLocal8Bit().data();
         const char* csstr = sstr.c_str();
         IplImage* newImage = cvLoadImage( csstr, 1 );
 
-        if ( newImage == 0 )
+        if ( !newImage )
         {
-            QMessageBox::warning( this, tr("ImageCompletion"), tr("无法打开文件 %1.\n").arg(fileName) );
+            QMessageBox::warning( this,
+                                  tr("提示"),
+                                  tr("无法打开文件 %1.\n").arg(fileName) );
             return false;
         }
 
         if (cv::max(newImage->width,newImage->height) > 800)
         {
             float scale = cv::max(newImage->width/800.0f, newImage->height/800.0f);
-            _ocvImage = cvCreateImage(cvSize(newImage->width/scale,newImage->height/scale),8,3);
+            _ocvImage = cvCreateImage(cvSize(newImage->width/scale,newImage->height/scale), 8, 3);
             cvResize(newImage,_ocvImage);
-            cvReleaseImage(&newImage);
         }
-        else if (newImage->width<=250||newImage->height<=250)
+        else if (newImage->width <= 250 || newImage->height <= 250)
         {
             float scale = cv::min(newImage->width/300.0f, newImage->height/300.0f);
             _ocvImage = cvCreateImage(cvSize(newImage->width/scale,newImage->height/scale),8,3);
             cvResize(newImage,_ocvImage);
-            cvReleaseImage(&newImage);
         }
         else
         {
@@ -122,7 +116,7 @@ bool ImageViewer::openImage(const QString &fileName)
         }
 
 
-        if(_srcOcvImage == NULL)
+        if( !_srcOcvImage )
         {
             _srcOcvImage = cvCreateImage(cvSize(_ocvImage->width, _ocvImage->height), _ocvImage->depth, _ocvImage->nChannels);
             cvCopy(_ocvImage, _srcOcvImage);
@@ -131,26 +125,21 @@ bool ImageViewer::openImage(const QString &fileName)
         _srcWidth = _ocvImage->width;
         _srcHeight = _ocvImage->height;
 
-        QImage *image;
-
         _labelMapImage = new QImage(_ocvImage->width, _ocvImage->height, QImage::Format_ARGB32);
         QImage _alphaImage(_ocvImage->width, _ocvImage->height, QImage::Format_Indexed8);
         _alphaImage.fill(255);
         _labelMapImage->setAlphaChannel(_alphaImage);
         _labelMapImage->fill(qRgb(0, 0, 0));
 
-        image = IplImageToQImage( _ocvImage );
+        QImage *image = IplImageToQImage( _ocvImage );
 
         setImage( *image );
     }
-
-    QApplication::restoreOverrideCursor();
     return true;
 }
 
 bool ImageViewer::deleteImage()
 {
-
     if (CV_IS_IMAGE(_ocvImage))
     {
         cvReleaseImage(&_ocvImage);
@@ -167,20 +156,15 @@ bool ImageViewer::deleteImage()
         _srcOcvImage = NULL;
     }
 
-    //	FinishJob();
+    DELETE(_displayImage);
+    DELETE(_labelMapImage);
 
-
-    if(_displayImage) { delete _displayImage; _displayImage = NULL; };
-    if(_labelMapImage) { delete _labelMapImage; _labelMapImage = NULL; }
-
-    //////////////////////////////////////////////////////////////////////////
     _displayImage	= new QImage(500, 500, QImage::Format_RGB32);
     _displayImage->fill(qRgb(128, 128, 128));
     _labelMapImage = new QImage(500, 500, QImage::Format_ARGB32);
     _labelMapImage->fill(qRgb(128, 128, 128));
-    //brushcolor		= Qt::blue;
     thickness		= 5;
-    brushInterface = 0;
+    brushInterface  = 0;
     bPaintable		= false;
     lastPos			= QPoint(-1, -1);
     updateObjectCount(0);
@@ -242,7 +226,7 @@ bool ImageViewer::saveAsLabelledResult(QString &pathResult)
     fDlg->setViewMode(QFileDialog::Detail);
     fDlg->setDirectory(QDir::currentPath());
 
-    fDlg->setFilter(tr("图像 (*.jpg *.png *.bmp *.jpeg)"));
+    fDlg->setFilter(MOLI_IMAGE_FILTER);
     fDlg->setDefaultSuffix("png");
 
     if(fDlg->exec() == QDialog::Accepted)

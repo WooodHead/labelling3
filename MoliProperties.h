@@ -65,7 +65,9 @@ private slots:
     void on__comboBoxMoliTypical_editTextChanged(const QString &arg1);
 
 signals:
-    void flush();
+    void next();
+    void saveImages();
+    void flushBottom();
     void flushLeft(QString path, QString label);
 
 private:

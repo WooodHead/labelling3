@@ -28,6 +28,8 @@ public:
     static QString ExtResult;
     static QString ExtMask;
 
+    static QString NewName;
+
     // Icons
     static QtAwesome *Awesome;
 

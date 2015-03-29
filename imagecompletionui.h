@@ -14,6 +14,9 @@
 #include <QToolButton>
 #include <QStandardItemModel>
 
+#include <deque>
+using namespace std;
+
 #include "ui_SceneCompletionWidget.h"
 #include "ui_RegionCompetition.h"
 #include "PaintTools.h"
@@ -28,8 +31,12 @@
 #include "UserManagement.h"
 #include "Global.h"
 #include "MoliProperties.h"
+#include "def.h"
 
 #define DELETEPTR(ptr) if(ptr) { delete ptr; ptr = 0; }
+#define THUMBNAILS_PER_ROW 4
+
+typedef std::deque<QString>::iterator deque_it;
 
 
 class QStackedWidget;
@@ -59,11 +66,6 @@ public:
         NONE,
         LOADFAILED
     };
-
-
-private:
-
-    bool maybeSave();
 
 public:
     void setupMainWindow();
@@ -106,6 +108,11 @@ private:
     QScrollArea             *_editScrollArea;
     ImageViewer             *_editImageViewer;
 
+    QTabWidget              *_centralThumbnailTabWidget;
+    QWidget                 *_thumbnailTab;
+    QScrollArea             *_thumbnailScrollArea;
+    QLabel*                 labels[20];
+
     QListWidget             *_bottomListWidget;
 
     QDockWidget             *_rightOperationWidget;
@@ -118,10 +125,6 @@ private:
     QTextEdit				*_logWidget;
     QString                 *_logInformationString;
     QTimer                  *_timer;
-
-    QList<QIcon> lableIcons;
-    EDITSTEP _step;
-    bool IsShowDetail;
 
     Ui::SceneCompletionWidget	  _sceneCompletionDialog;
     Ui::RegionCompetition         _regionCompetitionDialog;
@@ -139,6 +142,8 @@ private:
 
     QDockWidget         *_bottomWindowWidget;
     QWidget             *_bottomDockWindowContents;
+
+    QStackedWidget      *_centralStackedWidget;
 
 
     ////////////////////////////////////////////////////////////////////////////////////
@@ -159,8 +164,8 @@ private:
     QAction				*_searchAction;
     QAction				*_addtosqlAction;
     QAction				*_saveresultAction;
-    QAction                             *_exportDataAction;
-    QAction                             *_importDataAction;
+    QAction             *_exportDataAction;
+    QAction             *_importDataAction;
 
     QAction             *_openBatchAction;
 
@@ -177,36 +182,22 @@ private:
     QAction               *_manualAction;
     QAction               *_saveLabelResultAction;
     QAction               *_saveMaskAction;
-
-    //user
     QAction               *_userManagementAction;
-    //
+
     QAction               *_strikeThickness[3];
-    //
     QAction               *_lineThickness[3];
 
     QAction               *_redo;
     QAction               *_undo;
-private:	
-    ////////////////////////////////////////////////////////////////////////////////////
-    //   variables for brush
-    ////////////////////////////////////////////////////////////////////////////////////
-    bool						_bStartMarking;
-    int							_brushSize;
-    PaintTools					*_brushTool;
 
-    QColor _brush2_color;
-    QColor _brush3_color;
+    bool                  _bStartMarking;
+    int					  _brushSize;
+    PaintTools			  *_brushTool;
 
-    void showData();
-
-protected:
-
-    void			keyPressEvent(QKeyEvent *e);
+    QStandardItemModel    *_treeModel;
 
 private slots:
     void	open();
-    void    batchOpen();
     void	save();
     void	saveAs();
 
@@ -217,93 +208,91 @@ private slots:
     void    exportData();
     void    importData();
 
-    void exitApp();
-    void selectColor();
+    void    exitApp();
+    void    selectColor();
 
-    // Basic Operation
-    void scaling();
-    void brighting();
-    void notColor();
-    void measure();
+    // Basic operations
+    void    scaling();
+    void    brighting();
+    void    notColor();
+    void    measure();
 
-    void actionSliderReleased();
+    void    actionSliderReleased();
 
-    void userManagement();
+    void    userManagement();
 
 private slots:
+    void    updateBrushSize();
+    void    updateMethod();
 
-    ////////////////////////////////////////////////////////////////////////////////////
-    //   switch between different module
-    ////////////////////////////////////////////////////////////////////////////////////
-    void switchModule();
+    void    changeLabel();
+    void    updateLineThickness();
 
-    void _RegionupdateBrushSize();
+    void    methodChangeTriggered(QAction*);
+    void    strikeChangeTriggered(QAction*);
+    void    strikeThicknessChangeTriggered(QAction*);
+    void    lineThicknessChangeTriggered(QAction*);
 
-    void _SceneupdateBrushSize();
+    void    redo();
+    void    undo();
 
-    void updateMethod();
-
-    void changeLabel();
-    void updateLineWidth();
-    void strikeComboChanged(int index);
-    void strikeThicknessComboboxChanged(int);
-    void lineThicknessComboboxChanged(int);
-
-    void labellingMethodChanged(QAction*);
-
-    char* getNewLogString();
-    void strikeChangeTriggered(QAction*);
-
-    void strikeThicknessChanged(QAction*);
-    void lineThicknessChanged(QAction*);
-
-    void redo();
-    void undo();
-
-    void cellDoubleClicked_(int, int);
-
-    void removeImage(QString filename);
+    void    cellDoubleClickedLeftWindow(int, int);
 
 private:
     Searchdata *searchdata1;
     AdvanceSearchDlg *_advanceSearchDlg;
     UserManagement *userMangementDlg;
     classification class1;
-    buttom buttom1;
-    QString _imageName;
-    QString _imagePath;
-    int _cnt;
 
-    QString labelStatus(QString absolutePath);
-    void showThumbnail(QString status, int row);
-
-    std::vector<QString> _fNames;
+    QString _strCurrentImagePath;
     double _imageScale;
+
+    std::deque<QString> _dequeTodo;
+    std::deque<QString> _dequeDone;
+
+    QString     status(QString absolutePath);
+    void        showThumbnail(QString status, int row);
+    void        showThumbnailForLabelled(QString strFilePath);
+    void        showThumbnailForUnLabelled(QString strFilePath);
+
+    void        insertNewImage(QString status);
+    void        showData();
+    char*       getNewLogString();
 
 private:
     bool copyFiles(QString fromDir,QString toDir,bool convertIfExits = false);
     bool importDB(const QString &path);
     bool exportDB(const QString &path);
 
-    bool openImage(QString file);
-    QColor getColor(QString status);
+    void    openImage(QString file);
+    QColor  color(QString status);
 
     void clearBottomWindow();
     QImage loadLabelledResult(QString file);
-    void setBackgroundColor(QString path, QColor color);
-    void setImageState(QString path, QString state);
 
     int rowIndex(QString image);
     void showImagesInTree();
+    void inDeque(const QString& , std::deque<QString> &);
+    int in(const QString& strFilePath, std::deque<QString> &);
+    void showThumbnailsInCentral(QStringList list);
 
-    QStandardItemModel *_treeModel;
+    bool eventFilter(QObject *, QEvent *);
 
 private slots:
     void flushBottom();
     void flushLeft(QString path, QString label);
     void showContextMenu(QPoint);
     void editProperties();
-    void synchImageName(QString fName);
+    void syncFilePathStr(QString fName);
+    void next();
+    void on_dBTableWidget_8_cellDoubleClicked(int row, int column);
+    void on_dBTableWidget_7_cellDoubleClicked(int row, int column);
+    void on_dBTableWidget_6_cellDoubleClicked(int row, int column);
+    void on_dBTableWidget_5_cellDoubleClicked(int row, int column);
+    void on_dBTableWidget_4_cellDoubleClicked(int row, int column);
+    void on_dBTableWidget_3_cellDoubleClicked(int row, int column);
+    void on_dBTableWidget_2_cellDoubleClicked(int row, int column);
+    void on_dBTableWidget_1_cellDoubleClicked(int row, int column);
 };
 
 #endif // IMAGECOMPLETIONUI_H
