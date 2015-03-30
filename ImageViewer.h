@@ -33,7 +33,6 @@
 #include <opencv/cv.h>
 #include "ui_ButtomWindow.h"
 #include "BasicDataStructure.h"
-#include "buttom.h"
 
 #define DELETE(ptr) if(ptr) {delete ptr; ptr = 0;}
 

@@ -15,7 +15,6 @@
 #include <QSqlField>
 #include <QFileDialog>
 
-#include "Connection.h"
 #include "propertynamedlg.h"
 #include "Global.h"
 

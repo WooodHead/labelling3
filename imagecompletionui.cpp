@@ -2,19 +2,21 @@
 #include <QPixmap>
 #include <QSqlQuery>
 #include <QSqlError>
+
 #include "imagecompletionui.h"
 #include "interfaces.h"
 #include "ImageViewer.h"
-#include "Connection.h"
 #include "ImageProperties.h"
 
 
 ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
     : QMainWindow(parent, flags)
 {
-    _brushSize = 3;
-    _editImageViewer = NULL;
-    _formLayout = NULL;
+    _canBack             = false;
+    _brushSize           = 3;
+    _imageScale          = 1.0;
+    _editImageViewer     = 0;
+    _formLayout          = 0;
     _strCurrentImagePath = QString();
 
     setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
@@ -38,9 +40,8 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
     setStrikeOptionsEnabled(false);
 
     showData();
-    showImagesInTree();
 
-    _imageScale = 1.0;
+    showImagesInTree();
 }
 
 ImageCompletionUI::~ImageCompletionUI()
@@ -111,15 +112,11 @@ void	ImageCompletionUI::createActions()
 {
     _openAction = new QAction( tr("&打开"), this );
     _openAction->setObjectName(tr("_openAction"));
-    QIcon icon1;
-    icon1.addPixmap(QPixmap(tr(":/new/prefix1/icons/fileopen.png")), QIcon::Normal, QIcon::Off);
     _openAction->setIcon( Global::Awesome->icon(  folderopeno  ) );
     connect(_openAction, SIGNAL(triggered()), this, SLOT(open()));
 
     _saveAction = new QAction( Global::Awesome->icon(floppyo), tr("&保存"), this );
     _saveAction->setObjectName(tr("_saveAction"));
-    QIcon icon2;
-    icon2.addPixmap(QPixmap(tr(":/new/prefix1/icons/filesave.png")), QIcon::Normal, QIcon::Off);
     connect(_saveAction, SIGNAL(triggered()), this, SLOT(save()));
 
     _saveAsAction = new QAction(  Global::Awesome->icon(floppyo), tr("&另存为"), this );
@@ -244,7 +241,7 @@ void	ImageCompletionUI::createActions()
         _lineThicknessToolButton->addAction(_lineThickness[i]);
     }
 
-    // user
+    // User
     if(Global::Authority == "1") //admin
     {
         _userManagementAction = new QAction( Global::Awesome->icon(user), tr("用户管理"), this );
@@ -290,7 +287,7 @@ void	ImageCompletionUI::createToolBars()
     }
 }
 
-void	ImageCompletionUI::setupWidgets()
+void ImageCompletionUI::setupWidgets()
 {
 
     int width = this->width();
@@ -591,17 +588,27 @@ void ImageCompletionUI::createConnections()
 
 void ImageCompletionUI::showContextMenu(QPoint pos)
 {
-    QAction* triggerEdit = new QAction(this);
-    triggerEdit->setText("编辑磨粒图像属性");
-    connect(triggerEdit, SIGNAL(triggered()), this, SLOT(editProperties()));
+    // Menu 1
+    QAction* editMenu = new QAction(tr("编辑磨粒图像属性"), this);
+    connect(editMenu, SIGNAL(triggered()), this, SLOT(editProperties()));
 
     if(_editImageViewer->image().isNull())
     {
-        triggerEdit->setEnabled(false);
+        editMenu->setEnabled(false);
+    }
+
+    // Menu 2
+    QAction* backMenu = new QAction(tr("回退"), this);
+    connect(backMenu, SIGNAL(triggered()), this, SLOT(back()));
+
+    if(_canBack == false)
+    {
+        backMenu->setEnabled(false);
     }
 
     QMenu menu;
-    menu.addAction(triggerEdit);
+    menu.addAction(editMenu);
+    menu.addAction(backMenu);
     menu.exec(_centralTabWidget->mapToGlobal(pos));
 }
 
@@ -740,7 +747,7 @@ void ImageCompletionUI::showImagesInTree()
     _leftWindow._treeViewImages->setExpandsOnDoubleClick(false);
 
     QSqlDatabase db;
-    if(!createConnection(db))
+    if(!Global::createConnection(db))
     {
         QMessageBox::critical(0,
                               tr("提示"),
@@ -1037,7 +1044,7 @@ void ImageCompletionUI::showData()
     clearBottomWindow();
 
     QSqlDatabase db;
-    if(!createConnection(db))
+    if(!Global::createConnection(db))
     {
         QMessageBox::warning(0,
                              tr("数据库"),
@@ -1451,7 +1458,7 @@ bool ImageCompletionUI::importDB(const QString &path)
      *@param path sql文件路径
      */
     QSqlDatabase gAuthDB;
-    if(!createConnection(gAuthDB))
+    if(!Global::createConnection(gAuthDB))
         return false;
 
     QSqlQuery query(gAuthDB);
@@ -1518,7 +1525,7 @@ bool ImageCompletionUI::exportDB(const QString &path)
     //QMessageBox::warning(this,"warning","this is private function to export SQL Data",QMessageBox::Close);
 
     QSqlDatabase gAuthDB;
-    if(!createConnection(gAuthDB))
+    if(!Global::createConnection(gAuthDB))
         return false;
 
     QStringList vList;
@@ -1886,7 +1893,7 @@ QString ImageCompletionUI::status(QString imagePath)
     if(imagePath.isEmpty()) return QString();
 
     QSqlDatabase db;
-    if( createConnection(db) )
+    if( Global::createConnection(db) )
     {
         QSqlQuery query;
         bool ret = query.exec(QString("select * from ferrographypicinfo"));
@@ -1953,7 +1960,7 @@ void ImageCompletionUI::on_dBTableWidget_6_cellDoubleClicked(int row, int column
         QString id = item->text();
 
         QSqlDatabase db;
-        if(createConnection(db))
+        if(Global::createConnection(db))
         {
             QSqlQuery query;
             QString str = QString("select ferrographypicpath from ferrographypicinfo where ferrographysheetid='%1'").arg(id);
@@ -1981,7 +1988,7 @@ void ImageCompletionUI::on_dBTableWidget_5_cellDoubleClicked(int row, int column
         QString id = item->text();
 
         QSqlDatabase db;
-        if(createConnection(db))
+        if(Global::createConnection(db))
         {
             QSqlQuery query;
             QString str = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo join ferrographyinfo on ferrographyinfo.oilsampleid='%1' and ferrographypicinfo.ferrographysheetid = ferrographyinfo.ferrographysheetid").arg(id);
@@ -2008,7 +2015,7 @@ void ImageCompletionUI::on_dBTableWidget_4_cellDoubleClicked(int row, int column
         QString id = item->text();
 
         QSqlDatabase db;
-        if(createConnection(db))
+        if(Global::createConnection(db))
         {
             QSqlQuery query;
             QString str = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo join ferrographyinfo on ferrographyinfo.oilsampleid='%1' and ferrographypicinfo.ferrographysheetid = ferrographyinfo.ferrographysheetid").arg(id);
@@ -2035,7 +2042,7 @@ void ImageCompletionUI::on_dBTableWidget_3_cellDoubleClicked(int row, int column
         QString id = item->text();
 
         QSqlDatabase db;
-        if(createConnection(db))
+        if(Global::createConnection(db))
         {
             QSqlQuery query;
             QString str = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo join oilsampleinfo join movepartinfo join ferrographyinfo on ferrographyinfo.oilsampleid=oilsampleinfo.oilsampleid and oilsampleinfo.planeid = movepartinfo.planeid and ferrographypicinfo.ferrographysheetid = ferrographyinfo.ferrographysheetid and movepartinfo.movepartid = '%1'").arg(id);
@@ -2061,7 +2068,7 @@ void ImageCompletionUI::on_dBTableWidget_2_cellDoubleClicked(int row, int column
         QString id = item->text();
 
         QSqlDatabase db;
-        if(createConnection(db))
+        if(Global::createConnection(db))
         {
             QSqlQuery query;
             QString str = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo join oilsampleinfo join ferrographyinfo on ferrographyinfo.oilsampleid=oilsampleinfo.oilsampleid and ferrographypicinfo.ferrographysheetid = ferrographyinfo.ferrographysheetid and oilsampleinfo.planeid = '%1' ").arg(id);
@@ -2087,7 +2094,7 @@ void ImageCompletionUI::on_dBTableWidget_1_cellDoubleClicked(int row, int column
         QString id = item->text();
 
         QSqlDatabase db;
-        if(createConnection(db))
+        if(Global::createConnection(db))
         {
             QSqlQuery query;
             QString str = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo join oilsampleinfo join ferrographyinfo on ferrographyinfo.oilsampleid = oilsampleinfo.oilsampleid and ferrographypicinfo.ferrographysheetid = ferrographyinfo.ferrographysheetid and oilsampleinfo.planeid = '%1'").arg(id);
@@ -2104,6 +2111,14 @@ void ImageCompletionUI::on_dBTableWidget_1_cellDoubleClicked(int row, int column
         }
     }
     showThumbnailsInCentral(list);
+}
+
+void ImageCompletionUI::back()
+{
+    if(0 == _centralStackedWidget->currentIndex())
+    {
+        _centralStackedWidget->setCurrentIndex(1);
+    }
 }
 
 void ImageCompletionUI::showThumbnailsInCentral(QStringList list)
@@ -2132,6 +2147,10 @@ void ImageCompletionUI::showThumbnailsInCentral(QStringList list)
                 QPixmap image;
                 if(image.load(list[index]))
                 {
+                    QPainter *painter = new QPainter(&image);
+                    painter->setPen(QColor(0, 255, 0));
+                    painter->drawRect(0, 0, image.width(), image.height());
+                    delete painter;
                     label->setPixmap(image);
                 }
                 lll->addWidget(label);
@@ -2145,8 +2164,9 @@ void ImageCompletionUI::showThumbnailsInCentral(QStringList list)
     }
 
     _thumbnailScrollArea->setLayout(_formLayout);
-    if(_centralStackedWidget->currentIndex() != 1)
+    if(_centralStackedWidget->currentIndex() == 0)
     {
+        _canBack = false;
         _centralStackedWidget->setCurrentIndex(1);
     }
 }
@@ -2156,10 +2176,11 @@ bool ImageCompletionUI::eventFilter(QObject *target, QEvent *event)
     if(event->type() == QEvent::MouseButtonDblClick)
     {
         QString strFilePath = target->objectName();
-        if(QFile::exists(strFilePath))
+        if( QFile::exists(strFilePath) )
         {
             _centralStackedWidget->setCurrentIndex(0);
-            this->openImage(strFilePath);
+            openImage(strFilePath);
+            _canBack = true;
         }
     }
 }
@@ -2183,5 +2204,4 @@ void ImageCompletionUI::clearLayout(QLayout *layout)
             delete item;
         }
     }
-
 }

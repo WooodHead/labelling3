@@ -11,7 +11,6 @@
 #include <QDebug>
 
 #include "Global.h"
-#include "Connection.h"
 #include "imagecompletionui.h"
 
 Login::Login(QWidget *parent) :
@@ -169,7 +168,7 @@ void Login::login()
     }
 
     QSqlDatabase db;
-    if(!createConnection(db))
+    if(!Global::createConnection(db))
     {
         QMessageBox::critical(0, qApp->tr("提示"),
                               qApp->tr("数据库连接失败!"),
@@ -301,7 +300,7 @@ void Login::setText(QString str, QLineEdit* edit)
 void Login::on__buttonTest_clicked()
 {
     QSqlDatabase db;
-    if(!createConnection(db))
+    if(!Global::createConnection(db))
     {
         ui->_labelStatus->setText(tr("连接失败!"));
     }

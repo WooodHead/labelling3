@@ -3,6 +3,7 @@
 
 #include <QSettings>
 #include <QColor>
+#include <QSqlDatabase>
 #include "QtAwesome.h"
 
 class Global
@@ -34,6 +35,7 @@ public:
     static QtAwesome *Awesome;
 
     static void initialize();
+    static bool createConnection(QSqlDatabase &db);
 
     static QSettings *settings;
 

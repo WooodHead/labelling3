@@ -2,24 +2,17 @@ QT += sql
 
 HEADERS += \
     ImageOperate.h \
-    FileOperate.h \
     CImg.h \
     BasicDataStructure.h \
     interfaces.h \
     PaintTools.h \
-    PolyLine.h \
-    MyPreference.h \
-    Linelet.h \
     ImageViewer.h \
     imagecompletionui.h \
-    LeftWindow.h \
     searchdata.h \
     classification.h \
-    buttom.h \
     advancesearchdlg.h \
     propertynamedlg.h \
     ImageProperties.h \
-    Connection.h \
     Login.h \
     UserAdd.h \
     UserEdit.h \
@@ -36,12 +29,8 @@ SOURCES += \
     BasicDataStructure.cpp \
     main.cpp \
     PaintTools.cpp \
-    PolyLine.cpp \
-    MyPreference.cpp \
     ImageViewer.cpp \
-    LeftWindow.cpp \
     classification.cpp \
-    buttom.cpp \
     propertynamedlg.cpp \
     UserInfo.cpp \
     advancesearchdlg.cpp \

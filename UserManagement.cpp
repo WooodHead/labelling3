@@ -1,7 +1,5 @@
 ﻿#include "UserManagement.h"
 #include "ui_usermanagement.h"
-
-#include "Connection.h"
 #include "UserAdd.h"
 
 #include <QMessageBox>
@@ -24,7 +22,7 @@ UserManagement::UserManagement(QWidget *parent) :
 
     setIcons();
 
-    if(!createConnection(db))
+    if(!Global::createConnection(db))
     {
         QMessageBox::warning(this, tr("提示"), tr("不能打开数据库链接"), QMessageBox::Close);
         return;

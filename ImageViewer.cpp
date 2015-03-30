@@ -29,7 +29,6 @@
 #include "ImageViewer.h"
 
 #include "ImageOperate.h"
-#include "Connection.h"
 
 #include "imagecompletionui.h"
 

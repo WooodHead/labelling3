@@ -27,7 +27,6 @@ using namespace std;
 #include "ui_CornerWindow.h"
 #include "searchdata.h"
 #include "classification.h"
-#include "buttom.h"
 #include "advancesearchdlg.h"
 #include "UserManagement.h"
 #include "Global.h"
@@ -242,16 +241,20 @@ private slots:
     void    cellDoubleClickedLeftWindow(int, int);
 
 private:
-    Searchdata *searchdata1;
-    AdvanceSearchDlg *_advanceSearchDlg;
-    UserManagement *userMangementDlg;
-    classification class1;
+    Searchdata          *searchdata1;
+    AdvanceSearchDlg    *_advanceSearchDlg;
+    UserManagement      *userMangementDlg;
+    classification      class1;
 
-    QString _strCurrentImagePath;
-    double _imageScale;
+    QString             _strCurrentImagePath;
+    double              _imageScale;
 
     std::deque<QString> _dequeTodo;
     std::deque<QString> _dequeDone;
+
+    bool _canBack;
+
+private: // methods
 
     QString     status(QString absolutePath);
     void        showThumbnail(QString status, int row);
@@ -262,41 +265,43 @@ private:
     void        showData();
     char*       getNewLogString();
 
-private:
-    bool copyFiles(QString fromDir,QString toDir,bool convertIfExits = false);
-    bool importDB(const QString &path);
-    bool exportDB(const QString &path);
+    bool        copyFiles(QString fromDir,QString toDir,bool convertIfExits = false);
+    bool        importDB(const QString &path);
+    bool        exportDB(const QString &path);
 
-    void   openImage(QString file);
-    QColor color(QString status);
+    void        openImage(QString file);
+    QColor      color(QString status);
 
-    void   clearBottomWindow();
-    QImage loadLabelledResult(QString file);
+    void        clearBottomWindow();
+    QImage      loadLabelledResult(QString file);
 
-    int  rowIndex(QString image);
-    void showImagesInTree();
-    void inDeque(const QString& , std::deque<QString> &);
-    int  in(const QString& strFilePath, std::deque<QString> &);
-    void showThumbnailsInCentral(QStringList list);
+    int         rowIndex(QString image);
+    void        showImagesInTree();
+    void        inDeque(const QString& , std::deque<QString> &);
+    int         in(const QString& strFilePath, std::deque<QString> &);
+    void        showThumbnailsInCentral(QStringList list);
 
-    bool eventFilter(QObject *, QEvent *);
-    void clearLayout(QLayout *layout);
+    bool        eventFilter(QObject *, QEvent *);
+    void        clearLayout(QLayout *layout);
 
 private slots:
-    void flushBottom();
-    void flushLeft(QString path, QString label);
-    void showContextMenu(QPoint);
-    void editProperties();
-    void syncFilePathStr(QString fName);
-    void next();
-    void on_dBTableWidget_8_cellDoubleClicked(int row, int column);
-    void on_dBTableWidget_7_cellDoubleClicked(int row, int column);
-    void on_dBTableWidget_6_cellDoubleClicked(int row, int column);
-    void on_dBTableWidget_5_cellDoubleClicked(int row, int column);
-    void on_dBTableWidget_4_cellDoubleClicked(int row, int column);
-    void on_dBTableWidget_3_cellDoubleClicked(int row, int column);
-    void on_dBTableWidget_2_cellDoubleClicked(int row, int column);
-    void on_dBTableWidget_1_cellDoubleClicked(int row, int column);
+    void        flushBottom();
+    void        flushLeft(QString path, QString label);
+    void        showContextMenu(QPoint);
+    void        editProperties();
+    void        syncFilePathStr(QString fName);
+    void        next();
+
+    void        on_dBTableWidget_8_cellDoubleClicked(int row, int column);
+    void        on_dBTableWidget_7_cellDoubleClicked(int row, int column);
+    void        on_dBTableWidget_6_cellDoubleClicked(int row, int column);
+    void        on_dBTableWidget_5_cellDoubleClicked(int row, int column);
+    void        on_dBTableWidget_4_cellDoubleClicked(int row, int column);
+    void        on_dBTableWidget_3_cellDoubleClicked(int row, int column);
+    void        on_dBTableWidget_2_cellDoubleClicked(int row, int column);
+    void        on_dBTableWidget_1_cellDoubleClicked(int row, int column);
+
+    void        back();
 };
 
 #endif // IMAGECOMPLETIONUI_H
