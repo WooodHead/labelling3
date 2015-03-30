@@ -14,6 +14,7 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
 {
     _brushSize = 3;
     _editImageViewer = NULL;
+    _formLayout = NULL;
     _strCurrentImagePath = QString();
 
     setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
@@ -365,6 +366,8 @@ void	ImageCompletionUI::setupWidgets()
 
     _thumbnailScrollArea = new QScrollArea(_thumbnailTab);
     _thumbnailScrollArea->setObjectName(tr("_thumbnailScrollArea"));
+    _formLayout = new QFormLayout;
+    _thumbnailScrollArea->setLayout(_formLayout);
 
     QGridLayout *tabLayout2 = new QGridLayout;
     tabLayout2->addWidget(_thumbnailScrollArea);
@@ -1904,7 +1907,7 @@ QString ImageCompletionUI::status(QString imagePath)
 }
 
 void ImageCompletionUI::on_dBTableWidget_8_cellDoubleClicked(int row, int column)
-{
+{   
     QString strFilePath;
     QTableWidgetItem* item = _bottomWindow.dBTableWidget_8->item(row, 5);
     if(item)
@@ -1914,6 +1917,10 @@ void ImageCompletionUI::on_dBTableWidget_8_cellDoubleClicked(int row, int column
 
     if(!strFilePath.isEmpty() && QFile::exists(strFilePath) )
     {
+        if(_centralStackedWidget->currentIndex() != 0)
+        {
+            _centralStackedWidget->setCurrentIndex(0);
+        }
         this->openImage(strFilePath);
     }
 }
@@ -1929,6 +1936,10 @@ void ImageCompletionUI::on_dBTableWidget_7_cellDoubleClicked(int row, int column
 
     if(!strFilePath.isEmpty() && QFile::exists(strFilePath) )
     {
+        if(_centralStackedWidget->currentIndex() != 0)
+        {
+            _centralStackedWidget->setCurrentIndex(0);
+        }
         this->openImage(strFilePath);
     }
 }
@@ -1973,7 +1984,7 @@ void ImageCompletionUI::on_dBTableWidget_5_cellDoubleClicked(int row, int column
         if(createConnection(db))
         {
             QSqlQuery query;
-            QString str = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo where ferrographyinfo.oilsampleid='%1'").arg(id);
+            QString str = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo join ferrographyinfo on ferrographyinfo.oilsampleid='%1' and ferrographypicinfo.ferrographysheetid = ferrographyinfo.ferrographysheetid").arg(id);
             query.prepare(str);
 
             if(query.exec())
@@ -2000,7 +2011,7 @@ void ImageCompletionUI::on_dBTableWidget_4_cellDoubleClicked(int row, int column
         if(createConnection(db))
         {
             QSqlQuery query;
-            QString str = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo where ferrographypicinfo.oilsampleid='%1'").arg(id);
+            QString str = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo join ferrographyinfo on ferrographyinfo.oilsampleid='%1' and ferrographypicinfo.ferrographysheetid = ferrographyinfo.ferrographysheetid").arg(id);
             query.prepare(str);
 
             if(query.exec())
@@ -2022,14 +2033,12 @@ void ImageCompletionUI::on_dBTableWidget_3_cellDoubleClicked(int row, int column
     if(item)
     {
         QString id = item->text();
-        QString id2 = item->text();
 
         QSqlDatabase db;
         if(createConnection(db))
         {
             QSqlQuery query;
-            QString str = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo join oilsampleinfo join movepartinfo on ferrographypicinfo.oilsampleid=oilsampleinfo.oilsampleid and oilsampleinfo.planeid = movepartinfo.planeid and movepartinfo.planetype = oilsampleinfo.planeid and movepartinfo.movepartid = '%1'").arg(id);
-            query.prepare(str);
+            QString str = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo join oilsampleinfo join movepartinfo join ferrographyinfo on ferrographyinfo.oilsampleid=oilsampleinfo.oilsampleid and oilsampleinfo.planeid = movepartinfo.planeid and ferrographypicinfo.ferrographysheetid = ferrographyinfo.ferrographysheetid and movepartinfo.movepartid = '%1'").arg(id);
 
             if(query.exec())
             {
@@ -2047,18 +2056,15 @@ void ImageCompletionUI::on_dBTableWidget_2_cellDoubleClicked(int row, int column
 {
     QStringList list;
     QTableWidgetItem* item = _bottomWindow.dBTableWidget_2->item(row, 5);
-    QTableWidgetItem* item2 = _bottomWindow.dBTableWidget_2->item(row, 6);
-    if(item && item2)
+    if( item )
     {
         QString id = item->text();
-        QString id2 = item->text();
 
         QSqlDatabase db;
         if(createConnection(db))
         {
             QSqlQuery query;
-            QString str = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo join oilsampleinfo on ferrographypicinfo.oilsampleid=oilsampleinfo.oilsampleid and oilsampleinfo.planeid = '%1' and oilsampleinfo.planetype = '%2'").arg(id).arg(id2);
-            query.prepare(str);
+            QString str = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo join oilsampleinfo join ferrographyinfo on ferrographyinfo.oilsampleid=oilsampleinfo.oilsampleid and ferrographypicinfo.ferrographysheetid = ferrographyinfo.ferrographysheetid and oilsampleinfo.planeid = '%1' ").arg(id);
 
             if(query.exec())
             {
@@ -2076,18 +2082,16 @@ void ImageCompletionUI::on_dBTableWidget_1_cellDoubleClicked(int row, int column
 {
     QStringList list;
     QTableWidgetItem* item = _bottomWindow.dBTableWidget_1->item(row, 0);
-    QTableWidgetItem* item2 = _bottomWindow.dBTableWidget_1->item(row, 1);
-    if(item && item2)
+    if( item )
     {
         QString id = item->text();
-        QString id2 = item2->text();
 
         QSqlDatabase db;
         if(createConnection(db))
         {
             QSqlQuery query;
-            QString str = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo join oilsampleinfo on ferrographypicinfo.oilsampleid=oilsampleinfo.oilsampleid and oilsampleinfo.planeid = '%1'").arg(id);
-                                  // and oilsampleinfo.planetype = '%2'").arg(id).arg(id2);
+            QString str = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo join oilsampleinfo join ferrographyinfo on ferrographyinfo.oilsampleid = oilsampleinfo.oilsampleid and ferrographypicinfo.ferrographysheetid = ferrographyinfo.ferrographysheetid and oilsampleinfo.planeid = '%1'").arg(id);
+
             query.prepare(str);
 
             if(query.exec())
@@ -2108,7 +2112,7 @@ void ImageCompletionUI::showThumbnailsInCentral(QStringList list)
 
     close();
 
-    QFormLayout* formLayout = new QFormLayout;
+    clearLayout(_formLayout);
 
     int nRow = list.size() / THUMBNAILS_PER_ROW + 1;
 
@@ -2137,11 +2141,14 @@ void ImageCompletionUI::showThumbnailsInCentral(QStringList list)
                 break;
             }
         }
-        formLayout->addRow(lll);
+        _formLayout->addRow(lll);
     }
 
-    _thumbnailScrollArea->setLayout(formLayout);
-    _centralStackedWidget->setCurrentIndex(1);
+    _thumbnailScrollArea->setLayout(_formLayout);
+    if(_centralStackedWidget->currentIndex() != 1)
+    {
+        _centralStackedWidget->setCurrentIndex(1);
+    }
 }
 
 bool ImageCompletionUI::eventFilter(QObject *target, QEvent *event)
@@ -2155,4 +2162,26 @@ bool ImageCompletionUI::eventFilter(QObject *target, QEvent *event)
             this->openImage(strFilePath);
         }
     }
+}
+
+void ImageCompletionUI::clearLayout(QLayout *layout)
+{
+    if(layout)
+    {
+        while(QLayoutItem* item = layout->takeAt(0))
+        {
+            QWidget* widget;
+            if(widget = item->widget())
+            {
+                delete widget;
+            }
+
+            if(QLayout* childLayout = item->layout())
+            {
+                clearLayout(childLayout);
+            }
+            delete item;
+        }
+    }
+
 }

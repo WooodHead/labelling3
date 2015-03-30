@@ -13,6 +13,7 @@
 #include <QSqlDatabase>
 #include <QToolButton>
 #include <QStandardItemModel>
+#include <QFormLayout>
 
 #include <deque>
 using namespace std;
@@ -196,6 +197,8 @@ private:
 
     QStandardItemModel    *_treeModel;
 
+    QFormLayout           *_formLayout;
+
 private slots:
     void	open();
     void	save();
@@ -264,19 +267,20 @@ private:
     bool importDB(const QString &path);
     bool exportDB(const QString &path);
 
-    void    openImage(QString file);
-    QColor  color(QString status);
+    void   openImage(QString file);
+    QColor color(QString status);
 
-    void clearBottomWindow();
+    void   clearBottomWindow();
     QImage loadLabelledResult(QString file);
 
-    int rowIndex(QString image);
+    int  rowIndex(QString image);
     void showImagesInTree();
     void inDeque(const QString& , std::deque<QString> &);
-    int in(const QString& strFilePath, std::deque<QString> &);
+    int  in(const QString& strFilePath, std::deque<QString> &);
     void showThumbnailsInCentral(QStringList list);
 
     bool eventFilter(QObject *, QEvent *);
+    void clearLayout(QLayout *layout);
 
 private slots:
     void flushBottom();
