@@ -1,6 +1,5 @@
 ﻿#include "searchdata.h"
 #include "ui_searchdata.h"
-#include "Connection.h"
 #include <QApplication>
 #include <QTableView>
 #include <QObject>
@@ -179,7 +178,7 @@ Searchdata::Searchdata(QWidget *parent) :
     QSqlDatabase db2;//创建一个SQL数据库实例
 
     uid=0;
-    if(!createConnection(db2))//调用connection.h头文件中定义的createConnection函数连接数据库
+    if(!Global::createConnection(db2))//调用connection.h头文件中定义的createConnection函数连接数据库
     {
         QMessageBox::critical(0, qApp->tr("Cannot open database"),
                                       qApp->tr("Unable to establish a database connection."),
@@ -383,7 +382,7 @@ void Searchdata::on_linkbutton_clicked()//点击登录按钮
     int arrayid6[1000];
     int arrayid7[1000];
     int arrayid8[1000];
-    if(!createConnection(db))//调用connection.h头文件中定义的createConnection函数连接数据库
+    if(!Global::createConnection(db))//调用connection.h头文件中定义的createConnection函数连接数据库
     {
         QMessageBox::critical(0, qApp->tr("Cannot open database"),
                                       qApp->tr("Unable to establish a database connection."),
@@ -2779,7 +2778,7 @@ void Searchdata::on_addtobutton_clicked()//点击登录按钮
                  j++;
 
              }
-     if(!createConnection(db1))//调用connection.h头文件中定义的createConnection函数连接数据库
+     if(!Global::createConnection(db1))//调用connection.h头文件中定义的createConnection函数连接数据库
      {
          QMessageBox::critical(0, qApp->tr("Cannot open database"),
                                        qApp->tr("Unable to establish a database connection."),

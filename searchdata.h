@@ -2,6 +2,9 @@
 #define SEARCHDATA_H
 
 #include <QWidget>
+#include <QMessageBox>
+
+#include "Global.h"
 
 namespace Ui {
     class Searchdata;

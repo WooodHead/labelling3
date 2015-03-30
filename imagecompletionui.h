@@ -34,7 +34,7 @@ using namespace std;
 #include "def.h"
 
 #define DELETEPTR(ptr) if(ptr) { delete ptr; ptr = 0; }
-#define THUMBNAILS_PER_ROW 4
+#define THUMBNAILS_PER_ROW 8
 
 typedef std::deque<QString>::iterator deque_it;
 
@@ -252,7 +252,8 @@ private:
     std::deque<QString> _dequeTodo;
     std::deque<QString> _dequeDone;
 
-    bool _canBack;
+    bool                _canBack;
+    QString             _strMoliId;
 
 private: // methods
 
@@ -284,6 +285,8 @@ private: // methods
     bool        eventFilter(QObject *, QEvent *);
     void        clearLayout(QLayout *layout);
 
+    void        drawEnclosingRectangle(QPixmap& pixmap, const QColor color);
+
 private slots:
     void        flushBottom();
     void        flushLeft(QString path, QString label);
@@ -302,6 +305,8 @@ private slots:
     void        on_dBTableWidget_1_cellDoubleClicked(int row, int column);
 
     void        back();
+    void        append();
+    void        showAll();
 };
 
 #endif // IMAGECOMPLETIONUI_H

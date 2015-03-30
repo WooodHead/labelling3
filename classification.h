@@ -2,6 +2,9 @@
 #define CLASSIFICATION_H
 
 #include <QWidget>
+#include <QMessageBox>
+
+#include "Global.h"
 
 namespace Ui {
     class classification;

@@ -80,6 +80,9 @@ public:
 	QColor          getLineColor() const { return _lineColor; }
 	void			setLineThickness(int val) { _lineThickness = val; }
 
+    // Used only for draw all labelled MOLIs
+    void            drawAllMoli(QList<QByteArray> list);
+
 protected:
     void			paintEvent(QPaintEvent *event);
     void			mousePressEvent(QMouseEvent *event);

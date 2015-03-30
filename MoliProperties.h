@@ -10,6 +10,7 @@
 #include <QBuffer>
 
 #include "ImageOperate.h"
+#include "Global.h"
 
 namespace Ui {
 class MoliProperties;

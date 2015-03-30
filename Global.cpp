@@ -20,6 +20,7 @@ QString Global::ExtMask = QString();
 QString Global::ExtResult = QString();
 
 QString Global::NewName = QString();
+QString Global::MoliId = QString();
 
 QtAwesome* Global::Awesome = 0;
 

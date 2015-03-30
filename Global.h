@@ -30,6 +30,7 @@ public:
     static QString ExtMask;
 
     static QString NewName;
+    static QString MoliId;
 
     // Icons
     static QtAwesome *Awesome;

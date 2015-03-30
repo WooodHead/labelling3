@@ -1,8 +1,6 @@
 ﻿#include "MoliProperties.h"
 #include "ui_MoliProperties.h"
 
-#include "Connection.h"
-
 #include <opencv2/opencv.hpp>
 
 MoliProperties::MoliProperties(QWidget *parent) :
@@ -27,7 +25,7 @@ MoliProperties::MoliProperties(QWidget *parent) :
     connect(this, SIGNAL(saveImages()), parent, SLOT(save()));
     connect(this, SIGNAL(next()), parent, SLOT(next()));
 
-    if(!createConnection(_db))
+    if(!Global::createConnection(_db))
     {
         QMessageBox::critical(0, qApp->tr("提示"),
                               qApp->tr("数据库连接失败!"),
@@ -109,7 +107,11 @@ MoliProperties::~MoliProperties()
 
     _db.close();
     delete _model;
-    delete Global::Awesome;
+    if(Global::Awesome)
+    {
+        delete Global::Awesome;
+        Global::Awesome = 0;
+    }
 }
 
 void MoliProperties::on_pushButton_2_clicked()
@@ -155,6 +157,15 @@ void MoliProperties::on_pushButton_clicked()
         {
             if(_model->rowCount() == 1)
             {
+                QMessageBox::StandardButton ret = QMessageBox::warning(this,
+                                                           tr("提示"),
+                                                           tr("磨粒编号已存在, 确认要保存?"),
+                                                           QMessageBox::Ok | QMessageBox::Cancel);
+                if(QMessageBox::Cancel == ret)
+                {
+                    return;
+                }
+
                 QSqlRecord record = _model->record();
                 record.setValue("abrasiveid", ui->_comboBoxMoliID->currentText());
                 record.setValue("ferrographypicid", ui->_comboBoxMoliImageID->currentText());
@@ -312,6 +323,7 @@ void MoliProperties::on_pushButton_clicked()
                 }
 
                 Global::NewName = ui->_comboBoxMoliImageID->currentText();
+                Global::MoliId = ui->_comboBoxMoliID->currentText();
 
                 emit saveImages();
                 emit flushBottom();

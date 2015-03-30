@@ -751,6 +751,48 @@ void ImageViewer::imageNotColor( double /*scaleFactor*/ )
     setImage( *image );
 }
 
+void ImageViewer::drawAllMoli(QList<QByteArray> list)
+{
+    QRgb colors[] = {
+                     qRgb(0,   255, 255),
+                     qRgb(0,   255, 0),
+                     qRgb(255, 0,   0),
+                     qRgb(255, 255, 0),
+                     qRgb(255, 0,   255),
+                     qRgb(0,   0,   255)
+                    };
+
+    QPixmap pixmap;
+    QImage temp;
+    QImage *image = 0;
+    if(_ocvImage)
+    {
+        image = IplImageToQImage( _ocvImage );
+    }
+
+    int cnt = 0;
+    foreach(QByteArray arr, list)
+    {
+        pixmap.loadFromData(arr);
+        temp = pixmap.toImage();
+
+        for(int h = 0; h < temp.height(); h++)
+        {
+            for(int w = 0; w < temp.width(); w++)
+            {
+                QRgb color = temp.pixel(w, h);
+                if(qRed(color) == 0 && qGreen(color) == 255 && qBlue(color) == 255)
+                {
+                    image->setPixel(w, h, colors[cnt % 6]);
+                }
+            }
+        }
+        cnt ++;
+    }
+
+    setImage(*image);
+}
+
 void ImageViewer::mouseDoubleClickEvent( QMouseEvent */*event*/ )
 {
     if(_bPolygonDrawing)

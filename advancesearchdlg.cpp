@@ -7,7 +7,7 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    if(!createConnection(db))
+    if(!Global::createConnection(db))
     {
         QMessageBox::warning(this,tr("数据库提示"),tr("不能链接数据库"),QMessageBox::Close);
         return;
@@ -2024,7 +2024,7 @@ void AdvanceSearchDlg::on_addtoBtn_clicked()
         else
             QMessageBox::warning(this,tr("提示"),tr("保存查询属性失败"),QMessageBox::Close);
     }
-    else
+    //else // what's the fuck
         ;
     //        qDebug()<<"Reject";
 }
@@ -4859,7 +4859,7 @@ void AdvanceSearchDlg::on_modifyButton_clicked()
             else
                 this->propertyName = "";
     }
-    else
+    else // what's the fuck
         ;
 
     ui->queryBtn->setEnabled(true);

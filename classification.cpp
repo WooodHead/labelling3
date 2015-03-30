@@ -1,6 +1,5 @@
 #include "classification.h"
 #include "ui_classification.h"
-#include "Connection.h"
 #include <QApplication>
 #include <QTableView>
 #include <QObject>
@@ -16,7 +15,7 @@ classification::classification(QWidget *parent) :
     ui->setupUi(this);
     int i=0;
     QSqlDatabase db;
-    if(!createConnection(db))
+    if(!Global::createConnection(db))
     {
         QMessageBox::critical(0, qApp->tr("Cannot open database"),
                               qApp->tr("Unable to establish a database connection."),
@@ -55,7 +54,7 @@ void classification::on_updateButton_clicked()
 {
     int i=0;
     QSqlDatabase db;
-    if(!createConnection(db))
+    if(!Global::createConnection(db))
     {
         QMessageBox::critical(0, qApp->tr("Cannot open database"),
                               qApp->tr("Unable to establish a database connection."),

@@ -18,6 +18,7 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
     _editImageViewer     = 0;
     _formLayout          = 0;
     _strCurrentImagePath = QString();
+    _strMoliId           = QString();
 
     setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
@@ -592,12 +593,17 @@ void ImageCompletionUI::showContextMenu(QPoint pos)
     QAction* editMenu = new QAction(tr("编辑磨粒图像属性"), this);
     connect(editMenu, SIGNAL(triggered()), this, SLOT(editProperties()));
 
+    // Menu 2
+    QAction *appendMenu = new QAction(tr("标注新磨粒"), this);
+    connect(appendMenu, SIGNAL(triggered()), this, SLOT(append()));
+
     if(_editImageViewer->image().isNull())
     {
         editMenu->setEnabled(false);
+        appendMenu->setEnabled(false);
     }
 
-    // Menu 2
+    // Menu 3
     QAction* backMenu = new QAction(tr("回退"), this);
     connect(backMenu, SIGNAL(triggered()), this, SLOT(back()));
 
@@ -606,8 +612,14 @@ void ImageCompletionUI::showContextMenu(QPoint pos)
         backMenu->setEnabled(false);
     }
 
+    // Menu 4
+    QAction* showAllMenu = new QAction(tr("显示所有已标注磨粒"), this);
+    connect(showAllMenu, SIGNAL(triggered()), this, SLOT(showAll()));
+
     QMenu menu;
     menu.addAction(editMenu);
+    menu.addAction(appendMenu);
+    menu.addAction(showAllMenu);
     menu.addAction(backMenu);
     menu.exec(_centralTabWidget->mapToGlobal(pos));
 }
@@ -720,16 +732,7 @@ void ImageCompletionUI::openImage(QString strFilePath)
             this->showThumbnailForLabelled(strFilePath);
         }
 
-        QImage image = this->loadLabelledResult( strFilePath );
-        if(image.isNull())
-        {
-            QMessageBox::warning(0,
-                                 MOLI_MESSAGEBOX_TITLE_PROMPT_STRING,
-                                 "加载标注结果图像失败,自动显示原始图像",
-                                 QMessageBox::Close);
-            return;
-        }
-        _editImageViewer->setImage(image);
+        this->loadLabelledResult( strFilePath );
     }
     else if(MOLI_UNLABELLED_STATUS_CHAR == status)
     {
@@ -922,7 +925,17 @@ void	ImageCompletionUI::save()
     }
 
     // Save
-    QString pathResult = Global::PathResult + Global::NewName + "." + Global::ExtResult;
+    QString pathResult, pathMask;
+    if(Global::MoliId.isEmpty())
+    {
+        pathResult = Global::PathResult + Global::NewName + "." + Global::ExtResult;
+        pathMask = Global::PathMask + Global::NewName + "." + Global::ExtMask;
+    }
+    else
+    {
+        pathResult = Global::PathResult + Global::MoliId + "." + Global::ExtResult;
+        pathMask = Global::PathMask + Global::MoliId + "." + Global::ExtMask;
+    }
     if(!(ret1 = _editImageViewer->saveLabelledResult(pathResult, Global::ExtResult)))
     {
         QMessageBox::warning(this,
@@ -931,7 +944,6 @@ void	ImageCompletionUI::save()
                              QMessageBox::Close);
     }
 
-    QString pathMask = Global::PathMask + Global::NewName + "." + Global::ExtMask;
     if(!(ret2 = _editImageViewer->saveMask(pathMask, Global::ExtMask)))
     {
         QMessageBox::warning(this,
@@ -1450,7 +1462,6 @@ void ImageCompletionUI::undo()
     redo();
 }
 
-// 从文件导入数据--zhyn
 bool ImageCompletionUI::importDB(const QString &path)
 {
     /**
@@ -1515,7 +1526,6 @@ bool ImageCompletionUI::importDB(const QString &path)
     return true;
 }
 
-// 导出数据数据到文件--zhyn
 bool ImageCompletionUI::exportDB(const QString &path)
 {
     /**
@@ -1637,18 +1647,23 @@ void ImageCompletionUI::clearBottomWindow()
 
 QImage ImageCompletionUI::loadLabelledResult(QString file)
 {
+    QList<QByteArray> list;
     QPixmap image;
     QSqlTableModel *model = new QSqlTableModel;
 
     model->setTable("abrasivemarkinfo");
     model->setFilter(QString("abrasivepicpath = '%1'").arg(file));
-    if(model->select() && model->rowCount() == 1)
+    if(model->select())
     {
-        QSqlRecord record = model->record(0);
+        for(int i = 0; i < model->rowCount(); i++)
+        {
+            QSqlRecord record = model->record(i);
 
-        QByteArray arr = record.value("abrasiveResultData").toByteArray();
-        QString suffix = record.value("abrasiveResultExt").toString();
-        image.loadFromData(arr, suffix.toUtf8().constData());
+            QByteArray arr = record.value("abrasiveResultData").toByteArray();
+            list.push_back(arr);
+
+            _editImageViewer->drawAllMoli(list);
+        }
     }
 
     model->deleteLater();
@@ -1672,14 +1687,17 @@ void ImageCompletionUI::flushLeft(QString strFilePath, QString label)
         {
             _dequeTodo.erase(it);
             _leftWindow.tableWidget->removeRow(k);
+            break;
         }
     }
 
-    this->inDeque(strFilePath, _dequeDone);
-    this->showThumbnailForLabelled(strFilePath);
+    if(-1 == in(strFilePath, _dequeDone))
+    {
+        this->inDeque(strFilePath, _dequeDone);
+        this->showThumbnailForLabelled(strFilePath);
+    }
 }
 
-// 拷贝文件--zhyn
 bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIfExits)
 {
     /**
@@ -1733,7 +1751,6 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
     return true;
 }
 
-// 批量数据导入--zhyn
 void ImageCompletionUI::importData()
 {
     QFileDialog *packgeDir = new QFileDialog(this,tr("选择打包文件"),"","");
@@ -1798,7 +1815,6 @@ void ImageCompletionUI::importData()
     }
 }
 
-// 批量数据导出--zhyn
 void ImageCompletionUI::exportData()
 {
     QFileDialog *sourceDir = new QFileDialog(this,tr("选择铁谱图片目录"),"","");
@@ -2121,6 +2137,42 @@ void ImageCompletionUI::back()
     }
 }
 
+void ImageCompletionUI::append()
+{
+    bool ok = _editImageViewer->openImage(_strCurrentImagePath);
+    if(!ok)
+    {
+        QMessageBox::warning(this,
+                             tr("提示"),
+                             tr("无法打开图像"),
+                             QMessageBox::Close);
+        return;
+    }
+}
+
+void ImageCompletionUI::showAll()
+{
+    QList<QByteArray> list;
+
+    QSqlDatabase db;
+    if(Global::createConnection(db))
+    {
+        QString sql = QString("select abrasiveResultData from abrasivemarkinfo where abrasivepicpath = '%1'").arg(_strCurrentImagePath);
+
+        QSqlQuery query;
+        query.prepare(sql);
+
+        if(query.exec())
+        {
+            while(query.next())
+            {
+                list.push_back(query.value(0).toByteArray());
+            }
+            _editImageViewer->drawAllMoli(list);
+        }
+    }
+}
+
 void ImageCompletionUI::showThumbnailsInCentral(QStringList list)
 {
     if(list.empty()) return;
@@ -2142,15 +2194,12 @@ void ImageCompletionUI::showThumbnailsInCentral(QStringList list)
                 QLabel* label = new QLabel(list[index]);
                 label->installEventFilter(this);
                 label->setObjectName(list[index]);
-                label->setFixedSize(200, 100);
+                label->setFixedSize(150, 75);
                 label->setScaledContents(true);
                 QPixmap image;
                 if(image.load(list[index]))
                 {
-                    QPainter *painter = new QPainter(&image);
-                    painter->setPen(QColor(0, 255, 0));
-                    painter->drawRect(0, 0, image.width(), image.height());
-                    delete painter;
+                    drawEnclosingRectangle(image, color(status(list[index])));
                     label->setPixmap(image);
                 }
                 lll->addWidget(label);
@@ -2191,8 +2240,7 @@ void ImageCompletionUI::clearLayout(QLayout *layout)
     {
         while(QLayoutItem* item = layout->takeAt(0))
         {
-            QWidget* widget;
-            if(widget = item->widget())
+            if(QWidget* widget = item->widget())
             {
                 delete widget;
             }
@@ -2204,4 +2252,11 @@ void ImageCompletionUI::clearLayout(QLayout *layout)
             delete item;
         }
     }
+}
+
+void ImageCompletionUI::drawEnclosingRectangle(QPixmap& pixmap, const QColor color)
+{
+    QPainter painter(&pixmap);
+    painter.setPen(QPen(color, 20, Qt::SolidLine));
+    painter.drawRect(0, 0, pixmap.width(), pixmap.height());
 }
