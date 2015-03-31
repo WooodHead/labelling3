@@ -1149,7 +1149,9 @@ QString ImageProperties::generateTiepupianID()
         return ui->_comboBoxMentalOilSampleID->currentText() + "TPP" + QString(QChar::fromAscii(QChar('A').toAscii() + ui->_comboBoxMentalInstrumentType->currentIndex()-1)) + "00";
     }
     else
+    {
         return QString();
+    }
 }
 
 QString ImageProperties::generateOilSampleID()
@@ -1157,8 +1159,10 @@ QString ImageProperties::generateOilSampleID()
     if(!ui->_comboBoxMovepartName->currentText().isEmpty() && !ui->_dateEditOilSampleSampleDate->text().isEmpty()
             && !ui->_timeEditOilSampleSampleTime->text().isEmpty() && !ui->_comboBoxOilSamplePlaneID->currentText().isEmpty())
     {
+        QString str = ui->_comboBoxMovepartName->currentText();
+        QChar ch = str[str.length()-2];
         return ui->_comboBoxOilSamplePlaneID->currentText() + ui->_dateEditOilSampleSampleDate->date().toString("yyyyMMdd")
-                + ui->_timeEditOilSampleSampleTime->time().toString("hh") + QString(QChar::fromAscii(QChar('A').toAscii() + ui->_comboBoxMovepartName->currentIndex()-1))+"0";
+                + ui->_timeEditOilSampleSampleTime->time().toString("hh") + QString(ch) +"0";
     }
     else
     {
