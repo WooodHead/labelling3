@@ -10,6 +10,7 @@ UserManagement::UserManagement(QWidget *parent) :
     ui(new Ui::UserManagement)
 {
     ui->setupUi(this);
+    this->setModal(true);
 
     setWindowTitle(tr("用户管理"));
 

@@ -549,6 +549,7 @@ void ImageViewer::mouseReleaseEvent(QMouseEvent *event)
 
             lastPos = QPoint(-1, -1);
             QApplication::restoreOverrideCursor();
+            this->setDefaultCursor();
             _mainWindow->updateLog();
         }
     }
@@ -864,13 +865,17 @@ void ImageViewer::redo()
         _labelMapImage = NULL;
     }
 
-    thickness		= 5;
-    bPaintable		= false;
-    lastPos			= QPoint(-1, -1);
+    thickness   = 5;
+    bPaintable  = false;
+    lastPos     = QPoint(-1, -1);
     updateObjectCount(0);
     isEraser   = false;
     m_method   = -1;
-    _result_display = NULL;
+
+    _bRectDrawing = false;
+    _bPolygonDrawing = false;
+
+    DELETEPTR(_result_display);
 
     if(_srcOcvImage)
     {
