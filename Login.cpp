@@ -79,13 +79,8 @@ Login::Login(QWidget *parent) :
     ui->_comboBoxMask->addItems(QStringList() << "jpg" << "png" << "bmp");
     ui->_comboBoxResult->addItems(QStringList() << "jpg" << "png" << "bmp");
 
-
     QRect r = QApplication::desktop()->screenGeometry();
     this->move( r.center() - rect().center() );
-
-    //this->setStyleSheet("background-image: url(:/new/prefix1/icons/login_bg.jpg);");
-
-
     ui->centralStackedWidget->setCurrentIndex(0);
 }
 
@@ -121,15 +116,15 @@ void Login::customizeTitleBar()
     setWindowFlags(Qt::FramelessWindowHint);
     setMouseTracking(true);
 
-    int width = this->width();
     _settingButton = new QToolButton(this);
-    _minButton = new QToolButton(this);
-    _closeButton = new QToolButton(this);
+    _minButton     = new QToolButton(this);
+    _closeButton   = new QToolButton(this);
 
     _settingButton->setIcon(Global::Awesome->icon(gear));
     _minButton->setIcon(Global::Awesome->icon(minus_));
     _closeButton->setIcon(Global::Awesome->icon(times));
 
+    int width = this->width();
     _settingButton->setGeometry(width-67,5,20,20);
     _minButton->setGeometry(width-46,5,20,20);
     _closeButton->setGeometry(width-25,5,20,20);
@@ -170,8 +165,9 @@ void Login::login()
     QSqlDatabase db;
     if(!Global::createConnection(db))
     {
-        QMessageBox::critical(0, qApp->tr("提示"),
-                              qApp->tr("数据库连接失败!"),
+        QMessageBox::critical(0,
+                              tr("提示"),
+                              tr("数据库连接失败!"),
                               QMessageBox::Cancel);
         return;
     }
@@ -187,7 +183,12 @@ void Login::login()
     {
         if(query.size() == 0)
         {
-            QMessageBox::warning(this, tr("失败"), tr("登录失败,用户名或密码不正确!"), QMessageBox::Close);
+            QMessageBox::warning(this,
+                                 tr("失败"),
+                                 tr("登录失败,用户名或密码不正确!"),
+                                 QMessageBox::Close);
+            db.close();
+            return;
         }
         else
         {
@@ -196,15 +197,17 @@ void Login::login()
                 int no1 = query.record().indexOf("authority");
                 _authority = query.value(no1).toString();
 
-                QString connection = db.connectionName();
                 db.close();
-                QSqlDatabase::removeDatabase(connection);
                 return getDataForMainform();
             }
         }
     }
     else  {
-        QMessageBox::warning(this,tr("失败"),tr("查询用户信息失败"),QMessageBox::Close);
+        QMessageBox::warning(this,
+                             tr("失败"),
+                             tr("查询用户信息失败"),
+                             QMessageBox::Close);
+        db.close();
         return;
     }
 }
@@ -212,8 +215,8 @@ void Login::login()
 void Login::getDataForMainform()
 {
     Global::Authority = _authority;
-
     (new ImageCompletionUI)->show();
+
     this->deleteLater();
 }
 
@@ -308,5 +311,7 @@ void Login::on__buttonTest_clicked()
     {
         ui->_labelStatus->setText(tr("连接成功!"));
     }
+
+    db.close();
 }
 

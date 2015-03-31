@@ -239,6 +239,14 @@ private slots:
 
     void toChangeId();
 
+    void on__comboBoxMovepartName_currentIndexChanged(int index);
+
+    void on__comboBoxMentalInstrumentType_currentIndexChanged(int index);
+
+    void on__comboBoxMentalSampleArea_currentIndexChanged(int index);
+
+    void on__comboBoxMentalSampleLightType_currentIndexChanged(int index);
+
 private:
     Ui::ImageProperties *ui;
 

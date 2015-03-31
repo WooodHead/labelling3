@@ -1643,4 +1643,26 @@ bool ImageProperties::isExistID(QString id)
     return false;
 }
 
+void ImageProperties::on__comboBoxMovepartName_currentIndexChanged(int index)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+    ui->_comboBoxOilSampleID->setEditText(generateOilSampleID());
+}
 
+void ImageProperties::on__comboBoxMentalInstrumentType_currentIndexChanged(int index)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+    ui->_comboBoxMentalID->setEditText(generateTiepupianID());
+}
+
+void ImageProperties::on__comboBoxMentalSampleArea_currentIndexChanged(int index)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+    ui->_comboBoxMentalSampleImageID->setEditText(generateTieputupianID());
+}
+
+void ImageProperties::on__comboBoxMentalSampleLightType_currentIndexChanged(int index)
+{
+    if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
+    ui->_comboBoxMentalSampleImageID->setEditText(generateTieputupianID());
+}

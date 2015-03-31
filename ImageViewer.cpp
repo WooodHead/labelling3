@@ -23,13 +23,11 @@
 #include <opencv/highgui.h>
 
 #include <opencv2/opencv.hpp>
-#include <QSqlQuery>
+
 
 #include "interfaces.h"
 #include "ImageViewer.h"
-
 #include "ImageOperate.h"
-
 #include "imagecompletionui.h"
 
 
@@ -42,34 +40,34 @@ ImageViewer::ImageViewer(QWidget *parent)
 {
     setAttribute(Qt::WA_StaticContents);
 
-    _ocvImage		= NULL;
-    _srcOcvImage    = NULL;
-    labelImage      = NULL;
-    _displayImage	= new QImage(500, 500, QImage::Format_RGB32);
+    _ocvImage       = 0;
+    _srcOcvImage    = 0;
+    labelImage      = 0;
 
+    _displayImage   = new QImage(500, 500, QImage::Format_RGB32);
     _displayImage->fill(qRgb(128, 128, 128));
+
     _labelMapImage = new QImage(500, 500, QImage::Format_ARGB32);
     _labelMapImage->fill(qRgb(128, 128, 128));
 
-    thickness		= 5;
+    thickness       = 5;
     brushInterface  = 0;
-    bPaintable		= false;
-    lastPos			= QPoint(-1, -1);
-    updateObjectCount(0);
+    bPaintable      = false;
     isEraser        = false;
+    lastPos         = QPoint(-1, -1);
+    updateObjectCount( 0 );
 
-    _result_display = NULL;
-    _result_save = NULL;
+    _result_display = 0;
+    _result_save    = 0;
 
     _bRectDrawing        = false;
     _bPolygonDrawing     = false;
-    _bPolygonEndDrawing = false;
+    _bPolygonEndDrawing  = false;
     _lineThickness       = 3;
-    _lineColor           = Qt::yellow;
-
     m_method             = -1;
     _labelType           = -1;
     _seg_during          = 0;
+    _lineColor           = Qt::yellow;
 
     this->setMouseTracking(true);
 }
@@ -93,7 +91,8 @@ bool ImageViewer::openImage(const QString &fileName)
         {
             QMessageBox::warning( this,
                                   tr("提示"),
-                                  tr("无法打开文件 %1.\n").arg(fileName) );
+                                  tr("无法打开文件 %1.\n").arg(fileName),
+                                  QMessageBox::Close);
             return false;
         }
 
@@ -155,23 +154,24 @@ bool ImageViewer::deleteImage()
         _srcOcvImage = NULL;
     }
 
-    DELETE(_displayImage);
-    DELETE(_labelMapImage);
+    DELETEPTR( _displayImage  );
+    DELETEPTR( _labelMapImage );
 
     _displayImage	= new QImage(500, 500, QImage::Format_RGB32);
     _displayImage->fill(qRgb(128, 128, 128));
     _labelMapImage = new QImage(500, 500, QImage::Format_ARGB32);
     _labelMapImage->fill(qRgb(128, 128, 128));
-    thickness		= 5;
-    brushInterface  = 0;
-    bPaintable		= false;
-    lastPos			= QPoint(-1, -1);
+    thickness       = 5;
+    bPaintable      = false;
+    lastPos         = QPoint(-1, -1);
     updateObjectCount(0);
     isEraser = false;
     m_method = -1;
-    DELETE(_result_display);
-    DELETE(_result_save);
-    //////////////////////////////////////////////////////////////////////////
+
+    DELETEPTR( brushInterface  );
+    DELETEPTR( _result_display );
+    DELETEPTR( _result_save    );
+
     update();
 
     return true;
@@ -268,7 +268,7 @@ bool ImageViewer::saveAsMask(QString &pathMask)
     fDlg->setViewMode(QFileDialog::Detail);
     fDlg->setDirectory(QDir::currentPath());
 
-    fDlg->setFilter(tr("图像 (*.jpg *.png *.bmp *.jpeg)"));
+    fDlg->setFilter(MOLI_IMAGE_FILTER);
     fDlg->setDefaultSuffix("bmp");
 
     if(fDlg->exec() == QDialog::Accepted)
@@ -421,8 +421,7 @@ void ImageViewer::mousePressEvent(QMouseEvent *event)
             {
                 setupOtherPainter(painter);
 
-                lastPos       = event->pos();
-
+                lastPos = event->pos();
                 if(_bPolygonDrawing == false)
                 {
                     _polygonPointList.clear();
@@ -504,13 +503,14 @@ void ImageViewer::mouseReleaseEvent(QMouseEvent *event)
 
                     _seg_during = double(end-start) / CLOCKS_PER_SEC;
                     IplImage* temp = new IplImage(res);
-                    DELETE(_result_save);
+                    DELETEPTR(_result_save);
                     _result_save = IplImageToQImage(temp);
 
-                    if(_result_display) { delete _result_display; _result_display = NULL; }
+                    DELETEPTR(_result_display);
                     _result_display = setMaskMap(_ocvImage, temp);
 
                     setImage(*_result_display);
+                    DELETEPTR(temp);
                     _mainWindow->uncheckStrikeOptions();
                 }
             }
@@ -538,12 +538,13 @@ void ImageViewer::mouseReleaseEvent(QMouseEvent *event)
 
                 // mat -> iplimage -> qimage
                 IplImage* temp = new IplImage(res);
-                DELETE(_result_save);
+                DELETEPTR(_result_save);
                 _result_save = IplImageToQImage(temp);
 
-                DELETE(_result_display);
+                DELETEPTR(_result_display);
                 _result_display = setMaskMap(_ocvImage, temp);
                 setImage(*_result_display);
+                DELETEPTR(temp);
             }
 
             lastPos = QPoint(-1, -1);
@@ -834,10 +835,10 @@ void ImageViewer::polygonLabelling()
     _seg_during = (double)(end-start) / CLOCKS_PER_SEC;
 
     IplImage* temp = new IplImage(res);
-    DELETE(_result_save);
+    DELETEPTR(_result_save);
     _result_save = IplImageToQImage(temp);
 
-    DELETE(_result_display);
+    DELETEPTR(_result_display);
     _result_display = setMaskMap(_ocvImage, temp);
     setImage(*_result_display);
 

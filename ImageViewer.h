@@ -30,11 +30,13 @@
 #include <QtGui/QMainWindow>
 #include <QGraphicsScene>
 #include <QWidgetAction>
+#include <QSqlQuery>
 #include <opencv/cv.h>
+
 #include "ui_ButtomWindow.h"
 #include "BasicDataStructure.h"
+#include "def.h"
 
-#define DELETE(ptr) if(ptr) {delete ptr; ptr = 0;}
 
 class BrushInterface;
 class ImageCompletionUI;
@@ -45,12 +47,12 @@ class ImageViewer : public QWidget
 
 public:
     ImageViewer(QWidget *parent = 0);
-	~ImageViewer();
+    ~ImageViewer();
 
     bool			openImage(const QString &fileName);
-	bool			deleteImage();
+    bool			deleteImage();
 
-	bool			saveAsImage( const QString &fileName );
+    bool			saveAsImage( const QString &fileName );
     void			setImage(const QImage &image);
     void			setBrushWidth(int width);
     void			setBrush(BrushInterface *brushInterface, const QString &brush);
@@ -113,7 +115,7 @@ private:
     int				thickness;
 	QColor          _lineColor;
 	int				_lineThickness;
-    BrushInterface	*brushInterface;
+    BrushInterface  *brushInterface;
     QString			brush;
     QPoint			lastPos;
 

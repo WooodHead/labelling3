@@ -235,7 +235,7 @@
       <item row="0" column="6" colspan="2">
        <widget class="QComboBox" name="_comboBoxMovepartName">
         <property name="editable">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -1084,7 +1084,7 @@
       <item row="0" column="1">
        <widget class="QComboBox" name="_comboBoxMentalInstrumentType">
         <property name="editable">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
         <property name="currentIndex">
          <number>-1</number>
@@ -1223,7 +1223,7 @@
          </size>
         </property>
         <property name="editable">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -1247,7 +1247,7 @@
       <item row="0" column="5">
        <widget class="QComboBox" name="_comboBoxMentalSampleLightType">
         <property name="editable">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
       </item>

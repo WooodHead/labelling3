@@ -33,11 +33,9 @@ using namespace std;
 #include "MoliProperties.h"
 #include "def.h"
 
-#define DELETEPTR(ptr) if(ptr) { delete ptr; ptr = 0; }
 #define THUMBNAILS_PER_ROW 8
 
 typedef std::deque<QString>::iterator deque_it;
-
 
 class QStackedWidget;
 class QListWidget;
@@ -56,16 +54,6 @@ class ImageCompletionUI : public QMainWindow
 public:
     ImageCompletionUI(QWidget *parent = 0, Qt::WFlags flags = 0);
     ~ImageCompletionUI();
-
-    enum EDITSTEP
-    {
-        MARKING,
-        BOOSTING,
-        TESTING,
-        MARCHING,
-        NONE,
-        LOADFAILED
-    };
 
 public:
     void setupMainWindow();
@@ -102,7 +90,6 @@ private:
     QToolBar				*_moduleSelectToolBar;
     QComboBox				*_moduleSelectBox;
 
-    QWidget                 *_centralwidget;
     QTabWidget				*_centralTabWidget;
     QWidget                 *_editTab;
     QScrollArea             *_editScrollArea;
@@ -278,7 +265,7 @@ private: // methods
 
     int         rowIndex(QString image);
     void        showImagesInTree();
-    void        inDeque(const QString& , std::deque<QString> &);
+    void        enDeque(const QString& , std::deque<QString> &);
     int         in(const QString& strFilePath, std::deque<QString> &);
     void        showThumbnailsInCentral(QStringList list);
 
@@ -286,6 +273,7 @@ private: // methods
     void        clearLayout(QLayout *layout);
 
     void        drawEnclosingRectangle(QPixmap& pixmap, const QColor color);
+    void        loadMoliImage(QString moliId);
 
 private slots:
     void        flushBottom();

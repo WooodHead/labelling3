@@ -47,11 +47,9 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
 
 ImageCompletionUI::~ImageCompletionUI()
 {
-    if(Global::Awesome)
-    {
-        delete Global::Awesome;
-        Global::Awesome = 0;
-    }
+    DELETEPTR( _formLayout      );
+    DELETEPTR( Global::Awesome  );
+    DELETEPTR( _editImageViewer );
 }
 
 void ImageCompletionUI::setupMainWindow()
@@ -59,7 +57,7 @@ void ImageCompletionUI::setupMainWindow()
     this->resize( 1024, 800 );
     this->setMinimumSize( QSize(1024, 0) );
     this->showMaximized();
-    this->setWindowTitle( tr("交互式磨粒图谱库构建系统") );
+    this->setWindowTitle( MOLI_APP_TITLE );
 }
 
 void ImageCompletionUI::createMenus()
@@ -111,9 +109,8 @@ void ImageCompletionUI::createMenus()
 
 void	ImageCompletionUI::createActions()
 {
-    _openAction = new QAction( tr("&打开"), this );
+    _openAction = new QAction( Global::Awesome->icon(folderopeno), tr("&打开"), this );
     _openAction->setObjectName(tr("_openAction"));
-    _openAction->setIcon( Global::Awesome->icon(  folderopeno  ) );
     connect(_openAction, SIGNAL(triggered()), this, SLOT(open()));
 
     _saveAction = new QAction( Global::Awesome->icon(floppyo), tr("&保存"), this );
@@ -125,29 +122,27 @@ void	ImageCompletionUI::createActions()
     connect(_saveAsAction, SIGNAL(triggered()), this, SLOT( saveAs() ));
 
     _closeAction = new QAction( Global::Awesome->icon(times), tr("关闭"), this );
-    connect( _closeAction, SIGNAL(triggered()), this, SLOT( close() ));
+    connect(_closeAction, SIGNAL(triggered()), this, SLOT(close()));
 
     _exitAction = new QAction( Global::Awesome->icon(poweroff), tr("退出"), this );
     _exitAction->setObjectName(tr("_exitAction"));
-    connect( _exitAction, SIGNAL(triggered()), this, SLOT(exitApp()) );
+    connect(_exitAction, SIGNAL(triggered()), this, SLOT(exitApp()));
 
-    _searchAction = new QAction( tr("查询"), this );
+    _searchAction = new QAction( Global::Awesome->icon(areachart), tr("查询"), this );
     _searchAction->setObjectName(tr("_searchAction"));
-    _searchAction->setIcon( Global::Awesome->icon(areachart) );
-    connect( _searchAction, SIGNAL(triggered()), this, SLOT( search() ));
+    connect(_searchAction, SIGNAL(triggered()), this, SLOT(search()));
 
-    _addtosqlAction = new QAction( tr("属性分类"), this );
+    _addtosqlAction = new QAction( Global::Awesome->icon(reorder), tr("属性分类"), this );
     _addtosqlAction->setObjectName(tr("_addtosqlAction"));
-    _addtosqlAction->setIcon( Global::Awesome->icon(reorder) );
-    connect( _addtosqlAction, SIGNAL(triggered()), this, SLOT( addtosql() ));
+    connect(_addtosqlAction, SIGNAL(triggered()), this, SLOT(addtosql()));
 
     _exportDataAction = new QAction( QIcon(":/new/prefix1/icons/export.png"), tr("批量导出数据"),this);
     _exportDataAction->setObjectName(tr("_exportDataAction"));
-    connect(_exportDataAction,SIGNAL(triggered()),this,SLOT(exportData()));
+    connect(_exportDataAction, SIGNAL(triggered()), this, SLOT(exportData()));
 
     _importDataAction = new QAction(QIcon(":/new/prefix1/icons/import.png"), tr("批量导入数据"),this);
     _importDataAction->setObjectName(tr("_importDataAction"));
-    connect(_importDataAction,SIGNAL(triggered()),this,SLOT(importData()));
+    connect(_importDataAction, SIGNAL(triggered()), this, SLOT(importData()));
 
     // Image Labelling
     _strikeToolButton = new QToolButton(this);
@@ -295,11 +290,6 @@ void ImageCompletionUI::setupWidgets()
     int height = this->height();
 
     _centralStackedWidget = new QStackedWidget(this);
-    ////////////////////////////////////////////////////////////////////////////////////
-    //   _centralwidget
-    ////////////////////////////////////////////////////////////////////////////////////
-    _centralwidget  = new QWidget( this );
-    _centralwidget->setObjectName( tr( "_centralwidget") );
 
     ////////////////////////////////////////////////////////////////////////////////////
     //   _centralTabWidget
@@ -331,12 +321,11 @@ void ImageCompletionUI::setupWidgets()
 
     _editImageViewer = new ImageViewer( );
     _editScrollArea->setWidget( _editImageViewer );
-    _editImageViewer->setObjectName(tr("_editImageViewer"));
+    _editImageViewer->setObjectName( tr("_editImageViewer") );
     _editImageViewer->getMainWindow(this);
     _editImageViewer->setLineColor(QColor(colorTable[3], colorTable[4], colorTable[5]));
 
-    _centralTabWidget->addTab( _editTab, Global::Awesome->icon(pictureo), QString("EditTab") );
-    _centralTabWidget->setTabText(_centralTabWidget->indexOf(_editTab), QApplication::translate("ImageCompletionUIClass", tr("图像标注").toLocal8Bit().data(), 0));
+    _centralTabWidget->addTab( _editTab, Global::Awesome->icon(pictureo), QString("图像标注") );
     _centralTabWidget->setMaximumHeight(0.8 * height);
     _centralTabWidget->setContextMenuPolicy(Qt::CustomContextMenu);
 
@@ -353,7 +342,7 @@ void ImageCompletionUI::setupWidgets()
 
     _centralTabWidget->setPalette(palette);
 
-    // thumbnail widget
+    // Thumbnail widget
     _centralThumbnailTabWidget = new QTabWidget(_centralStackedWidget);
     QVBoxLayout *centralThumbnailTabWidgetLayout = new QVBoxLayout;
     centralThumbnailTabWidgetLayout->addWidget(_centralThumbnailTabWidget);
@@ -385,11 +374,9 @@ void ImageCompletionUI::setupWidgets()
     _centralStackedWidget->setCurrentIndex(0);
     setCentralWidget(_centralStackedWidget);
 
-
     ////////////////////////////////////////////////////////////////////////////////////
     //   _rightOperationWidget
     ////////////////////////////////////////////////////////////////////////////////////
-
     _rightOperationWidget = new QDockWidget(tr("工具箱"),this );
     _rightOperationWidget->setObjectName(tr("_rightOperationWidget"));
     _rightOperationWidget->setWindowIcon( Global::Awesome->icon(inbox) );
@@ -467,7 +454,6 @@ void ImageCompletionUI::setupWidgets()
     ////////////////////////////////////////////////////////////////////////////////////
     //   _logWidget
     ////////////////////////////////////////////////////////////////////////////////////
-
     _logWidget = new QTextEdit;
     QPalette palette2;
     palette2.setBrush(QPalette::Active, QPalette::Base, brush3);
@@ -489,7 +475,6 @@ void ImageCompletionUI::setupWidgets()
     ////////////////////////////////////////////////////////////////////////////////////
     //   _bottomWindowWidget
     ////////////////////////////////////////////////////////////////////////////////////
-
     _bottomWindowWidget = new QDockWidget(tr("数据库信息"),this );
     _bottomWindowWidget->setObjectName(tr("_bottomWindowWidget"));
     _bottomWindowWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
@@ -547,11 +532,11 @@ void ImageCompletionUI::createStatusBar()
 
 void ImageCompletionUI::createConnections()
 {
-    connect( _centralTabWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
+    connect(_centralTabWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showContextMenu(QPoint)));
 
-    connect( _regionCompetitionDialog.brushSizeSmallRadio, SIGNAL(clicked()), this, SLOT(updateBrushSize()) );
-    connect( _regionCompetitionDialog.brushSizeMediumRadio, SIGNAL(clicked()), this, SLOT(updateBrushSize()) );
-    connect( _regionCompetitionDialog.brushSizeLargeRadio, SIGNAL(clicked()), this, SLOT(updateBrushSize()) );
+    connect(_regionCompetitionDialog.brushSizeSmallRadio, SIGNAL(clicked()), this, SLOT(updateBrushSize()));
+    connect(_regionCompetitionDialog.brushSizeMediumRadio, SIGNAL(clicked()), this, SLOT(updateBrushSize()));
+    connect(_regionCompetitionDialog.brushSizeLargeRadio, SIGNAL(clicked()), this, SLOT(updateBrushSize()));
 
     connect(_regionCompetitionDialog.radioStrikeLabelling, SIGNAL(clicked()), this, SLOT(updateMethod()));
     connect(_regionCompetitionDialog.radioRectLabelling, SIGNAL(clicked()), this, SLOT(updateMethod()));
@@ -590,36 +575,37 @@ void ImageCompletionUI::createConnections()
 void ImageCompletionUI::showContextMenu(QPoint pos)
 {
     // Menu 1
-    QAction* editMenu = new QAction(tr("编辑磨粒图像属性"), this);
+    QAction* editMenu = new QAction(tr("编辑磨粒属性"), this);
     connect(editMenu, SIGNAL(triggered()), this, SLOT(editProperties()));
 
     // Menu 2
     QAction *appendMenu = new QAction(tr("标注新磨粒"), this);
     connect(appendMenu, SIGNAL(triggered()), this, SLOT(append()));
 
-    if(_editImageViewer->image().isNull())
+    // Menu 4
+    QAction* showAllMenu = new QAction(tr("显示所有磨粒"), this);
+    connect(showAllMenu, SIGNAL(triggered()), this, SLOT(showAll()));
+
+    if(_strCurrentImagePath.isEmpty())
     {
         editMenu->setEnabled(false);
         appendMenu->setEnabled(false);
+        showAllMenu->setEnabled(false);
     }
 
     // Menu 3
     QAction* backMenu = new QAction(tr("回退"), this);
     connect(backMenu, SIGNAL(triggered()), this, SLOT(back()));
-
     if(_canBack == false)
     {
         backMenu->setEnabled(false);
     }
 
-    // Menu 4
-    QAction* showAllMenu = new QAction(tr("显示所有已标注磨粒"), this);
-    connect(showAllMenu, SIGNAL(triggered()), this, SLOT(showAll()));
-
     QMenu menu;
     menu.addAction(editMenu);
     menu.addAction(appendMenu);
     menu.addAction(showAllMenu);
+    menu.addSeparator();
     menu.addAction(backMenu);
     menu.exec(_centralTabWidget->mapToGlobal(pos));
 }
@@ -628,8 +614,8 @@ void ImageCompletionUI::editProperties()
 {
     if(_strCurrentImagePath.isEmpty()) return;
 
-    QImage* result = _editImageViewer->getResultDisplay();
-    QImage* mask = _editImageViewer->getMask();
+    QImage* result  = _editImageViewer->getResultDisplay();
+    QImage* mask    = _editImageViewer->getMask();
     QImage* result2 = _editImageViewer->getResultSave();
 
     (new MoliProperties(this))->showDlg(_strCurrentImagePath, result != NULL ? *result : QImage(), result2 != NULL ? *result2 : QImage(), mask != NULL ? *mask : QImage(), _imageScale );
@@ -642,7 +628,7 @@ void ImageCompletionUI::syncFilePathStr(QString strFilePath)
     int pos = in(strFilePath, _dequeTodo);
     if( -1 == pos )
     {
-        inDeque(strFilePath, _dequeTodo);
+        enDeque(strFilePath, _dequeTodo);
         pos = in(strFilePath, _dequeTodo);
         showThumbnail(MOLI_UNLABELLED_STATUS_CHAR, pos);
     }
@@ -703,8 +689,8 @@ void ImageCompletionUI::openImage(QString strFilePath)
         return;
     }
 
-    _strCurrentImagePath = strFilePath;
     _editImageViewer->repaint();
+    _strCurrentImagePath = strFilePath;
 
     QString status = this->status( strFilePath );
     // New image
@@ -728,7 +714,7 @@ void ImageCompletionUI::openImage(QString strFilePath)
     {
         if(-1 == in(strFilePath, _dequeDone))
         {
-            this->inDeque(strFilePath, _dequeDone);
+            this->enDeque(strFilePath, _dequeDone);
             this->showThumbnailForLabelled(strFilePath);
         }
 
@@ -738,7 +724,7 @@ void ImageCompletionUI::openImage(QString strFilePath)
     {
         if(-1 == in(strFilePath, _dequeTodo))
         {
-            this->inDeque(strFilePath, _dequeTodo);
+            this->enDeque(strFilePath, _dequeTodo);
             this->showThumbnailForUnLabelled( strFilePath );
         }
     }
@@ -753,16 +739,14 @@ void ImageCompletionUI::showImagesInTree()
     if(!Global::createConnection(db))
     {
         QMessageBox::critical(0,
-                              tr("提示"),
+                              MOLI_MESSAGEBOX_TITLE_PROMPT_STRING,
                               tr("数据库连接失败!"),
                               QMessageBox::Close);
         return;
     }
 
-    QString sql = "select * from equipmentinfo";
-
     QSqlQuery query;
-    query.prepare(sql);
+    query.prepare("select * from equipmentinfo");
 
     std::multimap<QString, QString> departMap;
 
@@ -823,15 +807,17 @@ void ImageCompletionUI::showImagesInTree()
 
     _treeModel->setHeaderData(0, Qt::Horizontal, QString());
     _leftWindow._treeViewImages->setModel(_treeModel);
+    _leftWindow._treeViewImages->setHeaderHidden(true);
     _leftWindow._treeViewImages->setEditTriggers(QAbstractItemView::NoEditTriggers);
     _leftWindow._treeViewImages->setSelectionMode( QAbstractItemView::SingleSelection );
-    _leftWindow._treeViewImages->setHeaderHidden(true);
     _leftWindow._treeViewImages->show();
+
+    db.close();
 }
 
-void ImageCompletionUI::inDeque(const QString &elem, std::deque<QString> &d)
+void ImageCompletionUI::enDeque(const QString &elem, std::deque<QString> &d)
 {
-    if(in(elem, d) >= 0) return;
+    if( in(elem, d) >= 0 ) return;
 
     deque_it it;
     for(it = d.begin(); it != d.end(); it++)
@@ -869,6 +855,8 @@ void ImageCompletionUI::showThumbnail(QString status, int row)
     QImage* temp = _editImageViewer->getOriginalImage();
     _leftWindow.tableWidget->item(row, 0)->setData(Qt::DecorationRole, QPixmap::fromImage(*temp).scaled(80, 80));
     _leftWindow.tableWidget->item(row, 0)->setBackgroundColor(color(status));
+
+    DELETEPTR(temp);
 }
 
 //FIXME
@@ -981,7 +969,6 @@ void	ImageCompletionUI::close()
     _editImageViewer->deleteImage();
     QPixmap pixmap(0, 0);
     _regionCompetitionDialog.showColorLabel->setPixmap(pixmap);
-    setupBrush();
     _regionCompetitionDialog.radioForeground->setEnabled(false);
     _regionCompetitionDialog.radioBackground->setEnabled(false);
     _regionCompetitionDialog.radioErazer->setEnabled(false);
@@ -1010,12 +997,9 @@ void	ImageCompletionUI::addtosql()
 void ImageCompletionUI::updateLog()
 {
     char* log_str = getNewLogString();
-
-    if (log_str!=NULL)
+    if ( log_str )
     {
-
         (*_logInformationString) = log_str;
-        //sprintf(log_str, "");
         _logWidget->clear();
         QTextCursor cursor(_logWidget->textCursor());
         cursor.movePosition(QTextCursor::End);
@@ -1027,8 +1011,7 @@ void ImageCompletionUI::updateLog()
     // Maybe bug here
     if(log_str)
     {
-        delete [] log_str;
-        log_str = NULL;
+        DELETEPTR(log_str);
     }
 }
 
@@ -1136,15 +1119,12 @@ void ImageCompletionUI::showData()
         }
     }
 
-    QString connection = db.connectionName();
     db.close();
-    QSqlDatabase::removeDatabase(connection);
 }
 
 void ImageCompletionUI::updateBrushSize()
 {
-    if ( _editImageViewer->image().isNull() )
-        return;
+    if ( _editImageViewer->image().isNull() ) return;
 
     if (_regionCompetitionDialog.brushSizeSmallRadio->isChecked())
     {
@@ -1172,10 +1152,10 @@ void ImageCompletionUI::setStrikeOptionsEnabled(bool b)
         _regionCompetitionDialog.radioErazer->setChecked(false);
         _regionCompetitionDialog.buttonGroup_4->setExclusive(true);
     }
+
+    _regionCompetitionDialog.radioErazer->setEnabled(b);
     _regionCompetitionDialog.radioForeground->setEnabled(b);
     _regionCompetitionDialog.radioBackground->setEnabled(b);
-    _regionCompetitionDialog.radioErazer->setEnabled(b);
-
 }
 
 void ImageCompletionUI::updateMethod()
@@ -1186,7 +1166,7 @@ void ImageCompletionUI::updateMethod()
         _editImageViewer->setMethod(0);
         _editImageViewer->setLabelType(0);
         setStrikeOptionsEnabled(true);
-
+        setupBrush();
     }
     else if(_regionCompetitionDialog.radioRectLabelling->isChecked())
     {
@@ -1333,7 +1313,7 @@ void ImageCompletionUI::actionSliderReleased()
 void ImageCompletionUI::userManagement()
 {
     userMangementDlg = new UserManagement(this);
-    userMangementDlg->setWindowFlags(userMangementDlg->windowFlags()&~Qt::WindowMinimizeButtonHint& ~Qt::WindowMaximizeButtonHint);
+    userMangementDlg->setWindowFlags(userMangementDlg->windowFlags() & ~Qt::WindowMinimizeButtonHint &  ~Qt::WindowMaximizeButtonHint);
     userMangementDlg->show();
 }
 
@@ -1394,6 +1374,7 @@ void ImageCompletionUI::strikeChangeTriggered(QAction *a)
     _editImageViewer->setLabelType(0);
     setStrikeOptionsEnabled(true);
 
+    setupBrush();
     if(a == _fgAction)
     {
         _editImageViewer->changeObjectLabeling(1);
@@ -1434,7 +1415,7 @@ void ImageCompletionUI::lineThicknessChangeTriggered(QAction *a)
     a->setChecked(true);
 
     int w;
-    if(a == _lineThickness[0])      w = 3;
+    if     (a == _lineThickness[0]) w = 3;
     else if(a == _lineThickness[1]) w = 5;
     else if(a == _lineThickness[2]) w = 7;
 
@@ -1532,7 +1513,6 @@ bool ImageCompletionUI::exportDB(const QString &path)
      *@brief 导出数据库数据到文件中
      *@param path 文件路径
      */
-    //QMessageBox::warning(this,"warning","this is private function to export SQL Data",QMessageBox::Close);
 
     QSqlDatabase gAuthDB;
     if(!Global::createConnection(gAuthDB))
@@ -1693,7 +1673,7 @@ void ImageCompletionUI::flushLeft(QString strFilePath, QString label)
 
     if(-1 == in(strFilePath, _dequeDone))
     {
-        this->inDeque(strFilePath, _dequeDone);
+        this->enDeque(strFilePath, _dequeDone);
         this->showThumbnailForLabelled(strFilePath);
     }
 }
@@ -1944,8 +1924,35 @@ void ImageCompletionUI::on_dBTableWidget_8_cellDoubleClicked(int row, int column
         {
             _centralStackedWidget->setCurrentIndex(0);
         }
+        // Open Current Moli Image
         this->openImage(strFilePath);
+        this->loadMoliImage(_bottomWindow.dBTableWidget_8->item(row, 0)->text()); // Cover the source image
     }
+}
+
+void ImageCompletionUI::loadMoliImage(QString moliId)
+{
+    QSqlDatabase db;
+    if(Global::createConnection(db))
+    {
+        QString sql = QString("select abrasiveResultData from abrasivemarkinfo where abrasiveid = '%1'").arg(moliId);
+        QSqlQuery query;
+        query.prepare(sql);
+
+        if(query.exec() && query.record().count() == 1)
+        {
+            if(query.next())
+            {
+                QByteArray arr = query.value(0).toByteArray();
+                QPixmap pixmap;
+                pixmap.loadFromData(arr);
+                QImage image = pixmap.toImage();
+
+                _editImageViewer->setImage(image);
+            }
+        }
+    }
+    db.close();
 }
 
 void ImageCompletionUI::on_dBTableWidget_7_cellDoubleClicked(int row, int column)
@@ -1990,6 +1997,7 @@ void ImageCompletionUI::on_dBTableWidget_6_cellDoubleClicked(int row, int column
                 }
             }
         }
+        db.close();
     }
 
     showThumbnailsInCentral(list);
@@ -2018,6 +2026,7 @@ void ImageCompletionUI::on_dBTableWidget_5_cellDoubleClicked(int row, int column
                 }
             }
         }
+        db.close();
     }
     showThumbnailsInCentral(list);
 }
@@ -2045,6 +2054,7 @@ void ImageCompletionUI::on_dBTableWidget_4_cellDoubleClicked(int row, int column
                 }
             }
         }
+        db.close();
     }
     showThumbnailsInCentral(list);
 }
@@ -2062,7 +2072,7 @@ void ImageCompletionUI::on_dBTableWidget_3_cellDoubleClicked(int row, int column
         {
             QSqlQuery query;
             QString str = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo join oilsampleinfo join movepartinfo join ferrographyinfo on ferrographyinfo.oilsampleid=oilsampleinfo.oilsampleid and oilsampleinfo.planeid = movepartinfo.planeid and ferrographypicinfo.ferrographysheetid = ferrographyinfo.ferrographysheetid and movepartinfo.movepartid = '%1'").arg(id);
-
+            query.prepare(str);
             if(query.exec())
             {
                 while(query.next())
@@ -2071,6 +2081,7 @@ void ImageCompletionUI::on_dBTableWidget_3_cellDoubleClicked(int row, int column
                 }
             }
         }
+        db.close();
     }
     showThumbnailsInCentral(list);
 }
@@ -2087,7 +2098,8 @@ void ImageCompletionUI::on_dBTableWidget_2_cellDoubleClicked(int row, int column
         if(Global::createConnection(db))
         {
             QSqlQuery query;
-            QString str = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo join oilsampleinfo join ferrographyinfo on ferrographyinfo.oilsampleid=oilsampleinfo.oilsampleid and ferrographypicinfo.ferrographysheetid = ferrographyinfo.ferrographysheetid and oilsampleinfo.planeid = '%1' ").arg(id);
+            QString str = QString("select ferrographypicinfo.ferrographypicpath from ferrographypicinfo join oilsampleinfo join ferrographyinfo on ferrographyinfo.oilsampleid = oilsampleinfo.oilsampleid and ferrographypicinfo.ferrographysheetid = ferrographyinfo.ferrographysheetid and oilsampleinfo.planeid = '%1' ").arg(id);
+            query.prepare(str);
 
             if(query.exec())
             {
@@ -2097,6 +2109,7 @@ void ImageCompletionUI::on_dBTableWidget_2_cellDoubleClicked(int row, int column
                 }
             }
         }
+        db.close();
     }
     showThumbnailsInCentral(list);
 }
@@ -2125,6 +2138,7 @@ void ImageCompletionUI::on_dBTableWidget_1_cellDoubleClicked(int row, int column
                 }
             }
         }
+        db.close();
     }
     showThumbnailsInCentral(list);
 }
@@ -2151,7 +2165,7 @@ void ImageCompletionUI::append()
 }
 
 void ImageCompletionUI::showAll()
-{
+{   
     QList<QByteArray> list;
 
     QSqlDatabase db;
@@ -2171,6 +2185,7 @@ void ImageCompletionUI::showAll()
             _editImageViewer->drawAllMoli(list);
         }
     }
+    db.close();
 }
 
 void ImageCompletionUI::showThumbnailsInCentral(QStringList list)
@@ -2260,3 +2275,4 @@ void ImageCompletionUI::drawEnclosingRectangle(QPixmap& pixmap, const QColor col
     painter.setPen(QPen(color, 20, Qt::SolidLine));
     painter.drawRect(0, 0, pixmap.width(), pixmap.height());
 }
+

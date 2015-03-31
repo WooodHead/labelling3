@@ -117,7 +117,7 @@ QImage* setMaskMap(IplImage* ocvImage, IplImage* mask)
                 G = 0.6 * color1.val[1] + 0.4 * color2.val[1];
                 B = 0.6 * color1.val[0] + 0.4 * color2.val[0];
             }
-            if(x>0 && x < width && y > 0 && y < height && (color2.val[2] != 0 ||color2.val[1] != 0 || color2.val[0] != 0))
+            if(x > 0 && x < width-1 && y > 0 && y < height-1 && (color2.val[2] != 0 || color2.val[1] != 0 || color2.val[0] != 0))
             {
                 CvScalar color3 = cvGet2D(mask, y, x-1);
                 CvScalar color4 = cvGet2D(mask, y, x+1);
