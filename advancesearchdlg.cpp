@@ -43,7 +43,7 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent) :
 
     initpropertylistName();
 
-    query();
+//    query();
 
     ui->modifyButton->setEnabled(false);
     ui->conditionStackedWidget->setCurrentIndex(0);
@@ -1137,7 +1137,8 @@ QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap,QStrin
     sql.append(" ");
     if(conditionMap.isEmpty())
     {
-        return sql;
+//        return sql;
+        ;
     }
     else
     {
@@ -1163,9 +1164,29 @@ QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap,QStrin
             sql.append(fieldValue);
             sql.append("'");
         }
-
-        return sql;
+//        return sql;
     }
+    if(tableName == "movepartrepairinfo")
+    {
+        if(_eqmCdtMap.find("planeid") != _eqmCdtMap.end())
+        {
+            if(_mpCdtMap.find("movepartid") != _mpCdtMap.end())
+            {
+                ;
+            }
+            else
+            {
+                if(conditionMap.isEmpty())
+                    sql.append(" where ");
+                else
+                    sql.append(" and ");
+                sql.append("movepartid in (select movepartid from movepartinfo where planeid = '");
+                sql.append(_eqmCdtMap.find("planeid").value());
+                sql.append("')");
+            }
+        }
+    }
+    return sql;
 }
 
 
