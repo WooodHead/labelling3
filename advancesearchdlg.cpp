@@ -69,6 +69,9 @@ void AdvanceSearchDlg::resetConditions()
     _oiaCdtMap.clear();
     _abmCdtMap.clear();
 
+    ferrographypicidList.clear();
+    ferrographysheetidList.clear();
+
     // eqm
     ui->PlaneIdChkBox->setChecked(false);
     ui->planeTypeChkBox->setChecked(false);
@@ -1186,6 +1189,106 @@ QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap,QStrin
             }
         }
     }
+    else if(tableName == "oilanalyzeinfo")
+    {
+        if(_eqmCdtMap.find("planeid") != _eqmCdtMap.end())
+        {
+            if(_oisCdtMap.find("oilsampleid") != _oisCdtMap.end())
+            {
+                ;
+            }
+            else
+            {
+                if(conditionMap.isEmpty())
+                    sql.append(" where ");
+                else
+                    sql.append(" and ");
+                sql.append("oilsampleid in (select oilsampleid from oilsampleinfo where planeid = '");
+                sql.append(_eqmCdtMap.find("planeid").value());
+                sql.append("')");
+            }
+        }
+    }
+    else if(tableName == "ferrographyinfo")
+    {
+        if(_eqmCdtMap.find("planeid") != _eqmCdtMap.end())
+        {
+            if(_oisCdtMap.find("oilsampleid") != _oisCdtMap.end())
+            {
+                ;
+            }
+            else
+            {
+                if(conditionMap.isEmpty())
+                    sql.append(" where ");
+                else
+                    sql.append(" and ");
+                sql.append("oilsampleid in (select oilsampleid from oilsampleinfo where planeid = '");
+                sql.append(_eqmCdtMap.find("planeid").value());
+                sql.append("')");
+            }
+        }
+    }
+    else if(tableName == "ferrographypicinfo")
+    {
+        if(_fegCdtMap.find("ferrographysheetid") == _fegCdtMap.end())
+        {
+            if(!ferrographysheetidList.empty())
+            {
+                if(conditionMap.isEmpty())
+                    sql.append(" where ferrographysheetid = '");
+                else
+                    sql.append(" and ferrographysheetid = '");
+                int i =0;
+                sql.append(ferrographysheetidList[i]);
+                for(i =1;i<ferrographysheetidList.length();++i)
+                {
+
+                    sql.append("' or ferrographysheetid = '");
+                    sql.append(ferrographysheetidList[i]);
+                }
+                sql.append("'");
+            }
+            else
+            {
+                if(conditionMap.isEmpty())
+                    sql.append(" where ferrographysheetid = '");
+                else
+                    sql.append(" and ferrographysheetid = '");
+                sql.append("'");
+            }
+        }
+
+    }
+    else if(tableName == "abrasivemarkinfo")
+    {
+        if(_fegpCdtMap.find("ferrographypicid") == _fegpCdtMap.end())
+        {
+            if(!ferrographypicidList.empty())
+            {
+                if(conditionMap.isEmpty())
+                    sql.append(" where ferrographypicid = '");
+                else
+                    sql.append(" and ferrographypicid = '");
+                int i =0;
+                sql.append(ferrographypicidList[i]);
+                for(i =1;i<ferrographypicidList.length();++i)
+                {
+                    sql.append("' or ferrographypicid = '");
+                    sql.append(ferrographypicidList[i]);
+                }
+                sql.append("'");
+            }
+            else
+            {
+                if(conditionMap.isEmpty())
+                    sql.append(" where ferrographypicid = '");
+                else
+                    sql.append(" and ferrographypicid = '");
+                sql.append("'");
+            }
+        }
+    }
     return sql;
 }
 
@@ -1234,12 +1337,24 @@ void AdvanceSearchDlg::query()
     setModelHeaderData("FegInfo");
     qDebug()<<fegSql;
 
+    ferrographysheetidList.clear();
+    for(int i = 0;i<_fegInfoModel->rowCount();++i)
+    {
+        ferrographysheetidList.append(_fegInfoModel->record(i).value("ferrographysheetid").toString());
+    }
+
     // 铁谱图片采集信息表
     QString fegpTableName = tableNames.value("FegPInfo");
     QString fegpSql = generateSql(_fegpCdtMap,_fegpCdtField,fegpTableName);
     _fegpInfoModel->setQuery(fegpSql);
     setModelHeaderData("FegPInfo");
     qDebug()<<fegpSql;
+
+    ferrographypicidList.clear();
+    for(int i = 0;i<_fegpInfoModel->rowCount();++i)
+    {
+        ferrographypicidList.append(_fegpInfoModel->record(i).value("ferrographypicid").toString());
+    }
 
     // 磨粒标注信息表
     QString abmTableName = tableNames.value("AbmInfo");
@@ -3657,10 +3772,12 @@ void AdvanceSearchDlg::on_abm_ferrographyreportidCbBox_currentIndexChanged(int i
 void AdvanceSearchDlg::on_fegp_ferrographypicidChkBox_clicked()
 {
     _fegpCdtMap.remove("ferrographypicid");
+    _abmCdtMap.remove("ferrographypicid");
     if(ui->fegp_ferrographypicidChkBox->isChecked())
     {
         QString text =ui->fegp_ferrographypicidCbBox->currentText();
         _fegpCdtMap.insert("ferrographypicid",text);
+        _abmCdtMap.insert("ferrographypicid",text);
     }
 }
 

@@ -445,6 +445,9 @@ private:
     QSqlDatabase db;
     ProPertyNameDlg *ppnDlg;
     QString propertyName;
+
+    QStringList ferrographysheetidList;
+    QStringList ferrographypicidList;
     
     QMap<QString,QString> tableNames;
     QSqlQueryModel *_eqmInfoModel;
