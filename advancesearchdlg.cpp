@@ -29,9 +29,13 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent) :
     ui->propertylistTableView->addAction(usepropertyAction);
     connect(usepropertyAction,SIGNAL(triggered()),this,SLOT(useproperty()));
 
-    managepropertyAction = new QAction(tr("更新属性"),ui->propertylistTableView);
-    ui->propertylistTableView->addAction(managepropertyAction);;
-    connect(managepropertyAction,SIGNAL(triggered()),this,SLOT(manageproperty()));
+    deletepropertyAction = new QAction(tr("删除属性"),ui->propertylistTableView);
+    ui->propertylistTableView->addAction(deletepropertyAction);;
+    connect(deletepropertyAction,SIGNAL(triggered()),this,SLOT(deleteproperty()));
+    
+    renameprtpertyAction = new QAction(tr("重命名"),ui->propertylistTableView);
+    ui->propertylistTableView->addAction(renameprtpertyAction);;
+    connect(renameprtpertyAction,SIGNAL(triggered()),this,SLOT(renameprtperty()));
 
     ui->propertylistTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
 
@@ -185,6 +189,33 @@ void AdvanceSearchDlg::resetConditions()
 }
 
 
+void AdvanceSearchDlg::renameprtperty()
+{
+    QModelIndex index = ui->propertylistTableView->currentIndex();
+    QSqlRecord record = propertymodel->record(index.row());
+    QString oldpropertyname = record.value(0).toString();
+    
+    ppnDlg = new ProPertyNameDlg(this,oldpropertyname);
+    if(ppnDlg->exec()== QDialog::Accepted)
+    {
+
+        QSqlQuery query;
+        QString sql = "update propertyinfo set propertyname = '";
+        sql.append(this->propertyName);
+        sql.append("' where propertyname = '");
+        sql.append(oldpropertyname);
+        sql.append("'");
+        if(query.exec(sql))
+        {
+            initpropertylistName();
+            QMessageBox::warning(this,tr("提示"),tr("修改查询属性成功"),QMessageBox::Close);
+        }
+        else
+            QMessageBox::warning(this,tr("提示"),tr("修改查询属性失败"),QMessageBox::Close);
+    }
+}
+
+
 void AdvanceSearchDlg::useproperty()
 {
 
@@ -269,6 +300,10 @@ void AdvanceSearchDlg::useproperty()
                     ui->movepartNameChkBox->setChecked(true);
 
                 }
+                else if(field == "planeid")
+                {
+                    _mpCdtMap.insert("planeid",mpValues.at(idx));
+                }
                 else if(field == "movepartid")
                 {
                     ui->movepartIdCbBox->setCurrentIndex(ui->movepartIdCbBox->findText(mpValues.at(idx)));
@@ -326,6 +361,10 @@ void AdvanceSearchDlg::useproperty()
                     _mprCdtMap.insert("movepartrepairid",mprValues.at(idx));
                     ui->movepartRepairIdChkBox->setChecked(true);
                 }
+                else if(field == "movepartid")
+                {
+                    _mprCdtMap.insert("movepartid",mprValues.at(idx));
+                }
                 else if(field == "repairtime")
                 {
                     ui->repairrepairTimeCbBox->setCurrentIndex(ui->repairrepairTimeCbBox->findText(mprValues.at(idx)));
@@ -365,6 +404,10 @@ void AdvanceSearchDlg::useproperty()
                     ui->feg_ferrographysheetidCbBox->setCurrentIndex(ui->feg_ferrographysheetidCbBox->findText(fegValues.at(idx)));
                     _fegCdtMap.insert("ferrographysheetid",fegValues.at(idx));
                     ui->feg_ferrographysheetidChkBox->setChecked(true);
+                }
+                else if(field == "oilsampleid")
+                {
+                    _fegCdtMap.insert("oilsampleid",fegValues.at(idx));
                 }
                 else if(field == "ferrographymakestuff")
                 {
@@ -406,6 +449,10 @@ void AdvanceSearchDlg::useproperty()
                     ui->fegp_ferrographypicidCbBox->setCurrentIndex(ui->fegp_ferrographypicidCbBox->findText(fegpValues.at(idx)));
                     _fegpCdtMap.insert("ferrographypicid",fegpValues.at(idx));
                     ui->fegp_ferrographypicidChkBox->setChecked(true);
+                }
+                else if(field == "ferrographysheetid")
+                {
+                    _fegpCdtMap.insert("ferrographysheetid",fegpValues.at(idx));
                 }
                 else if(field == "ferrographyreportid")
                 {
@@ -477,6 +524,10 @@ void AdvanceSearchDlg::useproperty()
                     ui->oilsampleidCbBox->setCurrentIndex(ui->oilsampleidCbBox->findText(oisValues.at(idx)));
                     _oisCdtMap.insert("oilsampleid",oisValues.at(idx));
                     ui->oilsampleidChkBox->setChecked(true);
+                }
+                else if(field == "planeid")
+                {
+                    _oisCdtMap.insert("planeid",oisValues.at(idx));
                 }
                 else if(field == "samplestuff")
                 {
@@ -606,6 +657,10 @@ void AdvanceSearchDlg::useproperty()
                     ui->oia_sendstuffLineEdit->setText(oiaValues.at(idx));
                     _oiaCdtMap.insert("sendstuff",oiaValues.at(idx));
                     ui->oia_sendstuffChkBox->setChecked(true);
+                }
+                else if(field == "oilsampleid")
+                {
+                    _oiaCdtMap.insert("oilsampleid",oiaValues.at(idx));
                 }
                 else if(field == "senddepart")
                 {
@@ -793,6 +848,10 @@ void AdvanceSearchDlg::useproperty()
                     _abmCdtMap.insert("abrasiveid",abmValues.at(idx));
                     ui->abm_abrasiveidChkBox->setChecked(true);
                 }
+                else if(field == "ferrographypicid")
+                {
+                    _abmCdtMap.insert("ferrographypicid",abmValues.at(idx));
+                }
                 else if(field == "abrasiveshape")
                 {
                     ui->abm_abrasiveshapeCbBox->setCurrentIndex(ui->abm_abrasiveshapeCbBox->findText(abmValues.at(idx)));
@@ -892,16 +951,37 @@ void AdvanceSearchDlg::useproperty()
 }
 
 
-void AdvanceSearchDlg::manageproperty()
+void AdvanceSearchDlg::deleteproperty()
 {
 //    QMessageBox::warning(this,tr("提示"),tr("管理属性"),QMessageBox::Close);
+    
     this->resetConditions();
     QModelIndex index = ui->propertylistTableView->currentIndex();
     QSqlRecord record = propertymodel->record(index.row());
     QString propertyname = record.value(0).toString();
-    this->reloadConditions(propertyname);
-    ui->queryBtn->setEnabled(false);
-    ui->modifyButton->setEnabled(true);
+    QString sql = "delete from propertyinfo where propertyname ='";
+    sql.append(propertyname);
+    sql.append("'");
+    QSqlQuery query;
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, tr("QMessageBox::question()"), tr("确认使用当前属性查询?"),
+                                  QMessageBox::Yes | QMessageBox::Cancel);
+
+    if(reply == QMessageBox::Yes)
+    {
+        if(query.exec(sql))
+        {
+            initpropertylistName();
+            QMessageBox::warning(this,tr("提示"),tr("删除属性成功"),QMessageBox::Close);
+        }
+        else
+            QMessageBox::warning(this,tr("提示"),tr("删除属性失败，请检查数据库服务是否启动"),QMessageBox::Close);
+    }
+    
+    initpropertylistName();
+//    this->reloadConditions(propertyname);
+//    ui->queryBtn->setEnabled(false);
+//    ui->modifyButton->setEnabled(true);
 }
 
 
@@ -1961,9 +2041,6 @@ void AdvanceSearchDlg::on_addtoBtn_clicked()
     ppnDlg = new ProPertyNameDlg(this);
     if(ppnDlg->exec()== QDialog::Accepted)
     {
-        //        qDebug()<<"Accept";
-        //        qDebug()<<this->propertyName;
-
         QString eqmFields = "";
         QString eqmValues = "";
         if(!_eqmCdtMap.isEmpty())
@@ -2000,6 +2077,7 @@ void AdvanceSearchDlg::on_addtoBtn_clicked()
             }
         }
 
+        
         QString mprFields = "";
         QString mprValues = "";
         if(!_mprCdtMap.isEmpty())

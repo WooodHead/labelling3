@@ -3,10 +3,16 @@
 
 #include <QDialog>
 #include <QMessageBox>
+#include <QPushButton>
+#include <QSqlQuery>
+#include <QSqlRecord>
+#include "Global.h"
 
 namespace Ui {
 class ProPertyNameDlg;
 }
+
+class QPushButton;
 
 class ProPertyNameDlg : public QDialog
 {
@@ -21,7 +27,16 @@ signals:
     void setpropertyName(QString propertyName);
     
 private slots:
-    void on_buttonBox_accepted();
+//    void on_buttonBox_accepted();
+    
+//    void on_buttonBox_clicked(QAbstractButton *button);
+    
+    void on_OkButton_clicked();
+    
+    void on_cancelButton_clicked();
+    
+private:
+    void trriger(QString text);
     
 private:
     Ui::ProPertyNameDlg *ui;
