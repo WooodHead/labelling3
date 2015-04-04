@@ -29,9 +29,13 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent) :
     ui->propertylistTableView->addAction(usepropertyAction);
     connect(usepropertyAction,SIGNAL(triggered()),this,SLOT(useproperty()));
 
-    managepropertyAction = new QAction(tr("更新属性"),ui->propertylistTableView);
-    ui->propertylistTableView->addAction(managepropertyAction);;
-    connect(managepropertyAction,SIGNAL(triggered()),this,SLOT(manageproperty()));
+    deletepropertyAction = new QAction(tr("删除属性"),ui->propertylistTableView);
+    ui->propertylistTableView->addAction(deletepropertyAction);;
+    connect(deletepropertyAction,SIGNAL(triggered()),this,SLOT(deleteproperty()));
+    
+    renameprtpertyAction = new QAction(tr("重命名"),ui->propertylistTableView);
+    ui->propertylistTableView->addAction(renameprtpertyAction);;
+    connect(renameprtpertyAction,SIGNAL(triggered()),this,SLOT(renameprtperty()));
 
     ui->propertylistTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
 
@@ -185,6 +189,33 @@ void AdvanceSearchDlg::resetConditions()
 }
 
 
+void AdvanceSearchDlg::renameprtperty()
+{
+    QModelIndex index = ui->propertylistTableView->currentIndex();
+    QSqlRecord record = propertymodel->record(index.row());
+    QString oldpropertyname = record.value(0).toString();
+    
+    ppnDlg = new ProPertyNameDlg(this,oldpropertyname);
+    if(ppnDlg->exec()== QDialog::Accepted)
+    {
+
+        QSqlQuery query;
+        QString sql = "update propertyinfo set propertyname = '";
+        sql.append(this->propertyName);
+        sql.append("' where propertyname = '");
+        sql.append(oldpropertyname);
+        sql.append("'");
+        if(query.exec(sql))
+        {
+            initpropertylistName();
+            QMessageBox::warning(this,tr("提示"),tr("修改查询属性成功"),QMessageBox::Close);
+        }
+        else
+            QMessageBox::warning(this,tr("提示"),tr("修改查询属性失败"),QMessageBox::Close);
+    }
+}
+
+
 void AdvanceSearchDlg::useproperty()
 {
 
@@ -268,6 +299,10 @@ void AdvanceSearchDlg::useproperty()
                     _mpCdtMap.insert("movepartname",mpValues.at(idx));
                     ui->movepartNameChkBox->setChecked(true);
 
+                }
+                else if(field == "planeid")
+                {
+                    _mpCdtMap.insert("planeid",mpValues.at(idx));
                 }
                 else if(field == "movepartid")
                 {
@@ -892,16 +927,37 @@ void AdvanceSearchDlg::useproperty()
 }
 
 
-void AdvanceSearchDlg::manageproperty()
+void AdvanceSearchDlg::deleteproperty()
 {
 //    QMessageBox::warning(this,tr("提示"),tr("管理属性"),QMessageBox::Close);
+    
     this->resetConditions();
     QModelIndex index = ui->propertylistTableView->currentIndex();
     QSqlRecord record = propertymodel->record(index.row());
     QString propertyname = record.value(0).toString();
-    this->reloadConditions(propertyname);
-    ui->queryBtn->setEnabled(false);
-    ui->modifyButton->setEnabled(true);
+    QString sql = "delete from propertyinfo where propertyname ='";
+    sql.append(propertyname);
+    sql.append("'");
+    QSqlQuery query;
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, tr("QMessageBox::question()"), tr("确认使用当前属性查询?"),
+                                  QMessageBox::Yes | QMessageBox::Cancel);
+
+    if(reply == QMessageBox::Yes)
+    {
+        if(query.exec(sql))
+        {
+            initpropertylistName();
+            QMessageBox::warning(this,tr("提示"),tr("删除属性成功"),QMessageBox::Close);
+        }
+        else
+            QMessageBox::warning(this,tr("提示"),tr("删除属性失败，请检查数据库服务是否启动"),QMessageBox::Close);
+    }
+    
+    initpropertylistName();
+//    this->reloadConditions(propertyname);
+//    ui->queryBtn->setEnabled(false);
+//    ui->modifyButton->setEnabled(true);
 }
 
 
@@ -1961,9 +2017,6 @@ void AdvanceSearchDlg::on_addtoBtn_clicked()
     ppnDlg = new ProPertyNameDlg(this);
     if(ppnDlg->exec()== QDialog::Accepted)
     {
-        //        qDebug()<<"Accept";
-        //        qDebug()<<this->propertyName;
-
         QString eqmFields = "";
         QString eqmValues = "";
         if(!_eqmCdtMap.isEmpty())
@@ -2000,6 +2053,7 @@ void AdvanceSearchDlg::on_addtoBtn_clicked()
             }
         }
 
+        
         QString mprFields = "";
         QString mprValues = "";
         if(!_mprCdtMap.isEmpty())

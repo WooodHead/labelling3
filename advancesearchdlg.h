@@ -193,7 +193,8 @@ private:
 
 private slots:
      void useproperty();
-     void manageproperty();
+     void deleteproperty();
+     void renameprtperty();
 
 
 
@@ -461,7 +462,8 @@ private:
 
     QSqlQueryModel *propertymodel;
     QAction *usepropertyAction;
-    QAction *managepropertyAction;
+    QAction *deletepropertyAction;
+    QAction *renameprtpertyAction;
 
     QStringList _eqmCdtField;          // zhuang bei xin xi biao condition Field
     QStringList _abmCdtField;          // mo li biao ji xin xi biao condition Field
