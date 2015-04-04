@@ -35,7 +35,7 @@
       <item>
        <widget class="QStackedWidget" name="conditionStackedWidget">
         <property name="currentIndex">
-         <number>6</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="page">
          <layout class="QGridLayout" name="gridLayout_3">
@@ -49,8 +49,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>162</width>
-               <height>186</height>
+               <width>276</width>
+               <height>354</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -229,8 +229,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>253</width>
-               <height>186</height>
+               <width>276</width>
+               <height>354</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout">
@@ -382,18 +382,18 @@
                 </item>
                 <item>
                  <widget class="QDateEdit" name="movepartEndDateEdit">
+                  <property name="displayFormat">
+                   <string>yyyy年/MM月/dd日</string>
+                  </property>
+                  <property name="calendarPopup">
+                   <bool>true</bool>
+                  </property>
                   <property name="date">
                    <date>
                     <year>2014</year>
                     <month>1</month>
                     <day>1</day>
                    </date>
-                  </property>
-                  <property name="displayFormat">
-                   <string>yyyy年/MM月/dd日</string>
-                  </property>
-                  <property name="calendarPopup">
-                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -1925,7 +1925,7 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>210</width>
+               <width>259</width>
                <height>460</height>
               </rect>
              </property>
