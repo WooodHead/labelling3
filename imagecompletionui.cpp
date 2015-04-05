@@ -1797,69 +1797,82 @@ void ImageCompletionUI::importData()
 
 void ImageCompletionUI::exportData()
 {
-    QFileDialog *sourceDir = new QFileDialog(this,tr("选择铁谱图片目录"),"","");
-    sourceDir->setFileMode(QFileDialog::DirectoryOnly);
-    sourceDir->setViewMode(QFileDialog::Detail);
-    QString sourcePath;
-    if(sourceDir->exec())
+//    QFileDialog *sourceDir = new QFileDialog(this,tr("选择铁谱图片目录"),"","");
+//    sourceDir->setFileMode(QFileDialog::DirectoryOnly);
+//    sourceDir->setViewMode(QFileDialog::Detail);
+//    QString sourcePath;
+//    if(sourceDir->exec())
+//    {
+//        QStringList sourcePaths = sourceDir->selectedFiles();
+//        sourcePath = sourcePaths.at(0);
+//        //qDebug()<<sourcePath;
+//    }
+//    else
+//        return;
+
+//    QFileDialog *resultDir = new QFileDialog(this,tr("选择磨粒标注结果目录"),"","");
+//    resultDir->setFileMode(QFileDialog::DirectoryOnly);
+//    resultDir->setViewMode(QFileDialog::Detail);
+//    QString resultPath;
+//    if(resultDir->exec())
+//    {
+//        QStringList resultPaths = resultDir->selectedFiles();
+//        resultPath = resultPaths.at(0);
+//        //qDebug()<<resultPath;
+//    }
+//    else
+//        return;
+
+//    QFileDialog *targetDir = new QFileDialog(this,tr("选择打包存档目录"),"","");
+//    targetDir->setFileMode(QFileDialog::DirectoryOnly);
+//    targetDir->setViewMode(QFileDialog::Detail);
+//    QString targetPath;
+//    if(targetDir->exec())
+//    {
+//        QStringList targetPaths = targetDir->selectedFiles();
+//        targetPath  = targetPaths.at(0);
+//        //qDebug()<<targetPath;
+//    }
+//    else
+//        return;
+
+//    if(resultPath.isEmpty() | resultPath.isEmpty()| targetPath.isEmpty())
+//        return;
+    ExpDlg *expDlg = new ExpDlg(this,"","");
+    if(expDlg->exec() == QDialog::Accepted)
     {
-        QStringList sourcePaths = sourceDir->selectedFiles();
-        sourcePath = sourcePaths.at(0);
-        //qDebug()<<sourcePath;
+        QString sourcePath = this->_expSourcePicPath;
+        QString resultPath = this->_expResultPicPath;
+        QString targetPath = this->_expPackgePath;
+    #ifdef Q_OS_WIN
+        QString sourcetargetPath = targetPath + "\\sourceFile";
+        QString resulttargetPath = targetPath + "\\resultFile";
+        QString databackupFileName = targetPath + "\\databackup.sql";
+    #endif
+    
+    #ifdef Q_OS_LINUX
+        QString sourcetargetPath = targetPath + "/sourceFile";
+        QString resulttargetPath = targetPath + "/resultFile";
+        QString databackupFileName = targetPath + "/databackup.sql";
+    #endif
+    
+        // 导出数据库信息
+        /* edit code */
+    
+        if(this->copyFiles(sourcePath,sourcetargetPath)
+                && this->copyFiles(resultPath,resulttargetPath)
+                && this->exportDB(databackupFileName))
+            QMessageBox::warning(this,tr("批量数据导出提示"),tr("批量数据导出成功"),QMessageBox::Close);
+        else
+            QMessageBox::warning(this,tr("批量数据导出提示"),tr("批量数据导出失败"),QMessageBox::Close);
     }
-    else
-        return;
+}
 
-    QFileDialog *resultDir = new QFileDialog(this,tr("选择磨粒标注结果目录"),"","");
-    resultDir->setFileMode(QFileDialog::DirectoryOnly);
-    resultDir->setViewMode(QFileDialog::Detail);
-    QString resultPath;
-    if(resultDir->exec())
-    {
-        QStringList resultPaths = resultDir->selectedFiles();
-        resultPath = resultPaths.at(0);
-        //qDebug()<<resultPath;
-    }
-    else
-        return;
-
-    QFileDialog *targetDir = new QFileDialog(this,tr("选择打包存档目录"),"","");
-    targetDir->setFileMode(QFileDialog::DirectoryOnly);
-    targetDir->setViewMode(QFileDialog::Detail);
-    QString targetPath;
-    if(targetDir->exec())
-    {
-        QStringList targetPaths = targetDir->selectedFiles();
-        targetPath  = targetPaths.at(0);
-        //qDebug()<<targetPath;
-    }
-    else
-        return;
-
-    if(resultPath.isEmpty() | resultPath.isEmpty()| targetPath.isEmpty())
-        return;
-#ifdef Q_OS_WIN
-    QString sourcetargetPath = targetPath + "\\sourceFile";
-    QString resulttargetPath = targetPath + "\\resultFile";
-    QString databackupFileName = targetPath + "\\databackup.sql";
-#endif
-
-#ifdef Q_OS_LINUX
-    QString sourcetargetPath = targetPath + "/sourceFile";
-    QString resulttargetPath = targetPath + "/resultFile";
-    QString databackupFileName = targetPath + "/databackup.sql";
-#endif
-
-    // 导出数据库信息
-    /* edit code */
-
-
-    if(this->copyFiles(sourcePath,sourcetargetPath)
-            && this->copyFiles(resultPath,resulttargetPath)
-            && this->exportDB(databackupFileName))
-        QMessageBox::warning(this,tr("批量数据导出提示"),tr("批量数据导出成功"),QMessageBox::Close);
-    else
-        QMessageBox::warning(this,tr("批量数据导出提示"),tr("批量数据导出失败"),QMessageBox::Close);
+void ImageCompletionUI::setExpPath(QString sourcePicPath, QString resultPicPath, QString packgePath)
+{
+    this->_expSourcePicPath = sourcePicPath;
+    this->_expResultPicPath = resultPicPath;
+    this->_expPackgePath = packgePath;
 }
 
 void ImageCompletionUI::cellDoubleClickedLeftWindow(int row, int /* col */)

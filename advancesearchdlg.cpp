@@ -51,12 +51,16 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent) :
 
     ui->modifyButton->setEnabled(false);
     ui->conditionStackedWidget->setCurrentIndex(0);
+    
+    // 初始化缩略图窗口
+    this->thWindow = new ThumbnailWindow(this);
 
 }
 
 AdvanceSearchDlg::~AdvanceSearchDlg()
 {
     delete ui;
+    thWindow->close();
     db.close();
 }
 
@@ -1434,6 +1438,7 @@ void AdvanceSearchDlg::query()
     for(int i = 0;i<_fegpInfoModel->rowCount();++i)
     {
         ferrographypicidList.append(_fegpInfoModel->record(i).value("ferrographypicid").toString());
+        ferrographypicpathList.append(_fegpInfoModel->record(i).value("ferrographypicpath").toString());
     }
 
     // 磨粒标注信息表
@@ -1442,6 +1447,14 @@ void AdvanceSearchDlg::query()
     _abmInfoModel->setQuery(abmSql);
     setModelHeaderData("AbmInfo");
     qDebug()<<abmSql;
+    for(int i =0;i<_abmInfoModel->rowCount();++i)
+    {
+        abrasiveidList.append(_abmInfoModel->record(i).value("abrasiveid").toString());
+        abrasivepicpathList.append(_abmInfoModel->record(i).value("abrasivepicpath").toString());
+        ferrographypicidhList.append(_abmInfoModel->record(i).value("ferrographypicid").toString());
+    }
+    this->thWindow->show();
+    this->thWindow->initList(ferrographypicidhList,ferrographypicpathList,abrasiveidList,abrasivepicpathList);
 }
 
 

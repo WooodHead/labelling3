@@ -17,6 +17,7 @@
 
 #include "propertynamedlg.h"
 #include "Global.h"
+#include "thumbnailwindow.h"
 
 namespace Ui {
 class AdvanceSearchDlg;
@@ -195,8 +196,8 @@ private slots:
      void useproperty();
      void deleteproperty();
      void renameprtperty();
-
-
+     
+     
 
      void on_sampleidCbBox_currentIndexChanged(int index);
 
@@ -446,7 +447,15 @@ private:
     QSqlDatabase db;
     ProPertyNameDlg *ppnDlg;
     QString propertyName;
-
+    
+    // 显示缩略图
+    ThumbnailWindow *thWindow;
+    QStringList ferrographypicpathList;
+    QStringList ferrographypicidhList;
+    QStringList abrasivepicpathList;
+    QStringList abrasiveidList;
+    
+    // 连接查询条件
     QStringList ferrographysheetidList;
     QStringList ferrographypicidList;
     
