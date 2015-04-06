@@ -6,6 +6,7 @@ ThumbnailWindow::ThumbnailWindow(QWidget *parent) :
     ui(new Ui::ThumbnailWindow)
 {
     ui->setupUi(this);
+    connect(ui->listWidget,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(ItemClicked(QListWidgetItem*)));
     initListWidget();
 }
 ThumbnailWindow::ThumbnailWindow(QWidget *parent, QStringList picidList, QStringList picpathList):
@@ -52,4 +53,13 @@ void ThumbnailWindow::initListWidget()
 ThumbnailWindow::~ThumbnailWindow()
 {
     delete ui;
+}
+
+void ThumbnailWindow::ItemClicked(QListWidgetItem *item)
+{
+    if(!item)
+        return;
+    int nRowIdx = ui->listWidget->row(item);
+    
+    QMessageBox::warning(this,tr("提示"),QString(nRowIdx),QMessageBox::Close);
 }

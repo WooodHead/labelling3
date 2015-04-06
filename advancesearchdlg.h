@@ -14,6 +14,9 @@
 #include <QSqlRecord>
 #include <QSqlField>
 #include <QFileDialog>
+#include <QItemSelectionModel>
+#include <QModelIndexList>
+#include <QModelIndex>
 
 #include "propertynamedlg.h"
 #include "Global.h"
@@ -28,7 +31,8 @@ class AdvanceSearchDlg : public QDialog
     Q_OBJECT
     
 public:
-     AdvanceSearchDlg(QWidget *parent = 0);
+     AdvanceSearchDlg(QWidget *parent = 0,bool flag = false);
+//     void setDeleteFlag(bool flag){this->deleteflag = flag;}
     ~AdvanceSearchDlg();
     
 private slots:
@@ -196,6 +200,8 @@ private slots:
      void useproperty();
      void deleteproperty();
      void renameprtperty();
+     
+     void deletedate();
      
      
 
@@ -448,6 +454,10 @@ private:
     ProPertyNameDlg *ppnDlg;
     QString propertyName;
     
+    //删除标志
+    bool deleteflag = false;
+    
+    
     // 显示缩略图
     ThumbnailWindow *thWindow;
     QStringList ferrographypicpathList;
@@ -473,6 +483,8 @@ private:
     QAction *usepropertyAction;
     QAction *deletepropertyAction;
     QAction *renameprtpertyAction;
+    
+    QAction *deletedataAction;
 
     QStringList _eqmCdtField;          // zhuang bei xin xi biao condition Field
     QStringList _abmCdtField;          // mo li biao ji xin xi biao condition Field
