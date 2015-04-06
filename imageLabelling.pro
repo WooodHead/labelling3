@@ -21,7 +21,9 @@ HEADERS += \
     Global.h \
     MoliProperties.h \
     ImageComparison.h \
-    Util/def.h
+    Util/def.h \
+    expdlg.h \
+    thumbnailwindow.h
 
 
 SOURCES += \
@@ -43,7 +45,9 @@ SOURCES += \
     UserAdd.cpp \
     UserEdit.cpp \
     UserManagement.cpp \
-    ImageComparison.cpp
+    ImageComparison.cpp \
+    expdlg.cpp \
+    thumbnailwindow.cpp
 
 
 FORMS += \
@@ -64,7 +68,9 @@ FORMS += \
     useredit.ui \
     propertynamedlg.ui \
     MoliProperties.ui \
-    ImageComparison.ui
+    ImageComparison.ui \
+    expdlg.ui \
+    thumbnailwindow.ui
 
 RESOURCES += \
     ImageCompletion.qrc
