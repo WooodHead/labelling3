@@ -195,6 +195,8 @@ private:
      bool importDB(const QString &path);
      bool exportDB(const QSqlQueryModel *model,const QString &tablename,const QString &path);
      bool importDB(const QSqlQueryModel &model);
+     
+     bool deletefromtable(QStringList idList,QString tablename);
 
 private slots:
      void useproperty();
