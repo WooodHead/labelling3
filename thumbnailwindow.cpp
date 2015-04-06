@@ -32,12 +32,16 @@ void ThumbnailWindow::initList(QStringList picidList, QStringList picpathList,QS
 void ThumbnailWindow::initIcons()
 {
     int idx = 0;
+    if(ferrographypicpathList.isEmpty())
+        return;
     foreach(QString path,ferrographypicpathList)
     {
         QPixmap pixmap(path);
-        QListWidgetItem *pitem  = new QListWidgetItem(QIcon(pixmap.scaled(QSize(W_ICONSIZE,H_ICONSIZE))),tr("缩略图"));
+        QListWidgetItem *pitem  = new QListWidgetItem(QIcon(pixmap.scaled(QSize(W_ICONSIZE,H_ICONSIZE))),ferrographypicidList.at(idx));
+//        QListWidgetItem *pitem  = new QListWidgetItem(QIcon(pixmap.scaled(QSize(W_ICONSIZE,H_ICONSIZE))),tr("缩略图"));
         pitem->setSizeHint(QSize(W_ICONSIZE,H_ICONSIZE));
         ui->listWidget->insertItem(idx,pitem);
+        idx++;
     }
 }
 
@@ -61,5 +65,5 @@ void ThumbnailWindow::ItemClicked(QListWidgetItem *item)
         return;
     int nRowIdx = ui->listWidget->row(item);
     
-    QMessageBox::warning(this,tr("提示"),QString(nRowIdx),QMessageBox::Close);
+    QMessageBox::warning(this,tr("提示"),ferrographypicidList.at(nRowIdx),QMessageBox::Close);
 }
