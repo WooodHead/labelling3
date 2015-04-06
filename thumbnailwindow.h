@@ -4,6 +4,10 @@
 #include <QDialog>
 #include <QStringList>
 #include <QPixmap>
+#include <QMessageBox>
+#include <QListWidgetItem>
+
+#include "Global.h"
 
 const int W_ICONSIZE = 96; 
 const int H_ICONSIZE = 96; 
@@ -25,6 +29,9 @@ public:
     void initListWidget();
     void initIcons();
     void initList(QStringList picidList,QStringList picpathList,QStringList abmpicidList,QStringList abmpicpathList);
+    
+private slots:
+    void ItemClicked(QListWidgetItem *item);
     
 private:
     Ui::ThumbnailWindow *ui;

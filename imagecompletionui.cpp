@@ -132,7 +132,7 @@ void	ImageCompletionUI::createActions()
     _searchAction->setObjectName(tr("_searchAction"));
     connect(_searchAction, SIGNAL(triggered()), this, SLOT(search()));
 
-    _addtosqlAction = new QAction( Global::Awesome->icon(reorder), tr("属性分类"), this );
+    _addtosqlAction = new QAction( Global::Awesome->icon(reorder), tr("数据管理"), this );
     _addtosqlAction->setObjectName(tr("_addtosqlAction"));
     connect(_addtosqlAction, SIGNAL(triggered()), this, SLOT(addtosql()));
 
@@ -991,7 +991,10 @@ void	ImageCompletionUI::search()
 
 void	ImageCompletionUI::addtosql()
 {
-    class1.show();
+//    class1.show();
+    _advanceSearchDlg = new AdvanceSearchDlg(this,true);
+//    _advanceSearchDlg->setDeleteFlag(true);
+    _advanceSearchDlg->show();
 }
 
 void ImageCompletionUI::updateLog()
