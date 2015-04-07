@@ -5624,10 +5624,10 @@ void AdvanceSearchDlg::on_imagesymbolChkBox_clicked()
 
 void AdvanceSearchDlg::on_imagesymbolCbBox_currentIndexChanged(int index)
 {
-    _abmCdtMap.remove("imagesymbol");
+    _fegpCdtMap.remove("imagesymbol");
     if(ui->imagesymbolChkBox->isChecked())
     {
         QString text = ui->imagesymbolCbBox->currentText();
-        _abmCdtMap.insert("imagesymbol",text);
+        _fegpCdtMap.insert("imagesymbol",text);
     }
 }
