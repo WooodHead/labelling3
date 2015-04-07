@@ -162,7 +162,7 @@ void AdvanceSearchDlg::resetConditions()
     ui->fegp_lightsourcetypeChkBox->setChecked(false);
     ui->fegp_magnificationChkBox->setChecked(false);
     ui->fegp_microscopictypeChkBox->setChecked(false);
-    ui->imagesymbolChkBox->setChecked(false);
+//    ui->imagesymbolChkBox->setChecked(false);
 
     // ois
     ui->oilsampleidChkBox->setChecked(false);
@@ -554,12 +554,12 @@ void AdvanceSearchDlg::useproperty()
                     _fegpCdtMap.insert("imagerecognitioninfoanalysis",fegpValues.at(idx));
                     ui->fegp_imagerecognitioninfoanalysisChkBox->setChecked(true);
                 }
-                else if(field == "imagesymbol")
-                {
-                    ui->imagesymbolCbBox->setCurrentIndex(ui->imagesymbolCbBox->findText(fegpValues.at(idx)));
-                    _fegpCdtMap.insert("imagesymbol",fegpValues.at(idx));
-                    ui->imagesymbolChkBox->setChecked(true);
-                }
+//                else if(field == "imagesymbol")
+//                {
+//                    ui->imagesymbolCbBox->setCurrentIndex(ui->imagesymbolCbBox->findText(fegpValues.at(idx)));
+//                    _fegpCdtMap.insert("imagesymbol",fegpValues.at(idx));
+//                    ui->imagesymbolChkBox->setChecked(true);
+//                }
                 idx++;
             }
         }
@@ -1960,8 +1960,8 @@ void AdvanceSearchDlg::initCbBox()
             ui->fegp_magnificationCbBox->insertItem(-1,query.value(fegp_magnification).toString());
         if(ui->fegp_microscopictypeCbBox->findText(query.value(fegp_microscopictype).toString()) == -1)
             ui->fegp_microscopictypeCbBox->insertItem(-1,query.value(fegp_microscopictype).toString());
-        if(ui->imagesymbolCbBox->findText(query.value(fegp_imagesymbol).toString()) == -1)
-            ui->imagesymbolCbBox->insertItem(-1,query.value(fegp_imagesymbol).toString());
+//        if(ui->imagesymbolCbBox->findText(query.value(fegp_imagesymbol).toString()) == -1)
+//            ui->imagesymbolCbBox->insertItem(-1,query.value(fegp_imagesymbol).toString());
     }
     query.exec("select * from ferrographyinfo");
     while(query.next())
@@ -5618,22 +5618,22 @@ bool AdvanceSearchDlg::deletefromtable(QStringList idList, QString tablename)
     
 }
 
-void AdvanceSearchDlg::on_imagesymbolChkBox_clicked()
-{
-    _fegpCdtMap.remove("imagesymbol");
-    if(ui->imagesymbolChkBox->isChecked())
-    {
-        QString text = ui->imagesymbolCbBox->currentText();
-        _fegpCdtMap.insert("imagesymbol",text);
-    }
-}
+//void AdvanceSearchDlg::on_imagesymbolChkBox_clicked()
+//{
+//    _fegpCdtMap.remove("imagesymbol");
+//    if(ui->imagesymbolChkBox->isChecked())
+//    {
+//        QString text = ui->imagesymbolCbBox->currentText();
+//        _fegpCdtMap.insert("imagesymbol",text);
+//    }
+//}
 
-void AdvanceSearchDlg::on_imagesymbolCbBox_currentIndexChanged(int index)
-{
-    _fegpCdtMap.remove("imagesymbol");
-    if(ui->imagesymbolChkBox->isChecked())
-    {
-        QString text = ui->imagesymbolCbBox->currentText();
-        _fegpCdtMap.insert("imagesymbol",text);
-    }
-}
+//void AdvanceSearchDlg::on_imagesymbolCbBox_currentIndexChanged(int index)
+//{
+//    _fegpCdtMap.remove("imagesymbol");
+//    if(ui->imagesymbolChkBox->isChecked())
+//    {
+//        QString text = ui->imagesymbolCbBox->currentText();
+//        _fegpCdtMap.insert("imagesymbol",text);
+//    }
+//}
