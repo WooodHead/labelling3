@@ -303,6 +303,8 @@ private slots:
     void        back();
     void        append();
     void        showAll();
+
+    void        queryThumbnails(QStringList list);
 };
 
 #endif // IMAGECOMPLETIONUI_H

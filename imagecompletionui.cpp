@@ -2280,6 +2280,12 @@ void ImageCompletionUI::showThumbnailsInCentral(QStringList list)
     }
 }
 
+
+void ImageCompletionUI::queryThumbnails(QStringList list)
+{
+    this->showThumbnailsInCentral(list);
+}
+
 bool ImageCompletionUI::eventFilter(QObject *target, QEvent *event)
 {
     if(event->type() == QEvent::MouseButtonDblClick)

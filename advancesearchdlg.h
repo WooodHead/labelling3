@@ -448,6 +448,13 @@ private slots:
      void on_feg_ferrographymakeoilconsumptionLineEdit_textChanged(const QString &arg1);
 
      void on_modifyButton_clicked();
+
+     void on_imagesymbolChkBox_clicked();
+
+     void on_imagesymbolCbBox_currentIndexChanged(int index);
+
+signals:
+     void showqueryThumbnails(QStringList list);
      
 private:
     Ui::AdvanceSearchDlg *ui;

@@ -76,6 +76,8 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent,bool flag) :
         
         connect(deletedataAction,SIGNAL(triggered()),this,SLOT(deletedate()));
     }
+
+    connect(this,SIGNAL(showqueryThumbnails(QStringList)),parent,SLOT(queryThumbnails(QStringList)));
     
 
     createTableNames();
@@ -99,7 +101,7 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent,bool flag) :
 AdvanceSearchDlg::~AdvanceSearchDlg()
 {
     delete ui;
-    thWindow->close();
+//    thWindow->close();
     db.close();
 }
 
@@ -160,6 +162,7 @@ void AdvanceSearchDlg::resetConditions()
     ui->fegp_lightsourcetypeChkBox->setChecked(false);
     ui->fegp_magnificationChkBox->setChecked(false);
     ui->fegp_microscopictypeChkBox->setChecked(false);
+    ui->imagesymbolChkBox->setChecked(false);
 
     // ois
     ui->oilsampleidChkBox->setChecked(false);
@@ -550,6 +553,12 @@ void AdvanceSearchDlg::useproperty()
                     ui->fegp_imagerecognitioninfoanalysisLineEdit->setText(fegpValues.at(idx));
                     _fegpCdtMap.insert("imagerecognitioninfoanalysis",fegpValues.at(idx));
                     ui->fegp_imagerecognitioninfoanalysisChkBox->setChecked(true);
+                }
+                else if(field == "imagesymbol")
+                {
+                    ui->imagesymbolCbBox->setCurrentIndex(ui->imagesymbolCbBox->findText(fegpValues.at(idx)));
+                    _fegpCdtMap.insert("imagesymbol",fegpValues.at(idx));
+                    ui->imagesymbolChkBox->setChecked(true);
                 }
                 idx++;
             }
@@ -1497,9 +1506,9 @@ void AdvanceSearchDlg::query()
         abrasivepicpathList.append(_abmInfoModel->record(i).value("abrasivepicpath").toString());
         ferrographypicidhList.append(_abmInfoModel->record(i).value("ferrographypicid").toString());
     }
-    this->thWindow->show();
-    this->thWindow->initList(ferrographypicidhList,ferrographypicpathList,abrasiveidList,abrasivepicpathList);
-    
+//    this->thWindow->show();
+//    this->thWindow->initList(ferrographypicidhList,ferrographypicpathList,abrasiveidList,abrasivepicpathList);
+    emit showqueryThumbnails(ferrographypicpathList);
 }
 
 
@@ -1945,6 +1954,8 @@ void AdvanceSearchDlg::initCbBox()
             ui->fegp_magnificationCbBox->insertItem(-1,query.value(fegp_magnification).toString());
         if(ui->fegp_microscopictypeCbBox->findText(query.value(fegp_microscopictype).toString()) == -1)
             ui->fegp_microscopictypeCbBox->insertItem(-1,query.value(fegp_microscopictype).toString());
+        if(ui->imagesymbolCbBox->findText(query.value(fegp_imagesymbol).toString()) == -1)
+            ui->imagesymbolCbBox->insertItem(-1,query.value(fegp_imagesymbol).toString());
     }
     query.exec("select * from ferrographyinfo");
     while(query.next())
@@ -5599,4 +5610,24 @@ bool AdvanceSearchDlg::deletefromtable(QStringList idList, QString tablename)
         return true;
     }
     
+}
+
+void AdvanceSearchDlg::on_imagesymbolChkBox_clicked()
+{
+    _fegpCdtMap.remove("imagesymbol");
+    if(ui->imagesymbolChkBox->isChecked())
+    {
+        QString text = ui->imagesymbolCbBox->currentText();
+        _fegpCdtMap.insert("imagesymbol",text);
+    }
+}
+
+void AdvanceSearchDlg::on_imagesymbolCbBox_currentIndexChanged(int index)
+{
+    _abmCdtMap.remove("imagesymbol");
+    if(ui->imagesymbolChkBox->isChecked())
+    {
+        QString text = ui->imagesymbolCbBox->currentText();
+        _abmCdtMap.insert("imagesymbol",text);
+    }
 }

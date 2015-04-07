@@ -38,7 +38,7 @@
       <item>
        <widget class="QStackedWidget" name="conditionStackedWidget">
         <property name="currentIndex">
-         <number>1</number>
+         <number>6</number>
         </property>
         <widget class="QWidget" name="page">
          <layout class="QGridLayout" name="gridLayout_3">
@@ -52,8 +52,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>198</width>
-               <height>228</height>
+               <width>272</width>
+               <height>354</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -232,8 +232,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>314</width>
-               <height>340</height>
+               <width>272</width>
+               <height>354</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout">
@@ -385,18 +385,18 @@
                 </item>
                 <item>
                  <widget class="QDateEdit" name="movepartEndDateEdit">
+                  <property name="displayFormat">
+                   <string>yyyy年/MM月/dd日</string>
+                  </property>
+                  <property name="calendarPopup">
+                   <bool>true</bool>
+                  </property>
                   <property name="date">
                    <date>
                     <year>2014</year>
                     <month>1</month>
                     <day>1</day>
                    </date>
-                  </property>
-                  <property name="displayFormat">
-                   <string>yyyy年/MM月/dd日</string>
-                  </property>
-                  <property name="calendarPopup">
-                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -433,8 +433,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>287</width>
-               <height>158</height>
+               <width>272</width>
+               <height>354</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_15">
@@ -572,8 +572,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>269</width>
-               <height>607</height>
+               <width>255</width>
+               <height>488</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -974,8 +974,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>314</width>
-               <height>887</height>
+               <width>255</width>
+               <height>712</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -1542,8 +1542,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>261</width>
-               <height>362</height>
+               <width>272</width>
+               <height>354</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -1775,8 +1775,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>261</width>
-               <height>193</height>
+               <width>272</width>
+               <height>354</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -1898,6 +1898,27 @@
                </layout>
               </item>
               <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_8">
+                <item>
+                 <widget class="QLabel" name="label_7">
+                  <property name="text">
+                   <string>是否已标记</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="imagesymbolChkBox">
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="imagesymbolCbBox"/>
+                </item>
+               </layout>
+              </item>
+              <item>
                <spacer name="verticalSpacer_4">
                 <property name="orientation">
                  <enum>Qt::Vertical</enum>
@@ -1928,8 +1949,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>258</width>
-               <height>572</height>
+               <width>255</width>
+               <height>460</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_7">
