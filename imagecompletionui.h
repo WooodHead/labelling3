@@ -188,6 +188,7 @@ private:
 
 private slots:
     void	open();
+    void openbyquery(QString picid,QString picpath);
     void	save();
     void	saveAs();
 

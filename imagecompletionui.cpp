@@ -677,6 +677,35 @@ void ImageCompletionUI::open()
     this->openImage(strFilePath);
 }
 
+void ImageCompletionUI::openbyquery(QString picid, QString picpath)
+{
+    close();
+
+//    QSettings settings("ImageCompletion", "ImageCompletion");
+//    QString strLastImportPath = settings.value("lastImportPath", QDir::homePath()).toString();
+
+//    QString strFilePath = QFileDialog::getOpenFileName( this,
+//                                                        tr("打开图像"),
+//                                                        strLastImportPath,
+//                                                        MOLI_IMAGE_FILTER );
+    QMessageBox::warning(this,tr("提示"),picpath,QMessageBox::Close);
+
+    if( picpath.isEmpty() )
+    {
+        return;
+    }
+
+    if( !QFile::exists(picpath) )
+    {
+        return;
+    }
+
+//    settings.setValue("lastImportPath", QVariant(picpath));
+    QMessageBox::warning(this,tr("提示"),picpath,QMessageBox::Close);
+
+    this->openImage(picpath);
+}
+
 void ImageCompletionUI::openImage(QString strFilePath)
 {
     if( strFilePath.isEmpty() ) return;

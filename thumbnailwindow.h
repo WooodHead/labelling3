@@ -32,6 +32,14 @@ public:
     
 private slots:
     void ItemClicked(QListWidgetItem *item);
+
+    void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
+
+signals:
+    void showPic(QString picid,QString picpath);
+
+private:
+    void sendSignal(int nRowIdx);
     
 private:
     Ui::ThumbnailWindow *ui;

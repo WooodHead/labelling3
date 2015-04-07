@@ -92,7 +92,7 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent,bool flag) :
     ui->conditionStackedWidget->setCurrentIndex(0);
     
     // 初始化缩略图窗口
-    this->thWindow = new ThumbnailWindow(this);
+    this->thWindow = new ThumbnailWindow(parent);
 
 }
 

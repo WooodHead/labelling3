@@ -7,6 +7,7 @@ ThumbnailWindow::ThumbnailWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     connect(ui->listWidget,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(ItemClicked(QListWidgetItem*)));
+    connect(this,SIGNAL(showPic(QString,QString)),parent,SLOT(openbyquery(QString,QString)));
     initListWidget();
 }
 ThumbnailWindow::ThumbnailWindow(QWidget *parent, QStringList picidList, QStringList picpathList):
@@ -61,9 +62,23 @@ ThumbnailWindow::~ThumbnailWindow()
 
 void ThumbnailWindow::ItemClicked(QListWidgetItem *item)
 {
+//    if(!item)
+//        return;
+//    int nRowIdx = ui->listWidget->row(item);
+//    this->sendSignal(nRowIdx);
+//    QMessageBox::warning(this,tr("提示"),ferrographypicidList.at(nRowIdx),QMessageBox::Close);
+}
+
+
+void ThumbnailWindow::sendSignal(int nRowIdx)
+{
+    emit showPic(ferrographypicidList.at(nRowIdx),ferrographypicpathList.at(nRowIdx));
+}
+
+void ThumbnailWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
+{
     if(!item)
         return;
     int nRowIdx = ui->listWidget->row(item);
-    
-    QMessageBox::warning(this,tr("提示"),ferrographypicidList.at(nRowIdx),QMessageBox::Close);
+    this->sendSignal(nRowIdx);
 }
