@@ -1370,7 +1370,7 @@ QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap,QStrin
                 if(conditionMap.isEmpty())
                     sql.append(" where ferrographysheetid = '");
                 else
-                    sql.append(" and ferrographysheetid = '");
+                    sql.append(" and( ferrographysheetid = '");
                 int i =0;
                 sql.append(ferrographysheetidList[i]);
                 for(i =1;i<ferrographysheetidList.length();++i)
@@ -1379,7 +1379,10 @@ QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap,QStrin
                     sql.append("' or ferrographysheetid = '");
                     sql.append(ferrographysheetidList[i]);
                 }
-                sql.append("'");
+                if(conditionMap.isEmpty())
+                    sql.append("'");
+                else
+                    sql.append("')");
             }
             else
             {
@@ -1401,7 +1404,7 @@ QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap,QStrin
                 if(conditionMap.isEmpty())
                     sql.append(" where ferrographypicid = '");
                 else
-                    sql.append(" and ferrographypicid = '");
+                    sql.append(" and (ferrographypicid = '");
                 int i =0;
                 sql.append(ferrographypicidList[i]);
                 for(i =1;i<ferrographypicidList.length();++i)
@@ -1409,7 +1412,10 @@ QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap,QStrin
                     sql.append("' or ferrographypicid = '");
                     sql.append(ferrographypicidList[i]);
                 }
-                sql.append("'");
+                if(conditionMap.isEmpty())
+                    sql.append("'");
+                else
+                    sql.append("')");
             }
             else
             {
