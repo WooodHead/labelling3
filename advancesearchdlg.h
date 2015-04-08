@@ -416,13 +416,10 @@ private:
      bool copyFiles(QString fromDir,QString toDir,bool convertIfExits = false);
      bool copyFiles(QString fromDir,QString toDir,QStringList filenames,bool convertIfExist = false);
      bool importDB(const QString &path);
-     bool exportDB(const QSqlQueryModel *model,const QString &tablename,const QString &path);
+     bool exportDB(const QStringList &tablenameList,const QString &path);
      bool importDB(const QSqlQueryModel &model);
      
      bool deletefromtable(QStringList idList,QString tablename);
-     
-     void setExpPath(QString sourcePicPath,QString resultPicPath,QString packgePath);
-     void setImpPath(QString packgePath);
 
 private slots:
      void useproperty();
@@ -431,8 +428,10 @@ private slots:
      
      void deletedate();
      
-     
      void on_modifyButton_clicked();
+
+     void setExpPath(QString sourcePicPath,QString resultPicPath,QString packgePath);
+     void setImpPath(QString packgePath);
 
 signals:
      void showqueryThumbnails(QStringList list);

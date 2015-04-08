@@ -1080,65 +1080,85 @@ bool AdvanceSearchDlg::importDB(const QString &path)
 }
 
 
-bool AdvanceSearchDlg::exportDB(const QSqlQueryModel *model, const QString &tablename, const QString &path)
+bool AdvanceSearchDlg::exportDB(const QStringList &tablenameList, const QString &path)
 {
     QStringList vList;
-    int count = model->rowCount();
-    for(int i =0;i<count;++i)
-    {
-        QSqlRecord record = model->record(i);
-        QString prefix=QString("insert into %1(").arg(tablename); // 记录属性字段名
-        QString suffix="values(";                                 // 记录属性值
+    QSqlQueryModel *model;
+    foreach (QString tablename, tablenameList) {
+        if("equipmentinfo" == tablename)
+            model = _eqmInfoModel;
+        else if("movepartinfo" == tablename)
+            model = _mpInfoModel;
+        else if("movepartrepairinfo" == tablename)
+            model = _mprInfoModel;
+        else if("oilsampleinfo" == tablename)
+            model = _oisInfoModel;
+        else if("oilanalyzeinfo" == tablename)
+            model = _oiaInfoModel;
+        else if("ferrographyinfo" == tablename)
+            model = _fegInfoModel;
+        else if("ferrographypicinfo" == tablename)
+            model = _fegpInfoModel;
+        else if("abrasivemarkinfo" == tablename)
+            model = _abmInfoModel;
 
-        // 遍历属性字段
-        for(int j=0;j<record.count();j++)
+        int count = model->rowCount();
+        for(int i =0;i<count;++i)
         {
-            QSqlField field=record.field(j);
-            QString fieldName=field.name();
+            QSqlRecord record = model->record(i);
+            QString prefix=QString("insert into %1(").arg(tablename); // 记录属性字段名
+            QString suffix="values(";                                 // 记录属性值
 
-            switch(field.type())
+            // 遍历属性字段
+            for(int j=0;j<record.count();j++)
             {
-            case QVariant::String:
-                prefix+=fieldName;
-                suffix+=QString("'%1'").arg(record.value(j).toString());
-                break;
-            case QVariant::ByteArray:
-            {
-                prefix+=fieldName;
-                QByteArray data=record.value(j).toByteArray();
-                if(data.isNull())
+                QSqlField field=record.field(j);
+                QString fieldName=field.name();
+
+                switch(field.type())
                 {
-                    suffix+="null";
-                }else
+                case QVariant::String:
+                    prefix+=fieldName;
+                    suffix+=QString("'%1'").arg(record.value(j).toString());
+                    break;
+                case QVariant::ByteArray:
                 {
-                    suffix+=QString("E'%1'").arg(data.toHex().data()); // blob数据按16进制格式导出
+                    prefix+=fieldName;
+                    QByteArray data=record.value(j).toByteArray();
+                    if(data.isNull())
+                    {
+                        suffix+="null";
+                    }else
+                    {
+                        suffix+=QString("E'%1'").arg(data.toHex().data()); // blob数据按16进制格式导出
+                    }
+                }
+                    break;
+                default:
+                    prefix+=fieldName;
+                    suffix+=record.value(j).toString();
+                }
+
+                if(record.count()==1)
+                {
+                    prefix+=")";
+                    suffix+=")";
+                }else if(j!=record.count()-1)
+                {
+                    prefix+=",";
+                    suffix+=",";
+                }else if(j==record.count()-1)
+                {
+                    prefix+=")";
+                    suffix+=")";
                 }
             }
-                break;
-            default:
-                prefix+=fieldName;
-                suffix+=record.value(j).toString();
-            }
-
-            if(record.count()==1)
-            {
-                prefix+=")";
-                suffix+=")";
-            }else if(j!=record.count()-1)
-            {
-                prefix+=",";
-                suffix+=",";
-            }else if(j==record.count()-1)
-            {
-                prefix+=")";
-                suffix+=")";
-            }
+            // 组装sql语句 insert into auth_test values(0,'hello',E'003f')
+            QString iSql=QString("%1 %2;").arg(prefix).arg(suffix);
+            vList.append(iSql);
         }
-        // 组装sql语句 insert into auth_test values(0,'hello',E'003f')
-        QString iSql=QString("%1 %2;").arg(prefix).arg(suffix);
-        vList.append(iSql);
-        //        qDebug()<<iSql;
     }
+
     QFile file(path);
     file.open(QIODevice::WriteOnly|QIODevice::Truncate);
 
@@ -2570,18 +2590,23 @@ void AdvanceSearchDlg::on_exportBtn_clicked()
         
         
         
-        QString sqlfilepath = packgepath + "/backup.sql";
-        QString sourceimgtopath = packgepath + "/source/";
-        QString resultimgtopath = packgepath + "/result/";
+        QString sqlfilepath = packgepath + "/打包文件/databackup.sql";
+        QString sourceimgtopath = packgepath + "/打包文件/原始图像文件";
+        QString resultimgtopath = packgepath + "/打包文件/标记结果文件";
         QString sourceimgfrompath = Global::PathImage;
         QString resultimgfrompath = Global::PathResult;
-        QString filename = QFileDialog::getSaveFileName(this,
-                                                        tr("保存导出数据"),
-                                                        sqlfilepath,
-                                                        tr("SqlFile(*.sql)"));
-        if(filename.isEmpty())
-            return;
-        if(this->exportDB(_eqmInfoModel,"equipmentinfo",filename) &&
+
+        QStringList tablenameList;
+        tablenameList.append("equipmentinfo");
+        tablenameList.append("movepartinfo");
+        tablenameList.append("movepartrepairinfo");
+        tablenameList.append(" oilsampleinfo");
+        tablenameList.append("oilanalyzeinfo");
+        tablenameList.append("ferrographyinfo");
+        tablenameList.append("ferrographypicinfo");
+        tablenameList.append("abrasivemarkinfo");
+
+        if(this->exportDB(tablenameList,sqlfilepath) &&
                 this->copyFiles(sourceimgfrompath,sourceimgtopath,imgFileNames) &&
                 this->copyFiles(resultimgfrompath,resultimgtopath,imgFileNames))
             QMessageBox::warning(this,
@@ -2594,51 +2619,6 @@ void AdvanceSearchDlg::on_exportBtn_clicked()
                                  tr("数据导出失败"),
                                  QMessageBox::Close);
     }
-//    QFileDialog *packgeFileDlg = new QFileDialog(this,
-//                                                 tr("选择保存路径"),
-//                                                 tr(""),
-//                                                 tr(""));
-//    packgeFileDlg->setFileMode(QFileDialog::DirectoryOnly);
-//    QString packgepath;
-//    if(packgeFileDlg->exec())
-//    {
-//        QStringList packgepaths = packgeFileDlg->selectedFiles();
-//        packgepath = packgepaths.at(0);
-//    }
-//    else
-//        return;
-//    QStringList imgFileNames;
-//    int count = _fegpInfoModel->rowCount();
-//    for(int i=0;i<count;++i)
-//    {
-//        QSqlRecord record = _fegpInfoModel->record(i);
-//        QStringList templist = record.value(fegp_ferrographypicpath).toString().split("/");
-//        imgFileNames.append(templist.at(templist.count()-1));
-//    }
-
-//    QString sqlfilepath = packgepath + "/backup.sql";
-//    QString sourceimgtopath = packgepath + "/source/";
-//    QString resultimgtopath = packgepath + "/result/";
-//    QString sourceimgfrompath = Global::PathImage;
-//    QString resultimgfrompath = Global::PathResult;
-//    QString filename = QFileDialog::getSaveFileName(this,
-//                                                    tr("保存导出数据"),
-//                                                    sqlfilepath,
-//                                                    tr("SqlFile(*.sql)"));
-//    if(filename.isEmpty())
-//        return;
-//    if(this->exportDB(_eqmInfoModel,"equipmentinfo",filename) &&
-//            this->copyFiles(sourceimgfrompath,sourceimgtopath,imgFileNames) &&
-//            this->copyFiles(resultimgfrompath,resultimgtopath,imgFileNames))
-//        QMessageBox::warning(this,
-//                             tr("提示"),
-//                             tr("数据导出成功"),
-//                             QMessageBox::Close);
-//    else
-//        QMessageBox::warning(this,
-//                             tr("提示"),
-//                             tr("数据导出失败"),
-//                             QMessageBox::Close);
 }
 
 
@@ -2646,47 +2626,73 @@ void AdvanceSearchDlg::on_exportBtn_clicked()
 void AdvanceSearchDlg::on_importBtn_clicked()
 {
 
-    QFileDialog *packgeFileDlg = new QFileDialog(this,
-                                                 tr("选择数据导入路径"),
-                                                 tr(""),
-                                                 tr(""));
-    packgeFileDlg->setFileMode(QFileDialog::DirectoryOnly);
-
-    QString packgefilepath;
-    if(packgeFileDlg->exec())
+    ImpDlg *impdlg = new ImpDlg(this);
+    if(impdlg->exec() == QDialog::Accepted)
     {
-        QStringList packgefilepaths = packgeFileDlg->selectedFiles();
-        packgefilepath = packgefilepaths.at(0);
+        QDir dir(this->_impPackgePath);
+        QFileInfoList infoList = dir.entryInfoList();
+        QStringList fileNameList;
+        foreach(QFileInfo fileInfo,infoList)
+        {
+            if(fileInfo.fileName() == "." || fileInfo.fileName() == "..")
+                continue;
+            fileNameList.append(fileInfo.fileName());
+        }
+        // check packge file
+        if(!fileNameList.contains("原始图像文件") || !fileNameList.contains("标记结果文件") || !fileNameList.contains("databackup.sql"))
+            QMessageBox::warning(this,tr("提示"),tr("打包文件受损"),QMessageBox::Close);
+        else
+        {
+            QString recoverImagePath = Global::PathImage;
+            QString recoverResultPath = Global::PathResult;
+
+#ifdef Q_OS_WIN
+            QString packgeImagePath = _impPackgePath + "\\原始图像文件";
+            QString packgeResultPath = _impPackgePath + "\\标记结果文件";
+            QString packgeSqlPath = _impPackgePath + "\\databackup.sql";
+#endif
+
+#ifdef Q_OS_LINUX
+            QString packgeImagePath = _impPackgePath + "/原始图像文件";
+            QString packgeResultPath = _impPackgePath + "/标记结果文件";
+            QString packgeSqlPath = _impPackgePath + "/databackup.sql";
+#endif
+            if(this->copyFiles(packgeImagePath,recoverImagePath) &&
+                    this->copyFiles(packgeResultPath,recoverResultPath) &&
+                    this->importDB(packgeSqlPath))
+                QMessageBox::warning(this,tr("提示"),tr("数据恢复成功"),QMessageBox::Close);
+            else
+                QMessageBox::warning(this,tr("提示"),tr("数据恢复失败"),QMessageBox::Close);
+        }
     }
-    else
-        return;
-
-    QString sqlfilepath = packgefilepath + "/";
-    QString sourceimgfrompath = packgefilepath + "/source/";
-    QString sourceimgtopath   = Global::PathImage;
-    QString resultimgfrompath = packgefilepath + "/result/";
-    QString resultimgtopath   = Global::PathResult;
-
-    QString filename = QFileDialog::getOpenFileName(this,
-                                                    tr("导入数据"),
-                                                    sqlfilepath,
-                                                    tr("SqlFile(*.sql)"));
-    if(filename.isEmpty())
-        return;
 
 
-    if(this->importDB(filename) &&
-            this->copyFiles(sourceimgfrompath,sourceimgtopath)&&
-            this->copyFiles(resultimgfrompath,resultimgtopath))
-        QMessageBox::warning(this,
-                             tr("提示"),
-                             tr("数据导入成功"),
-                             QMessageBox::Close);
-    else
-        QMessageBox::warning(this,
-                             tr("提示"),
-                             tr("数据导入失败"),
-                             QMessageBox::Close);
+//    QString sqlfilepath = packgefilepath + "/";
+//    QString sourceimgfrompath = packgefilepath + "/source/";
+//    QString sourceimgtopath   = Global::PathImage;
+//    QString resultimgfrompath = packgefilepath + "/result/";
+//    QString resultimgtopath   = Global::PathResult;
+
+//    QString filename = QFileDialog::getOpenFileName(this,
+//                                                    tr("导入数据"),
+//                                                    sqlfilepath,
+//                                                    tr("SqlFile(*.sql)"));
+//    if(filename.isEmpty())
+//        return;
+
+
+//    if(this->importDB(filename) &&
+//            this->copyFiles(sourceimgfrompath,sourceimgtopath)&&
+//            this->copyFiles(resultimgfrompath,resultimgtopath))
+//        QMessageBox::warning(this,
+//                             tr("提示"),
+//                             tr("数据导入成功"),
+//                             QMessageBox::Close);
+//    else
+//        QMessageBox::warning(this,
+//                             tr("提示"),
+//                             tr("数据导入失败"),
+//                             QMessageBox::Close);
 }
 
 void AdvanceSearchDlg::on_movepartRepairIdChkBox_clicked()
