@@ -1765,65 +1765,85 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
 
 void ImageCompletionUI::importData()
 {
-    QFileDialog *packgeDir = new QFileDialog(this,tr("选择打包文件"),"","");
-    packgeDir->setFileMode(QFileDialog::DirectoryOnly);
-    packgeDir->setViewMode(QFileDialog::Detail);
+//    QFileDialog *packgeDir = new QFileDialog(this,tr("选择打包文件"),"","");
+//    packgeDir->setFileMode(QFileDialog::DirectoryOnly);
+//    packgeDir->setViewMode(QFileDialog::Detail);
 
-    QString packgePath;
-    if(packgeDir->exec())
+//    QString packgePath;
+//    if(packgeDir->exec())
+//    {
+//        QStringList packgePaths = packgeDir->selectedFiles();
+//        packgePath = packgePaths.at(0);
+//    }
+//    else
+//        return;
+    
+    ImpDlg *impdlg = new ImpDlg(this);
+    if(impdlg->exec() == QDialog::Accepted)
     {
-        QStringList packgePaths = packgeDir->selectedFiles();
-        packgePath = packgePaths.at(0);
-    }
-    else
-        return;
-    QDir dir(packgePath);
-    QFileInfoList infoList = dir.entryInfoList();
-    QStringList fileNameList;
-    foreach(QFileInfo fileInfo,infoList)
-    {
-        if(fileInfo.fileName() == "." || fileInfo.fileName() == "..")
-            continue;
-        fileNameList.append(fileInfo.fileName());
-    }
-    if(!fileNameList.contains("resultFile") || !fileNameList.contains("sourceFile") || !fileNameList.contains("databackup.sql"))
-        QMessageBox::warning(this,tr("提示"),tr("打包文件受损"),QMessageBox::Close);
-    else
-    {
-        QFileDialog *targetDir = new QFileDialog(this,tr("选择打包恢复目录"),"","");
-        targetDir->setFileMode(QFileDialog::DirectoryOnly);
-        targetDir->setViewMode(QFileDialog::Detail);
-        QString targetPath;
-        if(targetDir->exec())
+        QDir dir(_impPackgePath);
+        QFileInfoList infoList = dir.entryInfoList();
+        QStringList fileNameList;
+        foreach(QFileInfo fileInfo,infoList)
         {
-            QStringList targetPaths = targetDir->selectedFiles();
-            targetPath  = targetPaths.at(0);
+            if(fileInfo.fileName() == "." || fileInfo.fileName() == "..")
+                continue;
+            fileNameList.append(fileInfo.fileName());
         }
+        // check packge file
+        if(!fileNameList.contains("原始图像文件") || !fileNameList.contains("标记结果文件") || !fileNameList.contains("databackup.sql"))
+            QMessageBox::warning(this,tr("提示"),tr("打包文件受损"),QMessageBox::Close);
         else
-            return;
+        {
+            QString recoverImagePath = Global::PathImage;
+            QString recoverResultPath = Global::PathResult;
+            
 #ifdef Q_OS_WIN
-        QString sourcepackgePath = packgePath + "\\sourceFile";
-        QString resultpackgePath = packgePath + "\\resultFile";
-        QString databackupFileName = packgePath + "\\databackup.sql";
-
-        QString sourcetargetPath = targetPath + "\\sourceFile";
-        QString resulttargetPath = targetPath + "\\resultFile";
+            QString packgeImagePath = _impPackgePath + "\\原始图像文件";
+            QString packgeResultPath = _impPackgePath + "\\标记结果文件";
+            QString packgeSqlPath = _impPackgePath + "\\databackup.sql";
 #endif
-
+            
 #ifdef Q_OS_LINUX
-        QString sourcepackgePath = packgePath + "/sourceFile";
-        QString resultpackgePath = packgePath + "/resultFile";
-        QString databackupFileName = packgePath + "/databackup.sql";
-
-        QString sourcetargetPath = targetPath + "/sourceFile";
-        QString resulttargetPath = targetPath + "/resultFile";
+            QString packgeImagePath = _impPackgePath + "/原始图像文件";
+            QString packgeResultPath = _impPackgePath + "/标记结果文件";
+            QString packgeSqlPath = _impPackgePath + "/databackup.sql";
 #endif
-        if(this->copyFiles(sourcepackgePath,sourcetargetPath) &&
-                this->copyFiles(resultpackgePath,resulttargetPath) &&
-                this->importDB(databackupFileName))
-            QMessageBox::warning(this,tr("提示"),tr("数据恢复成功"),QMessageBox::Close);
-        else
-            QMessageBox::warning(this,tr("提示"),tr("数据恢复失败"),QMessageBox::Close);
+//            QFileDialog *targetDir = new QFileDialog(this,tr("选择打包恢复目录"),"","");
+//            targetDir->setFileMode(QFileDialog::DirectoryOnly);
+//            targetDir->setViewMode(QFileDialog::Detail);
+//            QString targetPath;
+//            if(targetDir->exec())
+//            {
+//                QStringList targetPaths = targetDir->selectedFiles();
+//                targetPath  = targetPaths.at(0);
+//            }
+//            else
+//                return;
+//    #ifdef Q_OS_WIN
+//            QString sourcepackgePath = packgePath + "\\sourceFile";
+//            QString resultpackgePath = packgePath + "\\resultFile";
+//            QString databackupFileName = packgePath + "\\databackup.sql";
+    
+//            QString sourcetargetPath = targetPath + "\\sourceFile";
+//            QString resulttargetPath = targetPath + "\\resultFile";
+//    #endif
+    
+//    #ifdef Q_OS_LINUX
+//            QString sourcepackgePath = packgePath + "/sourceFile";
+//            QString resultpackgePath = packgePath + "/resultFile";
+//            QString databackupFileName = packgePath + "/databackup.sql";
+    
+//            QString sourcetargetPath = targetPath + "/sourceFile";
+//            QString resulttargetPath = targetPath + "/resultFile";
+//    #endif
+            if(this->copyFiles(packgeImagePath,recoverImagePath) &&
+                    this->copyFiles(packgeResultPath,recoverResultPath) &&
+                    this->importDB(packgeSqlPath))
+                QMessageBox::warning(this,tr("提示"),tr("数据恢复成功"),QMessageBox::Close);
+            else
+                QMessageBox::warning(this,tr("提示"),tr("数据恢复失败"),QMessageBox::Close);
+        }   
     }
 }
 
@@ -1870,22 +1890,22 @@ void ImageCompletionUI::exportData()
 
 //    if(resultPath.isEmpty() | resultPath.isEmpty()| targetPath.isEmpty())
 //        return;
-    ExpDlg *expDlg = new ExpDlg(this,"","");
+    ExpDlg *expDlg = new ExpDlg(this,Global::PathImage,Global::PathResult);
     if(expDlg->exec() == QDialog::Accepted)
     {
         QString sourcePath = this->_expSourcePicPath;
         QString resultPath = this->_expResultPicPath;
         QString targetPath = this->_expPackgePath;
     #ifdef Q_OS_WIN
-        QString sourcetargetPath = targetPath + "\\sourceFile";
-        QString resulttargetPath = targetPath + "\\resultFile";
-        QString databackupFileName = targetPath + "\\databackup.sql";
+        QString sourcetargetPath = targetPath + "\\打包文件\\原始图像文件";
+        QString resulttargetPath = targetPath + "\\打包文件\\标记结果文件";
+        QString databackupFileName = targetPath + "\\打包文件\\标记结果文件";
     #endif
     
     #ifdef Q_OS_LINUX
-        QString sourcetargetPath = targetPath + "/sourceFile";
-        QString resulttargetPath = targetPath + "/resultFile";
-        QString databackupFileName = targetPath + "/databackup.sql";
+        QString sourcetargetPath = targetPath + "/打包文件/原始图像文件";
+        QString resulttargetPath = targetPath + "/打包文件/标记结果文件";
+        QString databackupFileName = targetPath + "/打包文件/databackup.sql";
     #endif
     
         // 导出数据库信息
@@ -1905,6 +1925,11 @@ void ImageCompletionUI::setExpPath(QString sourcePicPath, QString resultPicPath,
     this->_expSourcePicPath = sourcePicPath;
     this->_expResultPicPath = resultPicPath;
     this->_expPackgePath = packgePath;
+}
+
+void ImageCompletionUI::setImpPath(QString packgePath)
+{
+    this->_impPackgePath = packgePath;
 }
 
 void ImageCompletionUI::cellDoubleClickedLeftWindow(int row, int /* col */)

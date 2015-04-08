@@ -20,6 +20,8 @@
 
 #include "propertynamedlg.h"
 #include "Global.h"
+#include "expdlg.h"
+#include "impdlg.h"
 
 namespace Ui {
 class AdvanceSearchDlg;
@@ -418,6 +420,9 @@ private:
      bool importDB(const QSqlQueryModel &model);
      
      bool deletefromtable(QStringList idList,QString tablename);
+     
+     void setExpPath(QString sourcePicPath,QString resultPicPath,QString packgePath);
+     void setImpPath(QString packgePath);
 
 private slots:
      void useproperty();
@@ -439,8 +444,14 @@ private:
     ProPertyNameDlg *ppnDlg;
     QString propertyName;
     
+    QString _expSourcePicPath;
+    QString _expResultPicPath;
+    QString _expPackgePath;
+    
+    QString _impPackgePath;
+    
     //删除标志
-    bool deleteflag = false;
+    bool deleteflag;
      
     // 显示缩略图
     QStringList ferrographypicpathList;

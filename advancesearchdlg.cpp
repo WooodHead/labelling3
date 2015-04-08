@@ -88,20 +88,12 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent,bool flag) :
 
     initpropertylistName();
 
-//    query();
-
-//    ui->modifyButton->setEnabled(false);
     ui->conditionStackedWidget->setCurrentIndex(0);
-    
-    // 初始化缩略图窗口
-//    this->thWindow = new ThumbnailWindow(parent);
-
 }
 
 AdvanceSearchDlg::~AdvanceSearchDlg()
 {
     delete ui;
-//    thWindow->close();
     db.close();
 }
 
@@ -2360,7 +2352,6 @@ void AdvanceSearchDlg::on_addtoBtn_clicked()
         query.exec("select count(*) from propertyinfo");
         if(query.next())
             count = query.value(0).toString();
-        qDebug()<<count;
         QString propertySql = "insert into propertyinfo values(";
         propertySql.append(count);
         propertySql.append(",'");
@@ -2550,53 +2541,104 @@ void AdvanceSearchDlg::setpropertyName(QString propertyname)
 }
 
 
+void AdvanceSearchDlg::setExpPath(QString sourcePicPath, QString resultPicPath, QString packgePath)
+{
+    this->_expSourcePicPath = sourcePicPath;
+    this->_expResultPicPath = resultPicPath;
+    this->_expPackgePath = packgePath;
+}
+
+void AdvanceSearchDlg::setImpPath(QString packgePath)
+{
+    this->_impPackgePath = packgePath;
+}
+
 void AdvanceSearchDlg::on_exportBtn_clicked()
 {
-    QFileDialog *packgeFileDlg = new QFileDialog(this,
-                                                 tr("选择保存路径"),
-                                                 tr(""),
-                                                 tr(""));
-    packgeFileDlg->setFileMode(QFileDialog::DirectoryOnly);
-    QString packgepath;
-    if(packgeFileDlg->exec())
+    ExpDlg *expdlg = new ExpDlg(this,Global::PathImage,Global::PathResult);
+    if(expdlg->exec() == QDialog::Accepted)
     {
-        QStringList packgepaths = packgeFileDlg->selectedFiles();
-        packgepath = packgepaths.at(0);
+        QStringList imgFileNames;
+        int count = _fegpInfoModel->rowCount();
+        for(int i=0;i<count;++i)
+        {
+            QSqlRecord record = _fegpInfoModel->record(i);
+            QStringList templist = record.value(fegp_ferrographypicpath).toString().split("/");
+            imgFileNames.append(templist.at(templist.count()-1));
+        }
+        QString packgepath = this->_expPackgePath;
+        
+        
+        
+        QString sqlfilepath = packgepath + "/backup.sql";
+        QString sourceimgtopath = packgepath + "/source/";
+        QString resultimgtopath = packgepath + "/result/";
+        QString sourceimgfrompath = Global::PathImage;
+        QString resultimgfrompath = Global::PathResult;
+        QString filename = QFileDialog::getSaveFileName(this,
+                                                        tr("保存导出数据"),
+                                                        sqlfilepath,
+                                                        tr("SqlFile(*.sql)"));
+        if(filename.isEmpty())
+            return;
+        if(this->exportDB(_eqmInfoModel,"equipmentinfo",filename) &&
+                this->copyFiles(sourceimgfrompath,sourceimgtopath,imgFileNames) &&
+                this->copyFiles(resultimgfrompath,resultimgtopath,imgFileNames))
+            QMessageBox::warning(this,
+                                 tr("提示"),
+                                 tr("数据导出成功"),
+                                 QMessageBox::Close);
+        else
+            QMessageBox::warning(this,
+                                 tr("提示"),
+                                 tr("数据导出失败"),
+                                 QMessageBox::Close);
     }
-    else
-        return;
-    QStringList imgFileNames;
-    int count = _fegpInfoModel->rowCount();
-    for(int i=0;i<count;++i)
-    {
-        QSqlRecord record = _fegpInfoModel->record(i);
-        QStringList templist = record.value(fegp_ferrographypicpath).toString().split("/");
-        imgFileNames.append(templist.at(templist.count()-1));
-    }
+//    QFileDialog *packgeFileDlg = new QFileDialog(this,
+//                                                 tr("选择保存路径"),
+//                                                 tr(""),
+//                                                 tr(""));
+//    packgeFileDlg->setFileMode(QFileDialog::DirectoryOnly);
+//    QString packgepath;
+//    if(packgeFileDlg->exec())
+//    {
+//        QStringList packgepaths = packgeFileDlg->selectedFiles();
+//        packgepath = packgepaths.at(0);
+//    }
+//    else
+//        return;
+//    QStringList imgFileNames;
+//    int count = _fegpInfoModel->rowCount();
+//    for(int i=0;i<count;++i)
+//    {
+//        QSqlRecord record = _fegpInfoModel->record(i);
+//        QStringList templist = record.value(fegp_ferrographypicpath).toString().split("/");
+//        imgFileNames.append(templist.at(templist.count()-1));
+//    }
 
-    QString sqlfilepath = packgepath + "/backup.sql";
-    QString sourceimgtopath = packgepath + "/source/";
-    QString resultimgtopath = packgepath + "/result/";
-    QString sourceimgfrompath = Global::PathImage;
-    QString resultimgfrompath = Global::PathResult;
-    QString filename = QFileDialog::getSaveFileName(this,
-                                                    tr("保存导出数据"),
-                                                    sqlfilepath,
-                                                    tr("SqlFile(*.sql)"));
-    if(filename.isEmpty())
-        return;
-    if(this->exportDB(_eqmInfoModel,"equipmentinfo",filename) &&
-            this->copyFiles(sourceimgfrompath,sourceimgtopath,imgFileNames) &&
-            this->copyFiles(resultimgfrompath,resultimgtopath,imgFileNames))
-        QMessageBox::warning(this,
-                             tr("提示"),
-                             tr("数据导出成功"),
-                             QMessageBox::Close);
-    else
-        QMessageBox::warning(this,
-                             tr("提示"),
-                             tr("数据导出失败"),
-                             QMessageBox::Close);
+//    QString sqlfilepath = packgepath + "/backup.sql";
+//    QString sourceimgtopath = packgepath + "/source/";
+//    QString resultimgtopath = packgepath + "/result/";
+//    QString sourceimgfrompath = Global::PathImage;
+//    QString resultimgfrompath = Global::PathResult;
+//    QString filename = QFileDialog::getSaveFileName(this,
+//                                                    tr("保存导出数据"),
+//                                                    sqlfilepath,
+//                                                    tr("SqlFile(*.sql)"));
+//    if(filename.isEmpty())
+//        return;
+//    if(this->exportDB(_eqmInfoModel,"equipmentinfo",filename) &&
+//            this->copyFiles(sourceimgfrompath,sourceimgtopath,imgFileNames) &&
+//            this->copyFiles(resultimgfrompath,resultimgtopath,imgFileNames))
+//        QMessageBox::warning(this,
+//                             tr("提示"),
+//                             tr("数据导出成功"),
+//                             QMessageBox::Close);
+//    else
+//        QMessageBox::warning(this,
+//                             tr("提示"),
+//                             tr("数据导出失败"),
+//                             QMessageBox::Close);
 }
 
 

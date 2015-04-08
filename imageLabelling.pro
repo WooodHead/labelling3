@@ -23,7 +23,8 @@ HEADERS += \
     ImageComparison.h \
     Util/def.h \
     expdlg.h \
-    thumbnailwindow.h
+    thumbnailwindow.h \
+    impdlg.h
 
 
 SOURCES += \
@@ -47,7 +48,8 @@ SOURCES += \
     UserManagement.cpp \
     ImageComparison.cpp \
     expdlg.cpp \
-    thumbnailwindow.cpp
+    thumbnailwindow.cpp \
+    impdlg.cpp
 
 
 FORMS += \
@@ -70,7 +72,8 @@ FORMS += \
     MoliProperties.ui \
     ImageComparison.ui \
     expdlg.ui \
-    thumbnailwindow.ui
+    thumbnailwindow.ui \
+    impdlg.ui
 
 RESOURCES += \
     ImageCompletion.qrc

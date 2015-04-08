@@ -33,6 +33,7 @@ using namespace std;
 #include "MoliProperties.h"
 #include "def.h"
 #include "expdlg.h"
+#include "impdlg.h"
 
 #define THUMBNAILS_PER_ROW 8
 
@@ -230,6 +231,7 @@ private slots:
     void    cellDoubleClickedLeftWindow(int, int);
     
     void setExpPath(QString sourcePicPath,QString resultPicPath,QString packgePath);
+    void setImpPath(QString packgePath);
 
 private:
     Searchdata          *searchdata1;
@@ -249,6 +251,8 @@ private:
     QString _expSourcePicPath;
     QString _expResultPicPath;
     QString _expPackgePath;
+    
+    QString _impPackgePath;
 
 private: // methods
 
