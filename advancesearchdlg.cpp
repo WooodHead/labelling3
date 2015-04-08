@@ -1622,13 +1622,8 @@ void AdvanceSearchDlg::query()
     }
 //    this->thWindow->show();
 //    this->thWindow->initList(ferrographypicidhList,ferrographypicpathList,abrasiveidList,abrasivepicpathList);
-//    emit showqueryThumbnails(ferrographypicpathList);
-    showqueryThumbnails(ferrographypicpathList);
-}
 
-void AdvanceSearchDlg::showthumnails(QStringList pathlist)
-{
-//    emit showqueryThumbnails(pathlist);
+    emit showqueryThumbnails(ferrographypicpathList);
 }
 
 void AdvanceSearchDlg::createListWidget()
@@ -5728,25 +5723,4 @@ bool AdvanceSearchDlg::deletefromtable(QStringList idList, QString tablename)
         }
         return true;
     }
-    
 }
-
-//void AdvanceSearchDlg::on_imagesymbolChkBox_clicked()
-//{
-//    _fegpCdtMap.remove("imagesymbol");
-//    if(ui->imagesymbolChkBox->isChecked())
-//    {
-//        QString text = ui->imagesymbolCbBox->currentText();
-//        _fegpCdtMap.insert("imagesymbol",text);
-//    }
-//}
-
-//void AdvanceSearchDlg::on_imagesymbolCbBox_currentIndexChanged(int index)
-//{
-//    _fegpCdtMap.remove("imagesymbol");
-//    if(ui->imagesymbolChkBox->isChecked())
-//    {
-//        QString text = ui->imagesymbolCbBox->currentText();
-//        _fegpCdtMap.insert("imagesymbol",text);
-//    }
-//}

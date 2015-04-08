@@ -197,7 +197,6 @@ private:
      bool importDB(const QSqlQueryModel &model);
      
      bool deletefromtable(QStringList idList,QString tablename);
-     void showthumnails(QStringList pathList);
 
 private slots:
      void useproperty();
