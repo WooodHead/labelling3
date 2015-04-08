@@ -1263,6 +1263,7 @@ bool AdvanceSearchDlg::copyFiles(QString fromDir, QString toDir, bool convertIfE
 void AdvanceSearchDlg::on_queryBtn_clicked()
 {
     query();
+//    query();
 }
 
 QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap,QStringList conditionField, QString tableName)
@@ -1301,70 +1302,157 @@ QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap,QStrin
         }
 //        return sql;
     }
-    if(tableName == "movepartrepairinfo")
+    if(tableName == "movepartinfo" || tableName == "oilsampleinfo" )
     {
-        if(_eqmCdtMap.find("planeid") != _eqmCdtMap.end())
+        
+        if(!planeidList.empty())
         {
-            if(_mpCdtMap.find("movepartid") != _mpCdtMap.end())
+            if(conditionMap.isEmpty())
+                sql.append(" where planeid = '");
+            else 
+                sql.append(" and (planeid = '");
+            int i =0;
+            sql.append(planeidList[i]);
+            for(i =1;i<planeidList.length();++i)
             {
-                ;
+                sql.append("' or planeid = '");
+                sql.append(planeidList[i]);
             }
+            if(conditionMap.isEmpty())
+                sql.append("'");
             else
-            {
-                if(conditionMap.isEmpty())
-                    sql.append(" where ");
-                else
-                    sql.append(" and ");
-                sql.append("movepartid in (select movepartid from movepartinfo where planeid = '");
-                sql.append(_eqmCdtMap.find("planeid").value());
                 sql.append("')");
-            }
+        }
+        else
+        {
+            if(conditionMap.isEmpty())
+                sql.append(" where planeid = '");
+            else
+                sql.append(" and planeid = '");
+            sql.append("'");
         }
     }
-    else if(tableName == "oilanalyzeinfo")
+    else if(tableName == "movepartrepairinfo")
     {
-        if(_eqmCdtMap.find("planeid") != _eqmCdtMap.end())
+        if(!movepartidList.empty())
         {
-            if(_oisCdtMap.find("oilsampleid") != _oisCdtMap.end())
+            if(conditionMap.isEmpty())
+                sql.append(" where movepartid = '");
+            else 
+                sql.append(" and (movepartid= '");
+            int i =0;
+            sql.append(movepartidList[i]);
+            for(i =1;i<movepartidList.length();++i)
             {
-                ;
+                sql.append("' or movepartid = '");
+                sql.append(movepartidList[i]);
             }
+            if(conditionMap.isEmpty())
+                sql.append("'");
             else
-            {
-                if(conditionMap.isEmpty())
-                    sql.append(" where ");
-                else
-                    sql.append(" and ");
-                sql.append("oilsampleid in (select oilsampleid from oilsampleinfo where planeid = '");
-                sql.append(_eqmCdtMap.find("planeid").value());
                 sql.append("')");
-            }
+        }
+        else
+        {
+            if(conditionMap.isEmpty())
+                sql.append(" where movepartid = '");
+            else
+                sql.append(" and movepartid = '");
+            sql.append("'");
         }
     }
-    else if(tableName == "ferrographyinfo")
+//    else if(tableName == "movepartrepairinfo")
+//    {
+//        if(_eqmCdtMap.find("planeid") != _eqmCdtMap.end())
+//        {
+//            if(_mpCdtMap.find("movepartid") != _mpCdtMap.end())
+//            {
+//                ;
+//            }
+//            else
+//            {
+//                if(conditionMap.isEmpty())
+//                    sql.append(" where ");
+//                else
+//                    sql.append(" and ");
+//                sql.append("movepartid in (select movepartid from movepartinfo where planeid = '");
+//                sql.append(_eqmCdtMap.find("planeid").value());
+//                sql.append("')");
+//            }
+//        }
+//    }
+    else if(tableName == "oilanalyzeinfo" || tableName == "ferrographyinfo")
     {
-        if(_eqmCdtMap.find("planeid") != _eqmCdtMap.end())
+        if(!oilsampleidList.empty())
         {
-            if(_oisCdtMap.find("oilsampleid") != _oisCdtMap.end())
+            if(conditionMap.isEmpty())
+                sql.append(" where oilsampleid = '");
+            else 
+                sql.append(" and (oilsampleid= '");
+            int i =0;
+            sql.append(oilsampleidList[i]);
+            for(i =1;i<oilsampleidList.length();++i)
             {
-                ;
+                sql.append("' or oilsampleid = '");
+                sql.append(oilsampleidList[i]);
             }
+            if(conditionMap.isEmpty())
+                sql.append("'");
             else
-            {
-                if(conditionMap.isEmpty())
-                    sql.append(" where ");
-                else
-                    sql.append(" and ");
-                sql.append("oilsampleid in (select oilsampleid from oilsampleinfo where planeid = '");
-                sql.append(_eqmCdtMap.find("planeid").value());
                 sql.append("')");
-            }
         }
+        else
+        {
+            if(conditionMap.isEmpty())
+                sql.append(" where oilsampleid = '");
+            else
+                sql.append(" and oilsampleid = '");
+            sql.append("'");
+        }
+        
+        
+//        if(_eqmCdtMap.find("planeid") != _eqmCdtMap.end())
+//        {
+//            if(_oisCdtMap.find("oilsampleid") != _oisCdtMap.end())
+//            {
+//                ;
+//            }
+//            else
+//            {
+//                if(conditionMap.isEmpty())
+//                    sql.append(" where ");
+//                else
+//                    sql.append(" and ");
+//                sql.append("oilsampleid in (select oilsampleid from oilsampleinfo where planeid = '");
+//                sql.append(_eqmCdtMap.find("planeid").value());
+//                sql.append("')");
+//            }
+//        }
     }
+//    else if(tableName == "ferrographyinfo")
+//    {
+//        if(_eqmCdtMap.find("planeid") != _eqmCdtMap.end())
+//        {
+//            if(_oisCdtMap.find("oilsampleid") != _oisCdtMap.end())
+//            {
+//                ;
+//            }
+//            else
+//            {
+//                if(conditionMap.isEmpty())
+//                    sql.append(" where ");
+//                else
+//                    sql.append(" and ");
+//                sql.append("oilsampleid in (select oilsampleid from oilsampleinfo where planeid = '");
+//                sql.append(_eqmCdtMap.find("planeid").value());
+//                sql.append("')");
+//            }
+//        }
+//    }
     else if(tableName == "ferrographypicinfo")
     {
-        if(_fegCdtMap.find("ferrographysheetid") == _fegCdtMap.end())
-        {
+//        if(_fegCdtMap.find("ferrographysheetid") == _fegCdtMap.end())
+//        {
             if(!ferrographysheetidList.empty())
             {
                 if(conditionMap.isEmpty())
@@ -1392,13 +1480,13 @@ QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap,QStrin
                     sql.append(" and ferrographysheetid = '");
                 sql.append("'");
             }
-        }
+//        }
 
     }
     else if(tableName == "abrasivemarkinfo")
     {
-        if(_fegpCdtMap.find("ferrographypicid") == _fegpCdtMap.end())
-        {
+//        if(_fegpCdtMap.find("ferrographypicid") == _fegpCdtMap.end())
+//        {
             if(!ferrographypicidList.empty())
             {
                 if(conditionMap.isEmpty())
@@ -1425,7 +1513,7 @@ QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap,QStrin
                     sql.append(" and ferrographypicid = '");
                 sql.append("'");
             }
-        }
+//        }
     }
     return sql;
 }
@@ -1433,16 +1521,28 @@ QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap,QStrin
 
 void AdvanceSearchDlg::query()
 {
+    if(!Global::createConnection(db))
+    {
+        QMessageBox::warning(this,tr("数据库提示"),tr("不能链接数据库"),QMessageBox::Close);
+        return;
+    }
     ferrographypicidhList.clear();
     ferrographypicpathList.clear();
     abrasiveidList.clear();
     abrasivepicpathList.clear();
+    planeidList.clear();
+    movepartidList.clear();
+    oilsampleidList.clear();
     
     // 装备信息表
     QString eqmTableName = tableNames.value("EqmInfo");
     QString eqmSql = generateSql(_eqmCdtMap,_eqmCdtField,eqmTableName);
     _eqmInfoModel->setQuery(eqmSql);
     setModelHeaderData("EqmInfo");
+    for(int i =0;i<_eqmInfoModel->rowCount();++i)
+    {
+        planeidList.append(_eqmInfoModel->record(i).value("planeid").toString());
+    }
     qDebug()<<eqmSql;
 
     // 动部件信息表
@@ -1450,6 +1550,10 @@ void AdvanceSearchDlg::query()
     QString mpSql = generateSql(_mpCdtMap,_mpCdtField,mpTableName);
     _mpInfoModel->setQuery(mpSql);
     setModelHeaderData("MpInfo");
+    for(int i = 0;i<_mpInfoModel->rowCount();++i)
+    {
+        movepartidList.append(_mpInfoModel->record(i).value("movepartid").toString());
+    }
     qDebug()<<mpSql;
 
     // 动部件维修信息表
@@ -1464,6 +1568,10 @@ void AdvanceSearchDlg::query()
     QString oisSql = generateSql(_oisCdtMap,_oisCdtField,oisTableName);
     _oisInfoModel->setQuery(oisSql);
     setModelHeaderData("OisInfo");
+    for(int i =0;i<_oisInfoModel->rowCount();++i)
+    {
+        oilsampleidList.append(_oisInfoModel->record(i).value("oilsampleid").toString());
+    }
     qDebug()<<oisSql;
 
     // 油样检测分析信息表
@@ -1508,15 +1616,20 @@ void AdvanceSearchDlg::query()
     qDebug()<<abmSql;
     for(int i =0;i<_abmInfoModel->rowCount();++i)
     {
-        abrasiveidList.append(_abmInfoModel->record(i).value("abrasiveid").toString());
-        abrasivepicpathList.append(_abmInfoModel->record(i).value("abrasivepicpath").toString());
+//        abrasiveidList.append(_abmInfoModel->record(i).value("abrasiveid").toString());
+//        abrasivepicpathList.append(_abmInfoModel->record(i).value("abrasivepicpath").toString());
         ferrographypicidhList.append(_abmInfoModel->record(i).value("ferrographypicid").toString());
     }
 //    this->thWindow->show();
 //    this->thWindow->initList(ferrographypicidhList,ferrographypicpathList,abrasiveidList,abrasivepicpathList);
-    emit showqueryThumbnails(ferrographypicpathList);
+//    emit showqueryThumbnails(ferrographypicpathList);
+    showqueryThumbnails(ferrographypicpathList);
 }
 
+void AdvanceSearchDlg::showthumnails(QStringList pathlist)
+{
+//    emit showqueryThumbnails(pathlist);
+}
 
 void AdvanceSearchDlg::createListWidget()
 {

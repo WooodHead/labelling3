@@ -69,7 +69,12 @@ void Global::initialize()
 
 bool Global::createConnection(QSqlDatabase &db)
 {
-    db = QSqlDatabase::addDatabase("QMYSQL");
+    if(QSqlDatabase::contains("qt_sql_default_connection"))
+      db = QSqlDatabase::database("qt_sql_default_connection");
+    else
+      db = QSqlDatabase::addDatabase("QMYSQL");
+    
+    
 
     db.setHostName(Global::Hostname);
     db.setDatabaseName(Global::Database);

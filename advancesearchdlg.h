@@ -197,6 +197,7 @@ private:
      bool importDB(const QSqlQueryModel &model);
      
      bool deletefromtable(QStringList idList,QString tablename);
+     void showthumnails(QStringList pathList);
 
 private slots:
      void useproperty();
@@ -449,10 +450,6 @@ private slots:
 
      void on_modifyButton_clicked();
 
-     void on_imagesymbolChkBox_clicked();
-
-     void on_imagesymbolCbBox_currentIndexChanged(int index);
-
 signals:
      void showqueryThumbnails(QStringList list);
      
@@ -477,6 +474,10 @@ private:
     // 连接查询条件
     QStringList ferrographysheetidList;
     QStringList ferrographypicidList;
+    QStringList planeidList;
+    QStringList movepartidList;
+    QStringList oilsampleidList;
+//    QStringList 
     
     QMap<QString,QString> tableNames;
     QSqlQueryModel *_eqmInfoModel;
