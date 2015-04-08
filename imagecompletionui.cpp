@@ -1764,20 +1764,7 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
 }
 
 void ImageCompletionUI::importData()
-{
-//    QFileDialog *packgeDir = new QFileDialog(this,tr("选择打包文件"),"","");
-//    packgeDir->setFileMode(QFileDialog::DirectoryOnly);
-//    packgeDir->setViewMode(QFileDialog::Detail);
-
-//    QString packgePath;
-//    if(packgeDir->exec())
-//    {
-//        QStringList packgePaths = packgeDir->selectedFiles();
-//        packgePath = packgePaths.at(0);
-//    }
-//    else
-//        return;
-    
+{  
     ImpDlg *impdlg = new ImpDlg(this);
     if(impdlg->exec() == QDialog::Accepted)
     {

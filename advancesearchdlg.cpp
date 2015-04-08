@@ -1543,7 +1543,7 @@ void AdvanceSearchDlg::query()
     {
         planeidList.append(_eqmInfoModel->record(i).value("planeid").toString());
     }
-    qDebug()<<eqmSql;
+//    qDebug()<<eqmSql;
 
     // 动部件信息表
     QString mpTableName = tableNames.value("MpInfo");
@@ -1554,14 +1554,14 @@ void AdvanceSearchDlg::query()
     {
         movepartidList.append(_mpInfoModel->record(i).value("movepartid").toString());
     }
-    qDebug()<<mpSql;
+//    qDebug()<<mpSql;
 
     // 动部件维修信息表
     QString mprTableName = tableNames.value("MprInfo");
     QString mprSql = generateSql(_mprCdtMap,mprTableName);
     _mprInfoModel->setQuery(mprSql);
     setModelHeaderData("MprInfo");
-    qDebug()<<mprSql;
+//    qDebug()<<mprSql;
 
     // 油样采集信息表
     QString oisTableName = tableNames.value("OisInfo");
@@ -1572,21 +1572,21 @@ void AdvanceSearchDlg::query()
     {
         oilsampleidList.append(_oisInfoModel->record(i).value("oilsampleid").toString());
     }
-    qDebug()<<oisSql;
+//    qDebug()<<oisSql;
 
     // 油样检测分析信息表
     QString oiaTableName = tableNames.value("OiaInfo");
     QString oiaSql = generateSql(_oiaCdtMap,oiaTableName);
     _oiaInfoModel->setQuery(oiaSql);
     setModelHeaderData("OiaInfo");
-    qDebug()<<oiaSql;
+//    qDebug()<<oiaSql;
 
     // 铁谱质谱信息表
     QString fegTableName = tableNames.value("FegInfo");
     QString fegSql = generateSql(_fegCdtMap,fegTableName);
     _fegInfoModel->setQuery(fegSql);
     setModelHeaderData("FegInfo");
-    qDebug()<<fegSql;
+//    qDebug()<<fegSql;
 
     for(int i = 0;i<_fegInfoModel->rowCount();++i)
     {
@@ -1598,7 +1598,7 @@ void AdvanceSearchDlg::query()
     QString fegpSql = generateSql(_fegpCdtMap,fegpTableName);
     _fegpInfoModel->setQuery(fegpSql);
     setModelHeaderData("FegPInfo");
-    qDebug()<<fegpSql;
+//    qDebug()<<fegpSql;
 
     for(int i = 0;i<_fegpInfoModel->rowCount();++i)
     {
@@ -1611,7 +1611,7 @@ void AdvanceSearchDlg::query()
     QString abmSql = generateSql(_abmCdtMap,abmTableName);
     _abmInfoModel->setQuery(abmSql);
     setModelHeaderData("AbmInfo");
-    qDebug()<<abmSql;
+//    qDebug()<<abmSql;
     
     emit showqueryThumbnails(ferrographypicpathList);
 }
