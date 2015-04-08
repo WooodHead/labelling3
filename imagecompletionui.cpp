@@ -2260,11 +2260,13 @@ void ImageCompletionUI::showAll()
 
 void ImageCompletionUI::showThumbnailsInCentral(QStringList list)
 {
-    if(list.empty()) return;
-
     close();
-
     clearLayout(_formLayout);
+
+     if(list.empty())
+    {
+        return;
+    }
 
     int nRow = list.size() / THUMBNAILS_PER_ROW + 1;
 
