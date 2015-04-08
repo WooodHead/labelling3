@@ -29,7 +29,7 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent,bool flag) :
     ui->exportBtn->setIcon(QIcon(":/new/prefix1/icons/export.png"));
     ui->importBtn->setIcon(QIcon(":/new/prefix1/icons/import.png"));
     ui->addtoBtn->setIcon(Global::Awesome->icon(plus));
-    ui->modifyButton->setIcon(Global::Awesome->icon(pluscircle));
+    ui->modifyButton->setIcon(Global::Awesome->icon(trash));
     
     ui->modifyButton->setText(tr("删除数据"));
     
@@ -94,7 +94,7 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent,bool flag) :
     ui->conditionStackedWidget->setCurrentIndex(0);
     
     // 初始化缩略图窗口
-    this->thWindow = new ThumbnailWindow(parent);
+//    this->thWindow = new ThumbnailWindow(parent);
 
 }
 
@@ -554,12 +554,6 @@ void AdvanceSearchDlg::useproperty()
                     _fegpCdtMap.insert("imagerecognitioninfoanalysis",fegpValues.at(idx));
                     ui->fegp_imagerecognitioninfoanalysisChkBox->setChecked(true);
                 }
-//                else if(field == "imagesymbol")
-//                {
-//                    ui->imagesymbolCbBox->setCurrentIndex(ui->imagesymbolCbBox->findText(fegpValues.at(idx)));
-//                    _fegpCdtMap.insert("imagesymbol",fegpValues.at(idx));
-//                    ui->imagesymbolChkBox->setChecked(true);
-//                }
                 idx++;
             }
         }
@@ -1266,7 +1260,7 @@ void AdvanceSearchDlg::on_queryBtn_clicked()
 //    query();
 }
 
-QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap,QStringList conditionField, QString tableName)
+QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap, QString tableName)
 {
     QString sql = "select * from ";
     sql.append(tableName);
@@ -1521,22 +1515,16 @@ QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap,QStrin
 
 void AdvanceSearchDlg::query()
 {
-    if(!Global::createConnection(db))
-    {
-        QMessageBox::warning(this,tr("数据库提示"),tr("不能链接数据库"),QMessageBox::Close);
-        return;
-    }
-    ferrographypicidhList.clear();
+    ferrographysheetidList.clear();
+    ferrographypicidList.clear();
     ferrographypicpathList.clear();
-    abrasiveidList.clear();
-    abrasivepicpathList.clear();
     planeidList.clear();
     movepartidList.clear();
     oilsampleidList.clear();
     
     // 装备信息表
     QString eqmTableName = tableNames.value("EqmInfo");
-    QString eqmSql = generateSql(_eqmCdtMap,_eqmCdtField,eqmTableName);
+    QString eqmSql = generateSql(_eqmCdtMap,eqmTableName);
     _eqmInfoModel->setQuery(eqmSql);
     setModelHeaderData("EqmInfo");
     for(int i =0;i<_eqmInfoModel->rowCount();++i)
@@ -1547,7 +1535,7 @@ void AdvanceSearchDlg::query()
 
     // 动部件信息表
     QString mpTableName = tableNames.value("MpInfo");
-    QString mpSql = generateSql(_mpCdtMap,_mpCdtField,mpTableName);
+    QString mpSql = generateSql(_mpCdtMap,mpTableName);
     _mpInfoModel->setQuery(mpSql);
     setModelHeaderData("MpInfo");
     for(int i = 0;i<_mpInfoModel->rowCount();++i)
@@ -1558,14 +1546,14 @@ void AdvanceSearchDlg::query()
 
     // 动部件维修信息表
     QString mprTableName = tableNames.value("MprInfo");
-    QString mprSql = generateSql(_mprCdtMap,_mprCdtField,mprTableName);
+    QString mprSql = generateSql(_mprCdtMap,mprTableName);
     _mprInfoModel->setQuery(mprSql);
     setModelHeaderData("MprInfo");
     qDebug()<<mprSql;
 
     // 油样采集信息表
     QString oisTableName = tableNames.value("OisInfo");
-    QString oisSql = generateSql(_oisCdtMap,_oisCdtField,oisTableName);
+    QString oisSql = generateSql(_oisCdtMap,oisTableName);
     _oisInfoModel->setQuery(oisSql);
     setModelHeaderData("OisInfo");
     for(int i =0;i<_oisInfoModel->rowCount();++i)
@@ -1576,19 +1564,18 @@ void AdvanceSearchDlg::query()
 
     // 油样检测分析信息表
     QString oiaTableName = tableNames.value("OiaInfo");
-    QString oiaSql = generateSql(_oiaCdtMap,_oiaCdtField,oiaTableName);
+    QString oiaSql = generateSql(_oiaCdtMap,oiaTableName);
     _oiaInfoModel->setQuery(oiaSql);
     setModelHeaderData("OiaInfo");
     qDebug()<<oiaSql;
 
     // 铁谱质谱信息表
     QString fegTableName = tableNames.value("FegInfo");
-    QString fegSql = generateSql(_fegCdtMap,_fegCdtField,fegTableName);
+    QString fegSql = generateSql(_fegCdtMap,fegTableName);
     _fegInfoModel->setQuery(fegSql);
     setModelHeaderData("FegInfo");
     qDebug()<<fegSql;
 
-    ferrographysheetidList.clear();
     for(int i = 0;i<_fegInfoModel->rowCount();++i)
     {
         ferrographysheetidList.append(_fegInfoModel->record(i).value("ferrographysheetid").toString());
@@ -1596,12 +1583,11 @@ void AdvanceSearchDlg::query()
 
     // 铁谱图片采集信息表
     QString fegpTableName = tableNames.value("FegPInfo");
-    QString fegpSql = generateSql(_fegpCdtMap,_fegpCdtField,fegpTableName);
+    QString fegpSql = generateSql(_fegpCdtMap,fegpTableName);
     _fegpInfoModel->setQuery(fegpSql);
     setModelHeaderData("FegPInfo");
     qDebug()<<fegpSql;
 
-    ferrographypicidList.clear();
     for(int i = 0;i<_fegpInfoModel->rowCount();++i)
     {
         ferrographypicidList.append(_fegpInfoModel->record(i).value("ferrographypicid").toString());
@@ -1610,19 +1596,11 @@ void AdvanceSearchDlg::query()
 
     // 磨粒标注信息表
     QString abmTableName = tableNames.value("AbmInfo");
-    QString abmSql = generateSql(_abmCdtMap,_abmCdtField,abmTableName);
+    QString abmSql = generateSql(_abmCdtMap,abmTableName);
     _abmInfoModel->setQuery(abmSql);
     setModelHeaderData("AbmInfo");
     qDebug()<<abmSql;
-    for(int i =0;i<_abmInfoModel->rowCount();++i)
-    {
-//        abrasiveidList.append(_abmInfoModel->record(i).value("abrasiveid").toString());
-//        abrasivepicpathList.append(_abmInfoModel->record(i).value("abrasivepicpath").toString());
-        ferrographypicidhList.append(_abmInfoModel->record(i).value("ferrographypicid").toString());
-    }
-//    this->thWindow->show();
-//    this->thWindow->initList(ferrographypicidhList,ferrographypicpathList,abrasiveidList,abrasivepicpathList);
-
+    
     emit showqueryThumbnails(ferrographypicpathList);
 }
 
@@ -2089,14 +2067,14 @@ void AdvanceSearchDlg::on_PlaneIdChkBox_clicked()
 {
     _eqmCdtMap.remove("planeid");
     // forein key
-    _mpCdtMap.remove("planeid");
-    _oisCdtMap.remove("planeid");
+//    _mpCdtMap.remove("planeid");
+//    _oisCdtMap.remove("planeid");
     if(ui->PlaneIdChkBox->isChecked())
     {
         QString text = ui->planeidCbBox->currentText();
         _eqmCdtMap.insert("planeid",text);
-        _mpCdtMap.insert("planeid",text);
-        _oisCdtMap.insert("planeid",text);
+//        _mpCdtMap.insert("planeid",text);
+//        _oisCdtMap.insert("planeid",text);
     }
 }
 
@@ -2105,14 +2083,14 @@ void AdvanceSearchDlg::on_planeidCbBox_currentIndexChanged(int index)
 {
     _eqmCdtMap.remove("planeid");
     // forein key
-    _mpCdtMap.remove("planeid");
-    _oisCdtMap.remove("planeid");
+//    _mpCdtMap.remove("planeid");
+//    _oisCdtMap.remove("planeid");
     if(ui->PlaneIdChkBox->isChecked())
     {
         QString text = ui->planeidCbBox->currentText();
         _eqmCdtMap.insert("planeid",text);
-        _mpCdtMap.insert("planeid",text);
-        _oisCdtMap.insert("planeid",text);
+//        _mpCdtMap.insert("planeid",text);
+//        _oisCdtMap.insert("planeid",text);
     }
 }
 
@@ -2439,13 +2417,13 @@ void AdvanceSearchDlg::on_movepartIdChkBox_clicked()
 {
     _mpCdtMap.remove("movepartid");
     //foreign key
-    _mprCdtMap.remove("movepartid");
+//    _mprCdtMap.remove("movepartid");
     if(ui->movepartIdChkBox->isChecked())
     {
         QString text = ui->movepartIdCbBox->currentText();
         _mpCdtMap.insert("movepartid",text);
         //foreign key
-        _mprCdtMap.insert("movepartid",text);
+//        _mprCdtMap.insert("movepartid",text);
     }
 }
 
@@ -2454,13 +2432,13 @@ void AdvanceSearchDlg::on_movepartIdCbBox_currentIndexChanged(int index)
 {
     _mpCdtMap.remove("movepartid");
     //foreign key
-    _mprCdtMap.remove("movepartid");
+//    _mprCdtMap.remove("movepartid");
     if(ui->movepartIdChkBox->isChecked())
     {
         QString text = ui->movepartIdCbBox->currentText();
         _mpCdtMap.insert("movepartid",text);
         //foreign key
-        _mprCdtMap.insert("movepartid",text);
+//        _mprCdtMap.insert("movepartid",text);
     }
 }
 
@@ -2961,15 +2939,15 @@ void AdvanceSearchDlg::on_oilsampleidChkBox_clicked()
 {
     _oisCdtMap.remove("oilsampleid");
     // foreign key
-    _oiaCdtMap.remove("oiasampleid");
-    _fegCdtMap.remove("oilsampleid");
+//    _oiaCdtMap.remove("oiasampleid");
+//    _fegCdtMap.remove("oilsampleid");
     if(ui->oilsampleidChkBox->isChecked())
     {
         QString text = ui->oilsampleidCbBox->currentText();
         _oisCdtMap.insert("oilsampleid",text);
 
-        _oiaCdtMap.insert("oilsampleid",text);
-        _fegCdtMap.insert("oilsampleid",text);
+//        _oiaCdtMap.insert("oilsampleid",text);
+//        _fegCdtMap.insert("oilsampleid",text);
     }
 }
 
@@ -2986,14 +2964,14 @@ void AdvanceSearchDlg::on_oilsampleidChkBox_clicked()
 void AdvanceSearchDlg::on_oilsampleidCbBox_currentIndexChanged(int index)
 {
     _oisCdtMap.remove("oilsampleid");
-    _oiaCdtMap.remove("oiasampleid");
-    _fegCdtMap.remove("oilsampleid");
+//    _oiaCdtMap.remove("oiasampleid");
+//    _fegCdtMap.remove("oilsampleid");
     if(ui->oilsampleidChkBox->isChecked())
     {
         QString text = ui->oilsampleidCbBox->currentText();
         _oisCdtMap.insert("oilsampleid",text);
-        _oiaCdtMap.insert("oilsampleid",text);
-        _fegCdtMap.insert("oilsampleid",text);
+//        _oiaCdtMap.insert("oilsampleid",text);
+//        _fegCdtMap.insert("oilsampleid",text);
     }
 }
 
@@ -4041,12 +4019,12 @@ void AdvanceSearchDlg::on_abm_ferrographyreportidCbBox_currentIndexChanged(int i
 void AdvanceSearchDlg::on_fegp_ferrographypicidChkBox_clicked()
 {
     _fegpCdtMap.remove("ferrographypicid");
-    _abmCdtMap.remove("ferrographypicid");
+//    _abmCdtMap.remove("ferrographypicid");
     if(ui->fegp_ferrographypicidChkBox->isChecked())
     {
         QString text =ui->fegp_ferrographypicidCbBox->currentText();
         _fegpCdtMap.insert("ferrographypicid",text);
-        _abmCdtMap.insert("ferrographypicid",text);
+//        _abmCdtMap.insert("ferrographypicid",text);
     }
 }
 
@@ -4244,12 +4222,12 @@ void AdvanceSearchDlg::on_feg_ferrographysheetidChkBox_clicked()
 {
     _fegCdtMap.remove("ferrographysheetid");
     //foreign key
-    _fegpCdtMap.remove("ferrographysheetid");
+//    _fegpCdtMap.remove("ferrographysheetid");
     if(ui->feg_ferrographysheetidChkBox->isChecked())
     {
         QString text = ui->feg_ferrographysheetidCbBox->currentText();
         _fegCdtMap.insert("ferrographysheetid",text);
-        _fegpCdtMap.insert("ferrographysheetid",text);
+//        _fegpCdtMap.insert("ferrographysheetid",text);
     }
 }
 
@@ -4257,12 +4235,12 @@ void AdvanceSearchDlg::on_feg_ferrographysheetidCbBox_currentIndexChanged(int in
 {
     _fegCdtMap.remove("ferrographysheetid");
     //foreign key
-    _fegpCdtMap.remove("ferrographysheetid");
+//    _fegpCdtMap.remove("ferrographysheetid");
     if(ui->feg_ferrographysheetidChkBox->isChecked())
     {
         QString text = ui->feg_ferrographysheetidCbBox->currentText();
         _fegCdtMap.insert("ferrographysheetid",text);
-        _fegpCdtMap.insert("ferrographysheetid",text);
+//        _fegpCdtMap.insert("ferrographysheetid",text);
     }
 }
 

@@ -38,7 +38,7 @@
       <item>
        <widget class="QStackedWidget" name="conditionStackedWidget">
         <property name="currentIndex">
-         <number>6</number>
+         <number>5</number>
         </property>
         <widget class="QWidget" name="page">
          <layout class="QGridLayout" name="gridLayout_3">
@@ -52,8 +52,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>198</width>
-               <height>228</height>
+               <width>298</width>
+               <height>356</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -233,7 +233,7 @@
                <x>0</x>
                <y>0</y>
                <width>314</width>
-               <height>228</height>
+               <height>340</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout">
@@ -433,8 +433,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>287</width>
-               <height>158</height>
+               <width>298</width>
+               <height>356</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_15">
@@ -572,7 +572,7 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>269</width>
+               <width>282</width>
                <height>607</height>
               </rect>
              </property>
@@ -1542,7 +1542,7 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>261</width>
+               <width>282</width>
                <height>362</height>
               </rect>
              </property>

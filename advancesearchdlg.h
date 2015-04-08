@@ -20,7 +20,6 @@
 
 #include "propertynamedlg.h"
 #include "Global.h"
-#include "thumbnailwindow.h"
 
 namespace Ui {
 class AdvanceSearchDlg;
@@ -32,7 +31,6 @@ class AdvanceSearchDlg : public QDialog
     
 public:
      AdvanceSearchDlg(QWidget *parent = 0,bool flag = false);
-//     void setDeleteFlag(bool flag){this->deleteflag = flag;}
     ~AdvanceSearchDlg();
     
 private slots:
@@ -140,36 +138,21 @@ private slots:
      
      void on_monitorpartidChkBox_clicked();
      
-//     void on_monitorpartidLineEdit_textChanged(const QString &arg1);
-     
      void on_monitorpartnameChkBox_clicked();
-     
-//     void on_monitorpartnameLineEdit_textChanged(const QString &arg1);
-     
+
      void on_oilsampleidChkBox_clicked();
 
      void on_oilsampleidCbBox_currentIndexChanged(int index);
-//     void on_oilsampleidLineEdit_textChanged(const QString &arg1);
-     
+  
      void on_samplesituationChkBox_clicked();
-
-//     void on_samplesituationLineEdit_textChanged(const QString &arg1);
 
      void on_sampleidChkBox_clicked();
 
-//     void on_sampleidLineEdit_textChanged(const QString &arg1);
-
      void on_samplemethodChkBox_clicked();
-
-//     void on_samplemethodLineEdit_textChanged(const QString &arg1);
 
      void on_sampledepartidChkBox_clicked();
 
-//     void on_sampledepartidlineEdit_textChanged(const QString &arg1);
-
      void on_sampledepartnameChkBox_clicked();
-
-//     void on_sampledepartnameLineEdit_textChanged(const QString &arg1);
 
      void on_sendstuffChkBox_clicked();
 
@@ -178,35 +161,7 @@ private slots:
      void on_senddateDateEdit_dateChanged(const QDate &date);
 
      void on_sendtimeChkBox_clicked();
-
-private:
-     QString generateSql(QMap<QString,QString> conditionMap,QStringList conditionField,QString tableName);
-     void setModelHeaderData(QString tablename);
-     void createTableView();
-     void createTableNames();
-     void createListWidget();
-     void initCbBox();
-     void initpropertylistName();
-     void resetConditions();
-     void reloadConditions(QString propertyname);
-     void query();
-     bool copyFiles(QString fromDir,QString toDir,bool convertIfExits = false);
-     bool copyFiles(QString fromDir,QString toDir,QStringList filenames,bool convertIfExist = false);
-     bool importDB(const QString &path);
-     bool exportDB(const QSqlQueryModel *model,const QString &tablename,const QString &path);
-     bool importDB(const QSqlQueryModel &model);
      
-     bool deletefromtable(QStringList idList,QString tablename);
-
-private slots:
-     void useproperty();
-     void deleteproperty();
-     void renameprtperty();
-     
-     void deletedate();
-     
-     
-
      void on_sampleidCbBox_currentIndexChanged(int index);
 
      void on_samplesituationCbBox_currentIndexChanged(int index);
@@ -234,8 +189,6 @@ private slots:
      void on_oia_receivestuffLineEdit_textChanged(const QString &arg1);
 
      void on_oia_receivedateChkBox_clicked();
-
-//     void on_oia_receivedateDateEdit_timeChanged(const QTime &time);
 
      void on_oia_analyzedepartnameChkBox_clicked();
 
@@ -445,8 +398,35 @@ private slots:
 
      void on_feg_ferrographymakeoilconsumptionChkBox_clicked();
 
-     void on_feg_ferrographymakeoilconsumptionLineEdit_textChanged(const QString &arg1);
+     void on_feg_ferrographymakeoilconsumptionLineEdit_textChanged(const QString &arg1);     
 
+private:
+     QString generateSql(QMap<QString,QString> conditionMap,QString tableName);
+     void setModelHeaderData(QString tablename);
+     void createTableView();
+     void createTableNames();
+     void createListWidget();
+     void initCbBox();
+     void initpropertylistName();
+     void resetConditions();
+     void reloadConditions(QString propertyname);
+     void query();
+     bool copyFiles(QString fromDir,QString toDir,bool convertIfExits = false);
+     bool copyFiles(QString fromDir,QString toDir,QStringList filenames,bool convertIfExist = false);
+     bool importDB(const QString &path);
+     bool exportDB(const QSqlQueryModel *model,const QString &tablename,const QString &path);
+     bool importDB(const QSqlQueryModel &model);
+     
+     bool deletefromtable(QStringList idList,QString tablename);
+
+private slots:
+     void useproperty();
+     void deleteproperty();
+     void renameprtperty();
+     
+     void deletedate();
+     
+     
      void on_modifyButton_clicked();
 
 signals:
@@ -461,14 +441,9 @@ private:
     
     //删除标志
     bool deleteflag = false;
-    
-    
+     
     // 显示缩略图
-    ThumbnailWindow *thWindow;
     QStringList ferrographypicpathList;
-    QStringList ferrographypicidhList;
-    QStringList abrasivepicpathList;
-    QStringList abrasiveidList;
     
     // 连接查询条件
     QStringList ferrographysheetidList;
@@ -476,7 +451,6 @@ private:
     QStringList planeidList;
     QStringList movepartidList;
     QStringList oilsampleidList;
-//    QStringList 
     
     QMap<QString,QString> tableNames;
     QSqlQueryModel *_eqmInfoModel;
@@ -494,15 +468,6 @@ private:
     QAction *renameprtpertyAction;
     
     QAction *deletedataAction;
-
-    QStringList _eqmCdtField;          // zhuang bei xin xi biao condition Field
-    QStringList _abmCdtField;          // mo li biao ji xin xi biao condition Field
-    QStringList _fegCdtField;          // tie pu zhi pu xin xi biao condition Field
-    QStringList _fegpCdtField;         // tie pu tu pian cai ji xin xi biao condition Field
-    QStringList _mpCdtField;           // dong bu jian xin xi biao condtion Field
-    QStringList _mprCdtField;          // dong bu jian wei xiu xin xi biao condition Field
-    QStringList _oiaCdtField;          // you yang fen xi xin xi biao condition Field
-    QStringList _oisCdtField;          // you yang xin xi biao condition Field
 
     QMap<QString,QString> _eqmCdtMap;          // zhuang bei xin xi biao condition Map
     QMap<QString,QString> _abmCdtMap;          // mo li biao ji xin xi biao condition Map
