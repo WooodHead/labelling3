@@ -440,7 +440,7 @@ private:
     QString propertyName;
     
     //删除标志
-    bool deleteflag = false;
+    bool deleteflag;
      
     // 显示缩略图
     QStringList ferrographypicpathList;
