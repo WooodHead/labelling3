@@ -10,7 +10,6 @@ HEADERS += \
     imagecompletionui.h \
     searchdata.h \
     classification.h \
-    advancesearchdlg.h \
     propertynamedlg.h \
     ImageProperties.h \
     Login.h \
@@ -21,9 +20,10 @@ HEADERS += \
     Global.h \
     MoliProperties.h \
     ImageComparison.h \
-    Util/def.h \
     expdlg.h \
-    thumbnailwindow.h
+    thumbnailwindow.h \
+    advancesearchdlg.h \
+    Util/def.h
 
 
 SOURCES += \
@@ -33,21 +33,21 @@ SOURCES += \
     PaintTools.cpp \
     ImageViewer.cpp \
     classification.cpp \
-    propertynamedlg.cpp \
     UserInfo.cpp \
     advancesearchdlg.cpp \
     Global.cpp \
-    imagecompletionui.cpp \
-    ImageProperties.cpp \
     Login.cpp \
-    MoliProperties.cpp \
     searchdata.cpp \
     UserAdd.cpp \
     UserEdit.cpp \
     UserManagement.cpp \
     ImageComparison.cpp \
     expdlg.cpp \
-    thumbnailwindow.cpp
+    propertynamedlg.cpp \
+    thumbnailwindow.cpp \
+    imagecompletionui.cpp \
+    ImageProperties.cpp \
+    MoliProperties.cpp
 
 
 FORMS += \
@@ -81,24 +81,15 @@ unix:!macx {
     INCLUDEPATH += Util
 }
 win32 {
-#INCLUDEPATH += D:\opencv\build\include\
-#               Util \
+INCLUDEPATH += D:\opencv\build\include\
+               Util \
 
-INCLUDEPATH += D:\Application\CMake_Qt_OpenCV_MinGW482\install\include\
-            Util \
+#INCLUDEPATH += D:\Application\CMake_Qt_OpenCV_MinGW482\install\include\
+#            Util \
 
-LIBS += D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_calib3d244.dll.a\
-    D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_contrib244.dll.a\
-    D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_core244.dll.a\
-    D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_features2d244.dll.a\
-    D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_flann244.dll.a\
-    D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_gpu244.dll.a\
-    D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_highgui244.dll.a\
-    D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_imgproc244.dll.a\
-    D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_legacy244.dll.a\
-    D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_ml244.dll.a\
-    D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_objdetect244.dll.a\
-    D:\Application\CMake_Qt_OpenCV_MinGW482\install\lib\libopencv_video244.dll.a
+LIBS += D:\vendor\OpenCV243-mingw\lib\libopencv_core243.dll.a\
+    D:\vendor\OpenCV243-mingw\lib\libopencv_highgui243.dll.a\
+    D:\vendor\OpenCV243-mingw\lib\libopencv_imgproc243.dll.a\
 }
 
 OTHER_FILES += \
