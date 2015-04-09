@@ -92,7 +92,7 @@ void ImageCompletionUI::createMenus()
     for(int i = 0; i < 3; i++) submenu->addAction(_lineThickness[i]);
 
     _menuData=menuBar()->addMenu(tr("&数据管理"));
-    _menuData->addAction(_searchAction);
+//    _menuData->addAction(_searchAction);
     _menuData->addAction(_addtosqlAction);
     _menuData->addAction(_exportDataAction);
     _menuData->addAction(_importDataAction);
@@ -270,7 +270,7 @@ void	ImageCompletionUI::createToolBars()
     _editToolBar->addWidget(_lineThicknessToolButton);
 
     _editToolBar->addSeparator();
-    _editToolBar->addAction(_searchAction);
+//    _editToolBar->addAction(_searchAction);
     _editToolBar->addAction(_addtosqlAction);
     _editToolBar->addAction(_exportDataAction);
     _editToolBar->addAction(_importDataAction);

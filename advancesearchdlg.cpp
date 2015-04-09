@@ -2554,7 +2554,6 @@ void AdvanceSearchDlg::on_movepartEndDataChkBox_clicked()
     }
 }
 
-
 void AdvanceSearchDlg::setpropertyName(QString propertyname)
 {
     this->propertyName = propertyname;
@@ -2621,8 +2620,6 @@ void AdvanceSearchDlg::on_exportBtn_clicked()
     }
 }
 
-
-
 void AdvanceSearchDlg::on_importBtn_clicked()
 {
 
@@ -2665,34 +2662,6 @@ void AdvanceSearchDlg::on_importBtn_clicked()
                 QMessageBox::warning(this,tr("提示"),tr("数据恢复失败"),QMessageBox::Close);
         }
     }
-
-
-//    QString sqlfilepath = packgefilepath + "/";
-//    QString sourceimgfrompath = packgefilepath + "/source/";
-//    QString sourceimgtopath   = Global::PathImage;
-//    QString resultimgfrompath = packgefilepath + "/result/";
-//    QString resultimgtopath   = Global::PathResult;
-
-//    QString filename = QFileDialog::getOpenFileName(this,
-//                                                    tr("导入数据"),
-//                                                    sqlfilepath,
-//                                                    tr("SqlFile(*.sql)"));
-//    if(filename.isEmpty())
-//        return;
-
-
-//    if(this->importDB(filename) &&
-//            this->copyFiles(sourceimgfrompath,sourceimgtopath)&&
-//            this->copyFiles(resultimgfrompath,resultimgtopath))
-//        QMessageBox::warning(this,
-//                             tr("提示"),
-//                             tr("数据导入成功"),
-//                             QMessageBox::Close);
-//    else
-//        QMessageBox::warning(this,
-//                             tr("提示"),
-//                             tr("数据导入失败"),
-//                             QMessageBox::Close);
 }
 
 void AdvanceSearchDlg::on_movepartRepairIdChkBox_clicked()
