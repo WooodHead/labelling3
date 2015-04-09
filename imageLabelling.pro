@@ -45,9 +45,9 @@ SOURCES += \
     expdlg.cpp \
     propertynamedlg.cpp \
     thumbnailwindow.cpp \
-    imagecompletionui.cpp \
     ImageProperties.cpp \
-    MoliProperties.cpp
+    MoliProperties.cpp \
+    imagecompletionui.cpp
 
 
 FORMS += \
