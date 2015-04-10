@@ -1,4 +1,4 @@
-﻿#include "MoliProperties.h"
+#include "MoliProperties.h"
 #include "ui_MoliProperties.h"
 
 #include <opencv2/opencv.hpp>
@@ -529,4 +529,6 @@ void MoliProperties::on__comboBoxMoliTypical_editTextChanged(const QString &arg1
 {
     _bDirty = true;
 }
+
+
 

@@ -111,16 +111,16 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="CancelPushButton">
+      <widget class="QPushButton" name="OKPushButton">
        <property name="text">
-        <string>Cancel</string>
+        <string>导出</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="OKPushButton">
+      <widget class="QPushButton" name="CancelPushButton">
        <property name="text">
-        <string>OK</string>
+        <string>取消</string>
        </property>
       </widget>
      </item>

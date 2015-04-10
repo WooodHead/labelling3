@@ -262,7 +262,7 @@ void Login::on__buttonSave_clicked()
 
     Global::settings->setValue("IMAGE/pathImage", ui->_editOriginalCopyTo->text());
     Global::settings->setValue("IMAGE/pathMask", ui->_editMaskTo->text());
-    Global::settings->setValue("IMAGE/pathResult", ui->_editResultTo->text());
+    Global::settings->setValue("IMAGE/pathResult", ui->_editResultTo->text().toUtf8().constData());
     Global::settings->setValue("IMAGE/extMask", ui->_comboBoxMask->currentText());
     Global::settings->setValue("IMAGE/extResult", ui->_comboBoxResult->currentText());
 
@@ -296,7 +296,7 @@ void Login::setText(QString str, QLineEdit* edit)
     if(dlg.exec() == QDialog::Accepted)
     {
         QDir dir = dlg.selectedFiles()[0];
-        edit->setText( dir.absolutePath());
+        edit->setText( dir.absolutePath() + "/");
     }
 }
 

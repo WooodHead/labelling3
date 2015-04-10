@@ -1,3 +1,4 @@
+
 #include "propertynamedlg.h"
 #include "ui_propertynamedlg.h"
 
@@ -14,14 +15,14 @@ ProPertyNameDlg::ProPertyNameDlg(QWidget *parent, QString propertyname):
     ui(new Ui::ProPertyNameDlg)
 {
     ui->setupUi(this);
-    
+
     ui->propertyNaeLineEdit->setText(propertyname);
     ui->propertyNaeLineEdit->setFocus();
     connect(this,SIGNAL(setpropertyName(QString)),parent,SLOT(setpropertyName(QString)));
-    
+
 //    connect(this,SIGNAL(accepted()),this,SLOT(accept()));
 //    connect(this,SIGNAL(rejected()),this,SLOT(reject()));
-    
+
 //    ui->buttonBox->button(QDialogButtonBox)->setEnabled(false);
 }
 
@@ -45,7 +46,7 @@ ProPertyNameDlg::~ProPertyNameDlg()
 //void ProPertyNameDlg::on_buttonBox_clicked(QAbstractButton *button)
 //{
 //    QString text = ui->propertyNaeLineEdit->text().trimmed();
-    
+
 //    if(ui->buttonBox->button(QDialogButtonBox::Ok) == button)
 //    {
 //        trriger(text);
@@ -96,3 +97,4 @@ void ProPertyNameDlg::on_cancelButton_clicked()
 //    emit this->rejected();
     this->reject();
 }
+

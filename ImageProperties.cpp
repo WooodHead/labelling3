@@ -1,4 +1,4 @@
-﻿#include "ImageProperties.h"
+#include "ImageProperties.h"
 #include "ui_imageproperties.h"
 #include "Global.h"
 #include "ImageComparison.h"
@@ -1670,3 +1670,5 @@ void ImageProperties::on__comboBoxMentalSampleLightType_currentIndexChanged(int 
     if(!ui->_buttonSave->isEnabled()) ui->_buttonSave->setEnabled(true);
     ui->_comboBoxMentalSampleImageID->setEditText(generateTieputupianID());
 }
+
+

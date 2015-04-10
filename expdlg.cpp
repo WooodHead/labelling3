@@ -23,7 +23,7 @@ ExpDlg::ExpDlg(QWidget *parent, QString sourcepicPath, QString resultPath)
     this->sourcepicPath = sourcepicPath;
     this->resultpicPath = resultPath;
     this->packgePath = "";
-    
+
     connect(this,SIGNAL(initPathParams(QString,QString,QString)),parent,SLOT(setExpPath(QString,QString,QString)));
 }
 
@@ -109,3 +109,5 @@ void ExpDlg::on_packgePushButton_clicked()
     else
         return;
 }
+
+

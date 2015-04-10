@@ -46,6 +46,7 @@ void Global::initialize()
     Global::Awesome->initFontAwesome();
 
     Global::settings = new QSettings(strConfigFile, QSettings::IniFormat);
+    settings->setIniCodec("UTF8");
 
     Global::Database = Global::settings->value("MYSQL/databasename", Global::Database).toString();
     Global::Hostname = Global::settings->value("MYSQL/hostname", Global::Hostname).toString();
@@ -54,7 +55,7 @@ void Global::initialize()
 
     Global::PathImage = Global::settings->value("IMAGE/pathImage",Global::PathImage).toString();
     Global::PathMask = Global::settings->value("IMAGE/pathMask", Global::PathMask).toString();
-    Global::PathResult = Global::settings->value("IMAGE/pathResult", Global::PathResult).toString();
+    Global::PathResult = Global::settings->value("IMAGE/pathResult", Global::PathResult).toString();    
 
     QDir dirMask(Global::PathMask);
     QDir dirResult(Global::PathResult);
@@ -73,8 +74,6 @@ bool Global::createConnection(QSqlDatabase &db)
       db = QSqlDatabase::database("qt_sql_default_connection");
     else
       db = QSqlDatabase::addDatabase("QMYSQL");
-    
-    
 
     db.setHostName(Global::Hostname);
     db.setDatabaseName(Global::Database);

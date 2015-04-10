@@ -1,4 +1,4 @@
-﻿#include "UserManagement.h"
+#include "UserManagement.h"
 #include "ui_usermanagement.h"
 #include "UserAdd.h"
 
@@ -274,4 +274,6 @@ void UserManagement::on__searchUser_clicked()
     _model->setFilter(filter);
     _model->select();
 }
+
+
 

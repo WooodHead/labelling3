@@ -21,7 +21,7 @@ HEADERS += \
     MoliProperties.h \
     ImageComparison.h \
     expdlg.h \
-    thumbnailwindow.h \
+    impdlg.h \
     advancesearchdlg.h \
     Util/def.h
 
@@ -29,25 +29,25 @@ HEADERS += \
 SOURCES += \
     ImageOperate.cpp \
     BasicDataStructure.cpp \
-    main.cpp \
     PaintTools.cpp \
     ImageViewer.cpp \
     classification.cpp \
     UserInfo.cpp \
-    advancesearchdlg.cpp \
     Global.cpp \
     Login.cpp \
+    ImageComparison.cpp \
+    impdlg.cpp \
+    advancesearchdlg.cpp \
+    expdlg.cpp \
+    imagecompletionui.cpp \
+    ImageProperties.cpp \
+    main.cpp \
+    MoliProperties.cpp \
+    propertynamedlg.cpp \
     searchdata.cpp \
     UserAdd.cpp \
     UserEdit.cpp \
-    UserManagement.cpp \
-    ImageComparison.cpp \
-    expdlg.cpp \
-    propertynamedlg.cpp \
-    thumbnailwindow.cpp \
-    ImageProperties.cpp \
-    MoliProperties.cpp \
-    imagecompletionui.cpp
+    UserManagement.cpp
 
 
 FORMS += \
@@ -70,7 +70,7 @@ FORMS += \
     MoliProperties.ui \
     ImageComparison.ui \
     expdlg.ui \
-    thumbnailwindow.ui
+    impdlg.ui
 
 RESOURCES += \
     ImageCompletion.qrc

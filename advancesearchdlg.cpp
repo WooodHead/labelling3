@@ -1,4 +1,4 @@
-﻿#include "advancesearchdlg.h"
+#include "advancesearchdlg.h"
 #include "ui_advancesearchdlg.h"
 
 AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent,bool flag) :
@@ -18,7 +18,7 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent,bool flag) :
         setWindowTitle(tr("查询数据接口"));
         ui->modifyButton->setVisible(false);
     }
-    
+
     if(!Global::createConnection(db))
     {
         QMessageBox::warning(this,tr("数据库提示"),tr("不能链接数据库"),QMessageBox::Close);
@@ -30,9 +30,9 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent,bool flag) :
     ui->importBtn->setIcon(QIcon(":/new/prefix1/icons/import.png"));
     ui->addtoBtn->setIcon(Global::Awesome->icon(plus));
     ui->modifyButton->setIcon(Global::Awesome->icon(trash));
-    
+
     ui->modifyButton->setText(tr("删除数据"));
-    
+
 
     propertymodel = 0;
 
@@ -47,13 +47,13 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent,bool flag) :
     deletepropertyAction = new QAction(tr("删除属性"),ui->propertylistTableView);
     ui->propertylistTableView->addAction(deletepropertyAction);;
     connect(deletepropertyAction,SIGNAL(triggered()),this,SLOT(deleteproperty()));
-    
+
     renameprtpertyAction = new QAction(tr("重命名"),ui->propertylistTableView);
     ui->propertylistTableView->addAction(renameprtpertyAction);;
     connect(renameprtpertyAction,SIGNAL(triggered()),this,SLOT(renameprtperty()));
 
     ui->propertylistTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
-    
+
     if(deleteflag)
     {
         deletedataAction = new QAction(tr("删除数据"),0);
@@ -73,12 +73,12 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent,bool flag) :
         ui->fegpTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
         ui->abmTableView->addAction(deletedataAction);
         ui->abmTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
-        
+
         connect(deletedataAction,SIGNAL(triggered()),this,SLOT(deletedate()));
     }
 
     connect(this,SIGNAL(showqueryThumbnails(QStringList)),parent,SLOT(queryThumbnails(QStringList)));
-    
+
 
     createTableNames();
 
@@ -88,20 +88,12 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent,bool flag) :
 
     initpropertylistName();
 
-//    query();
-
-//    ui->modifyButton->setEnabled(false);
     ui->conditionStackedWidget->setCurrentIndex(0);
-    
-    // 初始化缩略图窗口
-//    this->thWindow = new ThumbnailWindow(parent);
-
 }
 
 AdvanceSearchDlg::~AdvanceSearchDlg()
 {
     delete ui;
-//    thWindow->close();
     db.close();
 }
 
@@ -240,7 +232,7 @@ void AdvanceSearchDlg::renameprtperty()
     QModelIndex index = ui->propertylistTableView->currentIndex();
     QSqlRecord record = propertymodel->record(index.row());
     QString oldpropertyname = record.value(0).toString();
-    
+
     ppnDlg = new ProPertyNameDlg(this,oldpropertyname);
     if(ppnDlg->exec()== QDialog::Accepted)
     {
@@ -1000,7 +992,7 @@ void AdvanceSearchDlg::useproperty()
 void AdvanceSearchDlg::deleteproperty()
 {
 //    QMessageBox::warning(this,tr("提示"),tr("管理属性"),QMessageBox::Close);
-    
+
     this->resetConditions();
     QModelIndex index = ui->propertylistTableView->currentIndex();
     QSqlRecord record = propertymodel->record(index.row());
@@ -1023,7 +1015,7 @@ void AdvanceSearchDlg::deleteproperty()
         else
             QMessageBox::warning(this,tr("提示"),tr("删除属性失败，请检查数据库服务是否启动"),QMessageBox::Close);
     }
-    
+
     initpropertylistName();
 //    this->reloadConditions(propertyname);
 //    ui->queryBtn->setEnabled(false);
@@ -1088,65 +1080,85 @@ bool AdvanceSearchDlg::importDB(const QString &path)
 }
 
 
-bool AdvanceSearchDlg::exportDB(const QSqlQueryModel *model, const QString &tablename, const QString &path)
+bool AdvanceSearchDlg::exportDB(const QStringList &tablenameList, const QString &path)
 {
     QStringList vList;
-    int count = model->rowCount();
-    for(int i =0;i<count;++i)
-    {
-        QSqlRecord record = model->record(i);
-        QString prefix=QString("insert into %1(").arg(tablename); // 记录属性字段名
-        QString suffix="values(";                                 // 记录属性值
+    QSqlQueryModel *model;
+    foreach (QString tablename, tablenameList) {
+        if("equipmentinfo" == tablename)
+            model = _eqmInfoModel;
+        else if("movepartinfo" == tablename)
+            model = _mpInfoModel;
+        else if("movepartrepairinfo" == tablename)
+            model = _mprInfoModel;
+        else if("oilsampleinfo" == tablename)
+            model = _oisInfoModel;
+        else if("oilanalyzeinfo" == tablename)
+            model = _oiaInfoModel;
+        else if("ferrographyinfo" == tablename)
+            model = _fegInfoModel;
+        else if("ferrographypicinfo" == tablename)
+            model = _fegpInfoModel;
+        else if("abrasivemarkinfo" == tablename)
+            model = _abmInfoModel;
 
-        // 遍历属性字段
-        for(int j=0;j<record.count();j++)
+        int count = model->rowCount();
+        for(int i =0;i<count;++i)
         {
-            QSqlField field=record.field(j);
-            QString fieldName=field.name();
+            QSqlRecord record = model->record(i);
+            QString prefix=QString("insert into %1(").arg(tablename); // 记录属性字段名
+            QString suffix="values(";                                 // 记录属性值
 
-            switch(field.type())
+            // 遍历属性字段
+            for(int j=0;j<record.count();j++)
             {
-            case QVariant::String:
-                prefix+=fieldName;
-                suffix+=QString("'%1'").arg(record.value(j).toString());
-                break;
-            case QVariant::ByteArray:
-            {
-                prefix+=fieldName;
-                QByteArray data=record.value(j).toByteArray();
-                if(data.isNull())
+                QSqlField field=record.field(j);
+                QString fieldName=field.name();
+
+                switch(field.type())
                 {
-                    suffix+="null";
-                }else
+                case QVariant::String:
+                    prefix+=fieldName;
+                    suffix+=QString("'%1'").arg(record.value(j).toString());
+                    break;
+                case QVariant::ByteArray:
                 {
-                    suffix+=QString("E'%1'").arg(data.toHex().data()); // blob数据按16进制格式导出
+                    prefix+=fieldName;
+                    QByteArray data=record.value(j).toByteArray();
+                    if(data.isNull())
+                    {
+                        suffix+="null";
+                    }else
+                    {
+                        suffix+=QString("E'%1'").arg(data.toHex().data()); // blob数据按16进制格式导出
+                    }
+                }
+                    break;
+                default:
+                    prefix+=fieldName;
+                    suffix+=record.value(j).toString();
+                }
+
+                if(record.count()==1)
+                {
+                    prefix+=")";
+                    suffix+=")";
+                }else if(j!=record.count()-1)
+                {
+                    prefix+=",";
+                    suffix+=",";
+                }else if(j==record.count()-1)
+                {
+                    prefix+=")";
+                    suffix+=")";
                 }
             }
-                break;
-            default:
-                prefix+=fieldName;
-                suffix+=record.value(j).toString();
-            }
-
-            if(record.count()==1)
-            {
-                prefix+=")";
-                suffix+=")";
-            }else if(j!=record.count()-1)
-            {
-                prefix+=",";
-                suffix+=",";
-            }else if(j==record.count()-1)
-            {
-                prefix+=")";
-                suffix+=")";
-            }
+            // 组装sql语句 insert into auth_test values(0,'hello',E'003f')
+            QString iSql=QString("%1 %2;").arg(prefix).arg(suffix);
+            vList.append(iSql);
         }
-        // 组装sql语句 insert into auth_test values(0,'hello',E'003f')
-        QString iSql=QString("%1 %2;").arg(prefix).arg(suffix);
-        vList.append(iSql);
-        //        qDebug()<<iSql;
     }
+
     QFile file(path);
     file.open(QIODevice::WriteOnly|QIODevice::Truncate);
 
@@ -1298,12 +1310,12 @@ QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap, QStri
     }
     if(tableName == "movepartinfo" || tableName == "oilsampleinfo" )
     {
-        
+
         if(!planeidList.empty())
         {
             if(conditionMap.isEmpty())
                 sql.append(" where planeid = '");
-            else 
+            else
                 sql.append(" and (planeid = '");
             int i =0;
             sql.append(planeidList[i]);
@@ -1332,7 +1344,7 @@ QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap, QStri
         {
             if(conditionMap.isEmpty())
                 sql.append(" where movepartid = '");
-            else 
+            else
                 sql.append(" and (movepartid= '");
             int i =0;
             sql.append(movepartidList[i]);
@@ -1381,7 +1393,7 @@ QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap, QStri
         {
             if(conditionMap.isEmpty())
                 sql.append(" where oilsampleid = '");
-            else 
+            else
                 sql.append(" and (oilsampleid= '");
             int i =0;
             sql.append(oilsampleidList[i]);
@@ -1403,8 +1415,8 @@ QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap, QStri
                 sql.append(" and oilsampleid = '");
             sql.append("'");
         }
-        
-        
+
+
 //        if(_eqmCdtMap.find("planeid") != _eqmCdtMap.end())
 //        {
 //            if(_oisCdtMap.find("oilsampleid") != _oisCdtMap.end())
@@ -1521,7 +1533,7 @@ void AdvanceSearchDlg::query()
     planeidList.clear();
     movepartidList.clear();
     oilsampleidList.clear();
-    
+
     // 装备信息表
     QString eqmTableName = tableNames.value("EqmInfo");
     QString eqmSql = generateSql(_eqmCdtMap,eqmTableName);
@@ -1531,7 +1543,7 @@ void AdvanceSearchDlg::query()
     {
         planeidList.append(_eqmInfoModel->record(i).value("planeid").toString());
     }
-    qDebug()<<eqmSql;
+//    qDebug()<<eqmSql;
 
     // 动部件信息表
     QString mpTableName = tableNames.value("MpInfo");
@@ -1542,14 +1554,14 @@ void AdvanceSearchDlg::query()
     {
         movepartidList.append(_mpInfoModel->record(i).value("movepartid").toString());
     }
-    qDebug()<<mpSql;
+//    qDebug()<<mpSql;
 
     // 动部件维修信息表
     QString mprTableName = tableNames.value("MprInfo");
     QString mprSql = generateSql(_mprCdtMap,mprTableName);
     _mprInfoModel->setQuery(mprSql);
     setModelHeaderData("MprInfo");
-    qDebug()<<mprSql;
+//    qDebug()<<mprSql;
 
     // 油样采集信息表
     QString oisTableName = tableNames.value("OisInfo");
@@ -1560,21 +1572,21 @@ void AdvanceSearchDlg::query()
     {
         oilsampleidList.append(_oisInfoModel->record(i).value("oilsampleid").toString());
     }
-    qDebug()<<oisSql;
+//    qDebug()<<oisSql;
 
     // 油样检测分析信息表
     QString oiaTableName = tableNames.value("OiaInfo");
     QString oiaSql = generateSql(_oiaCdtMap,oiaTableName);
     _oiaInfoModel->setQuery(oiaSql);
     setModelHeaderData("OiaInfo");
-    qDebug()<<oiaSql;
+//    qDebug()<<oiaSql;
 
     // 铁谱质谱信息表
     QString fegTableName = tableNames.value("FegInfo");
     QString fegSql = generateSql(_fegCdtMap,fegTableName);
     _fegInfoModel->setQuery(fegSql);
     setModelHeaderData("FegInfo");
-    qDebug()<<fegSql;
+//    qDebug()<<fegSql;
 
     for(int i = 0;i<_fegInfoModel->rowCount();++i)
     {
@@ -1586,7 +1598,7 @@ void AdvanceSearchDlg::query()
     QString fegpSql = generateSql(_fegpCdtMap,fegpTableName);
     _fegpInfoModel->setQuery(fegpSql);
     setModelHeaderData("FegPInfo");
-    qDebug()<<fegpSql;
+//    qDebug()<<fegpSql;
 
     for(int i = 0;i<_fegpInfoModel->rowCount();++i)
     {
@@ -1599,8 +1611,8 @@ void AdvanceSearchDlg::query()
     QString abmSql = generateSql(_abmCdtMap,abmTableName);
     _abmInfoModel->setQuery(abmSql);
     setModelHeaderData("AbmInfo");
-    qDebug()<<abmSql;
-    
+//    qDebug()<<abmSql;
+
     emit showqueryThumbnails(ferrographypicpathList);
 }
 
@@ -2246,7 +2258,7 @@ void AdvanceSearchDlg::on_addtoBtn_clicked()
             }
         }
 
-        
+
         QString mprFields = "";
         QString mprValues = "";
         if(!_mprCdtMap.isEmpty())
@@ -2360,7 +2372,6 @@ void AdvanceSearchDlg::on_addtoBtn_clicked()
         query.exec("select count(*) from propertyinfo");
         if(query.next())
             count = query.value(0).toString();
-        qDebug()<<count;
         QString propertySql = "insert into propertyinfo values(";
         propertySql.append(count);
         propertySql.append(",'");
@@ -2543,108 +2554,114 @@ void AdvanceSearchDlg::on_movepartEndDataChkBox_clicked()
     }
 }
 
-
 void AdvanceSearchDlg::setpropertyName(QString propertyname)
 {
     this->propertyName = propertyname;
 }
 
 
-void AdvanceSearchDlg::on_exportBtn_clicked()
+void AdvanceSearchDlg::setExpPath(QString sourcePicPath, QString resultPicPath, QString packgePath)
 {
-    QFileDialog *packgeFileDlg = new QFileDialog(this,
-                                                 tr("选择保存路径"),
-                                                 tr(""),
-                                                 tr(""));
-    packgeFileDlg->setFileMode(QFileDialog::DirectoryOnly);
-    QString packgepath;
-    if(packgeFileDlg->exec())
-    {
-        QStringList packgepaths = packgeFileDlg->selectedFiles();
-        packgepath = packgepaths.at(0);
-    }
-    else
-        return;
-    QStringList imgFileNames;
-    int count = _fegpInfoModel->rowCount();
-    for(int i=0;i<count;++i)
-    {
-        QSqlRecord record = _fegpInfoModel->record(i);
-        QStringList templist = record.value(fegp_ferrographypicpath).toString().split("/");
-        imgFileNames.append(templist.at(templist.count()-1));
-    }
-
-    QString sqlfilepath = packgepath + "/backup.sql";
-    QString sourceimgtopath = packgepath + "/source/";
-    QString resultimgtopath = packgepath + "/result/";
-    QString sourceimgfrompath = Global::PathImage;
-    QString resultimgfrompath = Global::PathResult;
-    QString filename = QFileDialog::getSaveFileName(this,
-                                                    tr("保存导出数据"),
-                                                    sqlfilepath,
-                                                    tr("SqlFile(*.sql)"));
-    if(filename.isEmpty())
-        return;
-    if(this->exportDB(_eqmInfoModel,"equipmentinfo",filename) &&
-            this->copyFiles(sourceimgfrompath,sourceimgtopath,imgFileNames) &&
-            this->copyFiles(resultimgfrompath,resultimgtopath,imgFileNames))
-        QMessageBox::warning(this,
-                             tr("提示"),
-                             tr("数据导出成功"),
-                             QMessageBox::Close);
-    else
-        QMessageBox::warning(this,
-                             tr("提示"),
-                             tr("数据导出失败"),
-                             QMessageBox::Close);
+    this->_expSourcePicPath = sourcePicPath;
+    this->_expResultPicPath = resultPicPath;
+    this->_expPackgePath = packgePath;
 }
 
+void AdvanceSearchDlg::setImpPath(QString packgePath)
+{
+    this->_impPackgePath = packgePath;
+}
 
+void AdvanceSearchDlg::on_exportBtn_clicked()
+{
+    ExpDlg *expdlg = new ExpDlg(this,Global::PathImage,Global::PathResult);
+    if(expdlg->exec() == QDialog::Accepted)
+    {
+        QStringList imgFileNames;
+        int count = _fegpInfoModel->rowCount();
+        for(int i=0;i<count;++i)
+        {
+            QSqlRecord record = _fegpInfoModel->record(i);
+            QStringList templist = record.value(fegp_ferrographypicpath).toString().split("/");
+            imgFileNames.append(templist.at(templist.count()-1));
+        }
+        QString packgepath = this->_expPackgePath;
+
+
+
+        QString sqlfilepath = packgepath + "/打包文件/databackup.sql";
+        QString sourceimgtopath = packgepath + "/打包文件/原始图像文件";
+        QString resultimgtopath = packgepath + "/打包文件/标记结果文件";
+        QString sourceimgfrompath = Global::PathImage;
+        QString resultimgfrompath = Global::PathResult;
+
+        QStringList tablenameList;
+        tablenameList.append("equipmentinfo");
+        tablenameList.append("movepartinfo");
+        tablenameList.append("movepartrepairinfo");
+        tablenameList.append(" oilsampleinfo");
+        tablenameList.append("oilanalyzeinfo");
+        tablenameList.append("ferrographyinfo");
+        tablenameList.append("ferrographypicinfo");
+        tablenameList.append("abrasivemarkinfo");
+
+        if(this->exportDB(tablenameList,sqlfilepath) &&
+                this->copyFiles(sourceimgfrompath,sourceimgtopath,imgFileNames) &&
+                this->copyFiles(resultimgfrompath,resultimgtopath,imgFileNames))
+            QMessageBox::warning(this,
+                                 tr("提示"),
+                                 tr("数据导出成功"),
+                                 QMessageBox::Close);
+        else
+            QMessageBox::warning(this,
+                                 tr("提示"),
+                                 tr("数据导出失败"),
+                                 QMessageBox::Close);
+    }
+}
 
 void AdvanceSearchDlg::on_importBtn_clicked()
 {
 
-    QFileDialog *packgeFileDlg = new QFileDialog(this,
-                                                 tr("选择数据导入路径"),
-                                                 tr(""),
-                                                 tr(""));
-    packgeFileDlg->setFileMode(QFileDialog::DirectoryOnly);
-
-    QString packgefilepath;
-    if(packgeFileDlg->exec())
+    ImpDlg *impdlg = new ImpDlg(this);
+    if(impdlg->exec() == QDialog::Accepted)
     {
-        QStringList packgefilepaths = packgeFileDlg->selectedFiles();
-        packgefilepath = packgefilepaths.at(0);
+        QDir dir(this->_impPackgePath);
+        QFileInfoList infoList = dir.entryInfoList();
+        QStringList fileNameList;
+        foreach(QFileInfo fileInfo,infoList)
+        {
+            if(fileInfo.fileName() == "." || fileInfo.fileName() == "..")
+                continue;
+            fileNameList.append(fileInfo.fileName());
+        }
+        // check packge file
+        if(!fileNameList.contains("原始图像文件") || !fileNameList.contains("标记结果文件") || !fileNameList.contains("databackup.sql"))
+            QMessageBox::warning(this,tr("提示"),tr("打包文件受损"),QMessageBox::Close);
+        else
+        {
+            QString recoverImagePath = Global::PathImage;
+            QString recoverResultPath = Global::PathResult;
+
+#ifdef Q_OS_WIN
+            QString packgeImagePath = _impPackgePath + "\\原始图像文件";
+            QString packgeResultPath = _impPackgePath + "\\标记结果文件";
+            QString packgeSqlPath = _impPackgePath + "\\databackup.sql";
+#endif
+
+#ifdef Q_OS_LINUX
+            QString packgeImagePath = _impPackgePath + "/原始图像文件";
+            QString packgeResultPath = _impPackgePath + "/标记结果文件";
+            QString packgeSqlPath = _impPackgePath + "/databackup.sql";
+#endif
+            if(this->copyFiles(packgeImagePath,recoverImagePath) &&
+                    this->copyFiles(packgeResultPath,recoverResultPath) &&
+                    this->importDB(packgeSqlPath))
+                QMessageBox::warning(this,tr("提示"),tr("数据恢复成功"),QMessageBox::Close);
+            else
+                QMessageBox::warning(this,tr("提示"),tr("数据恢复失败"),QMessageBox::Close);
+        }
     }
-    else
-        return;
-
-    QString sqlfilepath = packgefilepath + "/";
-    QString sourceimgfrompath = packgefilepath + "/source/";
-    QString sourceimgtopath   = Global::PathImage;
-    QString resultimgfrompath = packgefilepath + "/result/";
-    QString resultimgtopath   = Global::PathResult;
-
-    QString filename = QFileDialog::getOpenFileName(this,
-                                                    tr("导入数据"),
-                                                    sqlfilepath,
-                                                    tr("SqlFile(*.sql)"));
-    if(filename.isEmpty())
-        return;
-
-
-    if(this->importDB(filename) &&
-            this->copyFiles(sourceimgfrompath,sourceimgtopath)&&
-            this->copyFiles(resultimgfrompath,resultimgtopath))
-        QMessageBox::warning(this,
-                             tr("提示"),
-                             tr("数据导入成功"),
-                             QMessageBox::Close);
-    else
-        QMessageBox::warning(this,
-                             tr("提示"),
-                             tr("数据导入失败"),
-                             QMessageBox::Close);
 }
 
 void AdvanceSearchDlg::on_movepartRepairIdChkBox_clicked()
@@ -5262,7 +5279,7 @@ void AdvanceSearchDlg::deletedate()
     {
         int tabidx = ui->queryResultTabWidget->currentIndex();
         QSqlQuery query;
-       
+
         switch(tabidx)
         {
         case 0:
@@ -5284,7 +5301,7 @@ void AdvanceSearchDlg::deletedate()
                 foreach (QModelIndex index, selected) {
                     QString eqmid = _eqmInfoModel->record(index.row()).value("planeid").toString();
                     eqmidList.append(eqmid);
-                    
+
                     QString sql = "select movepartid from movepartinfo where planeid = '";
                     sql.append(eqmid);
                     sql.append("'");
@@ -5293,7 +5310,7 @@ void AdvanceSearchDlg::deletedate()
                     {
                         mpidList.append(query.value(0).toString());
                     }
-                    
+
                     sql = "select oilsampleid from oilsampleinfo where planeid = '";
                     sql.append(eqmid);
                     sql.append("'");
@@ -5302,7 +5319,7 @@ void AdvanceSearchDlg::deletedate()
                     {
                         oisidList.append(query.value(0).toString());
                     }
-                    
+
                     foreach (QString mpid, mpidList) {
                         sql = "select movepartrepairid from movepartrepairinfo where movepartid ='";
                         sql.append(mpid);
@@ -5313,9 +5330,9 @@ void AdvanceSearchDlg::deletedate()
                             mpridList.append(query.value(0).toString());
                         }
                     }
-                    
+
                     oiaidList = oisidList;
-                    
+
                     foreach (QString oisid, oisidList) {
                         sql = "select ferrographysheetid from ferrographyinfo where oilsampleid = '";
                         sql.append(oisid);
@@ -5326,7 +5343,7 @@ void AdvanceSearchDlg::deletedate()
                             fegidList.append(query.value(0).toString());
                         }
                     }
-                    
+
                     foreach (QString fegid, fegidList) {
                         sql = "select ferrographypicid from ferrographypicinfo where ferrographysheetid = '";
                         sql.append(fegid);
@@ -5337,7 +5354,7 @@ void AdvanceSearchDlg::deletedate()
                             fegpidList.append(query.value(0).toString());
                         }
                     }
-                    
+
                     foreach (QString fegpid, fegpidList) {
                         sql.append("select  abrasiveid from abrasivemarkinfo where ferrographypicid = '");
                         sql.append(fegpid);
@@ -5362,7 +5379,7 @@ void AdvanceSearchDlg::deletedate()
                     QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
             }
     //        QMessageBox::warning(this,tr("提示"),tr("eqm"),QMessageBox::Close);
-        
+
             break;
         }
         case 1:
@@ -5378,7 +5395,7 @@ void AdvanceSearchDlg::deletedate()
                 foreach (QModelIndex index, selected) {
                     QString mpid = _mpInfoModel->record(index.row()).value("movepartid").toString();
                     mpidList.append(mpid);
-                    
+
                     QString sql = "select movepartrepairid from movepartrepairinfo where movepartid = '";
                     sql.append(mpid);
                     sql.append("'");
@@ -5395,7 +5412,7 @@ void AdvanceSearchDlg::deletedate()
                     QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
             }
     //        QMessageBox::warning(this,tr("提示"),tr("mp"),QMessageBox::Close);
-        
+
             break;
         }
         case 2:
@@ -5456,7 +5473,7 @@ void AdvanceSearchDlg::deletedate()
                 foreach (QModelIndex index, selected) {
                     QString oisid = _oisInfoModel->record(index.row()).value("oilsampleid").toString();
                     oisidList.append(oisid);
-                    
+
                     QString sql;
                     sql = "select ferrographysheetid from ferrographyinfo where oilsampleid = '";
                     sql.append(oisid);
@@ -5466,8 +5483,8 @@ void AdvanceSearchDlg::deletedate()
                     {
                         fegidList.append(query.value(0).toString());
                     }
-                    
-                    
+
+
                     foreach (QString fegid, fegidList) {
                         sql = "select ferrographypicid from ferrographypicinfo where ferrographysheetid = '";
                         sql.append(fegid);
@@ -5478,7 +5495,7 @@ void AdvanceSearchDlg::deletedate()
                             fegpidList.append(query.value(0).toString());
                         }
                     }
-                    
+
                     foreach (QString fegpid, fegpidList) {
                         sql.append("select  abrasiveid from abrasivemarkinfo where ferrographypicid = '");
                         sql.append(fegpid);
@@ -5516,7 +5533,7 @@ void AdvanceSearchDlg::deletedate()
                 foreach (QModelIndex index, selected) {
                     QString fegid = _fegInfoModel->record(index.row()).value("ferrographysheetid").toString();
                     fegidList.append(fegid);
-                    
+
                     QString sql;
                     sql = "select ferrographypicid from ferrographypicinfo where ferrographysheetid = '";
                     sql.append(fegid);
@@ -5526,8 +5543,8 @@ void AdvanceSearchDlg::deletedate()
                     {
                         fegpidList.append(query.value(0).toString());
                     }
-                    
-    
+
+
                     foreach (QString fegpid, fegpidList) {
                         sql.append("select  abrasiveid from abrasivemarkinfo where ferrographypicid = '");
                         sql.append(fegpid);
@@ -5562,7 +5579,7 @@ void AdvanceSearchDlg::deletedate()
                 foreach (QModelIndex index, selected) {
                     QString fegpid = _fegpInfoModel->record(index.row()).value("ferrographypicid").toString();
                     fegpidList.append(fegpid);
-                    
+
                     QString sql;
                     sql.append("select  abrasiveid from abrasivemarkinfo where ferrographypicid = '");
                     sql.append(fegpid);
@@ -5572,7 +5589,7 @@ void AdvanceSearchDlg::deletedate()
                     {
                         abmidList.append(query.value(0).toString());
                     }
-                    
+
                 }
                 if(deletefromtable(fegpidList,"ferrographypicinfo")&&
                         deletefromtable(abmidList,"abrasivemarkinfo"))
@@ -5702,3 +5719,5 @@ bool AdvanceSearchDlg::deletefromtable(QStringList idList, QString tablename)
         return true;
     }
 }
+
+

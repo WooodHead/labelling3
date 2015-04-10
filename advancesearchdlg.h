@@ -20,6 +20,8 @@
 
 #include "propertynamedlg.h"
 #include "Global.h"
+#include "expdlg.h"
+#include "impdlg.h"
 
 namespace Ui {
 class AdvanceSearchDlg;
@@ -28,122 +30,122 @@ class AdvanceSearchDlg;
 class AdvanceSearchDlg : public QDialog
 {
     Q_OBJECT
-    
+
 public:
      AdvanceSearchDlg(QWidget *parent = 0,bool flag = false);
     ~AdvanceSearchDlg();
-    
+
 private slots:
      void setpropertyName(QString propertyname);
-     
+
      void on_queryBtn_clicked();
 
      void on_PlaneIdChkBox_clicked();
-     
+
      void on_planeidCbBox_currentIndexChanged(int index);
-     
+
      void on_planeTypeChkBox_clicked();
-     
+
      void on_planeTypeCbBox_currentIndexChanged(int index);
-     
-     void on_departIdChkBox_clicked();  
-     
+
+     void on_departIdChkBox_clicked();
+
      void on_departIdCbBox_currentIndexChanged(int index);
-     
+
      void on_runHourChkBox_clicked();
-     
+
      void on_runHourCbBox_currentIndexChanged(int index);
-     
+
      void on_runStageChkBox_clicked();
-     
+
      void on_runStageCbBox_currentIndexChanged(int index);
-     
+
      void on_repairTimeChkBox_clicked();
-     
+
      void on_repairTimeCbBox_currentIndexChanged(int index);
-     
+
      void on_addtoBtn_clicked();
-     
+
      void on_movepartIdChkBox_clicked();
-     
+
      void on_movepartIdCbBox_currentIndexChanged(int index);
-     
+
      void on_movepartNameChkBox_clicked();
-     
+
      void on_movepartNameCbBox_currentIndexChanged(int index);
-     
+
      void on_movepartTypeChkBox_clicked();
-     
+
      void on_movepartTypeCbBox_currentIndexChanged(int index);
-     
+
      void on_partrunHourChkBox_clicked();
-     
+
      void on_partrunHourCbBox_currentIndexChanged(int index);
-     
+
      void on_movepartStartDateEdit_dateChanged(const QDate &date);
-     
+
      void on_movepartStartDataChkBox_clicked();
-     
+
      void on_movepartEndDateEdit_dateChanged(const QDate &date);
-     
+
      void on_movepartEndDataChkBox_clicked();
-     
+
      void on_exportBtn_clicked();
-     
+
      void on_importBtn_clicked();
-     
+
      void on_movepartRepairIdChkBox_clicked();
-     
+
      void on_movepartRepairIdCbBox_currentIndexChanged(int index);
-     
+
      void on_repairDepartChkBox_clicked();
-     
+
      void on_repairDepartCbBox_currentIndexChanged(int index);
-     
+
      void on_repairrepairTimeChkBox_clicked();
-     
+
      void on_repairrepairTimeCbBox_currentIndexChanged(int index);
-     
+
      void on_repairDateDateEdit_dateChanged(const QDate &date);
-     
+
      void on_repairDateChkBox_clicked();
-     
+
      void on_samplestuffChkBox_clicked();
-     
+
      void on_samplestuffLineEdit_textChanged(const QString &arg1);
-     
+
      void on_samplevolumeChkBox_clicked();
-     
+
      void on_samplevolumeLineEdit_textChanged(const QString &arg1);
-     
+
      void on_sampledateChkBox_clicked();
-     
+
      void on_sampledateDateEdit_dateChanged(const QDate &date);
-     
+
      void on_sampletimeChkBox_clicked();
-     
+
      void on_sampletimeTimeEdit_timeChanged(const QTime &date);
-     
+
      void on_senddateChkBox_clicked();
-     
+
      void on_sendtimeTimeEdit_timeChanged(const QTime &date);
-     
+
      void on_oiladditionChkBox_clicked();
-     
+
      void on_oiladditionLineEdit_textChanged(const QString &arg1);
-     
+
      void on_oilworktimeChkBox_clicked();
-     
+
      void on_oilworktimeLineEdit_textChanged(const QString &arg1);
-     
+
      void on_monitorpartidChkBox_clicked();
-     
+
      void on_monitorpartnameChkBox_clicked();
 
      void on_oilsampleidChkBox_clicked();
 
      void on_oilsampleidCbBox_currentIndexChanged(int index);
-  
+
      void on_samplesituationChkBox_clicked();
 
      void on_sampleidChkBox_clicked();
@@ -161,7 +163,7 @@ private slots:
      void on_senddateDateEdit_dateChanged(const QDate &date);
 
      void on_sendtimeChkBox_clicked();
-     
+
      void on_sampleidCbBox_currentIndexChanged(int index);
 
      void on_samplesituationCbBox_currentIndexChanged(int index);
@@ -398,7 +400,7 @@ private slots:
 
      void on_feg_ferrographymakeoilconsumptionChkBox_clicked();
 
-     void on_feg_ferrographymakeoilconsumptionLineEdit_textChanged(const QString &arg1);     
+     void on_feg_ferrographymakeoilconsumptionLineEdit_textChanged(const QString &arg1);
 
 private:
      QString generateSql(QMap<QString,QString> conditionMap,QString tableName);
@@ -414,44 +416,49 @@ private:
      bool copyFiles(QString fromDir,QString toDir,bool convertIfExits = false);
      bool copyFiles(QString fromDir,QString toDir,QStringList filenames,bool convertIfExist = false);
      bool importDB(const QString &path);
-     bool exportDB(const QSqlQueryModel *model,const QString &tablename,const QString &path);
+     bool exportDB(const QStringList &tablenameList,const QString &path);
      bool importDB(const QSqlQueryModel &model);
-     
+
      bool deletefromtable(QStringList idList,QString tablename);
 
 private slots:
      void useproperty();
      void deleteproperty();
      void renameprtperty();
-     
+
      void deletedate();
-     
-     
+
      void on_modifyButton_clicked();
+
+     void setExpPath(QString sourcePicPath,QString resultPicPath,QString packgePath);
+     void setImpPath(QString packgePath);
 
 signals:
      void showqueryThumbnails(QStringList list);
-     
+
 private:
     Ui::AdvanceSearchDlg *ui;
-    
+
     QSqlDatabase db;
     ProPertyNameDlg *ppnDlg;
     QString propertyName;
-    
-    //删除标志
+
+    QString _expSourcePicPath;
+    QString _expResultPicPath;
+    QString _expPackgePath;
+
+    QString _impPackgePath;
+
     bool deleteflag;
-     
-    // 显示缩略图
+
     QStringList ferrographypicpathList;
-    
-    // 连接查询条件
+
     QStringList ferrographysheetidList;
     QStringList ferrographypicidList;
     QStringList planeidList;
     QStringList movepartidList;
     QStringList oilsampleidList;
-    
+
     QMap<QString,QString> tableNames;
     QSqlQueryModel *_eqmInfoModel;
     QSqlQueryModel *_abmInfoModel;
@@ -466,7 +473,7 @@ private:
     QAction *usepropertyAction;
     QAction *deletepropertyAction;
     QAction *renameprtpertyAction;
-    
+
     QAction *deletedataAction;
 
     QMap<QString,QString> _eqmCdtMap;          // zhuang bei xin xi biao condition Map
@@ -477,7 +484,7 @@ private:
     QMap<QString,QString> _mprCdtMap;          // dong bu jian wei xiu xin xi biao condition Map
     QMap<QString,QString> _oiaCdtMap;          // you yang fen xi xin xi biao condition Map
     QMap<QString,QString> _oisCdtMap;          // you yang xin xi biao condition Map
-    
+
     enum{
         eqm_planeid,
         eqm_planetype,
@@ -486,7 +493,7 @@ private:
         eqm_runstage,
         eqm_repairtime
     };
-    
+
     enum{
         mp_movepartid,
         mp_moveparttype,
@@ -498,7 +505,7 @@ private:
         mp_startdat,
         mp_enddate
     };
-    
+
     enum{
         mpr_movepartrepairid,
         mpr_movepartid,
@@ -510,7 +517,7 @@ private:
         mpr_repaircontent,
         mpr_repaircondition
     };
-    
+
     enum{
         feg_ferrographysheetid,
         feg_ferrographyreportid,
@@ -520,7 +527,7 @@ private:
         feg_ferrographymakemethod,
         feg_ferrographymakestuff
     };
-    
+
     enum{
         fegp_ferrographypicid,
         fegp_ferrographysheetid,
@@ -535,7 +542,7 @@ private:
         fegp_imagerecognitioninfoanalysis,
         fegp_imagesymbol
     };
-    
+
     enum{
         oia_oilsampleid,
         oia_analyzedepartname,
@@ -565,7 +572,7 @@ private:
         oia_physicochemicalequipment,
         oia_physicochemicalreportid
     };
-    
+
     enum{
         ois_oilsampleid,
         ois_sampledepartid,
@@ -589,7 +596,7 @@ private:
         ois_senddate,
         ois_sendtime
     };
-    
+
     enum{
         abm_abrasiveid,
         abm_ferrographypicid,

@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     // Set Codec
-    QTextCodec *codec = QTextCodec::codecForName("System");
+    QTextCodec *codec = QTextCodec::codecForName("UTF-8");
     QTextCodec::setCodecForLocale(codec);
     QTextCodec::setCodecForCStrings(codec);
     QTextCodec::setCodecForTr(codec);
@@ -26,3 +26,4 @@ int main(int argc, char *argv[])
 
     return a.exec();
 }
+
