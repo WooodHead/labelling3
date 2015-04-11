@@ -27,9 +27,6 @@ signals:
     void setpropertyName(QString propertyName);
     
 private slots:
-//    void on_buttonBox_accepted();
-    
-//    void on_buttonBox_clicked(QAbstractButton *button);
     
     void on_OkButton_clicked();
     

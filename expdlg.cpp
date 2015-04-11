@@ -36,12 +36,12 @@ void ExpDlg::on_OKPushButton_clicked()
 {
     if(this->sourcepicPath == "")
     {
-        QMessageBox::warning(this,tr("提示"),tr("原始图片路径不能为空"),QMessageBox::Close);
+        QMessageBox::warning(this,tr("提示"),tr("原始图片路径不能为空！"),QMessageBox::Close);
         ui->picLineEdit->setFocus();
     }
     else if(this->resultpicPath == "")
     {
-        QMessageBox::warning(this,tr("提示"),tr("磨粒标注结果不能为空"),QMessageBox::Close);
+        QMessageBox::warning(this,tr("提示"),tr("磨粒标注结果不能为空！"),QMessageBox::Close);
         ui->resultLineEdit->setFocus();
     }
     else if(this->packgePath == "")
@@ -68,10 +68,7 @@ void ExpDlg::on_picPushButton_clicked()
         sourcePath = sourcePaths.at(0);
         sourcepicPath = sourcePath;
         ui->picLineEdit->setText(sourcePath);
-        //qDebug()<<sourcePath;
     }
-    else
-        return;
 }
 
 void ExpDlg::on_resultPushButton_clicked()
@@ -86,10 +83,7 @@ void ExpDlg::on_resultPushButton_clicked()
         resultPath = resultPaths.at(0);
         resultpicPath = resultPath;
         ui->resultLineEdit->setText(resultPath);
-        //qDebug()<<resultPath;
     }
-    else
-        return;
 }
 
 void ExpDlg::on_packgePushButton_clicked()
@@ -104,10 +98,7 @@ void ExpDlg::on_packgePushButton_clicked()
         targetPath = targetPaths.at(0);
         packgePath = targetPath;
         ui->packgeLineEdit->setText(targetPath);
-        //qDebug()<<targetPath;
     }
-    else
-        return;
 }
 
 

@@ -653,6 +653,7 @@ void ImageCompletionUI::setupBrush()
 
 void ImageCompletionUI::open()
 {
+    Global::NewName = QString();
     _centralStackedWidget->setCurrentIndex(0);
 
     close();
@@ -890,28 +891,19 @@ void	ImageCompletionUI::save()
 
     bool ret1, ret2;
 
-    if(Global::PathResult.isEmpty())
+    if(Global::PathResult.isEmpty() || !QDir(Global::PathResult).exists())
     {
         QMessageBox::warning(this,
                              tr("保存"),
                              QString("请指定标注图像保存路径:%1").arg(QFileInfo(QApplication::instance()->applicationFilePath()).baseName() + ".ini"));
         return;
     }
-    if(Global::PathMask.isEmpty())
+    if(Global::PathMask.isEmpty() || !QDir(Global::PathMask).exists())
     {
         QMessageBox::warning(this,
                              tr("保存"),
                              QString("请指定掩码图像保存路径:%1").arg(QFileInfo(QApplication::instance()->applicationFilePath()).baseName() + ".ini"));
         return;
-    }
-
-    if(!QDir(Global::PathResult).exists())
-    {
-        QDir().mkdir(Global::PathResult);
-    }
-    if(!QDir(Global::PathMask).exists())
-    {
-        QDir().mkdir(Global::PathMask);
     }
 
     // Save
@@ -945,7 +937,7 @@ void	ImageCompletionUI::save()
 
 void ImageCompletionUI::saveAs()
 {
-    if(_strCurrentImagePath.isEmpty()) return;
+    if(Global::NewName.isEmpty()) return;
 
     QString pathResult, pathMask;
     bool ret1, ret2;
@@ -1709,8 +1701,8 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
         if(fileInfo.fileName() == "." || fileInfo.fileName() == "..")
             continue;
         // 数据库文件处理
-        if(fileInfo.fileName().split(".")[1] == "sql")
-            qDebug()<<fileInfo.fileName();
+        if(fileInfo.fileName().split(".")[1] == "sql") // why is this necessary?
+            qDebug() << fileInfo.fileName();
 
         // 当为目录时，递归的进行copy
         if(fileInfo.isDir())
@@ -1728,7 +1720,7 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
             }
             // 进行文件copy
             if(!QFile::copy(fileInfo.filePath(), targetDir.filePath(fileInfo.fileName()))){
-                return false;
+                //return false; // ???
             }
         }
     }
@@ -2171,6 +2163,7 @@ void ImageCompletionUI::showThumbnailsInCentral(QStringList list)
                 label->setObjectName(list[index]);
                 label->setFixedSize(150, 75);
                 label->setScaledContents(true);
+
                 QPixmap image;
                 if(image.load(list[index]))
                 {

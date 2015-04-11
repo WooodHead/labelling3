@@ -95,7 +95,7 @@ void UserManagement::on__deleteUser_clicked()
 {
     if(ui->_userTableView->selectionModel()->selection().count()<=0)
     {
-        QMessageBox::warning(this, tr(""), tr("当前未选中任何记录!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("提示"), tr("当前未选中任何记录!"), QMessageBox::Close);
         return;
     }
     else
@@ -104,7 +104,7 @@ void UserManagement::on__deleteUser_clicked()
         int curRow = index.row();
 
         QMessageBox::StandardButton reply;
-        reply = QMessageBox::question(this, tr("QMessageBox::question()"), tr("确认要删除当前行?"), QMessageBox::Yes | QMessageBox::Cancel);
+        reply = QMessageBox::question(this, tr("提示"), tr("确认要删除当前行?"), QMessageBox::Yes | QMessageBox::Cancel);
         if(reply == QMessageBox::Yes)
         {
             _model->removeRow(curRow);
@@ -121,7 +121,6 @@ void UserManagement::on__deleteUser_clicked()
 
 void UserManagement::on__addUser_clicked()
 {
-    //added by zhyn
     this->_userAddDialog = new UserAdd(this);
     connect(this,SIGNAL(closeAddDialog()),this->_userAddDialog,SLOT(close()));
     this->_userAddDialog->show();
@@ -209,7 +208,7 @@ void UserManagement::on__editUser_clicked()
 {
     if(ui->_userTableView->selectionModel()->selection().count()<=0)
     {
-        QMessageBox::warning(this, tr(""), tr("当前未选中任何记录!"), QMessageBox::Close);
+        QMessageBox::warning(this, tr("提示"), tr("当前未选中任何记录!"), QMessageBox::Close);
         return;
     }
     else

@@ -3,6 +3,8 @@
 #include <QStyleFactory>
 #include <QDialog>
 #include <QTextCodec>
+#include <QDebug>
+#include <QImageReader>
 
 #include "imagecompletionui.h"
 #include "Login.h"
