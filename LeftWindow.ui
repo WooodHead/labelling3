@@ -47,6 +47,12 @@
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="QScrollArea" name="scrollArea">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="lineWidth">
+          <number>0</number>
+         </property>
          <property name="widgetResizable">
           <bool>true</bool>
          </property>
@@ -55,8 +61,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>239</width>
-            <height>410</height>
+            <width>241</width>
+            <height>412</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_2">
