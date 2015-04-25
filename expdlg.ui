@@ -24,7 +24,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="picLineEdit"/>
+      <widget class="QLineEdit" name="picLineEdit">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="picPushButton">
@@ -51,7 +55,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="resultLineEdit"/>
+      <widget class="QLineEdit" name="resultLineEdit">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="resultPushButton">
