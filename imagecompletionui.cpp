@@ -1608,9 +1608,11 @@ bool ImageCompletionUI::exportDB(const QString &path)
                 switch(field.type())
                 {
                 case QVariant::String:
+                {
                     prefix+=fieldName;
                     suffix+=QString("'%1'").arg(query.value(i).toString());
                     break;
+                }
                 case QVariant::ByteArray:
                 {
                     prefix+=fieldName;
@@ -1622,11 +1624,13 @@ bool ImageCompletionUI::exportDB(const QString &path)
                     {
                         suffix+=QString("E'%1'").arg(data.toHex().data()); // blob数据按16进制格式导出
                     }
-                }
                     break;
+                }
                 default:
+                {
                     prefix+=fieldName;
                     suffix+=query.value(i).toString();
+                }
                 }
 
                 if(record.count()==1)
@@ -1650,8 +1654,12 @@ bool ImageCompletionUI::exportDB(const QString &path)
     }
 
     QFile file(path);
-    qDebug() << "path: " << path;
-    file.open(QIODevice::WriteOnly|QIODevice::Truncate);
+    //qDebug() << "path: " << path;
+    if(!file.open(QIODevice::WriteOnly|QIODevice::Truncate))
+    {
+        QMessageBox::warning(this,tr("提示"),tr("数据保存文件打开失败"),QMessageBox::Ok);
+        return false;
+    }
 
     // 将sql语句写入文件
     QTextStream out(&file);
@@ -1770,15 +1778,17 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
             continue;
         // 数据库文件处理
         if(fileInfo.fileName().split(".")[1] == "sql") // why is this necessary?
-            qDebug() << fileInfo.fileName();
+//            qDebug() << fileInfo.fileName();
 
         // 当为目录时，递归的进行copy
         if(fileInfo.isDir())
         {
+            /*
             if(!copyFiles(fileInfo.filePath(),
                           targetDir.filePath(fileInfo.fileName()),
                           convertIfExits))
                 return false;
+                */
         }
         else
         {
