@@ -43,6 +43,7 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
     showData();
     showImagesInTree();
     loadAllImagesAndShowInLeftWindow();
+    changeMeasureButtonState(true);
 }
 
 ImageCompletionUI::~ImageCompletionUI()
@@ -419,7 +420,6 @@ void ImageCompletionUI::setupWidgets()
     _regionCompetitionDialog.radioNotColor->setIcon(Global::Awesome->icon(circle));
     _regionCompetitionDialog.radioMesuarement->setIcon(QIcon(":/new/prefix1/icons/ruler.png"));
     _regionCompetitionDialog._line->setHidden(true);
-    _regionCompetitionDialog._labelRulerText->setHidden(true);
 
     _rightOperationWidget->setWidget(_dockWidgetContents);
     this->addDockWidget(static_cast<Qt::DockWidgetArea>(2), _rightOperationWidget);
@@ -514,8 +514,9 @@ void ImageCompletionUI::setupWidgets()
     _bottomWindow.dBTableWidget_8->setSelectionMode ( QAbstractItemView::SingleSelection);
     _bottomWindow.dBTableWidget_9->setSelectionMode ( QAbstractItemView::SingleSelection);
 
+    //    _bottomWindow.dBTableWidget_1->setContextMenuPolicy(Qt::CustomContextMenu);
+    //    _bottomWindowWidget->setContextMenuPolicy(Qt::CustomContextMenu);
     _bottomWindowWidget->setWidget(_bottomDockWindowContents);
-    _bottomWindowWidget->setContextMenuPolicy(Qt::CustomContextMenu);
     addDockWidget(Qt::BottomDockWidgetArea, _bottomWindowWidget);
 
     setCorner(Qt::BottomLeftCorner,Qt::LeftDockWidgetArea);
@@ -1077,6 +1078,22 @@ void ImageCompletionUI::updateLog()
     }
 }
 
+void ImageCompletionUI::updateStatusBar()
+{
+    char* log_str = getNewLogString();
+    if ( log_str )
+    {
+        (*_logInformationString) = log_str;
+
+        statusBar()->showMessage(*_logInformationString, 10000);
+    }
+
+    if(log_str)
+    {
+        DELETEPTR(log_str);
+    }
+}
+
 void ImageCompletionUI::uncheckMethods()
 {
     _regionCompetitionDialog.buttonGroup->setExclusive(false);
@@ -1299,8 +1316,7 @@ void ImageCompletionUI::scaling()
     _regionCompetitionDialog.labelSliderLeft->setText(tr("小"));
     _regionCompetitionDialog.labelSliderRight->setText(tr("大"));
 
-    _regionCompetitionDialog._line->setHidden(true);
-    _regionCompetitionDialog._labelRulerText->setHidden(true);
+    changeMeasureButtonState(true);
 }
 
 void ImageCompletionUI::brighting()
@@ -1312,8 +1328,7 @@ void ImageCompletionUI::brighting()
     _regionCompetitionDialog.labelSliderLeft->setText(tr("暗"));
     _regionCompetitionDialog.labelSliderRight->setText(tr("亮"));
 
-    _regionCompetitionDialog._line->setHidden(true);
-    _regionCompetitionDialog._labelRulerText->setHidden(true);
+    changeMeasureButtonState(true);
 }
 
 void ImageCompletionUI::notColor()
@@ -1323,26 +1338,12 @@ void ImageCompletionUI::notColor()
 
     _editImageViewer->imageNotColor( 0.0 );
 
-    _regionCompetitionDialog._line->setHidden(true);
-    _regionCompetitionDialog._labelRulerText->setHidden(true);
+    changeMeasureButtonState(true);
 }
 
 void ImageCompletionUI::measure()
 {
-    _regionCompetitionDialog.sliderBasicOp->setRange(0, 1000);
-    _regionCompetitionDialog.sliderBasicOp->setTickInterval(50);
-    _regionCompetitionDialog.sliderBasicOp->setTickPosition(QSlider::TicksRight);
-
-    _regionCompetitionDialog.labelSliderLeft->setText(tr("小"));
-    _regionCompetitionDialog.labelSliderRight->setText(tr("大"));
-
-    _regionCompetitionDialog._line->show();
-    _regionCompetitionDialog._labelRulerText->show();
-    _regionCompetitionDialog._labelRulerText->setScaledContents(true);
-    _regionCompetitionDialog._labelRulerText->setText(tr("50微米(50像素)"));
-
-    _regionCompetitionDialog.sliderBasicOp->setValue(50);
-
+    changeMeasureButtonState(false);
     _imageScale = 1.0;
 }
 
@@ -1365,11 +1366,7 @@ void ImageCompletionUI::actionSliderReleased()
         //	Do nothing (Fix it in the future)
 
     }
-    else if(_regionCompetitionDialog.radioMesuarement->isChecked())
-    {
-        _regionCompetitionDialog._labelRulerText->setText(QString::number(_regionCompetitionDialog.sliderBasicOp->value()) +"微米(50像素)");
-        _imageScale = _regionCompetitionDialog.sliderBasicOp->value() * 1.0 / 50;
-    }
+
 }
 
 void ImageCompletionUI::userManagement()
@@ -2008,6 +2005,39 @@ void ImageCompletionUI::loadAllImagesAndShowInLeftWindow()
     }
 }
 
+void ImageCompletionUI::wheelEvent(QWheelEvent *event)
+{
+    //    if(_centralTabWidget->underMouse() && _editImageViewer && !_editImageViewer->image().isNull())
+    //    {
+    //        int numDegrees = event->delta() / 8;
+    //        int numSteps = numDegrees / 15;
+
+    //        double factor = 10 + numSteps;
+    //        factor = factor >= 1 ? factor : 1;
+    //        factor = double(factor) / 10;
+
+    //        _editImageViewer->imageScaling(factor);
+
+    //        event->accept();
+    //    }
+}
+
+void ImageCompletionUI::changeMeasureButtonState(bool state)
+{
+    _regionCompetitionDialog.labelSliderLeft->setHidden(!state);
+    _regionCompetitionDialog.labelSliderRight->setHidden(!state);
+    _regionCompetitionDialog.sliderBasicOp->setHidden(!state);
+    _regionCompetitionDialog._line->setHidden(state);
+    _regionCompetitionDialog._label_pixel->setHidden(state);
+    _regionCompetitionDialog._label_micrometer->setHidden(state);
+    _regionCompetitionDialog._spinBox_measure->setHidden(state);
+
+    if(state)
+    {
+        _regionCompetitionDialog._spinBox_measure->setValue(50);
+    }
+}
+
 void ImageCompletionUI::on_dBTableWidget_7_cellDoubleClicked(int row, int column)
 {
     QString strFilePath;
@@ -2312,6 +2342,7 @@ void ImageCompletionUI::queryThumbnails(QStringList list)
 
 bool ImageCompletionUI::eventFilter(QObject *target, QEvent *event)
 {
+    QMouseEvent * mouseEvent = static_cast <QMouseEvent *> (event);
     if(event->type() == QEvent::MouseButtonDblClick)
     {
         QString strFilePath = target->objectName();
@@ -2354,6 +2385,7 @@ void ImageCompletionUI::drawEnclosingRectangle(QPixmap& pixmap, const QColor col
     painter.drawRect(0, 0, pixmap.width(), pixmap.height());
 }
 
-
-
-
+void ImageCompletionUI::on__spinBox_measure_valueChanged(int arg1)
+{
+    _imageScale = arg1 * 1.0 / 50;
+}

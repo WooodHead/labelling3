@@ -4,6 +4,7 @@
 #include <list>
 
 #include <opencv/cv.h>
+#include <opencv2/opencv.hpp>
 
 class QImage;
 using std::list;

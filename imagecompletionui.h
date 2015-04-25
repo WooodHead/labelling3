@@ -72,6 +72,7 @@ public:
     void setupBrush();
 
     void updateLog();
+    void updateStatusBar();
 
     void uncheckMethods();
     void uncheckStrikeOptions();
@@ -287,6 +288,8 @@ private: // methods
     void        loadMoliImage(QString moliId);
 
     void        loadAllImagesAndShowInLeftWindow();
+    void        wheelEvent(QWheelEvent *event);
+    void        changeMeasureButtonState(bool state);
 private slots:
     void        flushBottom();
     void        flushLeft(QString path, QString label);
@@ -312,6 +315,7 @@ private slots:
 
     void        queryThumbnails(QStringList list);
     void        OnDoubleClickTreeView(QModelIndex);
+    void on__spinBox_measure_valueChanged(int arg1);
 };
 
 #endif // IMAGECOMPLETIONUI_H

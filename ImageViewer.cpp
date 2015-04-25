@@ -550,7 +550,7 @@ void ImageViewer::mouseReleaseEvent(QMouseEvent *event)
             lastPos = QPoint(-1, -1);
             QApplication::restoreOverrideCursor();
             this->setDefaultCursor();
-            _mainWindow->updateLog();
+            _mainWindow->updateStatusBar();
         }
     }
 }
@@ -845,7 +845,7 @@ void ImageViewer::polygonLabelling()
 
     lastPos = QPoint(-1, -1);
     QApplication::restoreOverrideCursor();
-    _mainWindow->updateLog();
+    _mainWindow->updateStatusBar();
 }
 
 void ImageViewer::redo()
