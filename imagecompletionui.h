@@ -293,6 +293,7 @@ private: // methods
     void        changeMeasureButtonState(bool state);
     void        closeEvent(QCloseEvent *);
 private slots:
+    void        flushLeftTree();
     void        flushBottom();
     void        flushLeft(QString path, QString label);
     void        showContextMenu(QPoint);

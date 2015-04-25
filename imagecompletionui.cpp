@@ -422,6 +422,7 @@ void ImageCompletionUI::setupWidgets()
     _regionCompetitionDialog._line->setHidden(true);
 
     _rightOperationWidget->setWidget(_dockWidgetContents);
+    _rightOperationWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     this->addDockWidget(static_cast<Qt::DockWidgetArea>(2), _rightOperationWidget);
 
     _operationStackedWidget->setCurrentIndex(0);
@@ -468,7 +469,8 @@ void ImageCompletionUI::setupWidgets()
     _logWindowWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
     _logWindowWidget->setWidget(_logWidget);
-    _logWindowWidget->setMinimumHeight(0.27 * height);
+    _logWindowWidget->setMinimumHeight(0.1 * height);
+    _logWindowWidget->setMaximumHeight(0.3 * height);
     _logWindowWidget->setWindowIcon(Global::Awesome->icon(filetexto));
     addDockWidget(Qt::LeftDockWidgetArea, _logWindowWidget);
 
@@ -478,7 +480,7 @@ void ImageCompletionUI::setupWidgets()
     _bottomWindowWidget = new QDockWidget(tr("数据库信息"),this );
     _bottomWindowWidget->setObjectName(tr("_bottomWindowWidget"));
     _bottomWindowWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
-    _bottomWindowWidget->setMinimumHeight(0.35 * height);
+    _bottomWindowWidget->setMinimumHeight(0.1 * height);
     _bottomDockWindowContents = new QWidget( );
     _bottomDockWindowContents->setObjectName(tr("_bottomDockWindowContents"));
 
@@ -805,6 +807,10 @@ void ImageCompletionUI::OnDoubleClickTreeView(QModelIndex m)
         }
         showThumbnailsInCentral(list);
     }
+}
+void ImageCompletionUI::flushLeftTree()
+{
+    this->showImagesInTree();
 }
 
 void ImageCompletionUI::showImagesInTree()
@@ -1618,9 +1624,11 @@ bool ImageCompletionUI::exportDB(const QString &path)
                 switch(field.type())
                 {
                 case QVariant::String:
+                {
                     prefix+=fieldName;
                     suffix+=QString("'%1'").arg(query.value(i).toString());
                     break;
+                }
                 case QVariant::ByteArray:
                 {
                     prefix+=fieldName;
@@ -1632,11 +1640,13 @@ bool ImageCompletionUI::exportDB(const QString &path)
                     {
                         suffix+=QString("E'%1'").arg(data.toHex().data()); // blob数据按16进制格式导出
                     }
-                }
                     break;
+                }
                 default:
+                {
                     prefix+=fieldName;
                     suffix+=query.value(i).toString();
+                }
                 }
 
                 if(record.count()==1)
@@ -1660,8 +1670,12 @@ bool ImageCompletionUI::exportDB(const QString &path)
     }
 
     QFile file(path);
-    qDebug() << "path: " << path;
-    file.open(QIODevice::WriteOnly|QIODevice::Truncate);
+    //qDebug() << "path: " << path;
+    if(!file.open(QIODevice::WriteOnly|QIODevice::Truncate))
+    {
+        QMessageBox::warning(this,tr("提示"),tr("数据保存文件打开失败"),QMessageBox::Ok);
+        return false;
+    }
 
     // 将sql语句写入文件
     QTextStream out(&file);
@@ -1780,15 +1794,17 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
             continue;
         // 数据库文件处理
         if(fileInfo.fileName().split(".")[1] == "sql") // why is this necessary?
-            qDebug() << fileInfo.fileName();
+//            qDebug() << fileInfo.fileName();
 
         // 当为目录时，递归的进行copy
         if(fileInfo.isDir())
         {
+            /*
             if(!copyFiles(fileInfo.filePath(),
                           targetDir.filePath(fileInfo.fileName()),
                           convertIfExits))
                 return false;
+                */
         }
         else
         {

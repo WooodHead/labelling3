@@ -426,17 +426,21 @@ private slots:
      void deleteproperty();
      void renameprtperty();
 
-     void deletedate();
+     void deletedata();
 
-     void on_modifyButton_clicked();
+//     void on_modifyButton_clicked();
 
      void setExpPath(QString sourcePicPath,QString resultPicPath,QString packgePath);
      void setImpPath(QString packgePath);
 
      void on_deletepropertyButton_clicked();
 
+     void on_deleteDataButton_clicked();
+
 signals:
      void showqueryThumbnails(QStringList list);
+     void flushBottomData();
+     void flushLeftTree();
 
 private:
     Ui::AdvanceSearchDlg *ui;
