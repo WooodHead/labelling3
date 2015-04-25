@@ -41,8 +41,8 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
     setStrikeOptionsEnabled(false);
 
     showData();
-
     showImagesInTree();
+    loadAllImagesAndShowInLeftWindow();
 }
 
 ImageCompletionUI::~ImageCompletionUI()
@@ -65,9 +65,9 @@ void ImageCompletionUI::createMenus()
     _menuFile = menuBar()->addMenu( tr("&文件") );
 
     _menuFile->addAction( _openAction );
-    _menuFile->addSeparator();
-    _menuFile->addAction( _saveAction );
-    _menuFile->addAction( _saveAsAction );
+    //    _menuFile->addSeparator();
+    //    _menuFile->addAction( _saveAction );
+    //    _menuFile->addAction( _saveAsAction );
 
     _menuFile->addSeparator();
     _menuFile->addAction( _closeAction );
@@ -113,13 +113,13 @@ void	ImageCompletionUI::createActions()
     _openAction->setObjectName(tr("_openAction"));
     connect(_openAction, SIGNAL(triggered()), this, SLOT(open()));
 
-    _saveAction = new QAction( Global::Awesome->icon(floppyo), tr("&保存"), this );
-    _saveAction->setObjectName(tr("_saveAction"));
-    connect(_saveAction, SIGNAL(triggered()), this, SLOT(save()));
+    //    _saveAction = new QAction( Global::Awesome->icon(floppyo), tr("&保存"), this );
+    //    _saveAction->setObjectName(tr("_saveAction"));
+    //    connect(_saveAction, SIGNAL(triggered()), this, SLOT(save()));
 
-    _saveAsAction = new QAction(  Global::Awesome->icon(floppyo), tr("&另存为"), this );
-    _saveAsAction->setObjectName(tr("_saveAsAction"));
-    connect(_saveAsAction, SIGNAL(triggered()), this, SLOT( saveAs() ));
+    //    _saveAsAction = new QAction(  Global::Awesome->icon(floppyo), tr("&另存为"), this );
+    //    _saveAsAction->setObjectName(tr("_saveAsAction"));
+    //    connect(_saveAsAction, SIGNAL(triggered()), this, SLOT( saveAs() ));
 
     _closeAction = new QAction( Global::Awesome->icon(times), tr("关闭"), this );
     connect(_closeAction, SIGNAL(triggered()), this, SLOT(close()));
@@ -250,7 +250,7 @@ void	ImageCompletionUI::createToolBars()
 {
     _editToolBar = addToolBar( tr("文件") );
     _editToolBar->addAction( _openAction );
-    _editToolBar->addAction( _saveAction );
+    //    _editToolBar->addAction( _saveAction );
     _editToolBar->addAction( _closeAction );
 
     _editToolBar->addSeparator();
@@ -515,6 +515,7 @@ void ImageCompletionUI::setupWidgets()
     _bottomWindow.dBTableWidget_9->setSelectionMode ( QAbstractItemView::SingleSelection);
 
     _bottomWindowWidget->setWidget(_bottomDockWindowContents);
+    _bottomWindowWidget->setContextMenuPolicy(Qt::CustomContextMenu);
     addDockWidget(Qt::BottomDockWidgetArea, _bottomWindowWidget);
 
     setCorner(Qt::BottomLeftCorner,Qt::LeftDockWidgetArea);
@@ -570,6 +571,17 @@ void ImageCompletionUI::createConnections()
     connect(_bottomWindow.dBTableWidget_3, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_dBTableWidget_3_cellDoubleClicked(int, int)));
     connect(_bottomWindow.dBTableWidget_2, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_dBTableWidget_2_cellDoubleClicked(int, int)));
     connect(_bottomWindow.dBTableWidget_1, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_dBTableWidget_1_cellDoubleClicked(int, int)));
+
+    connect(_bottomWindow.dBTableWidget_8, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
+    connect(_bottomWindow.dBTableWidget_7, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
+    connect(_bottomWindow.dBTableWidget_6, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
+    connect(_bottomWindow.dBTableWidget_5, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
+    connect(_bottomWindow.dBTableWidget_4, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
+    connect(_bottomWindow.dBTableWidget_3, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
+    connect(_bottomWindow.dBTableWidget_2, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
+    connect(_bottomWindow.dBTableWidget_1, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
+
+    connect(_leftWindow._treeViewImages, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(OnDoubleClickTreeView(QModelIndex)));
 }
 
 void ImageCompletionUI::showContextMenu(QPoint pos)
@@ -630,7 +642,7 @@ void ImageCompletionUI::syncFilePathStr(QString strFilePath)
     {
         enDeque(strFilePath, _dequeTodo);
         pos = in(strFilePath, _dequeTodo);
-        showThumbnail(MOLI_UNLABELLED_STATUS_CHAR, pos);
+        showThumbnail(strFilePath, MOLI_UNLABELLED_STATUS_CHAR, pos);
     }
 
     _strCurrentImagePath = strFilePath;
@@ -730,6 +742,58 @@ void ImageCompletionUI::openImage(QString strFilePath)
             this->enDeque(strFilePath, _dequeTodo);
             this->showThumbnailForUnLabelled( strFilePath );
         }
+    }
+}
+
+void ImageCompletionUI::OnDoubleClickTreeView(QModelIndex m)
+{
+    QString selectedItemTitle = m.data().toString();
+    if(selectedItemTitle.endsWith(tr("jpg")) || selectedItemTitle.endsWith(tr("png")) || selectedItemTitle.endsWith(tr("bmp")) || selectedItemTitle.endsWith("jpeg"))
+    {
+        QString strFilePath = Global::PathImage + selectedItemTitle;
+        openImage(strFilePath);
+    }
+    else
+    {
+        QModelIndex parent = m.parent().isValid()? m.parent() : m;
+        QAbstractItemModel* model = (QAbstractItemModel*)m.model();
+
+        QStringList list;
+
+        if(model->hasChildren())
+        {
+            for(int i = 0; i < model->rowCount(parent); i++)
+            {
+                QModelIndex subModel = parent.child(i, 0);
+                if(m.parent().isValid() && subModel.data().toString() != selectedItemTitle)
+                    continue;
+                else
+                    selectedItemTitle = subModel.data().toString();
+
+                if(selectedItemTitle.endsWith(tr("jpg")) || selectedItemTitle.endsWith(tr("png")) || selectedItemTitle.endsWith(tr("bmp")) || selectedItemTitle.endsWith("jpeg"))
+                {
+                    list.push_back(Global::PathImage+selectedItemTitle);
+                }
+                else
+                {
+                    QAbstractItemModel* model2 = (QAbstractItemModel*)subModel.model();
+                    if(model2->hasChildren())
+                    {
+                        for(int j = 0; j < model2->rowCount(subModel); ++j)
+                        {
+                            QModelIndex subsubModel = subModel.child(j, 0);
+                            selectedItemTitle = subsubModel.data().toString();
+
+                            if(selectedItemTitle.endsWith(tr("jpg")) || selectedItemTitle.endsWith(tr("png")) || selectedItemTitle.endsWith(tr("bmp")) || selectedItemTitle.endsWith("jpeg"))
+                            {
+                                list.push_back(Global::PathImage+selectedItemTitle);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        showThumbnailsInCentral(list);
     }
 }
 
@@ -851,15 +915,16 @@ int ImageCompletionUI::in(const QString& strFilePath, std::deque<QString> &d)
     return -1;
 }
 
-void ImageCompletionUI::showThumbnail(QString status, int row)
+void ImageCompletionUI::showThumbnail(QString file, QString status, int row)
 {
     _leftWindow.tableWidget->insertRow(row);
     _leftWindow.tableWidget->setItem(row, 0, new QTableWidgetItem(""));
-    QImage* temp = _editImageViewer->getOriginalImage();
-    _leftWindow.tableWidget->item(row, 0)->setData(Qt::DecorationRole, QPixmap::fromImage(*temp).scaled(80, 80));
+    //    QImage* temp = _editImageViewer->getOriginalImage();
+    QImage temp = QImage(file);
+    _leftWindow.tableWidget->item(row, 0)->setData(Qt::DecorationRole, QPixmap::fromImage(temp).scaled(80, 80));
     _leftWindow.tableWidget->item(row, 0)->setBackgroundColor(color(status));
 
-    DELETEPTR(temp);
+    //    DELETEPTR(temp);
 }
 
 //FIXME
@@ -870,7 +935,7 @@ void ImageCompletionUI::showThumbnailForLabelled(QString strFilePath)
     int pos = this->in(strFilePath, _dequeDone);
     if(pos >= 0)
     {
-        this->showThumbnail(MOLI_LABELLED_STATUS_CHAR, pos + _dequeTodo.size());
+        this->showThumbnail(strFilePath, MOLI_LABELLED_STATUS_CHAR, pos + _dequeTodo.size());
     }
 }
 
@@ -881,7 +946,7 @@ void ImageCompletionUI::showThumbnailForUnLabelled(QString strFilePath)
     int pos = this->in(strFilePath, _dequeTodo);
     if(pos >= 0)
     {
-        this->showThumbnail(MOLI_UNLABELLED_STATUS_CHAR, pos);
+        this->showThumbnail(strFilePath, MOLI_UNLABELLED_STATUS_CHAR, pos);
     }
 }
 
@@ -1793,7 +1858,7 @@ void ImageCompletionUI::exportData()
 
         if(this->copyFiles(sourcePath,sourcetargetPath)
                 && this->copyFiles(resultPath,resulttargetPath)
-                 && this->exportDB(databackupFileName))
+                && this->exportDB(databackupFileName))
             QMessageBox::warning(this,tr("批量数据导出提示"),tr("批量数据导出成功"),QMessageBox::Close);
         else
             QMessageBox::warning(this,tr("批量数据导出提示"),tr("批量数据导出失败"),QMessageBox::Close);
@@ -1903,6 +1968,44 @@ void ImageCompletionUI::loadMoliImage(QString moliId)
         }
     }
     db.close();
+}
+
+void ImageCompletionUI::loadAllImagesAndShowInLeftWindow()
+{
+    QString imagePath;
+    QSqlDatabase db;
+    if( Global::createConnection(db) )
+    {
+        QSqlQuery query;
+        bool ret = query.exec(QString("select * from ferrographypicinfo"));
+        if(ret)
+        {
+            int index = query.record().indexOf("ferrographypicpath");
+            while(query.next())
+            {
+                imagePath = query.value(index).toString();
+
+                QString status = this->status( imagePath );
+
+                if(status == MOLI_LABELLED_STATUS_CHAR)
+                {
+                    if(-1 == in(imagePath, _dequeDone))
+                    {
+                        this->enDeque(imagePath, _dequeDone);
+                    }
+                    this->showThumbnailForLabelled(imagePath);
+                }
+                else
+                {
+                    if (-1 == in(imagePath, _dequeTodo))
+                    {
+                        this->enDeque(imagePath, _dequeTodo);
+                    }
+                    this->showThumbnailForUnLabelled(imagePath);
+                }
+            }
+        }
+    }
 }
 
 void ImageCompletionUI::on_dBTableWidget_7_cellDoubleClicked(int row, int column)
@@ -2091,6 +2194,19 @@ void ImageCompletionUI::on_dBTableWidget_1_cellDoubleClicked(int row, int column
         db.close();
     }
     showThumbnailsInCentral(list);
+}
+
+void ImageCompletionUI::bottomWindowContextMenuEvent(const QPoint &)
+{
+    QAction* editAction = new QAction(tr("编辑"), this);
+    connect(editAction, SIGNAL(triggered()), this, SLOT(editImageProperties()));
+
+    QMenu* contextMenu = new QMenu(this);
+    contextMenu->addAction(editAction);
+}
+
+void ImageCompletionUI::editImageProperties()
+{
 }
 
 void ImageCompletionUI::back()
