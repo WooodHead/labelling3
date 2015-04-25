@@ -422,6 +422,7 @@ void ImageCompletionUI::setupWidgets()
     _regionCompetitionDialog._labelRulerText->setHidden(true);
 
     _rightOperationWidget->setWidget(_dockWidgetContents);
+    _rightOperationWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     this->addDockWidget(static_cast<Qt::DockWidgetArea>(2), _rightOperationWidget);
 
     _operationStackedWidget->setCurrentIndex(0);
@@ -468,7 +469,8 @@ void ImageCompletionUI::setupWidgets()
     _logWindowWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
     _logWindowWidget->setWidget(_logWidget);
-    _logWindowWidget->setMinimumHeight(0.27 * height);
+    _logWindowWidget->setMinimumHeight(0.1 * height);
+    _logWindowWidget->setMaximumHeight(0.3 * height);
     _logWindowWidget->setWindowIcon(Global::Awesome->icon(filetexto));
     addDockWidget(Qt::LeftDockWidgetArea, _logWindowWidget);
 
@@ -478,7 +480,7 @@ void ImageCompletionUI::setupWidgets()
     _bottomWindowWidget = new QDockWidget(tr("数据库信息"),this );
     _bottomWindowWidget->setObjectName(tr("_bottomWindowWidget"));
     _bottomWindowWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
-    _bottomWindowWidget->setMinimumHeight(0.35 * height);
+    _bottomWindowWidget->setMinimumHeight(0.1 * height);
     _bottomDockWindowContents = new QWidget( );
     _bottomDockWindowContents->setObjectName(tr("_bottomDockWindowContents"));
 
