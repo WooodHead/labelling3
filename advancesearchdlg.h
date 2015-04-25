@@ -433,6 +433,8 @@ private slots:
      void setExpPath(QString sourcePicPath,QString resultPicPath,QString packgePath);
      void setImpPath(QString packgePath);
 
+     void on_deletepropertyButton_clicked();
+
 signals:
      void showqueryThumbnails(QStringList list);
 

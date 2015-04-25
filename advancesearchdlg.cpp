@@ -11,12 +11,12 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent,bool flag) :
     if(deleteflag)
     {
         setWindowTitle(tr("数据管理窗口"));
-        ui->modifyButton->setVisible(true);
+        ui->deleteDataButton->setVisible(true);
     }
     else
     {
         setWindowTitle(tr("查询数据接口"));
-        ui->modifyButton->setVisible(false);
+        ui->deleteDataButton->setVisible(false);
     }
 
     if(!Global::createConnection(db))
@@ -29,9 +29,10 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent,bool flag) :
     ui->exportBtn->setIcon(QIcon(":/new/prefix1/icons/export.png"));
     ui->importBtn->setIcon(QIcon(":/new/prefix1/icons/import.png"));
     ui->addtoBtn->setIcon(Global::Awesome->icon(plus));
-    ui->modifyButton->setIcon(Global::Awesome->icon(trash));
+    ui->deleteDataButton->setIcon(Global::Awesome->icon(trash));
+    ui->deletepropertyButton->setIcon(Global::Awesome->icon(minus_));
 
-    ui->modifyButton->setText(tr("删除数据"));
+    ui->deleteDataButton->setText(tr("删除查询结果"));
 
 
     propertymodel = 0;
@@ -246,10 +247,10 @@ void AdvanceSearchDlg::renameprtperty()
         if(query.exec(sql))
         {
             initpropertylistName();
-            QMessageBox::warning(this,tr("提示"),tr("修改查询属性成功"),QMessageBox::Close);
+            QMessageBox::warning(this,tr("提示"),tr("修改查询属性名称成功"),QMessageBox::Close);
         }
         else
-            QMessageBox::warning(this,tr("提示"),tr("修改查询属性失败"),QMessageBox::Close);
+            QMessageBox::warning(this,tr("提示"),tr("修改查询属性名称失败"),QMessageBox::Close);
     }
 }
 
@@ -984,7 +985,7 @@ void AdvanceSearchDlg::useproperty()
             }
         }
 
-        this->query();
+        //this->query();
     }
 }
 
@@ -995,6 +996,11 @@ void AdvanceSearchDlg::deleteproperty()
 
     this->resetConditions();
     QModelIndex index = ui->propertylistTableView->currentIndex();
+    if(!index.isValid())
+    {
+        QMessageBox::warning(this,tr("提示"),tr("未选中行"),QMessageBox::Ok);
+        return;
+    }
     QSqlRecord record = propertymodel->record(index.row());
     QString propertyname = record.value(0).toString();
     QString sql = "delete from propertyinfo where propertyname ='";
@@ -1002,7 +1008,7 @@ void AdvanceSearchDlg::deleteproperty()
     sql.append("'");
     QSqlQuery query;
     QMessageBox::StandardButton reply;
-    reply = QMessageBox::question(this, tr("QMessageBox::question()"), tr("确认使用当前属性查询?"),
+    reply = QMessageBox::question(this, tr("QMessageBox::question()"), tr("确认删除当前查询属性?"),
                                   QMessageBox::Yes | QMessageBox::Cancel);
 
     if(reply == QMessageBox::Yes)
@@ -1010,10 +1016,10 @@ void AdvanceSearchDlg::deleteproperty()
         if(query.exec(sql))
         {
             initpropertylistName();
-            QMessageBox::warning(this,tr("提示"),tr("删除属性成功"),QMessageBox::Close);
+            QMessageBox::warning(this,tr("提示"),tr("删除查询属性成功"),QMessageBox::Close);
         }
         else
-            QMessageBox::warning(this,tr("提示"),tr("删除属性失败，请检查数据库服务是否启动"),QMessageBox::Close);
+            QMessageBox::warning(this,tr("提示"),tr("删除查询属性失败，请检查数据库服务是否启动"),QMessageBox::Close);
     }
 
     initpropertylistName();
@@ -1623,8 +1629,9 @@ void AdvanceSearchDlg::createListWidget()
     ui->tableListWidget->insertItem(2,tr("动部件维修信息表"));
     ui->tableListWidget->insertItem(3,tr("油样采集信息表"));
     ui->tableListWidget->insertItem(4,tr("油样检测分析表"));
-    ui->tableListWidget->insertItem(5,tr("铁谱图片采集信息表"));
-    ui->tableListWidget->insertItem(6,tr("铁谱制谱信息表"));
+//    ui->tableListWidget->insertItem(5,tr("铁谱图片采集信息表"));
+    ui->tableListWidget->insertItem(5,tr("铁谱制谱信息表"));
+    ui->tableListWidget->insertItem(6,tr("铁谱图片采集信息表"));
     ui->tableListWidget->insertItem(7,tr("磨粒标注信息表"));
 
     ui->tableListWidget->setCurrentRow(0);
@@ -1885,6 +1892,18 @@ void AdvanceSearchDlg::initpropertylistName()
     propertymodel = new QSqlQueryModel;
     propertymodel->setQuery("select propertyname from propertyinfo");
     propertymodel->setHeaderData(0,Qt::Horizontal,tr("查询属性名"));
+    if(propertymodel->rowCount() == 0)
+    {
+        this->usepropertyAction->setEnabled(false);
+        this->renameprtpertyAction->setEnabled(false);
+        this->deletepropertyAction->setEnabled(false);
+    }
+    else
+    {
+        this->usepropertyAction->setEnabled(true);
+        this->renameprtpertyAction->setEnabled(true);
+        this->deletepropertyAction->setEnabled(true);
+    }
     ui->propertylistTableView->setModel(propertymodel);
     ui->propertylistTableView->setAlternatingRowColors(true);
     ui->propertylistTableView->setSelectionMode(QTableView::SingleSelection);
@@ -5721,3 +5740,8 @@ bool AdvanceSearchDlg::deletefromtable(QStringList idList, QString tablename)
 }
 
 
+
+void AdvanceSearchDlg::on_deletepropertyButton_clicked()
+{
+    this->deleteproperty();
+}

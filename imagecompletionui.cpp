@@ -380,7 +380,7 @@ void ImageCompletionUI::setupWidgets()
     _rightOperationWidget = new QDockWidget(tr("工具箱"),this );
     _rightOperationWidget->setObjectName(tr("_rightOperationWidget"));
     _rightOperationWidget->setWindowIcon( Global::Awesome->icon(inbox) );
-    _rightOperationWidget->setMaximumSize(QSize(0.2*width, 0.8*height));
+    _rightOperationWidget->setMaximumSize(QSize(0.2*width, 1*height));
     _rightOperationWidget->setFloating(false);
 
     _dockWidgetContents = new QWidget( );
@@ -519,7 +519,8 @@ void ImageCompletionUI::setupWidgets()
     addDockWidget(Qt::BottomDockWidgetArea, _bottomWindowWidget);
 
     setCorner(Qt::BottomLeftCorner,Qt::LeftDockWidgetArea);
-    setCorner(Qt::BottomRightCorner,Qt::BottomDockWidgetArea);
+    setCorner(Qt::BottomRightCorner,Qt::RightDockWidgetArea);
+//    setCorner(Qt::BottomRightCorner,Qt::BottomDockWidgetArea);
 
     QPixmap pixmap(30,30);
     pixmap.fill(_editImageViewer->getLineColor());
