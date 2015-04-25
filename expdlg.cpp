@@ -23,7 +23,10 @@ ExpDlg::ExpDlg(QWidget *parent, QString sourcepicPath, QString resultPath)
     this->sourcepicPath = sourcepicPath;
     this->resultpicPath = resultPath;
     this->packgePath = "";
-
+    this->ui->picPushButton->setVisible(false);
+    this->ui->resultPushButton->setVisible(false);
+    this->ui->picLineEdit->setEnabled(false);
+    this->ui->resultLineEdit->setEnabled(false);
     connect(this,SIGNAL(initPathParams(QString,QString,QString)),parent,SLOT(setExpPath(QString,QString,QString)));
 }
 
