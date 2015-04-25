@@ -38,7 +38,7 @@
       <item>
        <widget class="QStackedWidget" name="conditionStackedWidget">
         <property name="currentIndex">
-         <number>5</number>
+         <number>6</number>
         </property>
         <widget class="QWidget" name="page">
          <layout class="QGridLayout" name="gridLayout_3">
@@ -52,8 +52,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>271</width>
-               <height>391</height>
+               <width>162</width>
+               <height>186</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -232,8 +232,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>271</width>
-               <height>391</height>
+               <width>253</width>
+               <height>186</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout">
@@ -433,8 +433,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>271</width>
-               <height>391</height>
+               <width>253</width>
+               <height>130</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_15">
@@ -572,7 +572,7 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>254</width>
+               <width>217</width>
                <height>488</height>
               </rect>
              </property>
@@ -973,7 +973,7 @@
              <property name="geometry">
               <rect>
                <x>0</x>
-               <y>-301</y>
+               <y>0</y>
                <width>254</width>
                <height>712</height>
               </rect>
@@ -1726,7 +1726,7 @@
                 <item>
                  <widget class="QLabel" name="label_81">
                   <property name="text">
-                   <string>铁谱图片标识</string>
+                   <string>图片是否标注</string>
                   </property>
                  </widget>
                 </item>
@@ -1928,7 +1928,7 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>254</width>
+               <width>210</width>
                <height>460</height>
               </rect>
              </property>

@@ -288,6 +288,7 @@ private: // methods
 
     void        loadAllImagesAndShowInLeftWindow();
 private slots:
+    void        flushLeftTree();
     void        flushBottom();
     void        flushLeft(QString path, QString label);
     void        showContextMenu(QPoint);

@@ -799,6 +799,10 @@ void ImageCompletionUI::OnDoubleClickTreeView(QModelIndex m)
         showThumbnailsInCentral(list);
     }
 }
+void ImageCompletionUI::flushLeftTree()
+{
+    this->showImagesInTree();
+}
 
 void ImageCompletionUI::showImagesInTree()
 {
