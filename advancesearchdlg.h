@@ -439,6 +439,7 @@ private slots:
 
 signals:
      void showqueryThumbnails(QStringList list);
+     void flushBottomData();
 
 private:
     Ui::AdvanceSearchDlg *ui;

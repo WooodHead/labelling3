@@ -80,7 +80,7 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent,bool flag) :
 
     connect(this,SIGNAL(showqueryThumbnails(QStringList)),parent,SLOT(queryThumbnails(QStringList)));
 
-
+    connect(this,SIGNAL(flushBottomData()),parent,SLOT(flushBottom()));
     createTableNames();
 
     createTableView();
@@ -5771,6 +5771,8 @@ void AdvanceSearchDlg::deletedata()
         }
         }
         this->query();
+//        this->parent()->flushBottom();
+        emit flushBottomData();
     }
 }
 
