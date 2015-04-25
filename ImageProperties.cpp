@@ -493,6 +493,18 @@ bool ImageProperties::isValid(int index)
             QMessageBox::warning(this, tr("提示"), tr("油样编号不能为空!"), QMessageBox::Close);
             return false;
         }
+        if(ui->_comboBoxOilAnalyzeUnitName->currentText().isEmpty())
+        {
+            ui->_tabWidget->setCurrentIndex(4);
+            QMessageBox::warning(this, tr("提示"), tr("检测分析单位名称不能为空!"), QMessageBox::Close);
+            return false;
+        }
+        if(ui->_comboBoxOilAnalyzeSendUnit->currentText().isEmpty())
+        {
+            ui->_tabWidget->setCurrentIndex(4);
+            QMessageBox::warning(this, tr("提示"), tr("送检单位不能为空!"), QMessageBox::Close);
+            return false;
+        }
     }
     else if(index == 5)
     {
@@ -943,8 +955,6 @@ void ImageProperties::on__buttonSave_clicked()
         {
             if(!_models[i]->submitAll())
             {
-                qDebug() << i;
-
                 for(int k = 0; k < i; k++)
                 {
                     _models[k]->revertAll();
@@ -1056,13 +1066,15 @@ void ImageProperties::on__tabWidget_currentChanged(int index)
     {
         ui->_buttonSave->setText(tr("提交"));
         ui->_buttonNext->setVisible(false);
+        ui->_buttonSave->setEnabled(true);
     }
     else
     {
         ui->_buttonSave->setText(tr("保存"));
         ui->_buttonNext->setVisible(true);
+        ui->_buttonSave->setEnabled(false);
     }
-    ui->_buttonSave->setEnabled(false);
+
 }
 
 void ImageProperties::on__buttonCancel_clicked()

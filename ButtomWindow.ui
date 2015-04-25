@@ -1377,12 +1377,12 @@
          </column>
          <column>
           <property name="text">
-           <string>装备编号（机号或动部件编号）</string>
+           <string>机号</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string>装备型号</string>
+           <string>机型</string>
           </property>
          </column>
          <column>

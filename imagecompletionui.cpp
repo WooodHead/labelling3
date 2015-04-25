@@ -514,14 +514,21 @@ void ImageCompletionUI::setupWidgets()
     _bottomWindow.dBTableWidget_8->setSelectionMode ( QAbstractItemView::SingleSelection);
     _bottomWindow.dBTableWidget_9->setSelectionMode ( QAbstractItemView::SingleSelection);
 
-    //    _bottomWindow.dBTableWidget_1->setContextMenuPolicy(Qt::CustomContextMenu);
-    //    _bottomWindowWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+    _bottomWindow.dBTableWidget_1->setContextMenuPolicy(Qt::CustomContextMenu);
+    _bottomWindow.dBTableWidget_2->setContextMenuPolicy(Qt::CustomContextMenu);
+    _bottomWindow.dBTableWidget_3->setContextMenuPolicy(Qt::CustomContextMenu);
+    _bottomWindow.dBTableWidget_4->setContextMenuPolicy(Qt::CustomContextMenu);
+    _bottomWindow.dBTableWidget_5->setContextMenuPolicy(Qt::CustomContextMenu);
+    _bottomWindow.dBTableWidget_6->setContextMenuPolicy(Qt::CustomContextMenu);
+    _bottomWindow.dBTableWidget_7->setContextMenuPolicy(Qt::CustomContextMenu);
+    _bottomWindow.dBTableWidget_8->setContextMenuPolicy(Qt::CustomContextMenu);
+    _bottomWindow.dBTableWidget_9->setContextMenuPolicy(Qt::CustomContextMenu);
     _bottomWindowWidget->setWidget(_bottomDockWindowContents);
     addDockWidget(Qt::BottomDockWidgetArea, _bottomWindowWidget);
 
     setCorner(Qt::BottomLeftCorner,Qt::LeftDockWidgetArea);
     setCorner(Qt::BottomRightCorner,Qt::RightDockWidgetArea);
-//    setCorner(Qt::BottomRightCorner,Qt::BottomDockWidgetArea);
+    //    setCorner(Qt::BottomRightCorner,Qt::BottomDockWidgetArea);
 
     QPixmap pixmap(30,30);
     pixmap.fill(_editImageViewer->getLineColor());
@@ -574,6 +581,7 @@ void ImageCompletionUI::createConnections()
     connect(_bottomWindow.dBTableWidget_2, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_dBTableWidget_2_cellDoubleClicked(int, int)));
     connect(_bottomWindow.dBTableWidget_1, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_dBTableWidget_1_cellDoubleClicked(int, int)));
 
+    connect(_bottomWindow.dBTableWidget_9, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
     connect(_bottomWindow.dBTableWidget_8, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
     connect(_bottomWindow.dBTableWidget_7, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
     connect(_bottomWindow.dBTableWidget_6, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
@@ -1294,7 +1302,14 @@ void ImageCompletionUI::changeLabel()
 
 void ImageCompletionUI::exitApp()
 {
-    qApp->exit();
+    QMessageBox::StandardButton reply = QMessageBox::information(this, tr("退出"), tr("是否要退出标注程序?"), QMessageBox::Ok | QMessageBox::Cancel);
+    if(reply == QMessageBox::Ok)
+        qApp->exit();
+}
+
+void ImageCompletionUI::closeEvent(QCloseEvent *)
+{
+    exitApp();
 }
 
 void ImageCompletionUI::selectColor()
@@ -2227,17 +2242,121 @@ void ImageCompletionUI::on_dBTableWidget_1_cellDoubleClicked(int row, int column
     showThumbnailsInCentral(list);
 }
 
-void ImageCompletionUI::bottomWindowContextMenuEvent(const QPoint &)
+void ImageCompletionUI::bottomWindowContextMenuEvent(const QPoint &pos)
 {
     QAction* editAction = new QAction(tr("编辑"), this);
     connect(editAction, SIGNAL(triggered()), this, SLOT(editImageProperties()));
 
-    QMenu* contextMenu = new QMenu(this);
-    contextMenu->addAction(editAction);
+    QAction* addAction = new QAction(tr("添加采样点"), this);
+    connect(addAction, SIGNAL(triggered()), this, SLOT(addSamplePoint()));
+
+
+    QMenu contextMenu;
+    contextMenu.addAction(editAction);
+
+    switch(_bottomWindow.dataBaseTabWidget->currentIndex())
+    {
+    case 0:
+
+        if(_bottomWindow.dBTableWidget_1->selectionModel()->selection().indexes().isEmpty())
+        {
+            editAction->setEnabled(false);
+        }
+        contextMenu.exec(_bottomWindow.dBTableWidget_1->mapToGlobal(pos));
+        break;
+    case 1:
+
+        if(_bottomWindow.dBTableWidget_2->selectionModel()->selection().indexes().isEmpty())
+        {
+            editAction->setEnabled(false);
+        }
+        contextMenu.exec(_bottomWindow.dBTableWidget_2->mapToGlobal(pos));
+        break;
+    case 2:
+
+        if(_bottomWindow.dBTableWidget_3->selectionModel()->selection().indexes().isEmpty())
+        {
+            editAction->setEnabled(false);
+        }
+        contextMenu.exec(_bottomWindow.dBTableWidget_3->mapToGlobal(pos));
+        break;
+    case 3:
+
+        if(_bottomWindow.dBTableWidget_4->selectionModel()->selection().indexes().isEmpty())
+        {
+            editAction->setEnabled(false);
+        }
+        contextMenu.exec(_bottomWindow.dBTableWidget_4->mapToGlobal(pos));
+        break;
+    case 4:
+        if(_bottomWindow.dBTableWidget_5->selectionModel()->selection().indexes().isEmpty())
+        {
+            editAction->setEnabled(false);
+        }
+        contextMenu.exec(_bottomWindow.dBTableWidget_5->mapToGlobal(pos));
+        break;
+    case 5:
+        if(_bottomWindow.dBTableWidget_6->selectionModel()->selection().indexes().isEmpty())
+        {
+            editAction->setEnabled(false);
+        }
+        contextMenu.exec(_bottomWindow.dBTableWidget_6->mapToGlobal(pos));
+        break;
+    case 6:
+        if(_bottomWindow.dBTableWidget_7->selectionModel()->selection().indexes().isEmpty())
+        {
+            editAction->setEnabled(false);
+        }
+        contextMenu.exec(_bottomWindow.dBTableWidget_7->mapToGlobal(pos));
+        break;
+    case 7:
+        if(_bottomWindow.dBTableWidget_8->selectionModel()->selection().indexes().isEmpty())
+        {
+            editAction->setEnabled(false);
+        }
+        contextMenu.exec(_bottomWindow.dBTableWidget_8->mapToGlobal(pos));
+        break;
+    case 8:
+        contextMenu.addAction(addAction);
+
+        if(_bottomWindow.dBTableWidget_9->selectionModel()->selection().indexes().isEmpty())
+        {
+            editAction->setEnabled(false);
+        }
+        contextMenu.exec(_bottomWindow.dBTableWidget_9->mapToGlobal(pos));
+        break;
+    }
 }
 
 void ImageCompletionUI::editImageProperties()
 {
+    int index = _bottomWindow.dataBaseTabWidget->currentIndex();
+    QString primaryKeyValue;
+
+    switch(index)
+    {
+    case 0: primaryKeyValue = _bottomWindow.dBTableWidget_1->item(_bottomWindow.dBTableWidget_1->currentRow(), 0)->text(); break;
+    case 1: primaryKeyValue = _bottomWindow.dBTableWidget_2->item(_bottomWindow.dBTableWidget_2->currentRow(), 0)->text(); break;
+    case 2: primaryKeyValue = _bottomWindow.dBTableWidget_3->item(_bottomWindow.dBTableWidget_3->currentRow(), 0)->text(); break;
+    case 3: primaryKeyValue = _bottomWindow.dBTableWidget_4->item(_bottomWindow.dBTableWidget_4->currentRow(), 0)->text(); break;
+    case 4: primaryKeyValue = _bottomWindow.dBTableWidget_5->item(_bottomWindow.dBTableWidget_5->currentRow(), 0)->text(); break;
+    case 5: primaryKeyValue = _bottomWindow.dBTableWidget_6->item(_bottomWindow.dBTableWidget_6->currentRow(), 0)->text(); break;
+    case 6: primaryKeyValue = _bottomWindow.dBTableWidget_7->item(_bottomWindow.dBTableWidget_7->currentRow(), 0)->text(); break;
+    case 7: primaryKeyValue = _bottomWindow.dBTableWidget_8->item(_bottomWindow.dBTableWidget_8->currentRow(), 0)->text(); break;
+    case 8: primaryKeyValue = _bottomWindow.dBTableWidget_9->item(_bottomWindow.dBTableWidget_9->currentRow(), 0)->text(); break;
+    }
+
+    ImagePropertiesEditor* d = new ImagePropertiesEditor(this, index, primaryKeyValue);
+    d->showDlg();
+}
+
+void ImageCompletionUI::addSamplePoint()
+{
+    int index = _bottomWindow.dataBaseTabWidget->currentIndex();
+    QString primaryKeyValue = "NEW"; // label
+
+    ImagePropertiesEditor* d = new ImagePropertiesEditor(this, index, primaryKeyValue);
+    d->showDlg();
 }
 
 void ImageCompletionUI::back()
@@ -2314,6 +2433,7 @@ void ImageCompletionUI::showThumbnailsInCentral(QStringList list)
                 QPixmap image;
                 if(image.load(list[index]))
                 {
+                    image = image.scaled(QSize(150, 75));
                     drawEnclosingRectangle(image, color(status(list[index])));
                     label->setPixmap(image);
                 }
@@ -2382,7 +2502,7 @@ void ImageCompletionUI::clearLayout(QLayout *layout)
 void ImageCompletionUI::drawEnclosingRectangle(QPixmap& pixmap, const QColor color)
 {
     QPainter painter(&pixmap);
-    painter.setPen(QPen(color, 20, Qt::SolidLine));
+    painter.setPen(QPen(color, 10, Qt::SolidLine));
     painter.drawRect(0, 0, pixmap.width(), pixmap.height());
 }
 

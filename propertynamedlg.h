@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QSqlQuery>
 #include <QSqlRecord>
+
 #include "Global.h"
 
 namespace Ui {

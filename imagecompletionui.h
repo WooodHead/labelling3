@@ -34,8 +34,9 @@ using namespace std;
 #include "def.h"
 #include "expdlg.h"
 #include "impdlg.h"
+#include "ImagePropertiesEditor.h"
 
-#define THUMBNAILS_PER_ROW 8
+#define THUMBNAILS_PER_ROW 6
 
 typedef std::deque<QString>::iterator deque_it;
 
@@ -290,6 +291,7 @@ private: // methods
     void        loadAllImagesAndShowInLeftWindow();
     void        wheelEvent(QWheelEvent *event);
     void        changeMeasureButtonState(bool state);
+    void        closeEvent(QCloseEvent *);
 private slots:
     void        flushBottom();
     void        flushLeft(QString path, QString label);
@@ -308,6 +310,7 @@ private slots:
     void        on_dBTableWidget_1_cellDoubleClicked(int row, int column);
     void        bottomWindowContextMenuEvent(const QPoint &);
     void        editImageProperties();
+    void        addSamplePoint();
 
     void        back();
     void        append();
