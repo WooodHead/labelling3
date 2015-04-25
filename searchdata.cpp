@@ -1,4 +1,4 @@
-﻿#include "searchdata.h"
+#include "searchdata.h"
 #include "ui_searchdata.h"
 #include <QApplication>
 #include <QTableView>
@@ -2819,6 +2819,8 @@ void Searchdata::on_addtobutton_clicked()//点击登录按钮
 
 
 }
+
+
 
 
 

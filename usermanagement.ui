@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>811</width>
+    <width>715</width>
     <height>449</height>
    </rect>
   </property>
@@ -31,8 +31,8 @@
        <widget class="QWidget" name="widget_2" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <layout class="QGridLayout" name="gridLayout_3">
-           <item row="0" column="0">
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
             <layout class="QGridLayout" name="gridLayout_2">
              <item row="0" column="0">
               <widget class="QPushButton" name="_addUser">
@@ -64,7 +64,7 @@
              </item>
             </layout>
            </item>
-           <item row="1" column="0">
+           <item>
             <widget class="QGroupBox" name="groupBox">
              <property name="minimumSize">
               <size>
@@ -75,66 +75,103 @@
              <property name="title">
               <string>查询项</string>
              </property>
-             <widget class="QWidget" name="layoutWidget">
+             <widget class="QLineEdit" name="_editEmail">
               <property name="geometry">
                <rect>
-                <x>0</x>
-                <y>40</y>
-                <width>181</width>
-                <height>128</height>
+                <x>43</x>
+                <y>67</y>
+                <width>111</width>
+                <height>20</height>
                </rect>
               </property>
-              <layout class="QGridLayout" name="gridLayout">
-               <item row="3" column="0">
-                <widget class="QLabel" name="label_3">
-                 <property name="text">
-                  <string>手机号</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="0">
-                <widget class="QLabel" name="label_4">
-                 <property name="text">
-                  <string>权限</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QLineEdit" name="_editEmail"/>
-               </item>
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_2">
-                 <property name="text">
-                  <string>用户名</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="1">
-                <widget class="QComboBox" name="_authorityCombo"/>
-               </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="label">
-                 <property name="text">
-                  <string>Email</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="1">
-                <widget class="QLineEdit" name="_editPhone"/>
-               </item>
-               <item row="0" column="1">
-                <widget class="QLineEdit" name="_editUsername"/>
-               </item>
-              </layout>
+             </widget>
+             <widget class="QLabel" name="label_4">
+              <property name="geometry">
+               <rect>
+                <x>1</x>
+                <y>119</y>
+                <width>24</width>
+                <height>16</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>权限</string>
+              </property>
+             </widget>
+             <widget class="QComboBox" name="_authorityCombo">
+              <property name="geometry">
+               <rect>
+                <x>43</x>
+                <y>119</y>
+                <width>111</width>
+                <height>20</height>
+               </rect>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_3">
+              <property name="geometry">
+               <rect>
+                <x>1</x>
+                <y>93</y>
+                <width>36</width>
+                <height>16</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>手机号</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_2">
+              <property name="geometry">
+               <rect>
+                <x>1</x>
+                <y>41</y>
+                <width>36</width>
+                <height>16</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>用户名</string>
+              </property>
+             </widget>
+             <widget class="QLineEdit" name="_editUsername">
+              <property name="geometry">
+               <rect>
+                <x>43</x>
+                <y>41</y>
+                <width>111</width>
+                <height>20</height>
+               </rect>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label">
+              <property name="geometry">
+               <rect>
+                <x>1</x>
+                <y>67</y>
+                <width>30</width>
+                <height>16</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Email</string>
+              </property>
+             </widget>
+             <widget class="QLineEdit" name="_editPhone">
+              <property name="geometry">
+               <rect>
+                <x>43</x>
+                <y>93</y>
+                <width>111</width>
+                <height>20</height>
+               </rect>
+              </property>
              </widget>
             </widget>
            </item>
           </layout>
          </item>
         </layout>
-        <zorder>groupBox</zorder>
-        <zorder>layoutWidget</zorder>
-        <zorder>_userTableView</zorder>
        </widget>
       </item>
      </layout>

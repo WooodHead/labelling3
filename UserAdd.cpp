@@ -1,4 +1,4 @@
-﻿#include "UserAdd.h"
+#include "UserAdd.h"
 #include "ui_useradd.h"
 
 #include "Global.h"
@@ -85,4 +85,6 @@ UserInfo *UserAdd::getInfo()
 
     return new UserInfo(username, passwd, email, phone, authority2);
 }
+
+
 

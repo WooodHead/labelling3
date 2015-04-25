@@ -18,6 +18,94 @@ namespace Ui {
 class ImageProperties;
 }
 
+struct HistoryValues
+{
+    QString _planeId;
+    QString _planeType;
+    QString _unitId;
+    QString _hours;
+    QString _runtimeStage;
+    QString _repairNumber;
+
+    QString _movepartId;
+    QString _movepartName;
+    QString _movepartType;
+    QString _movepartMohe;
+    QString _movepartBeginDate;
+    QString _movepartEndDate;
+    QString _movepartHours;
+
+    QString _movepartwxId;
+    QString _movepartwxDate;
+    QString _movepartwxNumber;
+    QString _movepartwxUnit;
+    QString _movepartwxReason;
+    QString _movepartwxInfo;
+    QString _movepartwxUpdate;
+
+    QString _oilsampleDate;
+    QString _oilsampleTime;
+    QString _oilsampleMonitorName;
+    QString _oilsampleMonitorId;
+    QString _oilsampleSamplePointId;
+    QString _oilsampleHour;
+    QString _oilsampleHuayou;
+    QString _oilsampleReason;
+    QString _oilsampleUnit;
+    QString _oilsampleGuy;
+    QString _oilsampleMethod;
+    QString _oilsampleVolumn;
+    QString _oilsampleInfo;
+    QString _oilsampleSendGuy;
+    QString _oilsampleSendDate;
+    QString _oilsampleSendTime;
+    QString _oilsampleOccasion;
+
+    QString _oilcheckUnit;
+    QString _oilcheckSendUnit;
+    QString _oilcheckSendGuy;
+    QString _oilcheckSendReason;
+    QString _oilcheckReceiveDate;
+    QString _oilcheckReceiveGuy;
+    //
+    QString _oilcheckPollutionMethod;
+    QString _oilcheckPollutionGuy;
+    QString _oilcheckPollutionDate;
+    QString _oilcheckPollutionDevice;
+    //
+    QString _oilcheckLightMethod;
+    QString _oilcheckLightGuy;
+    QString _oilcheckLightDate;
+    QString _oilcheckLightDevice;
+    //
+    QString _oilcheckMentalMethod;
+    QString _oilcheckMentalGuy;
+    QString _oilcheckMentalDate;
+    QString _oilcheckMentalDevice;
+    //
+    QString _oilcheckLihuaMethod;
+    QString _oilcheckLihuaGuy;
+    QString _oilcheckLihuaDate;
+    QString _oilcheckLihuaDevice;
+
+    QString _mentalInstrumentType;
+    QString _mentalReportId;
+    QString _mentalOilCost;
+    QString _mentalMethod;
+    QString _mentalGuy;
+
+    QString _mentalpicSampleArea;
+    QString _mentalpicEnlarger;
+    QString _mentalpicLightType;
+    QString _mentalpicAnaReportId;
+    QString _mentalpicImageCaijiType;
+    QString _mentalpicMicroType;
+    QString _mentalpicAnaInfo;
+    QString _mentalpicSampleGuy;
+};
+
+static HistoryValues _history_values;
+
 class ImageProperties : public QDialog
 {
     Q_OBJECT
@@ -276,6 +364,10 @@ private:
 
     bool isExistID(QString id);
     void setupUiAgain();
+
+
+    void updateHistory();
+    void setHistoryData();
 
 signals:
     void flush();

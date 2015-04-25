@@ -1,4 +1,4 @@
-﻿#include <QtGui>
+#include <QtGui>
 #include <QPixmap>
 #include <QSqlQuery>
 #include <QSqlError>
@@ -41,8 +41,8 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
     setStrikeOptionsEnabled(false);
 
     showData();
-
     showImagesInTree();
+    loadAllImagesAndShowInLeftWindow();
 }
 
 ImageCompletionUI::~ImageCompletionUI()
@@ -65,9 +65,9 @@ void ImageCompletionUI::createMenus()
     _menuFile = menuBar()->addMenu( tr("&文件") );
 
     _menuFile->addAction( _openAction );
-    _menuFile->addSeparator();
-    _menuFile->addAction( _saveAction );
-    _menuFile->addAction( _saveAsAction );
+    //    _menuFile->addSeparator();
+    //    _menuFile->addAction( _saveAction );
+    //    _menuFile->addAction( _saveAsAction );
 
     _menuFile->addSeparator();
     _menuFile->addAction( _closeAction );
@@ -92,7 +92,7 @@ void ImageCompletionUI::createMenus()
     for(int i = 0; i < 3; i++) submenu->addAction(_lineThickness[i]);
 
     _menuData=menuBar()->addMenu(tr("&数据管理"));
-    _menuData->addAction(_searchAction);
+    //    _menuData->addAction(_searchAction);
     _menuData->addAction(_addtosqlAction);
     _menuData->addAction(_exportDataAction);
     _menuData->addAction(_importDataAction);
@@ -113,13 +113,13 @@ void	ImageCompletionUI::createActions()
     _openAction->setObjectName(tr("_openAction"));
     connect(_openAction, SIGNAL(triggered()), this, SLOT(open()));
 
-    _saveAction = new QAction( Global::Awesome->icon(floppyo), tr("&保存"), this );
-    _saveAction->setObjectName(tr("_saveAction"));
-    connect(_saveAction, SIGNAL(triggered()), this, SLOT(save()));
+    //    _saveAction = new QAction( Global::Awesome->icon(floppyo), tr("&保存"), this );
+    //    _saveAction->setObjectName(tr("_saveAction"));
+    //    connect(_saveAction, SIGNAL(triggered()), this, SLOT(save()));
 
-    _saveAsAction = new QAction(  Global::Awesome->icon(floppyo), tr("&另存为"), this );
-    _saveAsAction->setObjectName(tr("_saveAsAction"));
-    connect(_saveAsAction, SIGNAL(triggered()), this, SLOT( saveAs() ));
+    //    _saveAsAction = new QAction(  Global::Awesome->icon(floppyo), tr("&另存为"), this );
+    //    _saveAsAction->setObjectName(tr("_saveAsAction"));
+    //    connect(_saveAsAction, SIGNAL(triggered()), this, SLOT( saveAs() ));
 
     _closeAction = new QAction( Global::Awesome->icon(times), tr("关闭"), this );
     connect(_closeAction, SIGNAL(triggered()), this, SLOT(close()));
@@ -250,7 +250,7 @@ void	ImageCompletionUI::createToolBars()
 {
     _editToolBar = addToolBar( tr("文件") );
     _editToolBar->addAction( _openAction );
-    _editToolBar->addAction( _saveAction );
+    //    _editToolBar->addAction( _saveAction );
     _editToolBar->addAction( _closeAction );
 
     _editToolBar->addSeparator();
@@ -270,7 +270,7 @@ void	ImageCompletionUI::createToolBars()
     _editToolBar->addWidget(_lineThicknessToolButton);
 
     _editToolBar->addSeparator();
-    _editToolBar->addAction(_searchAction);
+    //    _editToolBar->addAction(_searchAction);
     _editToolBar->addAction(_addtosqlAction);
     _editToolBar->addAction(_exportDataAction);
     _editToolBar->addAction(_importDataAction);
@@ -515,6 +515,7 @@ void ImageCompletionUI::setupWidgets()
     _bottomWindow.dBTableWidget_9->setSelectionMode ( QAbstractItemView::SingleSelection);
 
     _bottomWindowWidget->setWidget(_bottomDockWindowContents);
+    _bottomWindowWidget->setContextMenuPolicy(Qt::CustomContextMenu);
     addDockWidget(Qt::BottomDockWidgetArea, _bottomWindowWidget);
 
     setCorner(Qt::BottomLeftCorner,Qt::LeftDockWidgetArea);
@@ -570,6 +571,17 @@ void ImageCompletionUI::createConnections()
     connect(_bottomWindow.dBTableWidget_3, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_dBTableWidget_3_cellDoubleClicked(int, int)));
     connect(_bottomWindow.dBTableWidget_2, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_dBTableWidget_2_cellDoubleClicked(int, int)));
     connect(_bottomWindow.dBTableWidget_1, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_dBTableWidget_1_cellDoubleClicked(int, int)));
+
+    connect(_bottomWindow.dBTableWidget_8, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
+    connect(_bottomWindow.dBTableWidget_7, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
+    connect(_bottomWindow.dBTableWidget_6, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
+    connect(_bottomWindow.dBTableWidget_5, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
+    connect(_bottomWindow.dBTableWidget_4, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
+    connect(_bottomWindow.dBTableWidget_3, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
+    connect(_bottomWindow.dBTableWidget_2, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
+    connect(_bottomWindow.dBTableWidget_1, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
+
+    connect(_leftWindow._treeViewImages, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(OnDoubleClickTreeView(QModelIndex)));
 }
 
 void ImageCompletionUI::showContextMenu(QPoint pos)
@@ -630,7 +642,7 @@ void ImageCompletionUI::syncFilePathStr(QString strFilePath)
     {
         enDeque(strFilePath, _dequeTodo);
         pos = in(strFilePath, _dequeTodo);
-        showThumbnail(MOLI_UNLABELLED_STATUS_CHAR, pos);
+        showThumbnail(strFilePath, MOLI_UNLABELLED_STATUS_CHAR, pos);
     }
 
     _strCurrentImagePath = strFilePath;
@@ -653,6 +665,9 @@ void ImageCompletionUI::setupBrush()
 
 void ImageCompletionUI::open()
 {
+    Global::NewName = QString();
+    _centralStackedWidget->setCurrentIndex(0);
+
     close();
 
     QSettings settings("ImageCompletion", "ImageCompletion");
@@ -675,35 +690,6 @@ void ImageCompletionUI::open()
     settings.setValue("lastImportPath", QVariant(strFilePath));
 
     this->openImage(strFilePath);
-}
-
-void ImageCompletionUI::openbyquery(QString picid, QString picpath)
-{
-    close();
-
-//    QSettings settings("ImageCompletion", "ImageCompletion");
-//    QString strLastImportPath = settings.value("lastImportPath", QDir::homePath()).toString();
-
-//    QString strFilePath = QFileDialog::getOpenFileName( this,
-//                                                        tr("打开图像"),
-//                                                        strLastImportPath,
-//                                                        MOLI_IMAGE_FILTER );
-    QMessageBox::warning(this,tr("提示"),picpath,QMessageBox::Close);
-
-    if( picpath.isEmpty() )
-    {
-        return;
-    }
-
-    if( !QFile::exists(picpath) )
-    {
-        return;
-    }
-
-//    settings.setValue("lastImportPath", QVariant(picpath));
-    QMessageBox::warning(this,tr("提示"),picpath,QMessageBox::Close);
-
-    this->openImage(picpath);
 }
 
 void ImageCompletionUI::openImage(QString strFilePath)
@@ -756,6 +742,58 @@ void ImageCompletionUI::openImage(QString strFilePath)
             this->enDeque(strFilePath, _dequeTodo);
             this->showThumbnailForUnLabelled( strFilePath );
         }
+    }
+}
+
+void ImageCompletionUI::OnDoubleClickTreeView(QModelIndex m)
+{
+    QString selectedItemTitle = m.data().toString();
+    if(selectedItemTitle.endsWith(tr("jpg")) || selectedItemTitle.endsWith(tr("png")) || selectedItemTitle.endsWith(tr("bmp")) || selectedItemTitle.endsWith("jpeg"))
+    {
+        QString strFilePath = Global::PathImage + selectedItemTitle;
+        openImage(strFilePath);
+    }
+    else
+    {
+        QModelIndex parent = m.parent().isValid()? m.parent() : m;
+        QAbstractItemModel* model = (QAbstractItemModel*)m.model();
+
+        QStringList list;
+
+        if(model->hasChildren())
+        {
+            for(int i = 0; i < model->rowCount(parent); i++)
+            {
+                QModelIndex subModel = parent.child(i, 0);
+                if(m.parent().isValid() && subModel.data().toString() != selectedItemTitle)
+                    continue;
+                else
+                    selectedItemTitle = subModel.data().toString();
+
+                if(selectedItemTitle.endsWith(tr("jpg")) || selectedItemTitle.endsWith(tr("png")) || selectedItemTitle.endsWith(tr("bmp")) || selectedItemTitle.endsWith("jpeg"))
+                {
+                    list.push_back(Global::PathImage+selectedItemTitle);
+                }
+                else
+                {
+                    QAbstractItemModel* model2 = (QAbstractItemModel*)subModel.model();
+                    if(model2->hasChildren())
+                    {
+                        for(int j = 0; j < model2->rowCount(subModel); ++j)
+                        {
+                            QModelIndex subsubModel = subModel.child(j, 0);
+                            selectedItemTitle = subsubModel.data().toString();
+
+                            if(selectedItemTitle.endsWith(tr("jpg")) || selectedItemTitle.endsWith(tr("png")) || selectedItemTitle.endsWith(tr("bmp")) || selectedItemTitle.endsWith("jpeg"))
+                            {
+                                list.push_back(Global::PathImage+selectedItemTitle);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        showThumbnailsInCentral(list);
     }
 }
 
@@ -877,15 +915,16 @@ int ImageCompletionUI::in(const QString& strFilePath, std::deque<QString> &d)
     return -1;
 }
 
-void ImageCompletionUI::showThumbnail(QString status, int row)
+void ImageCompletionUI::showThumbnail(QString file, QString status, int row)
 {
     _leftWindow.tableWidget->insertRow(row);
     _leftWindow.tableWidget->setItem(row, 0, new QTableWidgetItem(""));
-    QImage* temp = _editImageViewer->getOriginalImage();
-    _leftWindow.tableWidget->item(row, 0)->setData(Qt::DecorationRole, QPixmap::fromImage(*temp).scaled(80, 80));
+    //    QImage* temp = _editImageViewer->getOriginalImage();
+    QImage temp = QImage(file);
+    _leftWindow.tableWidget->item(row, 0)->setData(Qt::DecorationRole, QPixmap::fromImage(temp).scaled(80, 80));
     _leftWindow.tableWidget->item(row, 0)->setBackgroundColor(color(status));
 
-    DELETEPTR(temp);
+    //    DELETEPTR(temp);
 }
 
 //FIXME
@@ -896,7 +935,7 @@ void ImageCompletionUI::showThumbnailForLabelled(QString strFilePath)
     int pos = this->in(strFilePath, _dequeDone);
     if(pos >= 0)
     {
-        this->showThumbnail(MOLI_LABELLED_STATUS_CHAR, pos + _dequeTodo.size());
+        this->showThumbnail(strFilePath, MOLI_LABELLED_STATUS_CHAR, pos + _dequeTodo.size());
     }
 }
 
@@ -907,7 +946,7 @@ void ImageCompletionUI::showThumbnailForUnLabelled(QString strFilePath)
     int pos = this->in(strFilePath, _dequeTodo);
     if(pos >= 0)
     {
-        this->showThumbnail(MOLI_UNLABELLED_STATUS_CHAR, pos);
+        this->showThumbnail(strFilePath, MOLI_UNLABELLED_STATUS_CHAR, pos);
     }
 }
 
@@ -917,28 +956,19 @@ void	ImageCompletionUI::save()
 
     bool ret1, ret2;
 
-    if(Global::PathResult.isEmpty())
+    if(Global::PathResult.isEmpty() || !QDir(Global::PathResult).exists())
     {
         QMessageBox::warning(this,
                              tr("保存"),
                              QString("请指定标注图像保存路径:%1").arg(QFileInfo(QApplication::instance()->applicationFilePath()).baseName() + ".ini"));
         return;
     }
-    if(Global::PathMask.isEmpty())
+    if(Global::PathMask.isEmpty() || !QDir(Global::PathMask).exists())
     {
         QMessageBox::warning(this,
                              tr("保存"),
                              QString("请指定掩码图像保存路径:%1").arg(QFileInfo(QApplication::instance()->applicationFilePath()).baseName() + ".ini"));
         return;
-    }
-
-    if(!QDir(Global::PathResult).exists())
-    {
-        QDir().mkdir(Global::PathResult);
-    }
-    if(!QDir(Global::PathMask).exists())
-    {
-        QDir().mkdir(Global::PathMask);
     }
 
     // Save
@@ -972,7 +1002,7 @@ void	ImageCompletionUI::save()
 
 void ImageCompletionUI::saveAs()
 {
-    if(_strCurrentImagePath.isEmpty()) return;
+    if(Global::NewName.isEmpty()) return;
 
     QString pathResult, pathMask;
     bool ret1, ret2;
@@ -1020,9 +1050,9 @@ void	ImageCompletionUI::search()
 
 void	ImageCompletionUI::addtosql()
 {
-//    class1.show();
+    //    class1.show();
     _advanceSearchDlg = new AdvanceSearchDlg(this,true);
-//    _advanceSearchDlg->setDeleteFlag(true);
+    //    _advanceSearchDlg->setDeleteFlag(true);
     _advanceSearchDlg->show();
 }
 
@@ -1617,6 +1647,7 @@ bool ImageCompletionUI::exportDB(const QString &path)
     }
 
     QFile file(path);
+    qDebug() << "path: " << path;
     file.open(QIODevice::WriteOnly|QIODevice::Truncate);
 
     // 将sql语句写入文件
@@ -1723,8 +1754,7 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
 
     if(!targetDir.exists())
     {
-        //< 如果目标目录不存在，则进行创建
-        if(!targetDir.mkdir(targetDir.absolutePath()))
+        if(!targetDir.mkpath("."))
             return false;
     }
 
@@ -1736,8 +1766,8 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
         if(fileInfo.fileName() == "." || fileInfo.fileName() == "..")
             continue;
         // 数据库文件处理
-        if(fileInfo.fileName().split(".")[1] == "sql")
-            qDebug()<<fileInfo.fileName();
+        if(fileInfo.fileName().split(".")[1] == "sql") // why is this necessary?
+            qDebug() << fileInfo.fileName();
 
         // 当为目录时，递归的进行copy
         if(fileInfo.isDir())
@@ -1748,15 +1778,14 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
                 return false;
         }
         else
-        {   //当允许覆盖操作时，将旧文件进行删除操作
+        {
             if(convertIfExits && targetDir.exists(fileInfo.fileName()))
             {
                 targetDir.remove(fileInfo.fileName());
             }
             // 进行文件copy
-            if(!QFile::copy(fileInfo.filePath(),
-                            targetDir.filePath(fileInfo.fileName()))){
-                return false;
+            if(!QFile::copy(fileInfo.filePath(), targetDir.filePath(fileInfo.fileName()))){
+                //return false; // ???
             }
         }
     }
@@ -1764,7 +1793,7 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
 }
 
 void ImageCompletionUI::importData()
-{  
+{
     ImpDlg *impdlg = new ImpDlg(this);
     if(impdlg->exec() == QDialog::Accepted)
     {
@@ -1784,120 +1813,49 @@ void ImageCompletionUI::importData()
         {
             QString recoverImagePath = Global::PathImage;
             QString recoverResultPath = Global::PathResult;
-            
+
 #ifdef Q_OS_WIN
-            QString packgeImagePath = _impPackgePath + "\\原始图像文件";
-            QString packgeResultPath = _impPackgePath + "\\标记结果文件";
-            QString packgeSqlPath = _impPackgePath + "\\databackup.sql";
-#endif
-            
-#ifdef Q_OS_LINUX
-            QString packgeImagePath = _impPackgePath + "/原始图像文件";
-            QString packgeResultPath = _impPackgePath + "/标记结果文件";
+            QString packgeImagePath = _impPackgePath + QString::fromUtf8("/原始图像文件");
+            QString packgeResultPath = _impPackgePath + QString::fromUtf8("/标记结果文件");
             QString packgeSqlPath = _impPackgePath + "/databackup.sql";
 #endif
-//            QFileDialog *targetDir = new QFileDialog(this,tr("选择打包恢复目录"),"","");
-//            targetDir->setFileMode(QFileDialog::DirectoryOnly);
-//            targetDir->setViewMode(QFileDialog::Detail);
-//            QString targetPath;
-//            if(targetDir->exec())
-//            {
-//                QStringList targetPaths = targetDir->selectedFiles();
-//                targetPath  = targetPaths.at(0);
-//            }
-//            else
-//                return;
-//    #ifdef Q_OS_WIN
-//            QString sourcepackgePath = packgePath + "\\sourceFile";
-//            QString resultpackgePath = packgePath + "\\resultFile";
-//            QString databackupFileName = packgePath + "\\databackup.sql";
-    
-//            QString sourcetargetPath = targetPath + "\\sourceFile";
-//            QString resulttargetPath = targetPath + "\\resultFile";
-//    #endif
-    
-//    #ifdef Q_OS_LINUX
-//            QString sourcepackgePath = packgePath + "/sourceFile";
-//            QString resultpackgePath = packgePath + "/resultFile";
-//            QString databackupFileName = packgePath + "/databackup.sql";
-    
-//            QString sourcetargetPath = targetPath + "/sourceFile";
-//            QString resulttargetPath = targetPath + "/resultFile";
-//    #endif
+
+#ifdef Q_OS_LINUX
+            QString packgeImagePath = _impPackgePath + tr("/原始图像文件");
+            QString packgeResultPath = _impPackgePath + tr("/标记结果文件");
+            QString packgeSqlPath = _impPackgePath + "/databackup.sql";
+#endif
+
             if(this->copyFiles(packgeImagePath,recoverImagePath) &&
                     this->copyFiles(packgeResultPath,recoverResultPath) &&
                     this->importDB(packgeSqlPath))
                 QMessageBox::warning(this,tr("提示"),tr("数据恢复成功"),QMessageBox::Close);
             else
                 QMessageBox::warning(this,tr("提示"),tr("数据恢复失败"),QMessageBox::Close);
-        }   
+        }
     }
 }
 
 void ImageCompletionUI::exportData()
 {
-//    QFileDialog *sourceDir = new QFileDialog(this,tr("选择铁谱图片目录"),"","");
-//    sourceDir->setFileMode(QFileDialog::DirectoryOnly);
-//    sourceDir->setViewMode(QFileDialog::Detail);
-//    QString sourcePath;
-//    if(sourceDir->exec())
-//    {
-//        QStringList sourcePaths = sourceDir->selectedFiles();
-//        sourcePath = sourcePaths.at(0);
-//        //qDebug()<<sourcePath;
-//    }
-//    else
-//        return;
-
-//    QFileDialog *resultDir = new QFileDialog(this,tr("选择磨粒标注结果目录"),"","");
-//    resultDir->setFileMode(QFileDialog::DirectoryOnly);
-//    resultDir->setViewMode(QFileDialog::Detail);
-//    QString resultPath;
-//    if(resultDir->exec())
-//    {
-//        QStringList resultPaths = resultDir->selectedFiles();
-//        resultPath = resultPaths.at(0);
-//        //qDebug()<<resultPath;
-//    }
-//    else
-//        return;
-
-//    QFileDialog *targetDir = new QFileDialog(this,tr("选择打包存档目录"),"","");
-//    targetDir->setFileMode(QFileDialog::DirectoryOnly);
-//    targetDir->setViewMode(QFileDialog::Detail);
-//    QString targetPath;
-//    if(targetDir->exec())
-//    {
-//        QStringList targetPaths = targetDir->selectedFiles();
-//        targetPath  = targetPaths.at(0);
-//        //qDebug()<<targetPath;
-//    }
-//    else
-//        return;
-
-//    if(resultPath.isEmpty() | resultPath.isEmpty()| targetPath.isEmpty())
-//        return;
-    ExpDlg *expDlg = new ExpDlg(this,Global::PathImage,Global::PathResult);
+    ExpDlg *expDlg = new ExpDlg(this, Global::PathImage, Global::PathResult);
     if(expDlg->exec() == QDialog::Accepted)
     {
         QString sourcePath = this->_expSourcePicPath;
         QString resultPath = this->_expResultPicPath;
         QString targetPath = this->_expPackgePath;
-    #ifdef Q_OS_WIN
-        QString sourcetargetPath = targetPath + "\\打包文件\\原始图像文件";
-        QString resulttargetPath = targetPath + "\\打包文件\\标记结果文件";
-        QString databackupFileName = targetPath + "\\打包文件\\标记结果文件";
-    #endif
-    
-    #ifdef Q_OS_LINUX
-        QString sourcetargetPath = targetPath + "/打包文件/原始图像文件";
-        QString resulttargetPath = targetPath + "/打包文件/标记结果文件";
-        QString databackupFileName = targetPath + "/打包文件/databackup.sql";
-    #endif
-    
-        // 导出数据库信息
-        /* edit code */
-    
+#ifdef Q_OS_WIN
+        QString sourcetargetPath = targetPath + QString::fromUtf8("/打包文件/原始图像文件");
+        QString resulttargetPath = targetPath + QString::fromUtf8("/打包文件/标记结果文件");
+        QString databackupFileName = targetPath + QString::fromUtf8("/打包文件/databackup.sql");
+#endif
+
+#ifdef Q_OS_LINUX
+        QString sourcetargetPath = targetPath + tr("/打包文件/原始图像文件");
+        QString resulttargetPath = targetPath + tr("/打包文件/标记结果文件");
+        QString databackupFileName = targetPath + tr("/打包文件/databackup.sql");
+#endif
+
         if(this->copyFiles(sourcePath,sourcetargetPath)
                 && this->copyFiles(resultPath,resulttargetPath)
                 && this->exportDB(databackupFileName))
@@ -1967,7 +1925,7 @@ QString ImageCompletionUI::status(QString imagePath)
 }
 
 void ImageCompletionUI::on_dBTableWidget_8_cellDoubleClicked(int row, int column)
-{   
+{
     QString strFilePath;
     QTableWidgetItem* item = _bottomWindow.dBTableWidget_8->item(row, 5);
     if(item)
@@ -2010,6 +1968,44 @@ void ImageCompletionUI::loadMoliImage(QString moliId)
         }
     }
     db.close();
+}
+
+void ImageCompletionUI::loadAllImagesAndShowInLeftWindow()
+{
+    QString imagePath;
+    QSqlDatabase db;
+    if( Global::createConnection(db) )
+    {
+        QSqlQuery query;
+        bool ret = query.exec(QString("select * from ferrographypicinfo"));
+        if(ret)
+        {
+            int index = query.record().indexOf("ferrographypicpath");
+            while(query.next())
+            {
+                imagePath = query.value(index).toString();
+
+                QString status = this->status( imagePath );
+
+                if(status == MOLI_LABELLED_STATUS_CHAR)
+                {
+                    if(-1 == in(imagePath, _dequeDone))
+                    {
+                        this->enDeque(imagePath, _dequeDone);
+                    }
+                    this->showThumbnailForLabelled(imagePath);
+                }
+                else
+                {
+                    if (-1 == in(imagePath, _dequeTodo))
+                    {
+                        this->enDeque(imagePath, _dequeTodo);
+                    }
+                    this->showThumbnailForUnLabelled(imagePath);
+                }
+            }
+        }
+    }
 }
 
 void ImageCompletionUI::on_dBTableWidget_7_cellDoubleClicked(int row, int column)
@@ -2200,6 +2196,19 @@ void ImageCompletionUI::on_dBTableWidget_1_cellDoubleClicked(int row, int column
     showThumbnailsInCentral(list);
 }
 
+void ImageCompletionUI::bottomWindowContextMenuEvent(const QPoint &)
+{
+    QAction* editAction = new QAction(tr("编辑"), this);
+    connect(editAction, SIGNAL(triggered()), this, SLOT(editImageProperties()));
+
+    QMenu* contextMenu = new QMenu(this);
+    contextMenu->addAction(editAction);
+}
+
+void ImageCompletionUI::editImageProperties()
+{
+}
+
 void ImageCompletionUI::back()
 {
     if(0 == _centralStackedWidget->currentIndex())
@@ -2222,7 +2231,7 @@ void ImageCompletionUI::append()
 }
 
 void ImageCompletionUI::showAll()
-{   
+{
     QList<QByteArray> list;
 
     QSqlDatabase db;
@@ -2250,7 +2259,7 @@ void ImageCompletionUI::showThumbnailsInCentral(QStringList list)
     close();
     clearLayout(_formLayout);
 
-     if(list.empty())
+    if(list.empty())
     {
         return;
     }
@@ -2270,6 +2279,7 @@ void ImageCompletionUI::showThumbnailsInCentral(QStringList list)
                 label->setObjectName(list[index]);
                 label->setFixedSize(150, 75);
                 label->setScaledContents(true);
+
                 QPixmap image;
                 if(image.load(list[index]))
                 {
@@ -2311,7 +2321,10 @@ bool ImageCompletionUI::eventFilter(QObject *target, QEvent *event)
             openImage(strFilePath);
             _canBack = true;
         }
+        return true;
     }
+
+    return false;
 }
 
 void ImageCompletionUI::clearLayout(QLayout *layout)
@@ -2340,4 +2353,7 @@ void ImageCompletionUI::drawEnclosingRectangle(QPixmap& pixmap, const QColor col
     painter.setPen(QPen(color, 20, Qt::SolidLine));
     painter.drawRect(0, 0, pixmap.width(), pixmap.height());
 }
+
+
+
 

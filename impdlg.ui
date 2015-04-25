@@ -57,16 +57,16 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="cancelPushButton">
+      <widget class="QPushButton" name="okPushButton">
        <property name="text">
-        <string>Cancel</string>
+        <string>导入</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="okPushButton">
+      <widget class="QPushButton" name="cancelPushButton">
        <property name="text">
-        <string>OK</string>
+        <string>取消</string>
        </property>
       </widget>
      </item>

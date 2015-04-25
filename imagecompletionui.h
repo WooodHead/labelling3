@@ -189,7 +189,6 @@ private:
 
 private slots:
     void	open();
-    void openbyquery(QString picid,QString picpath);
     void	save();
     void	saveAs();
 
@@ -257,7 +256,7 @@ private:
 private: // methods
 
     QString     status(QString absolutePath);
-    void        showThumbnail(QString status, int row);
+    void        showThumbnail(QString strFilePath, QString status, int row);
     void        showThumbnailForLabelled(QString strFilePath);
     void        showThumbnailForUnLabelled(QString strFilePath);
 
@@ -265,7 +264,7 @@ private: // methods
     void        showData();
     char*       getNewLogString();
 
-    bool        copyFiles(QString fromDir,QString toDir,bool convertIfExits = false);
+    bool        copyFiles(QString fromDir,QString toDir,bool convertIfExits = true);
     bool        importDB(const QString &path);
     bool        exportDB(const QString &path);
 
@@ -287,6 +286,7 @@ private: // methods
     void        drawEnclosingRectangle(QPixmap& pixmap, const QColor color);
     void        loadMoliImage(QString moliId);
 
+    void        loadAllImagesAndShowInLeftWindow();
 private slots:
     void        flushBottom();
     void        flushLeft(QString path, QString label);
@@ -303,12 +303,15 @@ private slots:
     void        on_dBTableWidget_3_cellDoubleClicked(int row, int column);
     void        on_dBTableWidget_2_cellDoubleClicked(int row, int column);
     void        on_dBTableWidget_1_cellDoubleClicked(int row, int column);
+    void        bottomWindowContextMenuEvent(const QPoint &);
+    void        editImageProperties();
 
     void        back();
     void        append();
     void        showAll();
 
     void        queryThumbnails(QStringList list);
+    void        OnDoubleClickTreeView(QModelIndex);
 };
 
 #endif // IMAGECOMPLETIONUI_H

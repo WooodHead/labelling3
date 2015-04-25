@@ -1,4 +1,4 @@
-﻿#include "UserEdit.h"
+#include "UserEdit.h"
 #include "ui_useredit.h"
 
 #include <QMessageBox>
@@ -100,4 +100,6 @@ void useredit::on__cancel_clicked()
 {
     close();
 }
+
+
 

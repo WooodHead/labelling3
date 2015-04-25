@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1117</width>
+    <width>1166</width>
     <height>468</height>
    </rect>
   </property>
@@ -21,12 +21,12 @@
     <rect>
      <x>9</x>
      <y>9</y>
-     <width>1111</width>
+     <width>1151</width>
      <height>401</height>
     </rect>
    </property>
    <property name="currentIndex">
-    <number>6</number>
+    <number>7</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -398,7 +398,7 @@
        <x>1</x>
        <y>31</y>
        <width>991</width>
-       <height>194</height>
+       <height>227</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout_7">
@@ -450,62 +450,10 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_29">
-        <property name="text">
-         <string>监控部件名称</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QComboBox" name="_comboBoxOilSampleMonitorPart">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QLabel" name="label_30">
-        <property name="text">
-         <string>监控部件编号</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="3">
-       <widget class="QComboBox" name="_comboBoxOilSampleMonitorPartID">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="4">
-       <widget class="QLabel" name="label_31">
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;采样点编号&lt;span style=&quot; color:#ff0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="5">
-       <widget class="QComboBox" name="_comboBoxOilSampleSamplePointID">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="6">
-       <widget class="QLabel" name="label_32">
-        <property name="text">
-         <string>滑油工作时数(小时)</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="7">
-       <widget class="QLineEdit" name="_editOilSampleHours"/>
-      </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_33">
         <property name="text">
-         <string>滑油添加量(升)</string>
+         <string>滑油添加量(L)</string>
         </property>
        </widget>
       </item>
@@ -542,20 +490,6 @@
       </item>
       <item row="3" column="3">
        <widget class="QComboBox" name="_comboBoxOilSampleSampleGuy">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="4">
-       <widget class="QLabel" name="label_25">
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;油样编号&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="5">
-       <widget class="QComboBox" name="_comboBoxOilSampleID">
         <property name="editable">
          <bool>true</bool>
         </property>
@@ -657,7 +591,73 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="3" colspan="4">
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_25">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;油样编号&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="_comboBoxOilSampleID">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QComboBox" name="_comboBoxOilSampleSamplePointID">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="5">
+       <widget class="QComboBox" name="_comboBoxOilSampleMonitorPartID">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="label_31">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;采样点编号&lt;span style=&quot; color:#ff0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4">
+       <widget class="QLabel" name="label_30">
+        <property name="text">
+         <string>监控部件编号</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="6">
+       <widget class="QLabel" name="label_29">
+        <property name="text">
+         <string>监控部件名称</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="4">
+       <widget class="QLabel" name="label_32">
+        <property name="text">
+         <string>滑油工作时数</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="7">
+       <widget class="QComboBox" name="_comboBoxOilSampleMonitorPart">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="5">
+       <widget class="QLineEdit" name="_editOilSampleHours"/>
+      </item>
+      <item row="2" column="3" colspan="5">
        <widget class="QLineEdit" name="_editOilSampleReason"/>
       </item>
      </layout>
@@ -684,7 +684,7 @@
      <property name="geometry">
       <rect>
        <x>1</x>
-       <y>46</y>
+       <y>30</y>
        <width>1105</width>
        <height>221</height>
       </rect>
@@ -1064,13 +1064,13 @@
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;*说明&lt;/span&gt;: 铁谱片编号根据 油样编号 分析铁谱仪型号 自动生成, 最后两位是铁谱片顺序编号, 默认是00, &lt;/p&gt;&lt;p align=&quot;center&quot;&gt;如用户确认是同一油样的不同谱片, 则用户可手工顺序编为01,02,03, ..., 不超过99.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
-    <widget class="QWidget" name="layoutWidget">
+    <widget class="QWidget" name="">
      <property name="geometry">
       <rect>
-       <x>1</x>
-       <y>36</y>
-       <width>643</width>
-       <height>95</height>
+       <x>0</x>
+       <y>30</y>
+       <width>507</width>
+       <height>128</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout_5">
@@ -1098,6 +1098,13 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="3">
+       <widget class="QComboBox" name="_comboBoxMentalID">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_46">
         <property name="text">
@@ -1119,15 +1126,26 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="3">
+       <widget class="QComboBox" name="_comboBoxMentalOilSampleID">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
       <item row="2" column="0">
-       <widget class="QLabel" name="label_49">
+       <widget class="QLabel" name="label_51">
         <property name="text">
-         <string>铁谱片制取油样消耗量</string>
+         <string>铁谱片制取人</string>
         </property>
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QLineEdit" name="_editMentalMount"/>
+       <widget class="QComboBox" name="_comboBoxMentalGuy">
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="2" column="2">
        <widget class="QLabel" name="label_50">
@@ -1143,33 +1161,15 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="4">
-       <widget class="QLabel" name="label_51">
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_49">
         <property name="text">
-         <string>铁谱片制取人</string>
+         <string>铁谱片制取油样消耗量(L)</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="5">
-       <widget class="QComboBox" name="_comboBoxMentalGuy">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3" colspan="3">
-       <widget class="QComboBox" name="_comboBoxMentalID">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="3" colspan="3">
-       <widget class="QComboBox" name="_comboBoxMentalOilSampleID">
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="_editMentalMount"/>
       </item>
      </layout>
     </widget>
@@ -1195,7 +1195,7 @@
      <property name="geometry">
       <rect>
        <x>2</x>
-       <y>42</y>
+       <y>30</y>
        <width>761</width>
        <height>187</height>
       </rect>
@@ -1909,15 +1909,10 @@
   <tabstop>_timeEditOilSampleSampleTime</tabstop>
   <tabstop>_comboBoxOilSamplePlaneType</tabstop>
   <tabstop>_comboBoxOilSamplePlaneID</tabstop>
-  <tabstop>_comboBoxOilSampleMonitorPart</tabstop>
-  <tabstop>_comboBoxOilSampleMonitorPartID</tabstop>
-  <tabstop>_comboBoxOilSampleSamplePointID</tabstop>
-  <tabstop>_editOilSampleHours</tabstop>
   <tabstop>_editOilSampleMount</tabstop>
   <tabstop>_editOilSampleReason</tabstop>
   <tabstop>_comboBoxOilSampleSampleUnit</tabstop>
   <tabstop>_comboBoxOilSampleSampleGuy</tabstop>
-  <tabstop>_comboBoxOilSampleID</tabstop>
   <tabstop>_comboBoxOilSampleUnitID</tabstop>
   <tabstop>_comboBoxOilSampleSampleMethod</tabstop>
   <tabstop>_editOilSampleSampleMount</tabstop>

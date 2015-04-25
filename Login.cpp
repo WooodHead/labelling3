@@ -34,9 +34,10 @@ Login::Login(QWidget *parent) :
     ui->_icon->setScaledContents(true);
 
     QImage image2;
-    image2.load(":/new/prefix1/icons/login_logo2.jpg");
-    ui->_icon_2->setPixmap(QPixmap::fromImage(image2));
+    image2.load(":/new/prefix1/icons/login_logo2.png");
+    ui->_icon_2->setPixmap(QPixmap::fromImage(image2.scaled(ui->_icon_2->width(), ui->_icon_2->height(), Qt::KeepAspectRatio)));
     ui->_icon_2->setScaledContents(true);
+    ui->_icon_2->repaint();
 
     ui->_login->setStyleSheet("background: #99cccc; color: black;");
     ui->_cancel->setStyleSheet("background: #999999; color: black;");
@@ -48,8 +49,8 @@ Login::Login(QWidget *parent) :
     ui->_labelMainTitle->setAttribute(Qt::WA_TranslucentBackground);
     ui->_labelUserName->setAttribute(Qt::WA_TranslucentBackground);
     ui->_labelPasswd->setAttribute(Qt::WA_TranslucentBackground);
-    ui->_icon->setAttribute(Qt::WA_TranslucentBackground);
-    ui->_icon_2->setAttribute(Qt::WA_TranslucentBackground);
+//    ui->_icon->setAttribute(Qt::WA_TranslucentBackground);
+//    ui->_icon_2->setAttribute(Qt::WA_TranslucentBackground);
     ui->centralStackedWidget->setAttribute(Qt::WA_TranslucentBackground);
     ui->centralStackedWidgetPage1->setAttribute(Qt::WA_TranslucentBackground);
     ui->centralStackedWidgetPage2->setAttribute(Qt::WA_TranslucentBackground);
@@ -240,7 +241,6 @@ void Login::loadDefaultConfigs()
     ui->_editResultTo->setText(Global::PathResult);
     ui->_editMaskTo->setText(Global::PathMask);
 
-    qDebug() << Global::ExtResult;
     int index = ui->_comboBoxResult->findText(Global::ExtResult);
     ui->_comboBoxResult->setCurrentIndex(index);
     index = ui->_comboBoxMask->findText(Global::ExtMask);
@@ -262,7 +262,7 @@ void Login::on__buttonSave_clicked()
 
     Global::settings->setValue("IMAGE/pathImage", ui->_editOriginalCopyTo->text());
     Global::settings->setValue("IMAGE/pathMask", ui->_editMaskTo->text());
-    Global::settings->setValue("IMAGE/pathResult", ui->_editResultTo->text());
+    Global::settings->setValue("IMAGE/pathResult", ui->_editResultTo->text().toUtf8().constData());
     Global::settings->setValue("IMAGE/extMask", ui->_comboBoxMask->currentText());
     Global::settings->setValue("IMAGE/extResult", ui->_comboBoxResult->currentText());
 
@@ -296,7 +296,7 @@ void Login::setText(QString str, QLineEdit* edit)
     if(dlg.exec() == QDialog::Accepted)
     {
         QDir dir = dlg.selectedFiles()[0];
-        edit->setText( dir.absolutePath());
+        edit->setText( dir.absolutePath() + "/");
     }
 }
 

@@ -42,15 +42,21 @@
         </rect>
        </property>
        <property name="text">
-        <string>TextLabel</string>
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap resource="ImageCompletion.qrc">:/new/prefix1/icons/login_logo.png</pixmap>
+       </property>
+       <property name="scaledContents">
+        <bool>true</bool>
        </property>
       </widget>
       <widget class="QLabel" name="_labelMainTitle">
        <property name="geometry">
         <rect>
-         <x>240</x>
+         <x>230</x>
          <y>50</y>
-         <width>261</width>
+         <width>281</width>
          <height>41</height>
         </rect>
        </property>
@@ -62,19 +68,6 @@
        </property>
        <property name="scaledContents">
         <bool>false</bool>
-       </property>
-      </widget>
-      <widget class="QLabel" name="_icon_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>180</y>
-         <width>131</width>
-         <height>61</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string/>
        </property>
       </widget>
       <widget class="QPushButton" name="_cancel">
@@ -228,6 +221,25 @@
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+      <widget class="QLabel" name="_icon_2">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>160</y>
+         <width>131</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap resource="ImageCompletion.qrc">:/new/prefix1/icons/login_logo2.png</pixmap>
+       </property>
+       <property name="scaledContents">
+        <bool>true</bool>
        </property>
       </widget>
      </widget>
@@ -627,6 +639,8 @@
   <tabstop>_comboBoxResult</tabstop>
   <tabstop>_comboBoxMask</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="ImageCompletion.qrc"/>
+ </resources>
  <connections/>
 </ui>
