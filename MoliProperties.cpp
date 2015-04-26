@@ -286,7 +286,7 @@ void MoliProperties::on_pushButton_clicked()
                     QByteArray arr;
                     QBuffer buffer(&arr);
                     buffer.open(QIODevice::WriteOnly);
-                    _result2.save(&buffer, Global::ExtMask.toUtf8().constData());
+                    _result2.save(&buffer, Global::ExtResult.toUtf8().constData());
                     _model->setData(_model->index(0, 23), arr);
                 }
             }

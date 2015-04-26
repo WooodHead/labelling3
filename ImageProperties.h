@@ -335,6 +335,8 @@ private slots:
 
     void on__comboBoxMentalSampleLightType_currentIndexChanged(int index);
 
+    void on__comboBoxOilSamplePlaneID_textChanged(const QString &arg1);
+
 private:
     Ui::ImageProperties *ui;
 
@@ -368,6 +370,7 @@ private:
 
     void updateHistory();
     void setHistoryData();
+    QStringList getSamplePoint(QString fieldName, QString whereField, QString whereValue);
 
 signals:
     void flush();

@@ -119,7 +119,8 @@ void ImageProperties::load()
     ui->_comboBoxOilSamplePlaneID->addItems(getItems(_models[3], "planeid"));
     ui->_comboBoxOilSampleMonitorPart->addItems(getItems(_models[3], "monitorpartname"));
     ui->_comboBoxOilSampleMonitorPartID->addItems(getItems(_models[3], "monitorpartid"));
-    ui->_comboBoxOilSampleSamplePointID->addItems(getItems(_models[3], "sampleid"));
+//    ui->_comboBoxOilSampleSamplePointID->addItems(getItems(_models[3], "sampleid"));
+
     ui->_comboBoxOilSampleSampleUnit->addItems(getItems(_models[3], "sampledepartname"));
     ui->_comboBoxOilSampleSampleGuy->addItems(getItems(_models[3], "samplestuff"));
     ui->_comboBoxOilSampleSampleMethod->addItems(getItems(_models[3], "samplemethod"));
@@ -199,6 +200,29 @@ QStringList ImageProperties::getItems(QSqlTableModel *model, QString fieldName)
         QSqlRecord record = model->record(j);
         QString value = record.value(record.indexOf(fieldName)).toString();
         if(!list.contains(value)) list << value;
+    }
+
+    return list;
+}
+
+QStringList ImageProperties::getSamplePoint(QString fieldName, QString whereField, QString whereValue)
+{
+    QStringList list;
+    list << "";
+    QSqlDatabase db;
+    if(Global::createConnection(db))
+    {
+        QSqlTableModel *model = new QSqlTableModel(this, db);
+        model->setTable("sampleSummaryInfo");
+        model->setFilter(QString("%1='%2'").arg(whereField).arg(whereValue));
+        model->select();
+
+        for(int j = 0; j < model->rowCount(); j++)
+        {
+            QSqlRecord record = model->record(j);
+            QString value = record.value(record.indexOf(fieldName)).toString();
+            if(!list.contains(value)) list << value;
+        }
     }
 
     return list;
@@ -1859,3 +1883,8 @@ void ImageProperties::setHistoryData()
     ui->_comboBoxMentalSampleGuy->setEditText(_history_values._mentalpicSampleGuy );
 }
 
+
+void ImageProperties::on__comboBoxOilSamplePlaneID_textChanged(const QString &arg1)
+{
+     ui->_comboBoxOilSampleSamplePointID->addItems(getSamplePoint("sampleID", "equipID", arg1));
+}

@@ -830,10 +830,8 @@ void ImageViewer::drawAllMoli(QList<QByteArray> list)
     {
         pixmap.loadFromData(arr);
         temp = pixmap.toImage();
-        //        temp = temp.scaled(image->width(), image->height());
 
         if(temp.isNull()) continue;
-
         temp = temp.scaled(image->width(), image->height());
 
         for(int h = 0; h < temp.height(); h++)

@@ -327,7 +327,7 @@ void ImageCompletionUI::setupWidgets()
     _editImageViewer->setLineColor(QColor(colorTable[3], colorTable[4], colorTable[5]));
 
     _centralTabWidget->addTab( _editTab, Global::Awesome->icon(pictureo), QString("图像标注") );
-    _centralTabWidget->setMaximumHeight(0.8 * height);
+    _centralTabWidget->setMaximumHeight(height);
     _centralTabWidget->setContextMenuPolicy(Qt::CustomContextMenu);
 
     QPalette palette;
@@ -366,7 +366,7 @@ void ImageCompletionUI::setupWidgets()
     _thumbnailScrollArea->setBackgroundRole(  QPalette::Dark );
 
     _centralThumbnailTabWidget->addTab( _thumbnailTab, Global::Awesome->icon(pictureo), QString("缩略图") );
-    _centralThumbnailTabWidget->setMaximumHeight(0.8 * height);
+    _centralThumbnailTabWidget->setMaximumHeight(height);
     _centralThumbnailTabWidget->setContextMenuPolicy(Qt::CustomContextMenu);
     _centralThumbnailTabWidget->setPalette(palette);
 
@@ -381,7 +381,7 @@ void ImageCompletionUI::setupWidgets()
     _rightOperationWidget = new QDockWidget(tr("工具箱"),this );
     _rightOperationWidget->setObjectName(tr("_rightOperationWidget"));
     _rightOperationWidget->setWindowIcon( Global::Awesome->icon(inbox) );
-    _rightOperationWidget->setMaximumSize(QSize(0.2*width, 1*height));
+    _rightOperationWidget->setMaximumSize(QSize(width, height));
     _rightOperationWidget->setFloating(false);
 
     _dockWidgetContents = new QWidget( );
@@ -433,7 +433,7 @@ void ImageCompletionUI::setupWidgets()
     _leftWindowWidget = new QDockWidget(tr("图谱信息"),this );
     _leftWindowWidget->setObjectName(tr("_leftWindowWidget"));
     _leftWindowWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    _leftWindowWidget->setMaximumSize(QSize(0.2*width, height));
+    _leftWindowWidget->setMaximumSize(QSize(width, height));
     _leftWindowWidget->setMaximumHeight(height);
     _leftWindowWidget->setFloating(false);
     //
@@ -480,7 +480,6 @@ void ImageCompletionUI::setupWidgets()
     _bottomWindowWidget = new QDockWidget(tr("数据库信息"),this );
     _bottomWindowWidget->setObjectName(tr("_bottomWindowWidget"));
     _bottomWindowWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
-    _bottomWindowWidget->setMinimumHeight(0.1 * height);
     _bottomDockWindowContents = new QWidget( );
     _bottomDockWindowContents->setObjectName(tr("_bottomDockWindowContents"));
 
