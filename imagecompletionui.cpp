@@ -472,6 +472,7 @@ void ImageCompletionUI::setupWidgets()
     _logWindowWidget->setMinimumHeight(0.1 * height);
     _logWindowWidget->setMaximumHeight(0.3 * height);
     _logWindowWidget->setWindowIcon(Global::Awesome->icon(filetexto));
+    _logWindowWidget->setVisible(false);
     addDockWidget(Qt::LeftDockWidgetArea, _logWindowWidget);
 
     ////////////////////////////////////////////////////////////////////////////////////
