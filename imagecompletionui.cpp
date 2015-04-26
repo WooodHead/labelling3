@@ -594,6 +594,7 @@ void ImageCompletionUI::createConnections()
     connect(_bottomWindow.dBTableWidget_1, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
 
     connect(_leftWindow._treeViewImages, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(OnDoubleClickTreeView(QModelIndex)));
+    connect(_regionCompetitionDialog._spinBox_measure, SIGNAL(valueChanged(int)), this, SLOT(on__spinBox_measure_valueChanged(int)));
 }
 
 void ImageCompletionUI::showContextMenu(QPoint pos)

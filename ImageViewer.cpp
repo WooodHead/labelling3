@@ -830,8 +830,11 @@ void ImageViewer::drawAllMoli(QList<QByteArray> list)
     {
         pixmap.loadFromData(arr);
         temp = pixmap.toImage();
+        //        temp = temp.scaled(image->width(), image->height());
 
-        temp.scaled(image->width(), image->height());
+        if(temp.isNull()) continue;
+
+        temp = temp.scaled(image->width(), image->height());
 
         for(int h = 0; h < temp.height(); h++)
         {
@@ -841,6 +844,58 @@ void ImageViewer::drawAllMoli(QList<QByteArray> list)
                 if(qRed(color) == 255 && qGreen(color) == 255 && qBlue(color) == 0)
                 {
                     image->setPixel(w, h, colors[cnt % 6]);
+                }
+                else
+                {
+                    QRgb color2;
+                    if(w > 0)
+                    {
+                        color2 = temp.pixel(w-1, h);
+                        if(qRed(color2) == 255 && qGreen(color2) == 255 && qBlue(color2) == 0)
+                        {
+                            image->setPixel(w, h, colors[cnt % 6]);
+                        }
+                    }
+                    if(h > 0)
+                    {
+                        color2 = temp.pixel(w, h-1);
+                        if(qRed(color2) == 255 && qGreen(color2) == 255 && qBlue(color2) == 0)
+                        {
+                            image->setPixel(w, h, colors[cnt % 6]);
+                        }
+                    }
+                    if(w < temp.width()-1)
+                    {
+                        color2 = temp.pixel(w+1, h);
+                        if(qRed(color2) == 255 && qGreen(color2) == 255 && qBlue(color2) == 0)
+                        {
+                            image->setPixel(w, h, colors[cnt % 6]);
+                        }
+                    }
+                    if(h < temp.height()-1)
+                    {
+                        color2 = temp.pixel(w, h+1);
+                        if(qRed(color2) == 255 && qGreen(color2) == 255 && qBlue(color2) == 0)
+                        {
+                            image->setPixel(w, h, colors[cnt % 6]);
+                        }
+                    }
+                    if(w > 0 && h > 0)
+                    {
+                        color2 = temp.pixel(w-1, h-1);
+                        if(qRed(color2) == 255 && qGreen(color2) == 255 && qBlue(color2) == 0)
+                        {
+                            image->setPixel(w, h, colors[cnt % 6]);
+                        }
+                    }
+                    if(w < temp.width()-1 && h < temp.height()-1)
+                    {
+                        color2 = temp.pixel(w+1, h+1);
+                        if(qRed(color2) == 255 && qGreen(color2) == 255 && qBlue(color2) == 0)
+                        {
+                            image->setPixel(w, h, colors[cnt % 6]);
+                        }
+                    }
                 }
             }
         }
