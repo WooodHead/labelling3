@@ -991,13 +991,13 @@ void	ImageCompletionUI::save()
     QString pathResult, pathMask;
     if(Global::MoliId.isEmpty())
     {
-        pathResult = Global::PathResult + Global::NewName + "." + Global::ExtResult;
-        pathMask = Global::PathMask + Global::NewName + "." + Global::ExtMask;
+        pathResult = Global::PathResult + Global::NewName;
+        pathMask = Global::PathMask + Global::NewName;
     }
     else
     {
-        pathResult = Global::PathResult + Global::MoliId + "." + Global::ExtResult;
-        pathMask = Global::PathMask + Global::MoliId + "." + Global::ExtMask;
+        pathResult = Global::PathResult + Global::MoliId;
+        pathMask = Global::PathMask + Global::MoliId;
     }
     if(!(ret1 = _editImageViewer->saveLabelledResult(pathResult, Global::ExtResult)))
     {
@@ -1313,9 +1313,13 @@ void ImageCompletionUI::exitApp()
         qApp->exit();
 }
 
-void ImageCompletionUI::closeEvent(QCloseEvent *)
+void ImageCompletionUI::closeEvent(QCloseEvent *event)
 {
-    exitApp();
+    QMessageBox::StandardButton reply = QMessageBox::information(this, tr("退出"), tr("是否要退出标注程序?"), QMessageBox::Ok | QMessageBox::Cancel);
+    if(reply == QMessageBox::Ok)
+        event->accept();
+    else
+        event->ignore();
 }
 
 void ImageCompletionUI::selectColor()

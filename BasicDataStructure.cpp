@@ -126,9 +126,9 @@ QImage* setMaskMap(IplImage* ocvImage, IplImage* mask)
 
                 if(isAllZero(color3) || isAllZero(color4) || isAllZero(color5) || isAllZero(color6))
                 {
-                    R = 0;
+                    R = 255;
                     G = 255;
-                    B = 255;
+                    B = 0;
                 }
             }
             retImage->setPixel(x, y, qRgb(R, G, B));

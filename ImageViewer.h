@@ -151,6 +151,10 @@ private:
     bool            _bPolygonDrawing;
     bool			_bPolygonEndDrawing;
 
+    int _orgWidth;
+    int _orgHeight;
+    float _scale;
+
 public:
     void getMainWindow(ImageCompletionUI* m_Window){this->_mainWindow = m_Window;}
 	void setMethod(int a){m_method = a;}

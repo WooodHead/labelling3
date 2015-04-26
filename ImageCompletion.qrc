@@ -29,5 +29,6 @@
         <file>icons/login_bg2_.jpg</file>
         <file>icons/login_bg.jpg</file>
         <file>icons/login_logo2.png</file>
+        <file>icons/loading.gif</file>
     </qresource>
 </RCC>

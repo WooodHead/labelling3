@@ -85,7 +85,7 @@ void MoliProperties::computeMoliInfo(double imageScale, double &perimeter, doubl
         {
             QRgb color = _result.pixel(x, y);
 
-            if(qRed(color) == 0 && qGreen(color) == 255 && qBlue(color) == 255)
+            if(qRed(color) == 255 && qGreen(color) == 255 && qBlue(color) == 0)
             {
                 perimeterPixels++;
                 minX = cv::min(minX, x);
@@ -328,10 +328,11 @@ void MoliProperties::on_pushButton_clicked()
                 emit saveImages();
                 emit flushBottom();
                 emit flushLeft(_originalImagePath, "Y");
-                emit next();
 
                 QMessageBox::information(this, tr("提示"), tr("保存成功!"), QMessageBox::Close);
                 close();
+
+                emit next();
             }
         }
     }

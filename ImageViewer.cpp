@@ -40,6 +40,8 @@ ImageViewer::ImageViewer(QWidget *parent)
 {
     setAttribute(Qt::WA_StaticContents);
 
+    _orgWidth = 0;
+    _orgHeight = 0;
     _ocvImage       = 0;
     _srcOcvImage    = 0;
     labelImage      = 0;
@@ -96,16 +98,19 @@ bool ImageViewer::openImage(const QString &fileName)
             return false;
         }
 
+        _orgWidth = newImage->width;
+        _orgHeight = newImage->height;
+
         if (cv::max(newImage->width,newImage->height) > 800)
         {
-            float scale = cv::max(newImage->width/800.0f, newImage->height/800.0f);
-            _ocvImage = cvCreateImage(cvSize(newImage->width/scale,newImage->height/scale), 8, 3);
+            _scale = cv::max(newImage->width/600.0f, newImage->height/600.0f);
+            _ocvImage = cvCreateImage(cvSize(newImage->width/_scale, newImage->height/_scale), 8, 3);
             cvResize(newImage,_ocvImage);
         }
         else if (newImage->width <= 250 || newImage->height <= 250)
         {
-            float scale = cv::min(newImage->width/300.0f, newImage->height/300.0f);
-            _ocvImage = cvCreateImage(cvSize(newImage->width/scale,newImage->height/scale),8,3);
+            _scale = cv::min(newImage->width/300.0f, newImage->height/300.0f);
+            _ocvImage = cvCreateImage(cvSize(newImage->width/_scale,newImage->height/_scale),8,3);
             cvResize(newImage,_ocvImage);
         }
         else
@@ -157,7 +162,7 @@ bool ImageViewer::deleteImage()
     DELETEPTR( _displayImage  );
     DELETEPTR( _labelMapImage );
 
-    _displayImage	= new QImage(500, 500, QImage::Format_RGB32);
+    _displayImage = new QImage(500, 500, QImage::Format_RGB32);
     _displayImage->fill(qRgb(128, 128, 128));
     _labelMapImage = new QImage(500, 500, QImage::Format_ARGB32);
     _labelMapImage->fill(qRgb(128, 128, 128));
@@ -167,6 +172,8 @@ bool ImageViewer::deleteImage()
     updateObjectCount(0);
     isEraser = false;
     m_method = -1;
+    _orgWidth = 0;
+    _orgHeight = 0;
 
     DELETEPTR( brushInterface  );
     DELETEPTR( _result_display );
@@ -200,7 +207,20 @@ bool ImageViewer::saveLabelMap(const QString &fileName, const char *fileFormat)
             }
         }
     }
-    return _labelMapImage->save(fileName, fileFormat);
+
+    IplImage* temp = QImageToIplImage(*_labelMapImage);
+    IplImage* scaled = cvCreateImage(cvSize(this->_orgWidth, this->_orgHeight), temp->depth, temp->nChannels);
+    cvResize(temp, scaled, CV_INTER_CUBIC);
+
+    QImage* temp2 = IplImageToQImage(scaled);
+
+    bool ret = temp2->save(fileName, fileFormat);
+
+    cvReleaseImage(&temp);
+    cvReleaseImage(&scaled);
+    if(temp2) delete temp2;
+
+    return ret;
 }
 
 bool ImageViewer::saveLabelledResult(QString path, QString ext)
@@ -209,7 +229,28 @@ bool ImageViewer::saveLabelledResult(QString path, QString ext)
     if(!_displayImage) return false;
     if(!_result_display) return false;
 
-    return _result_display->save(path, ext.toUtf8().constData());
+    QString path1 = QString("%1_0.%2").arg(path).arg(ext);
+    QString path2 = QString("%1_1.%2").arg(path).arg(ext);
+
+    IplImage* cv_result_display = QImageToIplImage(*_result_display);
+    IplImage* scaled = cvCreateImage(cvSize(this->_orgWidth, this->_orgHeight), cv_result_display->depth, cv_result_display->nChannels);
+    cvResize(cv_result_display, scaled, CV_INTER_CUBIC);
+
+    QImage* temp = IplImageToQImage(scaled);
+    bool ret1 = temp->save(path1, ext.toUtf8().constData());
+
+    IplImage* cv_result_save = QImageToIplImage(*_result_save);
+    cvResize(cv_result_save, scaled, CV_INTER_CUBIC);
+
+    temp = IplImageToQImage(scaled);
+    bool ret2 = temp->save(path2, ext.toUtf8().constData());
+
+    cvReleaseImage(&cv_result_display);
+    cvReleaseImage(&scaled);
+    cvReleaseImage(&cv_result_save);
+    if(temp) delete temp;
+
+    return ret1 && ret2;
 }
 
 bool ImageViewer::saveAsLabelledResult(QString &pathResult)
@@ -245,6 +286,8 @@ bool ImageViewer::saveMask(QString path, QString ext)
 {
     if(_mask.empty()) return false;
 
+    path = QString("%1.%2").arg(path).arg(ext);
+
     if(m_method == 0)
     {
         return saveLabelMap(path, ext.toUtf8().constData());
@@ -252,8 +295,18 @@ bool ImageViewer::saveMask(QString path, QString ext)
     else
     {
         _mask = _mask * 255;
-        IplImage* temp = new IplImage(_mask);
-        return IplImageToQImage(temp)->save(path, ext.toUtf8().constData());
+        cv::Mat edgeMap;
+        cv::Canny(_mask, edgeMap, 1, 3);
+
+        cv::Mat edge;
+        cv::resize(edgeMap, edge, cv::Size(_orgWidth, _orgHeight), 0, 0, cv::INTER_CUBIC);
+
+        IplImage* temp = new IplImage(edge);
+        QImage* temp2 = IplImageToQImage(temp);
+        bool ret = temp2->save(path, ext.toUtf8().constData());
+
+        if(temp2) delete temp2;
+        return ret;
     }
 }
 
@@ -514,7 +567,7 @@ void ImageViewer::mouseReleaseEvent(QMouseEvent *event)
                     _mainWindow->uncheckStrikeOptions();
                 }
             }
-            else if(_labelType == 1 && _bRectDrawing)
+            else if(_labelType == 1 && _bRectDrawing) // rect
             {
                 _bRectDrawing = false;
 
@@ -525,7 +578,7 @@ void ImageViewer::mouseReleaseEvent(QMouseEvent *event)
 
                 if(w == 0 || h == 0 ) return;
 
-                cv::Rect roi = cv::Rect(x,y,w,h);
+                cv::Rect roi = cv::Rect(x, y, w, h);
 
                 if(!CV_IS_IMAGE(_ocvImage)) return;
                 cv::Mat m(_ocvImage);
@@ -756,13 +809,13 @@ void ImageViewer::imageNotColor( double /*scaleFactor*/ )
 void ImageViewer::drawAllMoli(QList<QByteArray> list)
 {
     QRgb colors[] = {
-                     qRgb(0,   255, 255),
-                     qRgb(0,   255, 0),
-                     qRgb(255, 0,   0),
-                     qRgb(255, 255, 0),
-                     qRgb(255, 0,   255),
-                     qRgb(0,   0,   255)
-                    };
+        qRgb(255, 0,   0),
+        qRgb(255, 255, 0),
+        qRgb(0,   255, 255),
+        qRgb(0,   255, 0),
+        qRgb(255, 0,   255),
+        qRgb(0,   0,   255)
+    };
 
     QPixmap pixmap;
     QImage temp;
@@ -778,12 +831,14 @@ void ImageViewer::drawAllMoli(QList<QByteArray> list)
         pixmap.loadFromData(arr);
         temp = pixmap.toImage();
 
+        temp.scaled(image->width(), image->height());
+
         for(int h = 0; h < temp.height(); h++)
         {
             for(int w = 0; w < temp.width(); w++)
             {
                 QRgb color = temp.pixel(w, h);
-                if(qRed(color) == 0 && qGreen(color) == 255 && qBlue(color) == 255)
+                if(qRed(color) == 255 && qGreen(color) == 255 && qBlue(color) == 0)
                 {
                     image->setPixel(w, h, colors[cnt % 6]);
                 }
@@ -931,7 +986,12 @@ QImage *ImageViewer::getMask()
         if(_mask.empty()) return false;
 
         _mask = _mask * 255;
-        IplImage* temp = new IplImage(_mask);
+
+        // Return edge map (Fix it if you encounter the efficiency problem)
+        cv::Mat edgeMap;
+        cv::Canny(_mask, edgeMap, 1, 3);
+
+        IplImage* temp = new IplImage(edgeMap);
         return IplImageToQImage(temp);
     }
 }
