@@ -566,6 +566,7 @@ void ImageViewer::mouseReleaseEvent(QMouseEvent *event)
                     DELETEPTR(temp);
                     _mainWindow->uncheckStrikeOptions();
                 }
+                _mainWindow->updateStatusBar();
             }
             else if(_labelType == 1 && _bRectDrawing) // rect
             {
@@ -598,12 +599,14 @@ void ImageViewer::mouseReleaseEvent(QMouseEvent *event)
                 _result_display = setMaskMap(_ocvImage, temp);
                 setImage(*_result_display);
                 DELETEPTR(temp);
+
+                _mainWindow->updateStatusBar();
             }
 
             lastPos = QPoint(-1, -1);
             QApplication::restoreOverrideCursor();
             this->setDefaultCursor();
-            _mainWindow->updateStatusBar();
+
         }
     }
 }
@@ -832,7 +835,16 @@ void ImageViewer::drawAllMoli(QList<QByteArray> list)
         temp = pixmap.toImage();
 
         if(temp.isNull()) continue;
-        temp = temp.scaled(image->width(), image->height());
+
+        IplImage* cv_image = QImageToIplImage(temp);
+        IplImage* cv_target = cvCreateImage(cvSize(image->width(), image->height()), cv_image->depth, cv_image->nChannels);
+        cvResize(cv_image, cv_target, cv::INTER_NEAREST);
+        QImage* temp2 = IplImageToQImage(cv_target);
+        temp = *temp2;
+
+        cvReleaseImage(&cv_image);
+        cvReleaseImage(&cv_target);
+        if(temp2) delete temp2;
 
         for(int h = 0; h < temp.height(); h++)
         {
@@ -933,12 +945,14 @@ void ImageViewer::polygonLabelling()
     {
         cv::fillPoly(_mask, elementPoints, &npts, 1, cv::GC_PR_FGD);
         res = grabCutSeg(m, _mask, cv::Rect(), 1);
+        _mainWindow->updateStatusBar();
     }
     else if(m_method == 2) // manual
     {
         // get mask
         cv::fillPoly(_mask, elementPoints, &npts, 1, cv::GC_FGD);
         m.copyTo(res, _mask);
+        _mainWindow->updateStatusBar();
     }
     clock_t end = clock();
     _seg_during = (double)(end-start) / CLOCKS_PER_SEC;
@@ -951,9 +965,9 @@ void ImageViewer::polygonLabelling()
     _result_display = setMaskMap(_ocvImage, temp);
     setImage(*_result_display);
 
+
     lastPos = QPoint(-1, -1);
     QApplication::restoreOverrideCursor();
-    _mainWindow->updateStatusBar();
 }
 
 void ImageViewer::redo()

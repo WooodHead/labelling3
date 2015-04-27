@@ -35,6 +35,7 @@ using namespace std;
 #include "expdlg.h"
 #include "impdlg.h"
 #include "ImagePropertiesEditor.h"
+#include "About.h"
 
 #define THUMBNAILS_PER_ROW 6
 
@@ -178,6 +179,9 @@ private:
     QAction               *_strikeThickness[3];
     QAction               *_lineThickness[3];
 
+    QAction *_aboutAction;
+    QAction *_docAction;
+
     QAction               *_redo;
     QAction               *_undo;
 
@@ -320,6 +324,9 @@ private slots:
     void        queryThumbnails(QStringList list);
     void        OnDoubleClickTreeView(QModelIndex);
     void on__spinBox_measure_valueChanged(int arg1);
+
+    void about();
+    void showDoc();
 };
 
 #endif // IMAGECOMPLETIONUI_H

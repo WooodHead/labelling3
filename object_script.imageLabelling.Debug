@@ -20,6 +20,8 @@ INPUT(
 ./debug\UserAdd.o
 ./debug\UserEdit.o
 ./debug\UserManagement.o
+./debug\ImagePropertiesEditor.o
+./debug\About.o
 ./debug\QtAwesome.o
 ./debug\moc_PaintTools.o
 ./debug\moc_ImageViewer.o
@@ -37,6 +39,8 @@ INPUT(
 ./debug\moc_expdlg.o
 ./debug\moc_impdlg.o
 ./debug\moc_advancesearchdlg.o
+./debug\moc_ImagePropertiesEditor.o
+./debug\moc_About.o
 ./debug\moc_QtAwesome.o
 ./debug\qrc_ImageCompletion.o
 ./debug\qrc_QtAwesome.o

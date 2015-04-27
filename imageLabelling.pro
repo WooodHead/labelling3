@@ -24,7 +24,8 @@ HEADERS += \
     impdlg.h \
     advancesearchdlg.h \
     Util/def.h \
-    ImagePropertiesEditor.h
+    ImagePropertiesEditor.h \
+    About.h
 
 
 SOURCES += \
@@ -49,7 +50,8 @@ SOURCES += \
     UserAdd.cpp \
     UserEdit.cpp \
     UserManagement.cpp \
-    ImagePropertiesEditor.cpp
+    ImagePropertiesEditor.cpp \
+    About.cpp
 
 
 FORMS += \
@@ -73,7 +75,8 @@ FORMS += \
     ImageComparison.ui \
     expdlg.ui \
     impdlg.ui \
-    ImagePropertiesEditor.ui
+    ImagePropertiesEditor.ui \
+    About.ui
 
 RESOURCES += \
     ImageCompletion.qrc

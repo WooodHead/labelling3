@@ -44,6 +44,8 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
     showImagesInTree();
     loadAllImagesAndShowInLeftWindow();
     changeMeasureButtonState(true);
+
+    _regionCompetitionDialog._spinBox_measure->setRange(1, 10000);
 }
 
 ImageCompletionUI::~ImageCompletionUI()
@@ -106,6 +108,9 @@ void ImageCompletionUI::createMenus()
     }
 
     _menuWindow = menuBar()->addMenu( tr("&帮助") );
+    //    _menuWindow->addAction(_docAction);
+    //    _menuWindow->addSeparator();
+    _menuWindow->addAction(_aboutAction);
 }
 
 void	ImageCompletionUI::createActions()
@@ -245,6 +250,12 @@ void	ImageCompletionUI::createActions()
         _userManagementAction->setObjectName(tr("_userManagementAction"));
         connect( _userManagementAction, SIGNAL(triggered()), this, SLOT(userManagement()) );
     }
+
+    _aboutAction = new QAction(tr("关于"), this);
+    connect(_aboutAction, SIGNAL(triggered()), this, SLOT(about()));
+
+    _docAction = new QAction(tr("帮助文档"), this);
+    connect(_docAction, SIGNAL(triggered()), this, SLOT(showDoc()));
 }
 
 void	ImageCompletionUI::createToolBars()
@@ -583,16 +594,18 @@ void ImageCompletionUI::createConnections()
     connect(_bottomWindow.dBTableWidget_2, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_dBTableWidget_2_cellDoubleClicked(int, int)));
     connect(_bottomWindow.dBTableWidget_1, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_dBTableWidget_1_cellDoubleClicked(int, int)));
 
-    connect(_bottomWindow.dBTableWidget_9, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
-    connect(_bottomWindow.dBTableWidget_8, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
-    connect(_bottomWindow.dBTableWidget_7, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
-    connect(_bottomWindow.dBTableWidget_6, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
-    connect(_bottomWindow.dBTableWidget_5, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
-    connect(_bottomWindow.dBTableWidget_4, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
-    connect(_bottomWindow.dBTableWidget_3, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
-    connect(_bottomWindow.dBTableWidget_2, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
-    connect(_bottomWindow.dBTableWidget_1, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
-
+    if(Global::Authority == "1")
+    {
+        connect(_bottomWindow.dBTableWidget_9, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
+        connect(_bottomWindow.dBTableWidget_8, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
+        connect(_bottomWindow.dBTableWidget_7, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
+        connect(_bottomWindow.dBTableWidget_6, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
+        connect(_bottomWindow.dBTableWidget_5, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
+        connect(_bottomWindow.dBTableWidget_4, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
+        connect(_bottomWindow.dBTableWidget_3, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
+        connect(_bottomWindow.dBTableWidget_2, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
+        connect(_bottomWindow.dBTableWidget_1, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(bottomWindowContextMenuEvent(const QPoint &)));
+    }
     connect(_leftWindow._treeViewImages, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(OnDoubleClickTreeView(QModelIndex)));
     connect(_regionCompetitionDialog._spinBox_measure, SIGNAL(valueChanged(int)), this, SLOT(on__spinBox_measure_valueChanged(int)));
 }
@@ -764,6 +777,7 @@ void ImageCompletionUI::OnDoubleClickTreeView(QModelIndex m)
     if(selectedItemTitle.endsWith(tr("jpg")) || selectedItemTitle.endsWith(tr("png")) || selectedItemTitle.endsWith(tr("bmp")) || selectedItemTitle.endsWith("jpeg"))
     {
         QString strFilePath = Global::PathImage + selectedItemTitle;
+        _centralStackedWidget->setCurrentIndex(0);
         openImage(strFilePath);
     }
     else
@@ -1799,29 +1813,29 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
             continue;
         // 数据库文件处理
         if(fileInfo.fileName().split(".")[1] == "sql") // why is this necessary?
-//            qDebug() << fileInfo.fileName();
+            //            qDebug() << fileInfo.fileName();
 
-        // 当为目录时，递归的进行copy
-        if(fileInfo.isDir())
-        {
-            /*
+            // 当为目录时，递归的进行copy
+            if(fileInfo.isDir())
+            {
+                /*
             if(!copyFiles(fileInfo.filePath(),
                           targetDir.filePath(fileInfo.fileName()),
                           convertIfExits))
                 return false;
                 */
-        }
-        else
-        {
-            if(convertIfExits && targetDir.exists(fileInfo.fileName()))
+            }
+            else
             {
-                targetDir.remove(fileInfo.fileName());
+                if(convertIfExits && targetDir.exists(fileInfo.fileName()))
+                {
+                    targetDir.remove(fileInfo.fileName());
+                }
+                // 进行文件copy
+                if(!QFile::copy(fileInfo.filePath(), targetDir.filePath(fileInfo.fileName()))){
+                    //return false; // ???
+                }
             }
-            // 进行文件copy
-            if(!QFile::copy(fileInfo.filePath(), targetDir.filePath(fileInfo.fileName()))){
-                //return false; // ???
-            }
-        }
     }
     return true;
 }
@@ -2531,3 +2545,11 @@ void ImageCompletionUI::on__spinBox_measure_valueChanged(int arg1)
 {
     _imageScale = arg1 * 1.0 / 50;
 }
+
+void ImageCompletionUI::about()
+{
+
+    (new About)->show();
+}
+
+void ImageCompletionUI::showDoc(){}

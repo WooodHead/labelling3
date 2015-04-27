@@ -20,6 +20,8 @@ INPUT(
 ./release\UserAdd.o
 ./release\UserEdit.o
 ./release\UserManagement.o
+./release\ImagePropertiesEditor.o
+./release\About.o
 ./release\QtAwesome.o
 ./release\moc_PaintTools.o
 ./release\moc_ImageViewer.o
@@ -37,6 +39,8 @@ INPUT(
 ./release\moc_expdlg.o
 ./release\moc_impdlg.o
 ./release\moc_advancesearchdlg.o
+./release\moc_ImagePropertiesEditor.o
+./release\moc_About.o
 ./release\moc_QtAwesome.o
 ./release\qrc_ImageCompletion.o
 ./release\qrc_QtAwesome.o

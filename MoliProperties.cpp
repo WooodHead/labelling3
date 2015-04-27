@@ -295,6 +295,7 @@ void MoliProperties::on_pushButton_clicked()
             {
                 _model->revertAll();
                 QMessageBox::warning(this, tr("提示"), tr("保存失败!"), QMessageBox::Close);
+                close();
             }
             else
             {
