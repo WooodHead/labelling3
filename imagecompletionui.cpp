@@ -1791,25 +1791,28 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
     }
 
     QFileInfoList fileInfoList = sourceDir.entryInfoList();
+    qDebug()<<fileInfoList.length();
     // 遍历所有文件信息
-    foreach(QFileInfo fileInfo, fileInfoList)
+//    foreach(QFileInfo fileInfo, fileInfoList)
+    for(int i = 0;i<fileInfoList.length();++i)
     {
+        QFileInfo fileInfo = fileInfoList.at(i);
         // 去除当前目录和父目录
         if(fileInfo.fileName() == "." || fileInfo.fileName() == "..")
             continue;
         // 数据库文件处理
-        if(fileInfo.fileName().split(".")[1] == "sql") // why is this necessary?
+//        if(fileInfo.fileName().split(".")[1] == "sql"); // why is this necessary?
 //            qDebug() << fileInfo.fileName();
 
         // 当为目录时，递归的进行copy
         if(fileInfo.isDir())
         {
-            /*
+
             if(!copyFiles(fileInfo.filePath(),
                           targetDir.filePath(fileInfo.fileName()),
                           convertIfExits))
                 return false;
-                */
+
         }
         else
         {
@@ -1819,7 +1822,7 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
             }
             // 进行文件copy
             if(!QFile::copy(fileInfo.filePath(), targetDir.filePath(fileInfo.fileName()))){
-                //return false; // ???
+                return false; // ???
             }
         }
     }
