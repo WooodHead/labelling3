@@ -480,7 +480,16 @@ private:
     QAction *deletepropertyAction;
     QAction *renameprtpertyAction;
 
-    QAction *deletedataAction;
+//    QAction *deletedataAction;
+
+    QAction *eqmdelAction;
+    QAction *mpdelAction;
+    QAction *mprdelAction;
+    QAction *oisdelAction;
+    QAction *oiadelAction;
+    QAction *fegdelAction;
+    QAction *fegpdelAction;
+    QAction *abmdelAction;
 
     QMap<QString,QString> _eqmCdtMap;          // zhuang bei xin xi biao condition Map
     QMap<QString,QString> _abmCdtMap;          // mo li biao ji xin xi biao condition Map

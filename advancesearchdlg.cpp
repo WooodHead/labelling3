@@ -57,25 +57,58 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent,bool flag) :
 
     if(deleteflag)
     {
-        deletedataAction = new QAction(tr("删除数据"),0);
-        ui->eqmTableView->addAction(deletedataAction);
+//        deletedataAction = new QAction(tr("删除数据"),0);
+        eqmdelAction = new QAction(tr("删除数据"),0);
+        ui->eqmTableView->addAction(eqmdelAction);
         ui->eqmTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
-        ui->mpTableView->addAction(deletedataAction);
+
+        mpdelAction = new QAction(tr("删除数据"),0);
+        ui->mpTableView->addAction(mpdelAction);
         ui->mpTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
-        ui->mprTableView->addAction(deletedataAction);
+
+        mprdelAction = new QAction(tr("删除数据"),0);;
+        ui->mprTableView->addAction(mprdelAction);
         ui->mprTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
-        ui->oiaTableView->addAction(deletedataAction);
+
+        oiadelAction = new QAction(tr("删除数据"),0);;
+        ui->oiaTableView->addAction(oiadelAction);
         ui->oiaTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
-        ui->oisTableView->addAction(deletedataAction);
+
+        oisdelAction = new QAction(tr("删除数据"),0);;
+        ui->oisTableView->addAction(oisdelAction);
         ui->oisTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
-        ui->fegTableView->addAction(deletedataAction);
+
+        fegdelAction = new QAction(tr("删除数据"),0);;
+        ui->fegTableView->addAction(fegdelAction);
         ui->fegTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
-        ui->fegpTableView->addAction(deletedataAction);
+
+        fegpdelAction = new QAction(tr("删除数据"),0);;
+        ui->fegpTableView->addAction(fegpdelAction);
         ui->fegpTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
-        ui->abmTableView->addAction(deletedataAction);
+
+        abmdelAction = new QAction(tr("删除数据"),0);;
+        ui->abmTableView->addAction(abmdelAction);
         ui->abmTableView->setContextMenuPolicy(Qt::ActionsContextMenu);
 
-        connect(deletedataAction,SIGNAL(triggered()),this,SLOT(deletedata()));
+        //deletedataAction->setEnabled(false);
+
+        connect(eqmdelAction,SIGNAL(triggered()),this,SLOT(deletedata()));
+        connect(mpdelAction,SIGNAL(triggered()),this,SLOT(deletedata()));
+        connect(mprdelAction,SIGNAL(triggered()),this,SLOT(deletedata()));
+        connect(oiadelAction,SIGNAL(triggered()),this,SLOT(deletedata()));
+        connect(oisdelAction,SIGNAL(triggered()),this,SLOT(deletedata()));
+        connect(fegdelAction,SIGNAL(triggered()),this,SLOT(deletedata()));
+        connect(fegpdelAction,SIGNAL(triggered()),this,SLOT(deletedata()));
+        connect(abmdelAction,SIGNAL(triggered()),this,SLOT(deletedata()));
+
+        eqmdelAction->setEnabled(false);
+        mpdelAction->setEnabled(false);
+        mprdelAction->setEnabled(false);
+        oiadelAction->setEnabled(false);
+        oisdelAction->setEnabled(false);
+        fegdelAction->setEnabled(false);
+        fegpdelAction->setEnabled(false);
+        abmdelAction->setEnabled(false);
     }
 
     connect(this,SIGNAL(showqueryThumbnails(QStringList)),parent,SLOT(queryThumbnails(QStringList)));
@@ -1550,6 +1583,10 @@ void AdvanceSearchDlg::query()
     {
         planeidList.append(_eqmInfoModel->record(i).value("planeid").toString());
     }
+    if(_eqmInfoModel->rowCount() == 0)
+        this->eqmdelAction->setEnabled(false);
+    else
+        this->eqmdelAction->setEnabled(true);
 //    qDebug()<<eqmSql;
 
     // 动部件信息表
@@ -1561,6 +1598,10 @@ void AdvanceSearchDlg::query()
     {
         movepartidList.append(_mpInfoModel->record(i).value("movepartid").toString());
     }
+    if(_mpInfoModel->rowCount() == 0)
+        mpdelAction->setEnabled(false);
+    else
+        mpdelAction->setEnabled(true);
 //    qDebug()<<mpSql;
 
     // 动部件维修信息表
@@ -1568,6 +1609,10 @@ void AdvanceSearchDlg::query()
     QString mprSql = generateSql(_mprCdtMap,mprTableName);
     _mprInfoModel->setQuery(mprSql);
     setModelHeaderData("MprInfo");
+    if(_mprInfoModel->rowCount() == 0)
+        mprdelAction->setEnabled(false);
+    else
+        mprdelAction->setEnabled(true);
 //    qDebug()<<mprSql;
 
     // 油样采集信息表
@@ -1579,13 +1624,21 @@ void AdvanceSearchDlg::query()
     {
         oilsampleidList.append(_oisInfoModel->record(i).value("oilsampleid").toString());
     }
-//    qDebug()<<oisSql;
+    if(_oisInfoModel->rowCount() == 0)
+        oisdelAction->setEnabled(false);
+    else
+        oisdelAction->setEnabled(true);
+        //    qDebug()<<oisSql;
 
     // 油样检测分析信息表
     QString oiaTableName = tableNames.value("OiaInfo");
     QString oiaSql = generateSql(_oiaCdtMap,oiaTableName);
     _oiaInfoModel->setQuery(oiaSql);
     setModelHeaderData("OiaInfo");
+    if(_oiaInfoModel->rowCount() == 0)
+        oiadelAction->setEnabled(false);
+    else
+        oiadelAction->setEnabled(true);
 //    qDebug()<<oiaSql;
 
     // 铁谱质谱信息表
@@ -1594,6 +1647,10 @@ void AdvanceSearchDlg::query()
     _fegInfoModel->setQuery(fegSql);
     setModelHeaderData("FegInfo");
 //    qDebug()<<fegSql;
+    if(_fegInfoModel->rowCount() == 0)
+        fegdelAction->setEnabled(false);
+    else
+        fegdelAction->setEnabled(true);
 
     for(int i = 0;i<_fegInfoModel->rowCount();++i)
     {
@@ -1605,6 +1662,10 @@ void AdvanceSearchDlg::query()
     QString fegpSql = generateSql(_fegpCdtMap,fegpTableName);
     _fegpInfoModel->setQuery(fegpSql);
     setModelHeaderData("FegPInfo");
+    if(_fegpInfoModel->rowCount() == 0)
+        fegpdelAction->setEnabled(false);
+    else
+        fegpdelAction->setEnabled(true);
 //    qDebug()<<fegpSql;
 
     for(int i = 0;i<_fegpInfoModel->rowCount();++i)
@@ -1619,6 +1680,10 @@ void AdvanceSearchDlg::query()
     _abmInfoModel->setQuery(abmSql);
     setModelHeaderData("AbmInfo");
 //    qDebug()<<abmSql;
+    if(_abmInfoModel->rowCount() == 0)
+        abmdelAction->setEnabled(false);
+    else
+        abmdelAction->setEnabled(true);
 
     emit showqueryThumbnails(ferrographypicpathList);
 }
@@ -5396,6 +5461,14 @@ void AdvanceSearchDlg::deletedata()
     if(reply == QMessageBox::Yes)
     {
 //        int tabidx = ui->queryResultTabWidget->currentIndex();
+        if(!this->db.isOpen())
+        {
+            if(!Global::createConnection(db))
+            {
+                QMessageBox::warning(this,tr("数据库提示"),tr("不能链接数据库"),QMessageBox::Close);
+                return;
+            }
+        }
         QSqlQuery query;
 
         switch(tabidx)
