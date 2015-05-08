@@ -274,7 +274,7 @@ private: // methods
     bool        importDB(const QString &path);
     bool        exportDB(const QString &path);
 
-    void        openImage(QString file);
+
     QColor      color(QString status);
 
     void        clearBottomWindow();
@@ -297,8 +297,9 @@ private: // methods
     void        changeMeasureButtonState(bool state);
     void        closeEvent(QCloseEvent *);
 private slots:
+    void        openImage(QString file);
     void        flushLeftTree();
-    void        flushBottom();
+    void        flush();
     void        flushLeft(QString path, QString label);
     void        showContextMenu(QPoint);
     void        editProperties();
@@ -316,7 +317,9 @@ private slots:
     void        bottomWindowContextMenuEvent(const QPoint &);
     void        editImageProperties();
     void        addSamplePoint();
+    void        deleteSamplePoint();
 
+    void        nextImage();
     void        back();
     void        append();
     void        showAll();

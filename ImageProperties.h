@@ -337,6 +337,10 @@ private slots:
 
     void on__comboBoxOilSamplePlaneID_textChanged(const QString &arg1);
 
+    void on__comboBoxMentalInstrumentType_currentIndexChanged(const QString &arg1);
+
+    void on__comboBoxOilAnalyzeMentalEquip_currentIndexChanged(int index);
+
 private:
     Ui::ImageProperties *ui;
 
@@ -376,6 +380,7 @@ signals:
     void flush();
     void closeViewer();
     void syncFilePathStr(QString fName);
+    void openImage(QString fName);
 
 public:
     void showDlg(QString filename);
