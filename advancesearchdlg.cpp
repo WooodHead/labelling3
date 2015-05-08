@@ -1661,6 +1661,7 @@ void AdvanceSearchDlg::query()
     QString fegpTableName = tableNames.value("FegPInfo");
     QString fegpSql = generateSql(_fegpCdtMap,fegpTableName);
     _fegpInfoModel->setQuery(fegpSql);
+    _fegpInfoModel->removeColumn(12);
     setModelHeaderData("FegPInfo");
     if(_fegpInfoModel->rowCount() == 0)
         fegpdelAction->setEnabled(false);
@@ -1678,6 +1679,9 @@ void AdvanceSearchDlg::query()
     QString abmTableName = tableNames.value("AbmInfo");
     QString abmSql = generateSql(_abmCdtMap,abmTableName);
     _abmInfoModel->setQuery(abmSql);
+    for(int i=18;i<24;++i)
+        _abmInfoModel->removeColumn(18);
+
     setModelHeaderData("AbmInfo");
 //    qDebug()<<abmSql;
     if(_abmInfoModel->rowCount() == 0)
