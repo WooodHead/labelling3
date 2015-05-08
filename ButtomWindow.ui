@@ -20,7 +20,7 @@
       <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="dBTab_1">
       <attribute name="title">
@@ -849,7 +849,7 @@
          </column>
          <column>
           <property name="text">
-           <string>分析铁谱仪型号</string>
+           <string>铁谱分析设备</string>
           </property>
          </column>
          <column>
