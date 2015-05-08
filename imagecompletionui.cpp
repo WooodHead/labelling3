@@ -68,9 +68,6 @@ void ImageCompletionUI::createMenus()
     _menuFile = menuBar()->addMenu( tr("&文件") );
 
     _menuFile->addAction( _openAction );
-    //    _menuFile->addSeparator();
-    //    _menuFile->addAction( _saveAction );
-    //    _menuFile->addAction( _saveAsAction );
 
     _menuFile->addSeparator();
     _menuFile->addAction( _closeAction );
@@ -118,14 +115,6 @@ void	ImageCompletionUI::createActions()
     _openAction = new QAction( Global::Awesome->icon(folderopeno), tr("&打开"), this );
     _openAction->setObjectName(tr("_openAction"));
     connect(_openAction, SIGNAL(triggered()), this, SLOT(open()));
-
-    //    _saveAction = new QAction( Global::Awesome->icon(floppyo), tr("&保存"), this );
-    //    _saveAction->setObjectName(tr("_saveAction"));
-    //    connect(_saveAction, SIGNAL(triggered()), this, SLOT(save()));
-
-    //    _saveAsAction = new QAction(  Global::Awesome->icon(floppyo), tr("&另存为"), this );
-    //    _saveAsAction->setObjectName(tr("_saveAsAction"));
-    //    connect(_saveAsAction, SIGNAL(triggered()), this, SLOT( saveAs() ));
 
     _closeAction = new QAction( Global::Awesome->icon(times), tr("关闭"), this );
     connect(_closeAction, SIGNAL(triggered()), this, SLOT(close()));
@@ -262,7 +251,6 @@ void	ImageCompletionUI::createToolBars()
 {
     _editToolBar = addToolBar( tr("文件") );
     _editToolBar->addAction( _openAction );
-    //    _editToolBar->addAction( _saveAction );
     _editToolBar->addAction( _closeAction );
 
     _editToolBar->addSeparator();
@@ -639,12 +627,21 @@ void ImageCompletionUI::showContextMenu(QPoint pos)
         backMenu->setEnabled(false);
     }
 
+    QAction* nextMenu = new QAction(tr("下一幅图像"), this);
+    connect(nextMenu, SIGNAL(triggered()), this, SLOT(nextImage()));
+    if(!_editImageViewer->getOriginalImage())
+    {
+        nextMenu->setEnabled(false);
+    }
+
     QMenu menu;
     menu.addAction(editMenu);
     menu.addAction(appendMenu);
     menu.addAction(showAllMenu);
     menu.addSeparator();
     menu.addAction(backMenu);
+    menu.addSeparator();
+    menu.addAction(nextMenu);
     menu.exec(_centralTabWidget->mapToGlobal(pos));
 }
 
@@ -950,7 +947,6 @@ void ImageCompletionUI::showThumbnail(QString file, QString status, int row)
 {
     _leftWindow.tableWidget->insertRow(row);
     _leftWindow.tableWidget->setItem(row, 0, new QTableWidgetItem(""));
-    //    QImage* temp = _editImageViewer->getOriginalImage();
     QImage temp = QImage(file);
     _leftWindow.tableWidget->item(row, 0)->setData(Qt::DecorationRole, QPixmap::fromImage(temp).scaled(80, 80));
     _leftWindow.tableWidget->item(row, 0)->setBackgroundColor(color(status));
@@ -1760,8 +1756,9 @@ QImage ImageCompletionUI::loadLabelledResult(QString file)
     return image.toImage();
 }
 
-void ImageCompletionUI::flushBottom()
+void ImageCompletionUI::flush()
 {
+    flushLeftTree();
     showData();
 }
 
@@ -1807,7 +1804,7 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
     QFileInfoList fileInfoList = sourceDir.entryInfoList();
     qDebug()<<fileInfoList.length();
     // 遍历所有文件信息
-//    foreach(QFileInfo fileInfo, fileInfoList)
+    //    foreach(QFileInfo fileInfo, fileInfoList)
     for(int i = 0;i<fileInfoList.length();++i)
     {
         QFileInfo fileInfo = fileInfoList.at(i);
@@ -2287,6 +2284,9 @@ void ImageCompletionUI::bottomWindowContextMenuEvent(const QPoint &pos)
     QAction* addAction = new QAction(tr("添加采样点"), this);
     connect(addAction, SIGNAL(triggered()), this, SLOT(addSamplePoint()));
 
+    QAction* deleteAction = new QAction(tr("删除采样点"), this);
+    connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteSamplePoint()));
+
 
     QMenu contextMenu;
     contextMenu.addAction(editAction);
@@ -2355,6 +2355,7 @@ void ImageCompletionUI::bottomWindowContextMenuEvent(const QPoint &pos)
         break;
     case 8:
         contextMenu.addAction(addAction);
+        contextMenu.addAction(deleteAction);
 
         if(_bottomWindow.dBTableWidget_9->selectionModel()->selection().indexes().isEmpty())
         {
@@ -2394,6 +2395,47 @@ void ImageCompletionUI::addSamplePoint()
 
     ImagePropertiesEditor* d = new ImagePropertiesEditor(this, index, primaryKeyValue);
     d->showDlg();
+}
+
+void ImageCompletionUI::deleteSamplePoint()
+{
+    int index = _bottomWindow.dataBaseTabWidget->currentIndex();
+    QString primaryKeyValue = _bottomWindow.dBTableWidget_9->item(_bottomWindow.dBTableWidget_9->currentRow(), 0)->text();
+
+    QSqlDatabase db;
+    if(Global::createConnection(db))
+    {
+        QString sql = QString("delete from sampleSummaryInfo where sampleId = '%1'").arg(primaryKeyValue);
+
+        QSqlQuery query;
+        query.prepare(sql);
+        if(query.exec())
+        {
+            QString sql = QString("select * from sampleSummaryInfo");
+            query.prepare(sql);
+            bool ret = query.exec();
+            QSqlRecord rec = query.record();
+            if(ret)
+            {
+                while(_bottomWindow.dBTableWidget_9->rowCount() > 0) _bottomWindow.dBTableWidget_9->removeRow(0);
+
+                int i = 0;
+                while(query.next())
+                {
+                    _bottomWindow.dBTableWidget_9->insertRow(i);
+                    for(int j=0; j<rec.count(); j++)
+                    {
+                        _bottomWindow.dBTableWidget_9->setItem(i, j, new QTableWidgetItem(query.value(j).toString()));
+                    }
+                    i++;
+                }
+            }
+        }
+    }
+}
+
+void ImageCompletionUI::nextImage()
+{
 }
 
 void ImageCompletionUI::back()

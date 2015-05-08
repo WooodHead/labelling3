@@ -12,7 +12,7 @@ ImageProperties::ImageProperties(QWidget *parent) :
     ui->setupUi(this);
     this->setupUiAgain();
 
-    connect(this, SIGNAL(flush()), parent, SLOT(flushBottom()));
+    connect(this, SIGNAL(flush()), parent, SLOT(flush()));
     connect(this, SIGNAL(syncFilePathStr(QString)), parent, SLOT(syncFilePathStr(QString)));
     connect(this, SIGNAL(closeViewer()), parent, SLOT(close()));
 
@@ -119,7 +119,7 @@ void ImageProperties::load()
     ui->_comboBoxOilSamplePlaneID->addItems(getItems(_models[3], "planeid"));
     ui->_comboBoxOilSampleMonitorPart->addItems(getItems(_models[3], "monitorpartname"));
     ui->_comboBoxOilSampleMonitorPartID->addItems(getItems(_models[3], "monitorpartid"));
-//    ui->_comboBoxOilSampleSamplePointID->addItems(getItems(_models[3], "sampleid"));
+    //    ui->_comboBoxOilSampleSamplePointID->addItems(getItems(_models[3], "sampleid"));
 
     ui->_comboBoxOilSampleSampleUnit->addItems(getItems(_models[3], "sampledepartname"));
     ui->_comboBoxOilSampleSampleGuy->addItems(getItems(_models[3], "samplestuff"));
@@ -142,8 +142,10 @@ void ImageProperties::load()
     //ui->_comboBoxOilAnalyzeLightEquipID->addItems(getItems(_models[4], "spectroscopyreportid"));
     ui->_comboBoxOilAnalyzeMentalMethod->addItems(getItems(_models[4], "ferrographymethod"));
     ui->_comboBoxOilAnalyzeMentalGuy->addItems(getItems(_models[4], "ferrographystuff"));
-    ui->_comboBoxOilAnalyzeMentalEquip->addItems(getItems(_models[4], "ferrographyequipment"));
+    //    ui->_comboBoxOilAnalyzeMentalEquip->addItems(getItems(_models[4], "ferrographyequipment"));
     //ui->_comboBoxOilAnalyzeMentalEquipID->addItems(getItems(_models[4], "ferrographyreportid"));
+    QStringList list2 = QStringList() << "" << tr("国产分析铁谱仪(A)") << tr("超谱蓟式分析铁谱仪(B)") << tr("美国热电分析铁谱仪(C)") << tr("旋转式分析铁谱仪(D)") << tr("滤膜制谱仪(E)");
+    ui->_comboBoxOilAnalyzeMentalEquip->addItems(list2);
 
     ui->_comboBoxOilAnalyzeLihuaMethod->addItems(getItems(_models[4], "physicochemicalmethod"));
     ui->_comboBoxOilAnalyzeLihuaGuy->addItems(getItems(_models[4], "physicochemicalstuff"));
@@ -155,7 +157,6 @@ void ImageProperties::load()
     ui->_comboBoxMentalReportID->addItems(getItems(_models[5], "ferrographyreportid"));
     ui->_comboBoxMentalOilSampleID->addItems(getItems(_models[5], "oilsampleid"));
 
-    QStringList list2 = QStringList() << "" << tr("国产分析铁谱仪(A)") << tr("超谱蓟式分析铁谱仪(B)") << tr("美国热电分析铁谱仪(C)") << tr("旋转式分析铁谱仪(D)") << tr("滤膜制谱仪(E)");
     ui->_comboBoxMentalInstrumentType->addItems(list2);
     ui->_comboBoxMentalMethod->addItems(getItems(_models[5], "ferrographymakemethod"));
     ui->_comboBoxMentalGuy->addItems(getItems(_models[5], "ferrographymakestuff"));
@@ -1019,13 +1020,13 @@ void ImageProperties::on__buttonSave_clicked()
             model->submitAll();
         }
 
-        updateHistory();
         _bCommited = true;
+        QMessageBox::warning(this, tr("提示"), tr("保存成功!"), QMessageBox::Close);
+        close();
+
+        updateHistory();
         Global::NewName = ui->_comboBoxMentalSampleImageID->currentText();
         emit flush();
-        QMessageBox::warning(this, tr("提示"), tr("保存成功!"), QMessageBox::Close);
-
-        close();
     }
 }
 
@@ -1723,20 +1724,20 @@ void ImageProperties::updateHistory()
     _history_values._movepartName = ui->_comboBoxMovepartName->currentText();
     _history_values._movepartType = ui->_comboBoxMovepartType->currentText();
     _history_values._movepartMohe = ui->_comboBoxMovepartMohe->currentText();
-    _history_values._movepartBeginDate = ui->_dateEditMovepartBegin->text();
-    _history_values._movepartEndDate = ui->_dateEditMovepartEnd->text();
+    _history_values._movepartBeginDate = ui->_dateEditMovepartBegin->date().toString();
+    _history_values._movepartEndDate = ui->_dateEditMovepartEnd->date().toString();
     _history_values._movepartHours = ui->_editMovepartHours->text();
 
     _history_values._movepartwxId = ui->_comboBoxMovepartServiceID->currentText();
-    _history_values._movepartwxDate = ui->_dateEditMovepartServiceDate->text();
+    _history_values._movepartwxDate = ui->_dateEditMovepartServiceDate->date().toString();
     _history_values._movepartwxNumber = ui->_editMovepartServiceNumber->text();
     _history_values._movepartwxUnit = ui->_comboBoxMovepartServiceUnit->currentText();
     _history_values._movepartwxReason = ui->_editMovepartServiceReson->text();
     _history_values._movepartwxInfo = ui->_editMovepartServiceInfo->text();
     _history_values._movepartwxUpdate = ui->_editMovepartServiceContent->text();
 
-    _history_values._oilsampleDate = ui->_dateEditOilSampleSampleDate->text();
-    _history_values._oilsampleTime = ui->_timeEditOilSampleSampleTime->text();
+    _history_values._oilsampleDate = ui->_dateEditOilSampleSampleDate->date().toString();
+    _history_values._oilsampleTime = ui->_timeEditOilSampleSampleTime->time().toString();
     _history_values._oilsampleMonitorName = ui->_comboBoxOilSampleMonitorPart->currentText();
     _history_values._oilsampleMonitorId = ui->_comboBoxOilSampleMonitorPartID->currentText();
     _history_values._oilsampleSamplePointId = ui->_comboBoxOilSampleSamplePointID->currentText();
@@ -1749,35 +1750,35 @@ void ImageProperties::updateHistory()
     _history_values._oilsampleVolumn = ui->_editOilSampleSampleMount->text();
     _history_values._oilsampleInfo = ui->_editOilSampleInfo->text();
     _history_values._oilsampleSendGuy = ui->_comboBoxOilSampleSendGuy->currentText();
-    _history_values._oilsampleSendDate = ui->_dateEditOilSampleSampleDate->text();
-    _history_values._oilsampleSendTime = ui->_timeEditOilSampleSendTime->text();
+    _history_values._oilsampleSendDate = ui->_dateEditOilSampleSampleDate->date().toString();
+    _history_values._oilsampleSendTime = ui->_timeEditOilSampleSendTime->time().toString();
     _history_values._oilsampleOccasion = ui->_comboBoxOilSampleSituation->currentText();
 
     _history_values._oilcheckUnit = ui->_comboBoxOilAnalyzeUnitName->currentText();
     _history_values._oilcheckSendUnit = ui->_comboBoxOilAnalyzeSendUnit->currentText();
     _history_values._oilcheckSendGuy = ui->_comboBoxOilAnalyzeSendGuy->currentText();
     _history_values._oilcheckSendReason = ui->_editOilAnalyzeReason->text();
-    _history_values._oilcheckReceiveDate = ui->_dateEditOilAnalyzeReceiveDate->text();
+    _history_values._oilcheckReceiveDate = ui->_dateEditOilAnalyzeReceiveDate->date().toString();
     _history_values._oilcheckReceiveGuy = ui->_comboBoxOilAnalyzeReceiveGuy->currentText();
     //
     _history_values._oilcheckPollutionMethod = ui->_comboBoxOilAnalyzePollutionLevelMethod->currentText();
     _history_values._oilcheckPollutionGuy = ui->_comboBoxOilAnalyzePollutionLevelGuy->currentText();
-    _history_values._oilcheckPollutionDate = ui->_dateEditOilAnalyzePollutionDate->text();
+    _history_values._oilcheckPollutionDate = ui->_dateEditOilAnalyzePollutionDate->date().toString();
     _history_values._oilcheckPollutionDevice = ui->_comboBoxOilAnalyzePolluteLevelEquip->currentText();
     //
     _history_values._oilcheckLightMethod = ui->_comboBoxOilAnalyzeLightMethod->currentText();
     _history_values._oilcheckLightGuy = ui->_comboBoxOilAnalyzeLightGuy->currentText();
-    _history_values._oilcheckLightDate = ui->_dateEditOilAnalyzeLightDate->text();
+    _history_values._oilcheckLightDate = ui->_dateEditOilAnalyzeLightDate->date().toString();
     _history_values._oilcheckLightDevice = ui->_comboBoxOilAnalyzeLightEquip->currentText();
     //
     _history_values._oilcheckMentalMethod = ui->_comboBoxOilAnalyzeMentalMethod->currentText();
     _history_values._oilcheckMentalGuy = ui->_comboBoxOilAnalyzeMentalGuy->currentText();
-    _history_values._oilcheckMentalDate = ui->_dateEditOilAnalyzeMentalDate->text();
+    _history_values._oilcheckMentalDate = ui->_dateEditOilAnalyzeMentalDate->date().toString();
     _history_values._oilcheckMentalDevice = ui->_comboBoxOilAnalyzeMentalEquip->currentText();
     //
     _history_values._oilcheckLihuaMethod = ui->_comboBoxOilAnalyzeLightMethod->currentText();
     _history_values._oilcheckLihuaGuy = ui->_comboBoxOilAnalyzeLihuaGuy->currentText();
-    _history_values._oilcheckLihuaDate = ui->_dateEditOilAnalyzeLihuaDate->text();
+    _history_values._oilcheckLihuaDate = ui->_dateEditOilAnalyzeLihuaDate->date().toString();
     _history_values._oilcheckLihuaDevice = ui->_comboBoxOilAnalyzeLihuaEquip->currentText();
 
     _history_values._mentalInstrumentType = ui->_comboBoxMentalInstrumentType->currentText();
@@ -1806,7 +1807,16 @@ void ImageProperties::setHistoryData()
     ui->_editServiceNumber->setText( _history_values._repairNumber );
 
     ui->_comboBoxMovepartID->setEditText( _history_values._movepartId );
-    ui->_comboBoxMovepartName->setEditText(_history_values._movepartName );
+
+    if(!_history_values._movepartName.isEmpty())
+    {
+        int index = ui->_comboBoxMovepartName->findText(_history_values._movepartName);
+        if(index)
+        {
+            ui->_comboBoxMovepartName->setCurrentIndex(index);
+        }
+    }
+
     ui->_comboBoxMovepartType->setEditText( _history_values._movepartType );
     ui->_comboBoxMovepartMohe->setEditText(  _history_values._movepartMohe );
 
@@ -1873,9 +1883,31 @@ void ImageProperties::setHistoryData()
     ui->_comboBoxMentalMethod->setEditText(_history_values._mentalMethod );
     ui->_comboBoxMentalGuy->setEditText(_history_values._mentalGuy );
 
-    ui->_comboBoxMentalSampleArea->setEditText(_history_values._mentalpicSampleArea );
+    if(!_history_values._mentalpicSampleArea.isEmpty())
+    {
+        int index = ui->_comboBoxMentalSampleArea->findText(_history_values._mentalpicSampleArea);
+        if(index)
+        {
+            ui->_comboBoxMentalSampleArea->setCurrentIndex(index);
+        }
+    }
+//    ui->_comboBoxMentalSampleArea->setEditText(_history_values._mentalpicSampleArea );
+
     ui->_editMentalSampleEnlarger->setText(_history_values._mentalpicEnlarger );
-    ui->_comboBoxMentalSampleLightType->setEditText(_history_values._mentalpicLightType );
+
+    if(!_history_values._mentalpicLightType.isEmpty())
+    {
+        int index = ui->_comboBoxMentalSampleLightType->findText(_history_values._mentalpicEnlarger);
+        if(index)
+        {
+            ui->_comboBoxMentalSampleLightType->setCurrentIndex(index);
+        }
+    }
+
+
+//    ui->_comboBoxMentalSampleLightType->setEditText(_history_values._mentalpicLightType );
+
+
     ui->_comboBoxMentalSampleReportID->setEditText(_history_values._mentalpicAnaReportId);
     ui->_comboBoxMentalSampleSamplerType->setEditText(_history_values._mentalpicImageCaijiType );
     ui->_comboBoxMentalSampleMicroType->setEditText(_history_values._mentalpicMicroType);
@@ -1886,5 +1918,15 @@ void ImageProperties::setHistoryData()
 
 void ImageProperties::on__comboBoxOilSamplePlaneID_textChanged(const QString &arg1)
 {
-     ui->_comboBoxOilSampleSamplePointID->addItems(getSamplePoint("sampleID", "equipID", arg1));
+    ui->_comboBoxOilSampleSamplePointID->addItems(getSamplePoint("sampleID", "equipID", arg1));
+}
+
+void ImageProperties::on__comboBoxMentalInstrumentType_currentIndexChanged(const QString &arg1)
+{
+    ui->_comboBoxOilAnalyzeMentalEquip->setEditText(arg1);
+}
+
+void ImageProperties::on__comboBoxOilAnalyzeMentalEquip_currentIndexChanged(int index)
+{
+    ui->_comboBoxMentalInstrumentType->setCurrentIndex(index);
 }
