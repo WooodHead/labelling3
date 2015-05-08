@@ -1815,7 +1815,8 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
         if(fileInfo.fileName() == "." || fileInfo.fileName() == "..")
             continue;
         // 数据库文件处理
-        if(fileInfo.fileName().split(".")[1] == "sql") // why is this necessary?
+        if(fileInfo.fileName().split(".")[1] == "sql")
+            ; // why is this necessary? yes! skip it when import
             //            qDebug() << fileInfo.fileName();
 
             // 当为目录时，递归的进行copy

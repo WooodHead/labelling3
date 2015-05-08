@@ -1699,7 +1699,6 @@ void AdvanceSearchDlg::createListWidget()
     ui->tableListWidget->insertItem(2,tr("动部件维修信息表"));
     ui->tableListWidget->insertItem(3,tr("油样采集信息表"));
     ui->tableListWidget->insertItem(4,tr("油样检测分析表"));
-//    ui->tableListWidget->insertItem(5,tr("铁谱图片采集信息表"));
     ui->tableListWidget->insertItem(5,tr("铁谱制谱信息表"));
     ui->tableListWidget->insertItem(6,tr("铁谱图片采集信息表"));
     ui->tableListWidget->insertItem(7,tr("磨粒标注信息表"));
@@ -5375,7 +5374,7 @@ void AdvanceSearchDlg::deletedata()
         QModelIndexList selected = selections->selectedIndexes();
         if(selected.isEmpty())
         {
-            QMessageBox::warning(this,tr("提示"),tr("为选中任何行"),QMessageBox::Close);
+            QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
         break;
@@ -5386,7 +5385,7 @@ void AdvanceSearchDlg::deletedata()
         QModelIndexList selected = selections->selectedIndexes();
         if(selected.isEmpty())
         {
-            QMessageBox::warning(this,tr("提示"),tr("为选中任何行"),QMessageBox::Close);
+            QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
         break;
@@ -5397,7 +5396,7 @@ void AdvanceSearchDlg::deletedata()
         QModelIndexList selected = selections->selectedIndexes();
         if(selected.isEmpty())
         {
-            QMessageBox::warning(this,tr("提示"),tr("为选中任何行"),QMessageBox::Close);
+            QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
         break;
@@ -5408,9 +5407,10 @@ void AdvanceSearchDlg::deletedata()
         QModelIndexList selected = selections->selectedIndexes();
         if(selected.isEmpty())
         {
-            QMessageBox::warning(this,tr("提示"),tr("为选中任何行"),QMessageBox::Close);
+            QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
+        break;
     }
     case 4:
     {
@@ -5418,7 +5418,7 @@ void AdvanceSearchDlg::deletedata()
         QModelIndexList selected = selections->selectedIndexes();
         if(selected.isEmpty())
         {
-            QMessageBox::warning(this,tr("提示"),tr("为选中任何行"),QMessageBox::Close);
+            QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
         break;
@@ -5429,7 +5429,7 @@ void AdvanceSearchDlg::deletedata()
         QModelIndexList selected = selections->selectedIndexes();
         if(selected.isEmpty())
         {
-            QMessageBox::warning(this,tr("提示"),tr("为选中任何行"),QMessageBox::Close);
+            QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
         break;
@@ -5440,7 +5440,7 @@ void AdvanceSearchDlg::deletedata()
         QModelIndexList selected = selections->selectedIndexes();
         if(selected.isEmpty())
         {
-            QMessageBox::warning(this,tr("提示"),tr("为选中任何行"),QMessageBox::Close);
+            QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
         break;
@@ -5451,7 +5451,7 @@ void AdvanceSearchDlg::deletedata()
         QModelIndexList selected = selections->selectedIndexes();
         if(selected.isEmpty())
         {
-            QMessageBox::warning(this,tr("提示"),tr("为选中任何行"),QMessageBox::Close);
+            QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
         break;
@@ -5484,7 +5484,7 @@ void AdvanceSearchDlg::deletedata()
             QModelIndexList selected = selections->selectedIndexes();
             if(selected.isEmpty())
             {
-                QMessageBox::warning(this,tr("提示"),tr("为选中任何行"),QMessageBox::Close);
+                QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
                 return;
             }
             else
@@ -5591,7 +5591,7 @@ void AdvanceSearchDlg::deletedata()
             QModelIndexList selected = selections->selectedIndexes();
             if(selected.isEmpty())
             {
-                QMessageBox::warning(this,tr("提示"),tr("为选中任何行"),QMessageBox::Close);
+                QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
                 return;
             }
             else
@@ -5628,7 +5628,7 @@ void AdvanceSearchDlg::deletedata()
             QModelIndexList selected = selections->selectedIndexes();
             if(selected.isEmpty())
             {
-                QMessageBox::warning(this,tr("提示"),tr("为选中任何行"),QMessageBox::Close);
+                QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
                 return;
             }
             else
@@ -5652,7 +5652,7 @@ void AdvanceSearchDlg::deletedata()
             QModelIndexList selected = selections->selectedIndexes();
             if(selected.isEmpty())
             {
-                QMessageBox::warning(this,tr("提示"),tr("为选中任何行"),QMessageBox::Close);
+                QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
                 return;
             }
             else
@@ -5676,7 +5676,7 @@ void AdvanceSearchDlg::deletedata()
             QModelIndexList selected = selections->selectedIndexes();
             if(selected.isEmpty())
             {
-                QMessageBox::warning(this,tr("提示"),tr("为选中任何行"),QMessageBox::Close);
+                QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
                 return;
             }
             else
@@ -5742,7 +5742,7 @@ void AdvanceSearchDlg::deletedata()
             QModelIndexList selected = selections->selectedIndexes();
             if(selected.isEmpty())
             {
-                QMessageBox::warning(this,tr("提示"),tr("为选中任何行"),QMessageBox::Close);
+                QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
                 return;
             }
             else
@@ -5792,7 +5792,7 @@ void AdvanceSearchDlg::deletedata()
             QModelIndexList selected = selections->selectedIndexes();
             if(selected.isEmpty())
             {
-                QMessageBox::warning(this,tr("提示"),tr("为选中任何行"),QMessageBox::Close);
+                QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
                 return;
             }
             else
@@ -5829,7 +5829,7 @@ void AdvanceSearchDlg::deletedata()
             QModelIndexList selected = selections->selectedIndexes();
             if(selected.isEmpty())
             {
-                QMessageBox::warning(this,tr("提示"),tr("为选中任何行"),QMessageBox::Close);
+                QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
                 return;
             }
             else

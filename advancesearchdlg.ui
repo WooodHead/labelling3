@@ -38,7 +38,7 @@
       <item>
        <widget class="QStackedWidget" name="conditionStackedWidget">
         <property name="currentIndex">
-         <number>6</number>
+         <number>5</number>
         </property>
         <widget class="QWidget" name="page">
          <layout class="QGridLayout" name="gridLayout_3">
@@ -974,7 +974,7 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>254</width>
+               <width>253</width>
                <height>712</height>
               </rect>
              </property>
@@ -1623,7 +1623,7 @@
                 <item>
                  <widget class="QLabel" name="label_66">
                   <property name="text">
-                   <string>分析铁谱仪型号</string>
+                   <string>铁谱分析设备</string>
                   </property>
                  </widget>
                 </item>
@@ -1928,7 +1928,7 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>210</width>
+               <width>254</width>
                <height>460</height>
               </rect>
              </property>
