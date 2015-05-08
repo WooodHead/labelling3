@@ -31,6 +31,7 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent,bool flag) :
     ui->addtoBtn->setIcon(Global::Awesome->icon(plus));
     ui->deleteDataButton->setIcon(Global::Awesome->icon(trash));
     ui->deletepropertyButton->setIcon(Global::Awesome->icon(minus_));
+    ui->delAllButton->setIcon(Global::Awesome->icon(warning));
 
     ui->deleteDataButton->setText(tr("删除查询结果"));
 
@@ -5956,3 +5957,25 @@ void AdvanceSearchDlg::on_deletepropertyButton_clicked()
     this->deleteproperty();
 }
 
+
+void AdvanceSearchDlg::on_delAllButton_clicked()
+{
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::warning(this, tr("QMessageBox::question()"), tr("慎重选择，此功能会删除所有数据?"),
+                                  QMessageBox::Yes | QMessageBox::Cancel);
+    if(reply == QMessageBox::Yes)
+    {
+        db.transaction();
+        QSqlQuery query;
+        query.exec("delete from equipmentinfo");
+        query.exec("delete from ferrographyinfo");
+        query.exec("delete from ferrographypicinfo");
+        query.exec("delete from movepartinfo");
+        query.exec("delete from movepartrepairinfo");
+        query.exec("delete from oilanalyzeinfo");
+        query.exec("delete from oilsampleinfo");
+        query.exec("delete from abrasivemarkinfo");
+        db.commit();
+        this->query();
+    }
+}

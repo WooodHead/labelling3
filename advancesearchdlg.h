@@ -437,6 +437,8 @@ private slots:
 
      void on_deleteDataButton_clicked();
 
+     void on_delAllButton_clicked();
+
 signals:
      void showqueryThumbnails(QStringList list);
      void flushBottomData();
