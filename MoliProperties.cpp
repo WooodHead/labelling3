@@ -21,7 +21,7 @@ MoliProperties::MoliProperties(QWidget *parent) :
     _bDirty = false;
 
     connect(this, SIGNAL(flushLeft(QString, QString)), parent, SLOT(flushLeft(QString, QString)));
-    connect(this, SIGNAL(flushBottom()), parent, SLOT(flushBottom()));
+    connect(this, SIGNAL(flushBottom()), parent, SLOT(flush()));
     connect(this, SIGNAL(saveImages()), parent, SLOT(save()));
     connect(this, SIGNAL(next()), parent, SLOT(next()));
 
@@ -333,7 +333,7 @@ void MoliProperties::on_pushButton_clicked()
                 QMessageBox::information(this, tr("提示"), tr("保存成功!"), QMessageBox::Close);
                 close();
 
-                emit next();
+//                emit next();
             }
         }
     }

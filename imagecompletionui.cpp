@@ -12,6 +12,7 @@
 ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
     : QMainWindow(parent, flags)
 {
+    _strNextImage = "";
     _canBack             = false;
     _brushSize           = 3;
     _imageScale          = 1.0;
@@ -666,6 +667,19 @@ void ImageCompletionUI::syncFilePathStr(QString strFilePath)
         enDeque(strFilePath, _dequeTodo);
         pos = in(strFilePath, _dequeTodo);
         showThumbnail(strFilePath, MOLI_UNLABELLED_STATUS_CHAR, pos);
+
+        if(pos != -1 && pos < _dequeTodo.size()-1)
+        {
+            _strNextImage = _dequeTodo[pos+1];
+        }
+        else if(pos == _dequeTodo.size()-1 && !_dequeDone.empty())
+        {
+            _strNextImage = _dequeDone[0];
+        }
+        else
+        {
+            _strNextImage = "";
+        }
     }
 
     _strCurrentImagePath = strFilePath;
@@ -756,6 +770,16 @@ void ImageCompletionUI::openImage(QString strFilePath)
             this->showThumbnailForLabelled(strFilePath);
         }
 
+        int index = in(strFilePath, _dequeDone);
+        if(index != -1 && index < _dequeDone.size() - 1)
+        {
+            _strNextImage = _dequeDone[index+1];
+        }
+        else
+        {
+            _strNextImage = "";
+        }
+
         this->loadLabelledResult( strFilePath );
     }
     else if(MOLI_UNLABELLED_STATUS_CHAR == status)
@@ -764,6 +788,20 @@ void ImageCompletionUI::openImage(QString strFilePath)
         {
             this->enDeque(strFilePath, _dequeTodo);
             this->showThumbnailForUnLabelled( strFilePath );
+        }
+
+        int index = in(strFilePath, _dequeTodo);
+        if(index != -1 && index < _dequeTodo.size() - 1)
+        {
+            _strNextImage = _dequeTodo[index+1];
+        }
+        else if(index == _dequeTodo.size()-1 && !_dequeDone.empty())
+        {
+            _strNextImage = _dequeDone[0];
+        }
+        else
+        {
+            _strNextImage = "";
         }
     }
 }
@@ -2436,6 +2474,10 @@ void ImageCompletionUI::deleteSamplePoint()
 
 void ImageCompletionUI::nextImage()
 {
+    if(!_strNextImage.isEmpty())
+    {
+        openImage(_strNextImage);
+    }
 }
 
 void ImageCompletionUI::back()

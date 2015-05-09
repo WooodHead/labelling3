@@ -3,8 +3,6 @@
 #include "Global.h"
 #include "ImageComparison.h"
 
-
-
 ImageProperties::ImageProperties(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ImageProperties)
@@ -1877,7 +1875,15 @@ void ImageProperties::setHistoryData()
     ui->_dateEditOilAnalyzeLihuaDate->setDate(QDate::fromString(_history_values._oilcheckLihuaDate));
     ui->_comboBoxOilAnalyzeLihuaEquip->setEditText(_history_values._oilcheckLihuaDevice);
 
-    ui->_comboBoxMentalInstrumentType->setEditText(_history_values._mentalInstrumentType);
+    if(!_history_values._mentalInstrumentType.isEmpty())
+    {
+        int index = ui->_comboBoxMentalInstrumentType->findText(_history_values._mentalInstrumentType);
+        if(index)
+        {
+            ui->_comboBoxMentalInstrumentType->setCurrentIndex(index);
+        }
+    }
+//    ui->_comboBoxMentalInstrumentType->setEditText(_history_values._mentalInstrumentType);
     ui->_comboBoxMentalReportID->setEditText(_history_values._mentalReportId);
     ui->_editMentalMount->setText(_history_values._mentalOilCost );
     ui->_comboBoxMentalMethod->setEditText(_history_values._mentalMethod );
@@ -1891,22 +1897,17 @@ void ImageProperties::setHistoryData()
             ui->_comboBoxMentalSampleArea->setCurrentIndex(index);
         }
     }
-//    ui->_comboBoxMentalSampleArea->setEditText(_history_values._mentalpicSampleArea );
 
     ui->_editMentalSampleEnlarger->setText(_history_values._mentalpicEnlarger );
 
     if(!_history_values._mentalpicLightType.isEmpty())
     {
-        int index = ui->_comboBoxMentalSampleLightType->findText(_history_values._mentalpicEnlarger);
+        int index = ui->_comboBoxMentalSampleLightType->findText(_history_values._mentalpicLightType);
         if(index)
         {
             ui->_comboBoxMentalSampleLightType->setCurrentIndex(index);
         }
     }
-
-
-//    ui->_comboBoxMentalSampleLightType->setEditText(_history_values._mentalpicLightType );
-
 
     ui->_comboBoxMentalSampleReportID->setEditText(_history_values._mentalpicAnaReportId);
     ui->_comboBoxMentalSampleSamplerType->setEditText(_history_values._mentalpicImageCaijiType );

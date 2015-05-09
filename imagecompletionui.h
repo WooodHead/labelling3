@@ -259,6 +259,8 @@ private:
     
     QString _impPackgePath;
 
+    QString _strNextImage;
+
 private: // methods
 
     QString     status(QString absolutePath);
