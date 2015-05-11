@@ -130,6 +130,28 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent,bool flag) :
 AdvanceSearchDlg::~AdvanceSearchDlg()
 {
     delete ui;
+    delete this->_eqmInfoModel;
+    delete this->_mpInfoModel;
+    delete this->_mprInfoModel;
+    delete this->_oiaInfoModel;
+    delete this->_oisInfoModel;
+    delete this->_fegInfoModel;
+    delete this->_fegpInfoModel;
+    delete this->_abmInfoModel;
+
+    delete this->eqmdelAction;
+    delete this->mpdelAction;
+    delete this->mprdelAction;
+    delete this->oiadelAction;
+    delete this->oisdelAction;
+    delete this->fegdelAction;
+    delete this->fegpdelAction;
+    delete this->abmdelAction;
+
+    delete this->propertymodel;
+    delete this->usepropertyAction;
+    delete this->renameprtpertyAction;
+    delete this->deletepropertyAction;
     db.close();
 }
 
@@ -1200,6 +1222,7 @@ bool AdvanceSearchDlg::exportDB(const QStringList &tablenameList, const QString 
         }
     }
 
+    delete model;
     QFile file(path);
     file.open(QIODevice::WriteOnly|QIODevice::Truncate);
 
@@ -2707,11 +2730,11 @@ void AdvanceSearchDlg::on_exportBtn_clicked()
                                  tr("数据导出失败"),
                                  QMessageBox::Close);
     }
+    delete expdlg;
 }
 
 void AdvanceSearchDlg::on_importBtn_clicked()
 {
-
     ImpDlg *impdlg = new ImpDlg(this);
     if(impdlg->exec() == QDialog::Accepted)
     {
@@ -2751,6 +2774,7 @@ void AdvanceSearchDlg::on_importBtn_clicked()
                 QMessageBox::warning(this,tr("提示"),tr("数据恢复失败"),QMessageBox::Close);
         }
     }
+    delete impdlg;
 }
 
 void AdvanceSearchDlg::on_movepartRepairIdChkBox_clicked()
@@ -5378,6 +5402,7 @@ void AdvanceSearchDlg::deletedata()
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
+        delete selections;
         break;
     }
     case 1:
@@ -5389,6 +5414,7 @@ void AdvanceSearchDlg::deletedata()
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
+        delete selections;
         break;
     }
     case 2:
@@ -5400,6 +5426,7 @@ void AdvanceSearchDlg::deletedata()
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
+        delete selections;
         break;
     }
     case 3:
@@ -5411,6 +5438,7 @@ void AdvanceSearchDlg::deletedata()
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
+        delete selections;
         break;
     }
     case 4:
@@ -5422,6 +5450,7 @@ void AdvanceSearchDlg::deletedata()
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
+        delete selections;
         break;
     }
     case 5:
@@ -5433,6 +5462,7 @@ void AdvanceSearchDlg::deletedata()
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
+        delete selections;
         break;
     }
     case 6:
@@ -5444,6 +5474,7 @@ void AdvanceSearchDlg::deletedata()
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
+        delete selections;
         break;
     }
     case 7:
@@ -5455,6 +5486,7 @@ void AdvanceSearchDlg::deletedata()
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
+        delete selections;
         break;
     }
     }
@@ -5583,6 +5615,7 @@ void AdvanceSearchDlg::deletedata()
                 else
                     QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
             }
+            delete selections;
             break;
         }
             // mp
@@ -5620,7 +5653,7 @@ void AdvanceSearchDlg::deletedata()
                     QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
             }
     //        QMessageBox::warning(this,tr("提示"),tr("mp"),QMessageBox::Close);
-
+            delete selections;
             break;
         }
         case 2:
@@ -5645,6 +5678,7 @@ void AdvanceSearchDlg::deletedata()
                     QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
             }
     //        QMessageBox::warning(this,tr("提示"),tr("mpr"),QMessageBox::Close);
+            delete selections;
             break;
         }
         case 3:
@@ -5669,6 +5703,7 @@ void AdvanceSearchDlg::deletedata()
                     QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
             }
     //        QMessageBox::warning(this,tr("提示"),tr("oia"),QMessageBox::Close);
+            delete selections;
             break;
         }
         case 4:
@@ -5735,6 +5770,7 @@ void AdvanceSearchDlg::deletedata()
                     QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
             }
     //        QMessageBox::warning(this,tr("提示"),tr("ois"),QMessageBox::Close);
+            delete selections;
             break;
         }
         case 5:
@@ -5785,6 +5821,7 @@ void AdvanceSearchDlg::deletedata()
                     QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
             }
     //        QMessageBox::warning(this,tr("提示"),tr("feg"),QMessageBox::Close);
+            delete selections;
             break;
         }
         case 6:
@@ -5822,6 +5859,7 @@ void AdvanceSearchDlg::deletedata()
                     QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
             }
     //        QMessageBox::warning(this,tr("提示"),tr("fegp"),QMessageBox::Close);
+            delete selections;
             break;
         }
         case 7:
@@ -5846,6 +5884,7 @@ void AdvanceSearchDlg::deletedata()
                     QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
             }
     //        QMessageBox::warning(this,tr("提示"),tr("abm"),QMessageBox::Close);
+            delete selections;
             break;
         }
         }

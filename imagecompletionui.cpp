@@ -1919,6 +1919,7 @@ void ImageCompletionUI::importData()
                 QMessageBox::warning(this,tr("提示"),tr("数据恢复失败"),QMessageBox::Close);
         }
     }
+    delete impdlg;
 }
 
 void ImageCompletionUI::exportData()
@@ -1948,6 +1949,7 @@ void ImageCompletionUI::exportData()
         else
             QMessageBox::warning(this,tr("批量数据导出提示"),tr("批量数据导出失败"),QMessageBox::Close);
     }
+    delete expDlg;
 }
 
 void ImageCompletionUI::setExpPath(QString sourcePicPath, QString resultPicPath, QString packgePath)
