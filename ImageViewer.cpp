@@ -49,8 +49,7 @@ ImageViewer::ImageViewer(QWidget *parent)
     _displayImage   = new QImage(500, 500, QImage::Format_RGB32);
     _displayImage->fill(qRgb(128, 128, 128));
 
-    _labelMapImage = new QImage(500, 500, QImage::Format_ARGB32);
-    _labelMapImage->fill(qRgb(128, 128, 128));
+    _labelMapImage = 0;
 
     thickness       = 5;
     brushInterface  = 0;
@@ -174,8 +173,7 @@ bool ImageViewer::deleteImage()
 
     _displayImage = new QImage(500, 500, QImage::Format_RGB32);
     _displayImage->fill(qRgb(128, 128, 128));
-    _labelMapImage = new QImage(500, 500, QImage::Format_ARGB32);
-    _labelMapImage->fill(qRgb(128, 128, 128));
+
     thickness       = 5;
     bPaintable      = false;
     lastPos         = QPoint(-1, -1);
