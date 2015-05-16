@@ -192,6 +192,7 @@ void MoliProperties::on_pushButton_clicked()
                     QFile *file = new QFile(_originalImagePath);
                     file->open(QIODevice::ReadOnly);
                     QByteArray data = file->readAll();
+                    file->close();
                     record.setValue("abrasivePictureData", data);
                 }
                 if(!_result.isNull())
@@ -263,6 +264,7 @@ void MoliProperties::on_pushButton_clicked()
                     QFile *file = new QFile(_originalImagePath);
                     file->open(QIODevice::ReadOnly);
                     QByteArray data = file->readAll();
+                    file->close();
                     _model->setData(_model->index(0, 18), data);
                 }
                 if(!_result.isNull())

@@ -220,7 +220,7 @@ QStringList ImageProperties::getSamplePoint(QString fieldName, QString whereFiel
         {
             QSqlRecord record = model->record(j);
             QString value = record.value(record.indexOf(fieldName)).toString();
-            if(!list.contains(value)) list << value;
+            if(!value.isEmpty() && !list.contains(value)) list << value;
         }
     }
 
@@ -899,6 +899,7 @@ void ImageProperties::on__buttonSave_clicked()
                         QFile *file = new QFile(imagePath);
                         file->open(QIODevice::ReadOnly);
                         new_ = file->readAll();
+                        file->close();
                     }
 
                     ImageComparison* dlg = new ImageComparison(this);
@@ -936,6 +937,7 @@ void ImageProperties::on__buttonSave_clicked()
                     QFile *file = new QFile(imagePath);
                     file->open(QIODevice::ReadOnly);
                     QByteArray data = file->readAll();
+                    file->close();
                     record.setValue("ferrographypic", data);
                 }
 
@@ -963,6 +965,7 @@ void ImageProperties::on__buttonSave_clicked()
                     QFile *file = new QFile(imagePath);
                     file->open(QIODevice::ReadOnly);
                     QByteArray data = file->readAll();
+                    file->close();
                     _models[6]->setData(_models[6]->index(0, 12), data);
                 }
                 QString copyTo = copyOrgImage(ui->_comboBoxMentalSampleImageID->currentText(), ui->_editMentalSamplePath->text());
@@ -1016,6 +1019,7 @@ void ImageProperties::on__buttonSave_clicked()
                 model->setData(model->index(0, 5), ui->_editOilSampleInfo->text());
             }
             model->submitAll();
+            model->deleteLater();
         }
 
         _bCommited = true;

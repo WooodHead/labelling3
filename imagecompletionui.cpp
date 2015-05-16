@@ -20,6 +20,7 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
     _formLayout          = 0;
     _strCurrentImagePath = QString();
     _strMoliId           = QString();
+    _treeModel = 0;
 
     setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
@@ -865,6 +866,11 @@ void ImageCompletionUI::flushLeftTree()
 
 void ImageCompletionUI::showImagesInTree()
 {
+    if(_treeModel)
+    {
+        _treeModel->removeRows(0, _treeModel->rowCount());
+    }
+
     _leftWindow._treeViewImages->setAlternatingRowColors(true);
     _leftWindow._treeViewImages->setExpandsOnDoubleClick(false);
 

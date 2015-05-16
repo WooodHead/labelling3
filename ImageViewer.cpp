@@ -86,8 +86,7 @@ bool ImageViewer::openImage(const QString &fileName)
         deleteImage();
 
         std::string sstr = fileName.toLocal8Bit().data();
-        const char* csstr = sstr.c_str();
-        IplImage* newImage = cvLoadImage( csstr, 1 );
+        IplImage* newImage = cvLoadImage( sstr.c_str(), 1 );
 
         if ( !newImage )
         {
@@ -115,7 +114,8 @@ bool ImageViewer::openImage(const QString &fileName)
         }
         else
         {
-            _ocvImage = newImage;
+            _ocvImage = cvCreateImage(cvSize(newImage->width, newImage->height), 8, 3);
+            cvCopy(newImage, _ocvImage);
         }
 
 
@@ -137,6 +137,13 @@ bool ImageViewer::openImage(const QString &fileName)
         QImage *image = IplImageToQImage( _ocvImage );
 
         setImage( *image );
+        DELETEPTR(image);
+
+        if(CV_IS_IMAGE(newImage))
+        {
+            cvReleaseImage(&newImage);
+            newImage = 0;
+        }
     }
     return true;
 }
@@ -162,6 +169,9 @@ bool ImageViewer::deleteImage()
     DELETEPTR( _displayImage  );
     DELETEPTR( _labelMapImage );
 
+    DELETEPTR( _result_display );
+    DELETEPTR( _result_save    );
+
     _displayImage = new QImage(500, 500, QImage::Format_RGB32);
     _displayImage->fill(qRgb(128, 128, 128));
     _labelMapImage = new QImage(500, 500, QImage::Format_ARGB32);
@@ -176,8 +186,9 @@ bool ImageViewer::deleteImage()
     _orgHeight = 0;
 
     DELETEPTR( brushInterface  );
-    DELETEPTR( _result_display );
-    DELETEPTR( _result_save    );
+
+    _polygonPointList.clear();
+    _polygonPointList_cv.clear();
 
     update();
 
@@ -332,6 +343,7 @@ bool ImageViewer::saveAsMask(QString &pathMask)
             if(saveLabelMap(filename))
             {
                 pathMask = filename;
+
                 return true;
             }
             else return false;
@@ -344,6 +356,7 @@ bool ImageViewer::saveAsMask(QString &pathMask)
             if(temp2->save(filename))
             {
                 pathMask = filename;
+                if(temp2) delete temp2;
                 return true;
             }
             else return false;
@@ -563,7 +576,6 @@ void ImageViewer::mouseReleaseEvent(QMouseEvent *event)
                     _result_display = setMaskMap(_ocvImage, temp);
 
                     setImage(*_result_display);
-                    DELETEPTR(temp);
                     _mainWindow->uncheckStrikeOptions();
                 }
                 _mainWindow->updateStatusBar();
@@ -598,7 +610,6 @@ void ImageViewer::mouseReleaseEvent(QMouseEvent *event)
                 DELETEPTR(_result_display);
                 _result_display = setMaskMap(_ocvImage, temp);
                 setImage(*_result_display);
-                DELETEPTR(temp);
 
                 _mainWindow->updateStatusBar();
             }
@@ -761,6 +772,8 @@ void ImageViewer::imageScaling( double scaleFactor )
     image = IplImageToQImage( _ocvImage );
 
     setImage( *image );
+
+    DELETEPTR(image);
 }
 
 void ImageViewer::imageBrighting( double scaleFactor )
@@ -789,6 +802,7 @@ void ImageViewer::imageBrighting( double scaleFactor )
     image = IplImageToQImage( _ocvImage );
 
     setImage( *image );
+    DELETEPTR(image);
 }
 
 void ImageViewer::imageNotColor( double /*scaleFactor*/ )
@@ -807,6 +821,7 @@ void ImageViewer::imageNotColor( double /*scaleFactor*/ )
     QImage *image = IplImageToQImage( _ocvImage );
 
     setImage( *image );
+    DELETEPTR(image);
 }
 
 void ImageViewer::drawAllMoli(QList<QByteArray> list)
@@ -913,6 +928,7 @@ void ImageViewer::drawAllMoli(QList<QByteArray> list)
     }
 
     setImage(*image);
+    DELETEPTR(image);
 }
 
 void ImageViewer::mouseDoubleClickEvent( QMouseEvent */*event*/ )
