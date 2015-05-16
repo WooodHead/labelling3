@@ -332,6 +332,9 @@ private slots:
 
     void about();
     void showDoc();
+    void on__comboBoxLarger_currentIndexChanged(const QString &arg1);
+    void on__spinBox_pixel_valueChanged(int arg1);
+    void on__horizontalSliderScale_valueChanged(int value);
 };
 
 #endif // IMAGECOMPLETIONUI_H

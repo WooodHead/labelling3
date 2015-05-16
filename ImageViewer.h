@@ -163,6 +163,12 @@ public:
 	int Method() const { return m_method; }
 	void Method(int val) { m_method = val; }
 
+    int orgWidth() const { return _orgWidth; }
+    int orgHeight() const { return _orgHeight; }
+
+    int width() const { if(_ocvImage) return  _displayImage->width(); else return 0; }
+    int height() const { if(_ocvImage) return _displayImage->height(); else return 0; }
+
 	double _seg_during;
 
     void redo();

@@ -417,10 +417,9 @@ void ImageCompletionUI::setupWidgets()
     _regionCompetitionDialog.setupUi(_regionCompetitionPage);
     _regionCompetitionDialog.buttonSelectColor->setIcon(Global::Awesome->icon(eyedropper));
     _regionCompetitionDialog.radioBrightness->setIcon(Global::Awesome->icon(adjust));
-    _regionCompetitionDialog.radioScale->setIcon(QIcon(":/new/prefix1/icons/scale.png"));
+    //    _regionCompetitionDialog.radioScale->setIcon(QIcon(":/new/prefix1/icons/scale.png"));
     _regionCompetitionDialog.radioNotColor->setIcon(Global::Awesome->icon(circle));
-    _regionCompetitionDialog.radioMesuarement->setIcon(QIcon(":/new/prefix1/icons/ruler.png"));
-    _regionCompetitionDialog._line->setHidden(true);
+    //    _regionCompetitionDialog._labelMeasure->setPixmap(QPixmap(":/new/prefix1/icons/ruler.png"));
 
     _rightOperationWidget->setWidget(_dockWidgetContents);
     _rightOperationWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -563,16 +562,16 @@ void ImageCompletionUI::createConnections()
     connect(_regionCompetitionDialog.radioErazer, SIGNAL(clicked()), this, SLOT(changeLabel()));
 
     // Basic Operation
-    connect(_regionCompetitionDialog.radioScale, SIGNAL(clicked()), this, SLOT(scaling()));
     connect(_regionCompetitionDialog.radioBrightness, SIGNAL(clicked()), this, SLOT(brighting()));
     connect(_regionCompetitionDialog.radioNotColor, SIGNAL(clicked()), this, SLOT(notColor()));
-    connect(_regionCompetitionDialog.radioMesuarement, SIGNAL(clicked()), this, SLOT(measure()));
 
     connect(_regionCompetitionDialog.sliderBasicOp, SIGNAL(sliderReleased()), this, SLOT(actionSliderReleased()));
 
     connect(_regionCompetitionDialog.radioLineWidthThin, SIGNAL(clicked()), this, SLOT(updateLineThickness()));
     connect(_regionCompetitionDialog.radioLineWidthMedium, SIGNAL(clicked()), this, SLOT(updateLineThickness()));
     connect(_regionCompetitionDialog.radioLineWidthThick, SIGNAL(clicked()), this, SLOT(updateLineThickness()));
+    connect(_regionCompetitionDialog._comboBoxLarger, SIGNAL(currentIndexChanged(QString)), this, SLOT(on__comboBoxLarger_currentIndexChanged(QString)));
+    connect(_regionCompetitionDialog._horizontalSliderScale, SIGNAL(valueChanged(int)), this, SLOT(on__horizontalSliderScale_valueChanged(int)));
 
     connect(_leftWindow.tableWidget, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(cellDoubleClickedLeftWindow(int, int)));
     connect(_bottomWindow.dBTableWidget_8, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(on_dBTableWidget_8_cellDoubleClicked(int, int)));
@@ -655,6 +654,8 @@ void ImageCompletionUI::editProperties()
     QImage* mask    = _editImageViewer->getMask();
     QImage* result2 = _editImageViewer->getResultSave();
 
+    _imageScale = _regionCompetitionDialog._spinBox_measure->value() * 1.0 / _regionCompetitionDialog._spinBox_pixel->value();
+    _imageScale *= _editImageViewer->orgWidth() * _editImageViewer->orgHeight() * 1.0 / _editImageViewer->width() / _editImageViewer->height();
     (new MoliProperties(this))->showDlg(_strCurrentImagePath, result != NULL ? *result : QImage(), result2 != NULL ? *result2 : QImage(), mask != NULL ? *mask : QImage(), _imageScale );
 }
 
@@ -740,6 +741,11 @@ void ImageCompletionUI::openImage(QString strFilePath)
         close();
         this->setStrikeOptionsEnabled( false );
         return;
+    }
+    else
+    {
+        _regionCompetitionDialog._lineEdit_width->setText(QString::number(_editImageViewer->width()));
+        _regionCompetitionDialog._lineEdit_height->setText(QString::number(_editImageViewer->height()));
     }
 
     _editImageViewer->repaint();
@@ -1432,12 +1438,12 @@ void ImageCompletionUI::actionSliderReleased()
 {
     double scaleFactor;
 
-    if(_regionCompetitionDialog.radioScale->isChecked())
-    {
-        scaleFactor = _regionCompetitionDialog.sliderBasicOp->value() * 1.0 / 10;
-        _editImageViewer->imageScaling( scaleFactor );
-    }
-    else if(_regionCompetitionDialog.radioBrightness->isChecked())
+    //    if(_regionCompetitionDialog.radioScale->isChecked())
+    //    {
+    //        scaleFactor = _regionCompetitionDialog.sliderBasicOp->value() * 1.0 / 10;
+    //        _editImageViewer->imageScaling( scaleFactor );
+    //    }
+    if(_regionCompetitionDialog.radioBrightness->isChecked())
     {
         scaleFactor = _regionCompetitionDialog.sliderBasicOp->value();
         _editImageViewer->imageBrighting( scaleFactor );
@@ -1858,27 +1864,27 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
         // 数据库文件处理
         if(fileInfo.fileName().split(".")[1] == "sql")
             ; // why is this necessary? yes! skip it when import
-            //            qDebug() << fileInfo.fileName();
+        //            qDebug() << fileInfo.fileName();
 
-            // 当为目录时，递归的进行copy
-            if(fileInfo.isDir())
+        // 当为目录时，递归的进行copy
+        if(fileInfo.isDir())
+        {
+            if(!copyFiles(fileInfo.filePath(),
+                          targetDir.filePath(fileInfo.fileName()),
+                          convertIfExits))
+                return false;
+        }
+        else
+        {
+            if(convertIfExits && targetDir.exists(fileInfo.fileName()))
             {
-                if(!copyFiles(fileInfo.filePath(),
-                              targetDir.filePath(fileInfo.fileName()),
-                              convertIfExits))
-                    return false;
+                targetDir.remove(fileInfo.fileName());
             }
-            else
-            {
-                if(convertIfExits && targetDir.exists(fileInfo.fileName()))
-                {
-                    targetDir.remove(fileInfo.fileName());
-                }
-                // 进行文件copy
-                if(!QFile::copy(fileInfo.filePath(), targetDir.filePath(fileInfo.fileName()))){
-                    //return false; // ???
-                }
+            // 进行文件copy
+            if(!QFile::copy(fileInfo.filePath(), targetDir.filePath(fileInfo.fileName()))){
+                //return false; // ???
             }
+        }
     }
     return true;
 }
@@ -2123,15 +2129,6 @@ void ImageCompletionUI::changeMeasureButtonState(bool state)
     _regionCompetitionDialog.labelSliderLeft->setHidden(!state);
     _regionCompetitionDialog.labelSliderRight->setHidden(!state);
     _regionCompetitionDialog.sliderBasicOp->setHidden(!state);
-    _regionCompetitionDialog._line->setHidden(state);
-    _regionCompetitionDialog._label_pixel->setHidden(state);
-    _regionCompetitionDialog._label_micrometer->setHidden(state);
-    _regionCompetitionDialog._spinBox_measure->setHidden(state);
-
-    if(state)
-    {
-        _regionCompetitionDialog._spinBox_measure->setValue(50);
-    }
 }
 
 void ImageCompletionUI::on_dBTableWidget_7_cellDoubleClicked(int row, int column)
@@ -2637,7 +2634,14 @@ void ImageCompletionUI::drawEnclosingRectangle(QPixmap& pixmap, const QColor col
 
 void ImageCompletionUI::on__spinBox_measure_valueChanged(int arg1)
 {
-    _imageScale = arg1 * 1.0 / 50;
+    //    _imageScale = arg1 * 1.0 / _regionCompetitionDialog._spinBox_pixel->value();
+    //    _imageScale *= _editImageViewer->orgWidth() * _editImageViewer->orgHeight() * 1.0 / _editImageViewer->width() / _editImageViewer->height();
+}
+
+void ImageCompletionUI::on__spinBox_pixel_valueChanged(int arg1)
+{
+    //    _imageScale = _regionCompetitionDialog._spinBox_measure * 1.0 / arg1;
+    //    _imageScale *= _editImageViewer->orgWidth() * _editImageViewer->orgHeight() * 1.0 / _editImageViewer->width() / _editImageViewer->height();
 }
 
 void ImageCompletionUI::about()
@@ -2647,3 +2651,31 @@ void ImageCompletionUI::about()
 }
 
 void ImageCompletionUI::showDoc(){}
+
+void ImageCompletionUI::on__comboBoxLarger_currentIndexChanged(const QString &arg1)
+{
+    if(arg1 == "100x")
+    {
+        _regionCompetitionDialog._spinBox_pixel->setValue(284);
+        _regionCompetitionDialog._spinBox_measure->setValue(200);
+    }
+    else if(arg1 == "200x")
+    {
+        _regionCompetitionDialog._spinBox_pixel->setValue(579);
+        _regionCompetitionDialog._spinBox_measure->setValue(200);
+    }
+    else if(arg1 == "500x")
+    {
+        _regionCompetitionDialog._spinBox_pixel->setValue(1431);
+        _regionCompetitionDialog._spinBox_measure->setValue(200);
+    }
+}
+
+void ImageCompletionUI::on__horizontalSliderScale_valueChanged(int value)
+{
+    double scaleFactor = value * 1.0 / 10;
+    _editImageViewer->imageScaling( scaleFactor );
+
+    _regionCompetitionDialog._lineEdit_width->setText( QString::number(int(_editImageViewer->width() * scaleFactor)));
+    _regionCompetitionDialog._lineEdit_height->setText(QString::number(int(_editImageViewer->height() * scaleFactor)));
+}
