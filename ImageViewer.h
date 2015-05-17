@@ -71,8 +71,8 @@ public:
     bool            saveAsLabelledResult(QString &pathResult);
     bool            saveMask(QString path, QString ext);
     bool            saveAsMask(QString &pathMask);
-	
-    QImage*         getOriginalImage();
+
+    IplImage*         getOriginalImage();
 
 public:
 	void			imageScaling( double scaleFactor );

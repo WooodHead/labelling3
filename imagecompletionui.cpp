@@ -1000,8 +1000,6 @@ void ImageCompletionUI::showThumbnail(QString file, QString status, int row)
     QImage temp = QImage(file);
     _leftWindow.tableWidget->item(row, 0)->setData(Qt::DecorationRole, QPixmap::fromImage(temp).scaled(80, 80));
     _leftWindow.tableWidget->item(row, 0)->setBackgroundColor(color(status));
-
-    //    DELETEPTR(temp);
 }
 
 //FIXME
@@ -1166,7 +1164,7 @@ void ImageCompletionUI::updateStatusBar()
 
     if(log_str)
     {
-        DELETEPTR(log_str);
+        delete[] log_str;
     }
 }
 
@@ -1219,55 +1217,58 @@ void ImageCompletionUI::showData()
             {
                 for(int j=0; j<rec.count(); j++)
                 {
+                    QTableWidgetItem* item = new QTableWidgetItem(query.value(j).toString());
                     switch(k)
                     {
                     case 1:
                     {
                         if( j == 0 ) _bottomWindow.dBTableWidget_1->insertRow(_bottomWindow.dBTableWidget_1->rowCount());
-                        _bottomWindow.dBTableWidget_1->setItem(i, j, new QTableWidgetItem(query.value(j).toString()));
+                        _bottomWindow.dBTableWidget_1->setItem(i, j, item);
                         break;
                     }
                     case 2:
                     {
                         if( j == 0 ) _bottomWindow.dBTableWidget_2->insertRow(_bottomWindow.dBTableWidget_2->rowCount());
-                        _bottomWindow.dBTableWidget_2->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                        _bottomWindow.dBTableWidget_2->setItem(i, j, item); break;
                     }
                     case 3:
                     {
                         if( j == 0 ) _bottomWindow.dBTableWidget_3->insertRow(_bottomWindow.dBTableWidget_3->rowCount());
-                        _bottomWindow.dBTableWidget_3->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                        _bottomWindow.dBTableWidget_3->setItem(i, j, item); break;
                     }
                     case 4:
                     {
                         if( j == 0 ) _bottomWindow.dBTableWidget_4->insertRow(_bottomWindow.dBTableWidget_4->rowCount());
-                        _bottomWindow.dBTableWidget_4->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                        _bottomWindow.dBTableWidget_4->setItem(i, j, item); break;
                     }
                     case 5:
                     {
                         if( j == 0 ) _bottomWindow.dBTableWidget_5->insertRow(_bottomWindow.dBTableWidget_5->rowCount());
-                        _bottomWindow.dBTableWidget_5->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                        _bottomWindow.dBTableWidget_5->setItem(i, j, item); break;
                     }
                     case 6:
                     {
                         if( j == 0 ) _bottomWindow.dBTableWidget_6->insertRow(_bottomWindow.dBTableWidget_6->rowCount());
-                        _bottomWindow.dBTableWidget_6->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                        _bottomWindow.dBTableWidget_6->setItem(i, j, item); break;
                     }
                     case 7:
                     {
                         if( j == 0 ) _bottomWindow.dBTableWidget_7->insertRow(_bottomWindow.dBTableWidget_7->rowCount());
-                        _bottomWindow.dBTableWidget_7->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                        _bottomWindow.dBTableWidget_7->setItem(i, j, item); break;
                     }
                     case 8:
                     {
                         if( j == 0 ) _bottomWindow.dBTableWidget_8->insertRow(_bottomWindow.dBTableWidget_8->rowCount());
-                        _bottomWindow.dBTableWidget_8->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                        _bottomWindow.dBTableWidget_8->setItem(i, j, item); break;
                     }
                     case 9:
                     {
                         if( j == 0 ) _bottomWindow.dBTableWidget_9->insertRow(_bottomWindow.dBTableWidget_9->rowCount());
-                        _bottomWindow.dBTableWidget_9->setItem(i, j, new QTableWidgetItem(query.value(j).toString())); break;
+                        _bottomWindow.dBTableWidget_9->setItem(i, j, item); break;
                     }
                     }
+
+                    DELETEPTR(item);
                 }
                 i++;
             }

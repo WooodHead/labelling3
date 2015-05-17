@@ -247,17 +247,18 @@ bool ImageViewer::saveLabelledResult(QString path, QString ext)
 
     QImage* temp = IplImageToQImage(scaled);
     bool ret1 = temp->save(path1, ext.toUtf8().constData());
+    DELETEPTR(temp);
 
     IplImage* cv_result_save = QImageToIplImage(*_result_save);
     cvResize(cv_result_save, scaled, CV_INTER_CUBIC);
 
     temp = IplImageToQImage(scaled);
     bool ret2 = temp->save(path2, ext.toUtf8().constData());
+    DELETEPTR(temp);
 
     cvReleaseImage(&cv_result_display);
     cvReleaseImage(&scaled);
     cvReleaseImage(&cv_result_save);
-    if(temp) delete temp;
 
     return ret1 && ret2;
 }
@@ -366,9 +367,9 @@ bool ImageViewer::saveAsMask(QString &pathMask)
     }
 }
 
-QImage *ImageViewer::getOriginalImage()
+IplImage *ImageViewer::getOriginalImage()
 {
-    return IplImageToQImage(_ocvImage);
+    return _ocvImage;
 }
 
 void ImageViewer::setImage(const QImage &image)
