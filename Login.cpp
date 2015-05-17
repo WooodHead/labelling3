@@ -145,6 +145,8 @@ void Login::customizeTitleBar()
 
     layout->setSpacing(0);
     setLayout(layout);
+
+    DELETEPTR(layout);
 }
 
 void Login::login()
@@ -216,8 +218,8 @@ void Login::login()
 void Login::getDataForMainform()
 {
     Global::Authority = _authority;
-    (new ImageCompletionUI)->show();
 
+    (new ImageCompletionUI)->show();
     this->deleteLater();
 }
 
