@@ -298,7 +298,10 @@ private: // methods
     void        wheelEvent(QWheelEvent *event);
     void        changeMeasureButtonState(bool state);
     void        closeEvent(QCloseEvent *);
+
+
 private slots:
+    void setEnlargementFactor(QString strFilePath);
     void        openImage(QString file);
     void        flushLeftTree();
     void        flush();

@@ -13,6 +13,7 @@ ImageProperties::ImageProperties(QWidget *parent) :
     connect(this, SIGNAL(flush()), parent, SLOT(flush()));
     connect(this, SIGNAL(syncFilePathStr(QString)), parent, SLOT(syncFilePathStr(QString)));
     connect(this, SIGNAL(closeViewer()), parent, SLOT(close()));
+    connect(this, SIGNAL(setEnlargementFactor(QString)), parent, SLOT(setEnlargementFactor(QString)));
 
     _bCommited = false;
     for(int i = 0; i < TABLE_N; i++ ) _models[i] = 0;
@@ -603,16 +604,17 @@ void ImageProperties::showDlg(QString filename)
     ui->_editMentalSamplePath->setText(filename);
 
     _originalImagePath = filename;
-    QPixmap image;
-    if(image.load(_originalImagePath))
-    {
-        ui->_labelOriginalImage_2->setPixmap(image);
-        ui->_labelOriginalImage_2->setScaledContents(true);
-    }
+//    QPixmap image;
+//    if(image.load(_originalImagePath))
+//    {
+//        ui->_labelOriginalImage_2->setPixmap(image);
+//        ui->_labelOriginalImage_2->setScaledContents(true);
+//    }
 }
 
 void ImageProperties::on__buttonSave_clicked()
 {
+    QString copyTo = "";
     int index = ui->_tabWidget->currentIndex();
     if( index != ui->_tabWidget->count()-1)
     {
@@ -974,7 +976,7 @@ void ImageProperties::on__buttonSave_clicked()
                     file->close();
                     _models[6]->setData(_models[6]->index(0, 12), data);
                 }
-                QString copyTo = copyOrgImage(ui->_comboBoxMentalSampleImageID->currentText(), ui->_editMentalSamplePath->text());
+                copyTo = copyOrgImage(ui->_comboBoxMentalSampleImageID->currentText(), ui->_editMentalSamplePath->text());
 
                 if(!copyTo.isEmpty() && QFile::exists(copyTo))
                 {
@@ -994,6 +996,11 @@ void ImageProperties::on__buttonSave_clicked()
                 QMessageBox::warning(this, tr("提示"), tr("保存失败!"), QMessageBox::Close);
                 return;
             }
+        }
+
+        if(!copyTo.isEmpty() && QFile::exists(copyTo))
+        {
+            emit setEnlargementFactor(copyTo);
         }
 
         // Save Summary Info;
@@ -1031,11 +1038,11 @@ void ImageProperties::on__buttonSave_clicked()
         _bCommited = true;
         QMessageBox::warning(this, tr("提示"), tr("保存成功!"), QMessageBox::Close);
 
+        close();
+
         updateHistory();
         Global::NewName = ui->_comboBoxMentalSampleImageID->currentText();
         emit flush();
-
-        close();
     }
 }
 

@@ -425,8 +425,8 @@ void MoliProperties::showDlg(QString imagePath, const QImage* result, const QIma
 
             ui->_labelOriginalImage->setPixmap(QPixmap(imagePath));
 
-            if(!result) ui->_labelResultImage->setPixmap(QPixmap::fromImage(_result));
-            if(!mask) ui->_labelMaskImage->setPixmap(QPixmap::fromImage(_mask));
+            if(result) ui->_labelResultImage->setPixmap(QPixmap::fromImage(_result));
+            if(mask) ui->_labelMaskImage->setPixmap(QPixmap::fromImage(_mask));
 
             computeMoliInfo( imageScale, perimeter, maxHeight, maxWidth);
 

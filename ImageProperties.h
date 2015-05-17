@@ -382,6 +382,7 @@ signals:
     void closeViewer();
     void syncFilePathStr(QString fName);
     void openImage(QString fName);
+    void setEnlargementFactor(QString);
 
 public:
     void showDlg(QString filename);

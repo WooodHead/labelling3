@@ -763,7 +763,6 @@ void ImageCompletionUI::openImage(QString strFilePath)
         if(QMessageBox::Ok == reply)
         {
             (new ImageProperties(this))->showDlg( strFilePath );
-            int i = 1;
         }
         else
         {
@@ -789,6 +788,7 @@ void ImageCompletionUI::openImage(QString strFilePath)
             _strNextImage = "";
         }
 
+        setEnlargementFactor(strFilePath);
         this->loadLabelledResult( strFilePath );
     }
     else if(MOLI_UNLABELLED_STATUS_CHAR == status)
@@ -812,7 +812,10 @@ void ImageCompletionUI::openImage(QString strFilePath)
         {
             _strNextImage = "";
         }
+        setEnlargementFactor(strFilePath);
     }
+
+
 }
 
 void ImageCompletionUI::OnDoubleClickTreeView(QModelIndex m)
@@ -1384,6 +1387,48 @@ void ImageCompletionUI::closeEvent(QCloseEvent *event)
         event->accept();
     else
         event->ignore();
+}
+
+void ImageCompletionUI::setEnlargementFactor(QString strFilePath)
+{
+    QString factor;
+    QSqlDatabase db;
+    if(Global::createConnection(db))
+    {
+        QSqlQuery query;
+        QString sql = QString("select magnification from ferrographypicinfo where ferrographypicpath = '%1'").arg(strFilePath);
+
+        if(query.exec(sql) )
+        {
+            if(query.next())
+            {
+                factor = query.value(0).toString();
+            }
+        }
+        else
+        {
+            factor = "1";
+        }
+
+        factor = factor + "x";
+
+        if(factor == "100x")
+        {
+            _regionCompetitionDialog._comboBoxLarger->setCurrentIndex(0);
+        }
+        else if(factor == "200x")
+        {
+            _regionCompetitionDialog._comboBoxLarger->setCurrentIndex(1);
+        }
+        else if(factor == "500x")
+        {
+            _regionCompetitionDialog._comboBoxLarger->setCurrentIndex(2);
+        }
+        else
+        {
+            _regionCompetitionDialog._comboBoxLarger->setEditText(factor);
+        }
+    }
 }
 
 void ImageCompletionUI::selectColor()

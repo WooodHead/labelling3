@@ -114,7 +114,7 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent,bool flag) :
 
     connect(this,SIGNAL(showqueryThumbnails(QStringList)),parent,SLOT(queryThumbnails(QStringList)));
 
-    connect(this,SIGNAL(flushBottomData()),parent,SLOT(flushBottom()));
+    connect(this,SIGNAL(flushBottomData()),parent,SLOT(flush()));
     connect(this,SIGNAL(flushLeftTree()),parent,SLOT(flushLeftTree()));
     createTableNames();
 
