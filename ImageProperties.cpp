@@ -212,7 +212,7 @@ QStringList ImageProperties::getItems(QSqlTableModel *model, QString fieldName)
 QStringList ImageProperties::getSamplePoint(QString fieldName, QString whereField, QString whereValue)
 {
     QStringList list;
-    list << "";
+//    list << "";
     QSqlDatabase db;
     if(Global::createConnection(db))
     {
@@ -227,9 +227,8 @@ QStringList ImageProperties::getSamplePoint(QString fieldName, QString whereFiel
             QString value = record.value(record.indexOf(fieldName)).toString();
             if(!value.isEmpty() && !list.contains(value)) list << value;
         }
+        model->deleteLater();
     }
-
-    db.close();
 
     return list;
 }
@@ -1812,7 +1811,7 @@ void ImageProperties::setHistoryData()
 {
     ui->_comboBoxEquipPlaneID->setEditText( _history_values._planeId);
     ui->_comboBoxEquipPlaneType->setEditText( _history_values._planeType);
-    ui->_comboBoxEquipUnitID->setEditText(_history_values._planeType);
+    ui->_comboBoxEquipUnitID->setEditText(_history_values._unitId);
     ui->_editEquipHours->setText( _history_values._hours );
     ui->_comboBoxEquipRuntime->setEditText(  _history_values._runtimeStage );
     ui->_editServiceNumber->setText( _history_values._repairNumber );
