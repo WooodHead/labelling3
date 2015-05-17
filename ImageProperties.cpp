@@ -46,9 +46,9 @@ void ImageProperties::setupUiAgain()
     ui->_editOilSampleMount->setValidator(new QDoubleValidator(0.0, 1000000.0, 5, this));
     ui->_editOilSampleSampleMount->setValidator(new QDoubleValidator(0.0, 1000000.0, 5, this));
     ui->_editMentalMount->setValidator(new QDoubleValidator(0.0, 1000000.0, 5, this));
-    ui->_editMentalSampleEnlarger->setValidator(new QIntValidator(1, 1000, this));
-    ui->_editMoliSize->setValidator(new QDoubleValidator(0.0, 100.0, 5, this));
-    ui->_editMoliLength->setValidator(new QDoubleValidator(0.0, 100.0, 5, this));
+    ui->_editMentalSampleEnlarger->setValidator(new QIntValidator(1, 100000, this));
+    ui->_editMoliSize->setValidator(new QDoubleValidator(0.0, 1000.0, 5, this));
+    ui->_editMoliLength->setValidator(new QDoubleValidator(0.0, 1000.0, 5, this));
 
     ui->_timeEditOilSampleSampleTime->setDisplayFormat("yyyyMMdd");
 
@@ -56,6 +56,13 @@ void ImageProperties::setupUiAgain()
 }
 
 ImageProperties::~ImageProperties()
+{
+    releaseModels();
+
+    delete ui;
+}
+
+void ImageProperties::releaseModels()
 {
     for(int i = 0; i < TABLE_N; i++)
     {
@@ -65,8 +72,6 @@ ImageProperties::~ImageProperties()
             _models[i] = 0;
         }
     }
-
-    delete ui;
 }
 
 void ImageProperties::load()
@@ -223,6 +228,8 @@ QStringList ImageProperties::getSamplePoint(QString fieldName, QString whereFiel
             if(!value.isEmpty() && !list.contains(value)) list << value;
         }
     }
+
+    db.close();
 
     return list;
 }
@@ -1024,11 +1031,12 @@ void ImageProperties::on__buttonSave_clicked()
 
         _bCommited = true;
         QMessageBox::warning(this, tr("提示"), tr("保存成功!"), QMessageBox::Close);
-        close();
 
         updateHistory();
         Global::NewName = ui->_comboBoxMentalSampleImageID->currentText();
         emit flush();
+
+        close();
     }
 }
 
@@ -1117,6 +1125,7 @@ void ImageProperties::closeEvent(QCloseEvent *event)
         if(reply == QMessageBox::Ok)
         {
             emit closeViewer();
+            releaseModels();
         }
         else if(reply == QMessageBox::Cancel)
         {

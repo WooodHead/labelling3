@@ -12,7 +12,7 @@
 ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
     : QMainWindow(parent, flags)
 {
-    _strNextImage = "";
+    _strNextImage        = "";
     _canBack             = false;
     _brushSize           = 3;
     _imageScale          = 1.0;
@@ -20,7 +20,7 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
     _formLayout          = 0;
     _strCurrentImagePath = QString();
     _strMoliId           = QString();
-    _treeModel = 0;
+    _treeModel           = 0;
 
     setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
@@ -55,6 +55,7 @@ ImageCompletionUI::~ImageCompletionUI()
     DELETEPTR( _formLayout      );
     DELETEPTR( Global::Awesome  );
     DELETEPTR( _editImageViewer );
+    DELETEPTR(_treeModel);
 }
 
 void ImageCompletionUI::setupMainWindow()
@@ -762,6 +763,7 @@ void ImageCompletionUI::openImage(QString strFilePath)
         if(QMessageBox::Ok == reply)
         {
             (new ImageProperties(this))->showDlg( strFilePath );
+            int i = 1;
         }
         else
         {
@@ -1268,7 +1270,7 @@ void ImageCompletionUI::showData()
                     }
                     }
 
-                    DELETEPTR(item);
+//                    DELETEPTR(item);
                 }
                 i++;
             }

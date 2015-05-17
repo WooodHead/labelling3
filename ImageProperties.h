@@ -376,6 +376,7 @@ private:
     void setHistoryData();
     QStringList getSamplePoint(QString fieldName, QString whereField, QString whereValue);
 
+    void releaseModels();
 signals:
     void flush();
     void closeViewer();
