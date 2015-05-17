@@ -341,11 +341,11 @@ void MoliProperties::on_pushButton_clicked()
     }
 }
 
-void MoliProperties::showDlg(QString imagePath, const QImage& result, const QImage& result2, const QImage& mask, const double imageScale)
+void MoliProperties::showDlg(QString imagePath, const QImage* result, const QImage* result2, const QImage* mask, const double imageScale)
 {
-    _result = result;
-    _mask = mask;
-    _result2 = result2;
+    if(result) _result = *result;
+    if(mask) _mask = *mask;
+    if(result2) _result2 = *result2;
 
     _originalImagePath = imagePath;
     ui->_editMoliPath->setText(imagePath);
@@ -425,8 +425,8 @@ void MoliProperties::showDlg(QString imagePath, const QImage& result, const QIma
 
             ui->_labelOriginalImage->setPixmap(QPixmap(imagePath));
 
-            if(!result.isNull()) ui->_labelResultImage->setPixmap(QPixmap::fromImage(_result));
-            if(!mask.isNull()) ui->_labelMaskImage->setPixmap(QPixmap::fromImage(_mask));
+            if(!result) ui->_labelResultImage->setPixmap(QPixmap::fromImage(_result));
+            if(!mask) ui->_labelMaskImage->setPixmap(QPixmap::fromImage(_mask));
 
             computeMoliInfo( imageScale, perimeter, maxHeight, maxWidth);
 

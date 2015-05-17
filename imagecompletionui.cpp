@@ -656,7 +656,7 @@ void ImageCompletionUI::editProperties()
 
     _imageScale = _regionCompetitionDialog._spinBox_measure->value() * 1.0 / _regionCompetitionDialog._spinBox_pixel->value();
     _imageScale *= _editImageViewer->orgWidth() * _editImageViewer->orgHeight() * 1.0 / _editImageViewer->width() / _editImageViewer->height();
-    (new MoliProperties(this))->showDlg(_strCurrentImagePath, result != NULL ? *result : QImage(), result2 != NULL ? *result2 : QImage(), mask != NULL ? *mask : QImage(), _imageScale );
+    (new MoliProperties(this))->showDlg(_strCurrentImagePath, result, result2, mask, _imageScale );
 }
 
 void ImageCompletionUI::syncFilePathStr(QString strFilePath)
