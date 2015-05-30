@@ -21,6 +21,7 @@ ImageCompletionUI::ImageCompletionUI(QWidget *parent, Qt::WFlags flags)
     _strCurrentImagePath = QString();
     _strMoliId           = QString();
     _treeModel           = 0;
+    _thumbnailWidget = 0;
 
     setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 
@@ -356,8 +357,16 @@ void ImageCompletionUI::setupWidgets()
 
     _thumbnailScrollArea = new QScrollArea(_thumbnailTab);
     _thumbnailScrollArea->setObjectName(tr("_thumbnailScrollArea"));
+
+    //    _thumbnailWidget = new QWidget;
+    //    _thumbnailScrollArea->setWidget(_thumbnailWidget);
     _formLayout = new QFormLayout;
+
+    //    _thumbnailScrollArea->widget()->setLayout(_formLayout);
     _thumbnailScrollArea->setLayout(_formLayout);
+    _thumbnailScrollArea->setWidgetResizable(true);
+    _thumbnailScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    _thumbnailScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
     QGridLayout *tabLayout2 = new QGridLayout;
     tabLayout2->addWidget(_thumbnailScrollArea);
@@ -366,6 +375,8 @@ void ImageCompletionUI::setupWidgets()
     _thumbnailScrollArea->setAlignment( Qt::AlignCenter );
     _thumbnailScrollArea->setAutoFillBackground( true );
     _thumbnailScrollArea->setBackgroundRole(  QPalette::Dark );
+    //    _thumbnailScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    //    _thumbnailScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
     _centralThumbnailTabWidget->addTab( _thumbnailTab, Global::Awesome->icon(pictureo), QString("缩略图") );
     _centralThumbnailTabWidget->setMaximumHeight(height);
@@ -448,6 +459,10 @@ void ImageCompletionUI::setupWidgets()
     _leftWindowWidget->setWidget(_leftDockWindowContents);
 
     addDockWidget(Qt::LeftDockWidgetArea, _leftWindowWidget);
+
+    QHeaderView *verticalHeader = _leftWindow.tableWidget->verticalHeader();
+    verticalHeader->setResizeMode(QHeaderView::Fixed);
+    verticalHeader->setDefaultSectionSize(50);
 
     // Hide Columns (Fix it in the future)
     _leftWindow.tableWidget->hideColumn(2);
@@ -606,6 +621,9 @@ void ImageCompletionUI::showContextMenu(QPoint pos)
     QAction* editMenu = new QAction(tr("编辑磨粒属性"), this);
     connect(editMenu, SIGNAL(triggered()), this, SLOT(editProperties()));
 
+    QAction* checkMenu = new QAction(tr("查看磨粒属性"), this);
+    connect(checkMenu, SIGNAL(triggered()), this, SLOT(checkProperties()));
+
     // Menu 2
     QAction *appendMenu = new QAction(tr("标注新磨粒"), this);
     connect(appendMenu, SIGNAL(triggered()), this, SLOT(append()));
@@ -619,6 +637,7 @@ void ImageCompletionUI::showContextMenu(QPoint pos)
         editMenu->setEnabled(false);
         appendMenu->setEnabled(false);
         showAllMenu->setEnabled(false);
+        checkMenu->setEnabled(false);
     }
 
     // Menu 3
@@ -638,6 +657,8 @@ void ImageCompletionUI::showContextMenu(QPoint pos)
 
     QMenu menu;
     menu.addAction(editMenu);
+    menu.addAction(checkMenu);
+    menu.addSeparator();
     menu.addAction(appendMenu);
     menu.addAction(showAllMenu);
     menu.addSeparator();
@@ -658,6 +679,19 @@ void ImageCompletionUI::editProperties()
     _imageScale = _regionCompetitionDialog._spinBox_measure->value() * 1.0 / _regionCompetitionDialog._spinBox_pixel->value();
     _imageScale *= _editImageViewer->orgWidth() * _editImageViewer->orgHeight() * 1.0 / _editImageViewer->width() / _editImageViewer->height();
     (new MoliProperties(this))->showDlg(_strCurrentImagePath, result, result2, mask, _imageScale );
+}
+
+void ImageCompletionUI::checkProperties()
+{
+    if(_strCurrentImagePath.isEmpty()) return;
+
+    QImage* result  = _editImageViewer->getResultDisplay();
+    QImage* mask    = _editImageViewer->getMask();
+    QImage* result2 = _editImageViewer->getResultSave();
+
+    _imageScale = _regionCompetitionDialog._spinBox_measure->value() * 1.0 / _regionCompetitionDialog._spinBox_pixel->value();
+    _imageScale *= _editImageViewer->orgWidth() * _editImageViewer->orgHeight() * 1.0 / _editImageViewer->width() / _editImageViewer->height();
+    (new CheckProperties(this))->showDlg(_strCurrentImagePath, result, result2, mask, _imageScale );
 }
 
 void ImageCompletionUI::syncFilePathStr(QString strFilePath)
@@ -862,6 +896,23 @@ void ImageCompletionUI::OnDoubleClickTreeView(QModelIndex m)
                             {
                                 list.push_back(Global::PathImage+selectedItemTitle);
                             }
+                            else
+                            {
+                                QAbstractItemModel* model3 = (QAbstractItemModel*)subsubModel.model();
+                                if(model3->hasChildren())
+                                {
+                                    for(int j = 0; j < model3->rowCount(subsubModel); ++j)
+                                    {
+                                        QModelIndex subsubsubModel = subsubModel.child(j, 0);
+                                        selectedItemTitle = subsubsubModel.data().toString();
+
+                                        if(selectedItemTitle.endsWith(tr("jpg")) || selectedItemTitle.endsWith(tr("png")) || selectedItemTitle.endsWith(tr("bmp")) || selectedItemTitle.endsWith("jpeg"))
+                                        {
+                                            list.push_back(Global::PathImage+selectedItemTitle);
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -904,7 +955,7 @@ void ImageCompletionUI::showImagesInTree()
     {
         while(query.next())
         {
-            departMap.insert(std::pair<QString, QString>(query.value(2).toString(), query.value(0).toString()));
+            departMap.insert(std::pair<QString, QString>(query.value(2).toString(), query.value(1).toString())); // depart -> plane-type
         }
     }
 
@@ -917,10 +968,10 @@ void ImageCompletionUI::showImagesInTree()
         departs.push_back(it->first);
     }
 
-    QStandardItem* item;
+    QStandardItem* item, *item2;
     QStandardItem* items[cnt];
     _treeModel = new QStandardItemModel(cnt,1);
-    for(int i = 0; i < cnt; i++)
+    for(int i = 0; i < cnt; i++) // department
     {
         items[i] = new QStandardItem(departs[i]);
         items[i]->setIcon(Global::Awesome->icon(group));
@@ -928,28 +979,45 @@ void ImageCompletionUI::showImagesInTree()
 
         for(std::multimap<QString, QString>::iterator it = departMap.begin(); it != departMap.end(); it++)
         {
+            // plane-type
             if((*it).first == departs[i])
             {
                 item = new QStandardItem((*it).second);
                 item->setIcon(Global::Awesome->icon(plane));
                 items[i]->appendRow(item);
-            }
 
-            // Append Images
-            QSqlQuery query;
-            QString sql = QString("select ferrographypicinfo.ferrographypicid from ferrographypicinfo join ferrographyinfo join oilsampleinfo on ferrographypicinfo.ferrographysheetid = ferrographyinfo.ferrographysheetid and ferrographyinfo.oilsampleid = oilsampleinfo.oilsampleid and oilsampleinfo.sampledepartid = '%1' and oilsampleinfo.planeid = '%2'").arg(departs[i]).arg((*it).second);
+                // plane-id
+                QSqlQuery query;
+                QString sql = QString("select planeid from equipmentinfo where departid = '%1' and planetype = '%2'").arg(departs[i]).arg((*it).second);
 
-            query.prepare(sql);
-            if(query.exec())
-            {
-                while(query.next())
+                query.prepare(sql);
+                if(query.exec())
                 {
-                    QString fName = query.value(0).toString();
-                    QImage image(Global::PathImage + fName + ".jpg");
+                    while(query.next())
+                    {
+                        QString fName = query.value(0).toString();
+                        item2 = new QStandardItem(fName);
+                        item2->setIcon(Global::Awesome->icon(plane));
+                        item->appendRow(item2);
 
-                    QStandardItem *item2 = new QStandardItem(fName + ".jpg");
-                    item2->setIcon(QPixmap::fromImage(image));
-                    item->appendRow(item2);
+                        //
+                        QSqlQuery query;
+                        QString sql = QString("select ferrographypicinfo.ferrographypicid from ferrographypicinfo join ferrographyinfo join oilsampleinfo on ferrographypicinfo.ferrographysheetid = ferrographyinfo.ferrographysheetid and ferrographyinfo.oilsampleid = oilsampleinfo.oilsampleid and oilsampleinfo.sampledepartid = '%1' and oilsampleinfo.planeid = '%2' and oilsampleinfo.planetype = '%3'").arg(departs[i]).arg(fName).arg((*it).second);
+
+                        query.prepare(sql);
+                        if(query.exec())
+                        {
+                            while(query.next())
+                            {
+                                QString fName = query.value(0).toString();
+                                QImage image(Global::PathImage + fName + ".jpg");
+
+                                QStandardItem *item3 = new QStandardItem(fName + ".jpg");
+                                item3->setIcon(QPixmap::fromImage(image));
+                                item2->appendRow(item3);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -1273,7 +1341,7 @@ void ImageCompletionUI::showData()
                     }
                     }
 
-//                    DELETEPTR(item);
+                    //                    DELETEPTR(item);
                 }
                 i++;
             }
@@ -2622,6 +2690,7 @@ void ImageCompletionUI::showThumbnailsInCentral(QStringList list)
         _formLayout->addRow(lll);
     }
 
+    //    _thumbnailScrollArea->setWidget(new QWidget);
     _thumbnailScrollArea->setLayout(_formLayout);
     if(_centralStackedWidget->currentIndex() == 0)
     {

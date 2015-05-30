@@ -36,6 +36,7 @@ using namespace std;
 #include "impdlg.h"
 #include "ImagePropertiesEditor.h"
 #include "About.h"
+#include "CheckProperties.h"
 
 #define THUMBNAILS_PER_ROW 6
 
@@ -193,6 +194,8 @@ private:
 
     QFormLayout           *_formLayout;
 
+    QWidget *_thumbnailWidget;
+
 private slots:
     void	open();
     void	save();
@@ -308,6 +311,7 @@ private slots:
     void        flushLeft(QString path, QString label);
     void        showContextMenu(QPoint);
     void        editProperties();
+    void        checkProperties();
     void        syncFilePathStr(QString fName);
     void        next();
 
