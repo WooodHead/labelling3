@@ -2041,6 +2041,7 @@ void ImageCompletionUI::cellDoubleClickedLeftWindow(int row, int /* col */)
 
         if(!strFilePath.isEmpty())
         {
+            _centralStackedWidget->setCurrentIndex(0);
             openImage(strFilePath);
         }
     }
