@@ -406,7 +406,7 @@ void ImageViewer::paintEvent(QPaintEvent * /* event */)
     QPainter painter(this);
     painter.drawImage(QPoint(0, 0), *_displayImage);
 
-    if ( bPaintable )
+    if ( bPaintable && _labelMapImage )
     {
         QImage _alphaChannel(_displayImage->width(), _displayImage->height(), QImage::Format_Indexed8);
         _alphaChannel.fill(100);

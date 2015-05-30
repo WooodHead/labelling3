@@ -1395,6 +1395,8 @@ void ImageCompletionUI::setStrikeOptionsEnabled(bool b)
 
 void ImageCompletionUI::updateMethod()
 {
+    if(!_editImageViewer->getOCVImage()) return;
+
     _editImageViewer->setPaintable(true);
     if (_regionCompetitionDialog.radioStrikeLabelling->isChecked())
     {
