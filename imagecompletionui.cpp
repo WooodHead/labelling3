@@ -358,12 +358,12 @@ void ImageCompletionUI::setupWidgets()
     _thumbnailScrollArea = new QScrollArea(_thumbnailTab);
     _thumbnailScrollArea->setObjectName(tr("_thumbnailScrollArea"));
 
-    //    _thumbnailWidget = new QWidget;
-    //    _thumbnailScrollArea->setWidget(_thumbnailWidget);
-    _formLayout = new QFormLayout;
+    _thumbnailWidget = new QWidget;
+    _formLayout = new QFormLayout(_thumbnailWidget);
+    _thumbnailScrollArea->setWidget(_thumbnailWidget);
 
-    //    _thumbnailScrollArea->widget()->setLayout(_formLayout);
-    _thumbnailScrollArea->setLayout(_formLayout);
+//    _thumbnailScrollArea->setLayout(_formLayout);
+
     _thumbnailScrollArea->setWidgetResizable(true);
     _thumbnailScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     _thumbnailScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
@@ -2707,8 +2707,7 @@ void ImageCompletionUI::showThumbnailsInCentral(QStringList list)
         _formLayout->addRow(lll);
     }
 
-    //    _thumbnailScrollArea->setWidget(new QWidget);
-    _thumbnailScrollArea->setLayout(_formLayout);
+    _thumbnailScrollArea->widget()->setLayout(_formLayout);
     if(_centralStackedWidget->currentIndex() == 0)
     {
         _canBack = false;

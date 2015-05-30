@@ -2905,8 +2905,6 @@ void AdvanceSearchDlg::on_samplestuffChkBox_clicked()
     }
 }
 
-
-
 void AdvanceSearchDlg::on_samplestuffLineEdit_textChanged(const QString &arg1)
 {
     _oisCdtMap.remove("samplestuff");
