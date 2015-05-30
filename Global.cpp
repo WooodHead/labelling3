@@ -11,7 +11,7 @@ QString Global::DisplayName = QString();
 QString Global::Database = "bookdata";
 QString Global::Hostname = "localhost";
 QString Global::Username = "root";
-QString Global::Passwd   = "zxy082";
+QString Global::Passwd   = "";
 
 QString Global::PathImage = QString();
 QString Global::PathMask = QString();
@@ -55,7 +55,7 @@ void Global::initialize()
 
     Global::PathImage = Global::settings->value("IMAGE/pathImage",Global::PathImage).toString();
     Global::PathMask = Global::settings->value("IMAGE/pathMask", Global::PathMask).toString();
-    Global::PathResult = Global::settings->value("IMAGE/pathResult", Global::PathResult).toString();    
+    Global::PathResult = Global::settings->value("IMAGE/pathResult", Global::PathResult).toString();
 
     QDir dirMask(Global::PathMask);
     QDir dirResult(Global::PathResult);

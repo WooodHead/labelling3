@@ -1244,14 +1244,15 @@ bool AdvanceSearchDlg::copyFiles(QString fromDir, QString toDir, QStringList fil
     if(!targetDir.exists())
     {
         //< 如果目标目录不存在，则进行创建
-        if(!targetDir.mkdir(targetDir.absolutePath()))
+        if(!targetDir.mkpath("."))
             return false;
     }
     if(fromDir == toDir)
         return true;
-    foreach (QString filename, filenames) {
+    foreach (QString filename, filenames)
+    {
         QString fromFullName = fromDir + filename;
-        QString toFullName   = toDir   + filename;
+        QString toFullName   = toDir   + "/" + filename;
         bool fromexist = sourceDir.exists(fromFullName);
         if(!fromexist)
         {
@@ -1259,14 +1260,19 @@ bool AdvanceSearchDlg::copyFiles(QString fromDir, QString toDir, QStringList fil
             QMessageBox::warning(this,tr("提示"),msg,QMessageBox::Close);
             continue;
         }
-        bool exist = targetDir.exists(toFullName);
-        if(exist)
-            if(convertIfExist)
-            {
-                targetDir.remove(toFullName);
-            }
-        if(!QFile::copy(fromFullName,toFullName))
+
+        if(targetDir.exists(toFullName) /*&& convertIfExist*/)
+        {
+            targetDir.remove(toFullName);
+        }
+
+        qDebug() << fromFullName;
+        qDebug() << toFullName;
+
+        if(!QFile::copy(fromFullName, toFullName))
+        {
             return false;
+        }
     }
     return true;
 }
@@ -2671,11 +2677,11 @@ void AdvanceSearchDlg::setpropertyName(QString propertyname)
     this->propertyName = propertyname;
 }
 
-
-void AdvanceSearchDlg::setExpPath(QString sourcePicPath, QString resultPicPath, QString packgePath)
+void AdvanceSearchDlg::setExpPath(QString sourcePicPath, QString resultPicPath, QString maskPicPath, QString packgePath)
 {
     this->_expSourcePicPath = sourcePicPath;
     this->_expResultPicPath = resultPicPath;
+    this->_expMaskPicPath = maskPicPath;
     this->_expPackgePath = packgePath;
 }
 
@@ -2686,26 +2692,49 @@ void AdvanceSearchDlg::setImpPath(QString packgePath)
 
 void AdvanceSearchDlg::on_exportBtn_clicked()
 {
-    ExpDlg *expdlg = new ExpDlg(this,Global::PathImage,Global::PathResult);
+    ExpDlg *expdlg = new ExpDlg(this,Global::PathImage,Global::PathResult, Global::PathMask);
     if(expdlg->exec() == QDialog::Accepted)
     {
         QStringList imgFileNames;
+        QStringList resultFileNames;
+        QStringList maskFileNames;
+
         int count = _fegpInfoModel->rowCount();
         for(int i=0;i<count;++i)
         {
             QSqlRecord record = _fegpInfoModel->record(i);
             QStringList templist = record.value(fegp_ferrographypicpath).toString().split("/");
-            imgFileNames.append(templist.at(templist.count()-1));
+
+            QString name = templist.at(templist.count()-1);
+            imgFileNames.append(name);
+
+            QStringList splitedNames = name.split(".");
+            name = splitedNames.at(0);
+
+            // Mask Images
+            QString filter = name + "*." + Global::ExtMask;
+            QStringList nameFilter;
+            nameFilter << filter;
+            QDir dir(Global::PathMask);
+            maskFileNames.append( dir.entryList(nameFilter));
+
+            // Result Images
+            filter = name + "*." + Global::ExtResult;
+            nameFilter.clear();
+            nameFilter << filter;
+            QDir dir2(Global::PathResult);
+            resultFileNames.append(dir2.entryList(nameFilter));
         }
+
         QString packgepath = this->_expPackgePath;
-
-
 
         QString sqlfilepath = packgepath + "/打包文件/databackup.sql";
         QString sourceimgtopath = packgepath + "/打包文件/原始图像文件";
         QString resultimgtopath = packgepath + "/打包文件/标记结果文件";
+        QString maskimgtopath = packgepath + "/打包文件/掩码图像文件";
         QString sourceimgfrompath = Global::PathImage;
         QString resultimgfrompath = Global::PathResult;
+        QString maskimgfrompath = Global::PathMask;
 
         QStringList tablenameList;
         tablenameList.append("equipmentinfo");
@@ -2717,18 +2746,17 @@ void AdvanceSearchDlg::on_exportBtn_clicked()
         tablenameList.append("ferrographypicinfo");
         tablenameList.append("abrasivemarkinfo");
 
-        if(this->exportDB(tablenameList,sqlfilepath) &&
-                this->copyFiles(sourceimgfrompath,sourceimgtopath,imgFileNames) &&
-                this->copyFiles(resultimgfrompath,resultimgtopath,imgFileNames))
-            QMessageBox::warning(this,
-                                 tr("提示"),
-                                 tr("数据导出成功"),
-                                 QMessageBox::Close);
+        if(this->copyFiles(sourceimgfrompath, sourceimgtopath,imgFileNames) &&
+                this->copyFiles(resultimgfrompath,resultimgtopath,resultFileNames) &&
+                this->copyFiles(maskimgfrompath, maskimgtopath, maskFileNames) &&
+                this->exportDB(tablenameList,sqlfilepath))
+        {
+            QMessageBox::warning(this, tr("提示"), tr("数据导出成功"), QMessageBox::Close);
+        }
         else
-            QMessageBox::warning(this,
-                                 tr("提示"),
-                                 tr("数据导出失败"),
-                                 QMessageBox::Close);
+        {
+            QMessageBox::warning(this, tr("提示"), tr("数据导出失败"), QMessageBox::Close);
+        }
     }
     delete expdlg;
 }
@@ -2748,30 +2776,40 @@ void AdvanceSearchDlg::on_importBtn_clicked()
             fileNameList.append(fileInfo.fileName());
         }
         // check packge file
-        if(!fileNameList.contains("原始图像文件") || !fileNameList.contains("标记结果文件") || !fileNameList.contains("databackup.sql"))
+        if(!fileNameList.contains("原始图像文件") || !fileNameList.contains("标记结果文件") || !fileNameList.contains("掩码图像文件") && !fileNameList.contains("databackup.sql"))
+        {
             QMessageBox::warning(this,tr("提示"),tr("打包文件受损"),QMessageBox::Close);
+        }
         else
         {
             QString recoverImagePath = Global::PathImage;
             QString recoverResultPath = Global::PathResult;
+            QString recoverMaskPath = Global::PathMask;
 
 #ifdef Q_OS_WIN
-            QString packgeImagePath = _impPackgePath + "\\原始图像文件";
-            QString packgeResultPath = _impPackgePath + "\\标记结果文件";
-            QString packgeSqlPath = _impPackgePath + "\\databackup.sql";
+            QString packgeImagePath = _impPackgePath + QString::fromUtf8("/原始图像文件");
+            QString packgeResultPath = _impPackgePath + QString::fromUtf8("/标记结果文件");
+            QString packgeMaskPath = _impPackgePath + QString::fromUtf8("/掩码图像文件");
+            QString packgeSqlPath = _impPackgePath + "/databackup.sql";
 #endif
 
 #ifdef Q_OS_LINUX
-            QString packgeImagePath = _impPackgePath + "/原始图像文件";
-            QString packgeResultPath = _impPackgePath + "/标记结果文件";
+            QString packgeImagePath = _impPackgePath + tr("/原始图像文件");
+            QString packgeResultPath = _impPackgePath + tr("/标记结果文件");
+            QString packgeMaskPath = _impPackgePath + tr("/掩码图像文件");
             QString packgeSqlPath = _impPackgePath + "/databackup.sql";
 #endif
             if(this->copyFiles(packgeImagePath,recoverImagePath) &&
                     this->copyFiles(packgeResultPath,recoverResultPath) &&
+                    this->copyFiles(packgeMaskPath, recoverMaskPath) &&
                     this->importDB(packgeSqlPath))
+            {
                 QMessageBox::warning(this,tr("提示"),tr("数据恢复成功"),QMessageBox::Close);
+            }
             else
+            {
                 QMessageBox::warning(this,tr("提示"),tr("数据恢复失败"),QMessageBox::Close);
+            }
         }
     }
     delete impdlg;

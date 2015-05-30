@@ -430,7 +430,7 @@ private slots:
 
 //     void on_modifyButton_clicked();
 
-     void setExpPath(QString sourcePicPath,QString resultPicPath,QString packgePath);
+     void setExpPath(QString sourcePicPath, QString resultPicPath, QString maskPicPath, QString packgePath);
      void setImpPath(QString packgePath);
 
      void on_deletepropertyButton_clicked();
@@ -453,6 +453,7 @@ private:
 
     QString _expSourcePicPath;
     QString _expResultPicPath;
+    QString _expMaskPicPath;
     QString _expPackgePath;
 
     QString _impPackgePath;

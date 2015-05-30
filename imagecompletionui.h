@@ -238,7 +238,7 @@ private slots:
 
     void    cellDoubleClickedLeftWindow(int, int);
     
-    void setExpPath(QString sourcePicPath,QString resultPicPath,QString packgePath);
+    void setExpPath(QString sourcePicPath,QString resultPicPath, QString maskPicPath, QString packgePath);
     void setImpPath(QString packgePath);
 
 private:
@@ -258,6 +258,7 @@ private:
     
     QString _expSourcePicPath;
     QString _expResultPicPath;
+    QString _expMaskPicPath;
     QString _expPackgePath;
     
     QString _impPackgePath;

@@ -15,7 +15,7 @@ class ExpDlg : public QDialog
     
 public:
     explicit ExpDlg(QWidget *parent = 0);
-    ExpDlg(QWidget *parent,QString sourcepicPath,QString resultPath);
+    ExpDlg(QWidget *parent,QString _sourcePicPath,QString resultPath, QString maskPicPath);
     ~ExpDlg();
     
 private slots:
@@ -29,15 +29,18 @@ private slots:
     
     void on_packgePushButton_clicked();
     
+    void on_maskPushButton_clicked();
+
 signals:
-    void initPathParams(QString sourcePicPath,QString resultPicPath,QString packgePath);
+    void initPathParams(QString sourcePicPath,QString resultPicPath, QString maskPicPath, QString _packgePath);
     
 private:
     Ui::ExpDlg *ui;
     
-    QString sourcepicPath;
-    QString resultpicPath;
-    QString packgePath;
+    QString _sourcePicPath;
+    QString _resultPicPath;
+    QString _maskPicPath;
+    QString _packgePath;
 };
 
 #endif // EXPDLG_H

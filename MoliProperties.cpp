@@ -152,21 +152,22 @@ void MoliProperties::on_pushButton_clicked()
     }
     else
     {
+        bool bExist = false;
         _model->setFilter(QString("abrasiveid = '%1'").arg(ui->_comboBoxMoliID->currentText()));
         if(_model->select())
         {
             if(_model->rowCount() == 1)
             {
-                QMessageBox::StandardButton ret = QMessageBox::warning(this,
-                                                           tr("提示"),
-                                                           tr("磨粒编号已存在, 确认要保存?"),
-                                                           QMessageBox::Ok | QMessageBox::Cancel);
-                if(QMessageBox::Cancel == ret)
-                {
-                    return;
-                }
-
-                QSqlRecord record = _model->record();
+//                QMessageBox::StandardButton ret = QMessageBox::warning(this,
+//                                                           tr("提示"),
+//                                                           tr("磨粒编号已存在, 确认要保存?"),
+//                                                           QMessageBox::Ok | QMessageBox::Cancel);
+//                if(QMessageBox::Cancel == ret)
+//                {
+//                    return;
+//                }
+                bExist = true;
+                QSqlRecord record = _model->record(0);
                 record.setValue("abrasiveid", ui->_comboBoxMoliID->currentText());
                 record.setValue("ferrographypicid", ui->_comboBoxMoliImageID->currentText());
                 record.setValue("ferrographysheetid", ui->_comboBoxMoliPianID->currentText());
@@ -187,52 +188,52 @@ void MoliProperties::on_pushButton_clicked()
                 record.setValue("abrasivefaultinformationreflection", ui->_comboBoxMoliGivenInfo->currentText());
                 record.setValue("abrasivetypical", ui->_comboBoxMoliTypical->currentText());
 
-                if(!_originalImagePath.isEmpty())
-                {
-                    QFile *file = new QFile(_originalImagePath);
-                    file->open(QIODevice::ReadOnly);
-                    QByteArray data = file->readAll();
-                    file->close();
-                    record.setValue("abrasivePictureData", data);
-                }
-                if(!_result.isNull())
-                {
-                    QByteArray arr;
-                    QBuffer buffer(&arr);
-                    buffer.open(QIODevice::WriteOnly);
-                    _result.save(&buffer, Global::ExtResult.toUtf8().constData());
-                    record.setValue("abrasiveResultData", arr);
-                }
-                else
-                {
-                    record.setValue("abrasiveResultData", record.value("abrasiveResultData").toByteArray());
-                }
+//                if(!_originalImagePath.isEmpty())
+//                {
+//                    QFile *file = new QFile(_originalImagePath);
+//                    file->open(QIODevice::ReadOnly);
+//                    QByteArray data = file->readAll();
+//                    file->close();
+//                    record.setValue("abrasivePictureData", data);
+//                }
+//                if(!_result.isNull())
+//                {
+//                    QByteArray arr;
+//                    QBuffer buffer(&arr);
+//                    buffer.open(QIODevice::WriteOnly);
+//                    _result.save(&buffer, Global::ExtResult.toUtf8().constData());
+//                    record.setValue("abrasiveResultData", arr);
+//                }
+//                else
+//                {
+//                    record.setValue("abrasiveResultData", record.value("abrasiveResultData").toByteArray());
+//                }
 
-                if(!_result2.isNull())
-                {
-                    QByteArray arr;
-                    QBuffer buffer(&arr);
-                    buffer.open(QIODevice::WriteOnly);
-                    _result2.save(&buffer, Global::ExtResult.toUtf8().constData());
-                    record.setValue("abrasiveResultData2", arr);
-                }
-                else
-                {
-                    record.setValue("abrasiveResultData2", record.value("abrasiveResultData2").toByteArray());
-                }
+//                if(!_result2.isNull())
+//                {
+//                    QByteArray arr;
+//                    QBuffer buffer(&arr);
+//                    buffer.open(QIODevice::WriteOnly);
+//                    _result2.save(&buffer, Global::ExtResult.toUtf8().constData());
+//                    record.setValue("abrasiveResultData2", arr);
+//                }
+//                else
+//                {
+//                    record.setValue("abrasiveResultData2", record.value("abrasiveResultData2").toByteArray());
+//                }
 
-                if(!_mask.isNull())
-                {
-                    QByteArray arr;
-                    QBuffer buffer(&arr);
-                    buffer.open(QIODevice::WriteOnly);
-                    _mask.save(&buffer, Global::ExtMask.toUtf8().constData());
-                    record.setValue("abrasiveMaskData", arr);
-                }
-                else
-                {
-                    record.setValue("abrasiveMaskData", record.value("abrasiveMaskData").toByteArray());
-                }
+//                if(!_mask.isNull())
+//                {
+//                    QByteArray arr;
+//                    QBuffer buffer(&arr);
+//                    buffer.open(QIODevice::WriteOnly);
+//                    _mask.save(&buffer, Global::ExtMask.toUtf8().constData());
+//                    record.setValue("abrasiveMaskData", arr);
+//                }
+//                else
+//                {
+//                    record.setValue("abrasiveMaskData", record.value("abrasiveMaskData").toByteArray());
+//                }
 
                 _model->setRecord(0, record);
             }
@@ -328,7 +329,10 @@ void MoliProperties::on_pushButton_clicked()
                 Global::NewName = ui->_comboBoxMoliImageID->currentText();
                 Global::MoliId = ui->_comboBoxMoliID->currentText();
 
-                emit saveImages();
+                if(!bExist)
+                {
+                    emit saveImages();
+                }
                 emit flushBottom();
                 emit flushLeft(_originalImagePath, "Y");
 

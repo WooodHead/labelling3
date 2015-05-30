@@ -268,6 +268,17 @@ void Login::on__buttonSave_clicked()
     Global::settings->setValue("IMAGE/extMask", ui->_comboBoxMask->currentText());
     Global::settings->setValue("IMAGE/extResult", ui->_comboBoxResult->currentText());
 
+    Global::Database = ui->_editDatabase->text();
+    Global::Hostname = ui->_editIP->text();
+    Global::Username = ui->_editUsername_2->text();
+    Global::Passwd   = ui->_editPasswd_2->text();
+
+    Global::PathImage = ui->_editOriginalCopyTo->text();
+    Global::PathMask = ui->_editMaskTo->text();
+    Global::PathResult = ui->_editResultTo->text().toUtf8().constData();
+    Global::ExtMask = ui->_comboBoxMask->currentText();
+    Global::ExtResult = ui->_comboBoxResult->currentText();
+
     ui->centralStackedWidget->setCurrentIndex(0);
     _settingButton->show();
 }
