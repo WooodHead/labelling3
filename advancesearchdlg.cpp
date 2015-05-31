@@ -5438,7 +5438,7 @@ void AdvanceSearchDlg::deletedata()
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
-        delete selections;
+//        delete selections;
         break;
     }
     case 1:
@@ -5450,7 +5450,7 @@ void AdvanceSearchDlg::deletedata()
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
-        delete selections;
+//        delete selections;
         break;
     }
     case 2:
@@ -5462,7 +5462,7 @@ void AdvanceSearchDlg::deletedata()
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
-        delete selections;
+//        delete selections;
         break;
     }
     case 3:
@@ -5474,7 +5474,7 @@ void AdvanceSearchDlg::deletedata()
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
-        delete selections;
+//        delete selections;
         break;
     }
     case 4:
@@ -5486,7 +5486,7 @@ void AdvanceSearchDlg::deletedata()
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
-        delete selections;
+//        delete selections;
         break;
     }
     case 5:
@@ -5498,7 +5498,7 @@ void AdvanceSearchDlg::deletedata()
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
-        delete selections;
+//        delete selections;
         break;
     }
     case 6:
@@ -5510,7 +5510,7 @@ void AdvanceSearchDlg::deletedata()
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
-        delete selections;
+//        delete selections;
         break;
     }
     case 7:
@@ -5522,7 +5522,7 @@ void AdvanceSearchDlg::deletedata()
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
-        delete selections;
+//        delete selections;
         break;
     }
     }
