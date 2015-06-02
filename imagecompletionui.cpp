@@ -632,6 +632,22 @@ void ImageCompletionUI::showContextMenu(QPoint pos)
     QAction* showAllMenu = new QAction(tr("显示所有磨粒"), this);
     connect(showAllMenu, SIGNAL(triggered()), this, SLOT(showAll()));
 
+    QSqlDatabase db;
+    if(!_strCurrentImagePath.isEmpty() && Global::createConnection(db))
+    {
+        QString sql = QString("select * from abrasivemarkinfo where abrasivepicpath = '%1'").arg(_strCurrentImagePath);
+        QSqlQuery query;
+        query.prepare(sql);
+        if(query.exec() && query.size() > 0)
+        {
+            checkMenu->setEnabled(true);
+        }
+        else
+        {
+            checkMenu->setEnabled(false);
+        }
+    }
+
     if(_strCurrentImagePath.isEmpty())
     {
         editMenu->setEnabled(false);
@@ -640,11 +656,11 @@ void ImageCompletionUI::showContextMenu(QPoint pos)
         checkMenu->setEnabled(false);
     }
 
-    if(!_editImageViewer->getMask() || !_editImageViewer->getResultSave())
-    {
-        editMenu->setEnabled(false);
-        checkMenu->setEnabled(false);
-    }
+//    if(!_editImageViewer->getMask() || !_editImageViewer->getResultSave())
+//    {
+//        editMenu->setEnabled(false);
+//        checkMenu->setEnabled(false);
+//    }
 
     // Menu 3
     QAction* backMenu = new QAction(tr("回退"), this);
