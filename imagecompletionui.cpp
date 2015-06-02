@@ -1035,7 +1035,8 @@ void ImageCompletionUI::showImagesInTree()
                                 QImage image(Global::PathImage + fName + ".jpg");
 
                                 item3 = new QStandardItem(fName + ".jpg");
-                                item3->setIcon(QPixmap::fromImage(image));
+                                QPixmap pix = QPixmap::fromImage(image).scaled(15,15);
+                                item3->setIcon(QIcon(pix));
                                 item2->appendRow(item3);
                             }
                         }
@@ -1077,15 +1078,26 @@ void ImageCompletionUI::enDeque(const QString &elem, std::deque<QString> &d)
 
 int ImageCompletionUI::in(const QString& strFilePath, std::deque<QString> &d)
 {
-    int k;
-    deque_it it;
-    for(it = d.begin(), k = 0; it != d.end(); it++)
+    std::deque<QString>::iterator ind = std::find(d.begin(), d.end(), strFilePath);
+
+    if(ind == d.end())
     {
-        if(*it == strFilePath) return k;
-        k++;
+        return -1;
+    }
+    else
+    {
+        return (int)(ind - d.begin());
     }
 
-    return -1;
+//    int k;
+//    deque_it it;
+//    for(it = d.begin(), k = 0; it != d.end(); it++)
+//    {
+//        if(*it == strFilePath) return k;
+//        k++;
+//    }
+
+//    return -1;
 }
 
 void ImageCompletionUI::showThumbnail(QString file, QString status, int row)
@@ -1095,6 +1107,8 @@ void ImageCompletionUI::showThumbnail(QString file, QString status, int row)
     QImage temp = QImage(file);
     _leftWindow.tableWidget->item(row, 0)->setData(Qt::DecorationRole, QPixmap::fromImage(temp).scaled(80, 80));
     _leftWindow.tableWidget->item(row, 0)->setBackgroundColor(color(status));
+
+    QPixmapCache::clear();
 }
 
 //FIXME

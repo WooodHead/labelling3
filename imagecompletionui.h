@@ -15,6 +15,7 @@
 #include <QStandardItemModel>
 #include <QFormLayout>
 
+#include <algorithm>
 #include <map>
 #include <deque>
 using namespace std;
