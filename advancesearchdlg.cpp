@@ -115,7 +115,7 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent,bool flag) :
     connect(this,SIGNAL(showqueryThumbnails(QStringList)),parent,SLOT(queryThumbnails(QStringList)));
 
     connect(this,SIGNAL(flushBottomData()),parent,SLOT(flush()));
-    connect(this,SIGNAL(flushLeftTree()),parent,SLOT(flushLeftTree()));
+//    connect(this,SIGNAL(flushLeftTree()),parent,SLOT(flushLeftTree()));
     createTableNames();
 
     createTableView();
@@ -5438,7 +5438,7 @@ void AdvanceSearchDlg::deletedata()
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
-        delete selections;
+//        delete selections;
         break;
     }
     case 1:
@@ -5450,7 +5450,7 @@ void AdvanceSearchDlg::deletedata()
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
-        delete selections;
+//        delete selections;
         break;
     }
     case 2:
@@ -5462,7 +5462,7 @@ void AdvanceSearchDlg::deletedata()
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
-        delete selections;
+//        delete selections;
         break;
     }
     case 3:
@@ -5474,7 +5474,7 @@ void AdvanceSearchDlg::deletedata()
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
-        delete selections;
+//        delete selections;
         break;
     }
     case 4:
@@ -5486,7 +5486,7 @@ void AdvanceSearchDlg::deletedata()
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
-        delete selections;
+//        delete selections;
         break;
     }
     case 5:
@@ -5498,7 +5498,7 @@ void AdvanceSearchDlg::deletedata()
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
-        delete selections;
+//        delete selections;
         break;
     }
     case 6:
@@ -5510,7 +5510,7 @@ void AdvanceSearchDlg::deletedata()
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
-        delete selections;
+//        delete selections;
         break;
     }
     case 7:
@@ -5522,7 +5522,7 @@ void AdvanceSearchDlg::deletedata()
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
-        delete selections;
+//        delete selections;
         break;
     }
     }
@@ -5937,40 +5937,41 @@ bool AdvanceSearchDlg::deletefromtable(QStringList idList, QString tablename)
     QSqlQuery query;
     if(tablename == "abrasivemarkinfo")
     {
-        foreach (QString abmid, idList) {
+        foreach (QString abmid, idList)
+        {
             QString sql = "delete from abrasivemarkinfo where abrasiveid = '";
             sql.append(abmid);
             sql.append("'");
-            if(!query.exec(sql))
-                return false;
+            if(!query.exec(sql)) return false;
         }
         return true;
     }
     else if(tablename == "equipmentinfo")
     {
-        foreach (QString eqmid, idList) {
+        foreach (QString eqmid, idList)
+        {
             QString sql = "delete from equipmentinfo where planeid = '";
             sql.append(eqmid);
             sql.append("'");
-            if(!query.exec(sql))
-                return false;
+            if(!query.exec(sql)) return false;
         }
         return true;
     }
     else if(tablename == "movepartinfo")
     {
-        foreach (QString mpid, idList) {
+        foreach (QString mpid, idList)
+        {
             QString sql = "delete from movepartinfo where movepartid = '";
             sql.append(mpid);
             sql.append("'");
-            if(!query.exec(sql))
-                return false;
+            if(!query.exec(sql)) return false;
         }
         return true;
     }
     else if(tablename == "movepartrepairinfo")
     {
-        foreach (QString mprid, idList) {
+        foreach (QString mprid, idList)
+        {
             QString sql = "delete from movepartrepairinfo where movepartrepairid = '";
             sql.append(mprid);
             sql.append("'");
@@ -5996,30 +5997,29 @@ bool AdvanceSearchDlg::deletefromtable(QStringList idList, QString tablename)
             QString sql = "delete from oilsampleinfo where oilsampleid = '";
             sql.append(oisid);
             sql.append("'");
-            if(!query.exec(sql))
-                return false;
+            if(!query.exec(sql)) return false;
         }
         return true;
     }
     else if(tablename == "ferrographyinfo")
     {
-        foreach (QString fegid, idList) {
+        foreach (QString fegid, idList)
+        {
             QString sql = "delete from ferrographyinfo where ferrographysheetid = '";
             sql.append(fegid);
             sql.append("'");
-            if(!query.exec(sql))
-                return false;
+            if(!query.exec(sql)) return false;
         }
         return true;
     }
     else if(tablename == "ferrographypicinfo")
     {
-        foreach (QString fegpid, idList) {
+        foreach (QString fegpid, idList)
+        {
             QString sql = "delete from ferrographypicinfo where ferrographypicid = '";
             sql.append(fegpid);
             sql.append("'");
-            if(!query.exec(sql))
-                return false;
+            if(!query.exec(sql)) return false;
         }
         return true;
     }
@@ -6052,5 +6052,7 @@ void AdvanceSearchDlg::on_delAllButton_clicked()
         query.exec("delete from abrasivemarkinfo");
         db.commit();
         this->query();
+
+        emit flushBottomData();
     }
 }
