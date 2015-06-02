@@ -955,7 +955,7 @@ void ImageCompletionUI::showImagesInTree()
     QSqlQuery query;
     query.prepare("select * from equipmentinfo");
 
-    std::multimap<QString, QString> departMap;
+    std::map<QString, QString> departMap;
 
     if(query.exec())
     {
@@ -974,9 +974,9 @@ void ImageCompletionUI::showImagesInTree()
         departs.push_back(it->first);
     }
 
-    QStandardItem* item, *item2;
+    QStandardItem* item, *item2, *item3;
     QStandardItem* items[cnt];
-    _treeModel = new QStandardItemModel(cnt,1);
+    _treeModel = new QStandardItemModel(cnt, 1);
     for(int i = 0; i < cnt; i++) // department
     {
         items[i] = new QStandardItem(departs[i]);
@@ -992,13 +992,13 @@ void ImageCompletionUI::showImagesInTree()
                 item->setIcon(Global::Awesome->icon(plane));
                 items[i]->appendRow(item);
 
-                // plane-id
                 QSqlQuery query;
                 QString sql = QString("select planeid from equipmentinfo where departid = '%1' and planetype = '%2'").arg(departs[i]).arg((*it).second);
 
                 query.prepare(sql);
                 if(query.exec())
                 {
+                    // plane-id
                     while(query.next())
                     {
                         QString fName = query.value(0).toString();
@@ -1006,19 +1006,19 @@ void ImageCompletionUI::showImagesInTree()
                         item2->setIcon(Global::Awesome->icon(plane));
                         item->appendRow(item2);
 
-                        //
-                        QSqlQuery query;
-                        QString sql = QString("select ferrographypicinfo.ferrographypicid from ferrographypicinfo join ferrographyinfo join oilsampleinfo on ferrographypicinfo.ferrographysheetid = ferrographyinfo.ferrographysheetid and ferrographyinfo.oilsampleid = oilsampleinfo.oilsampleid and oilsampleinfo.sampledepartid = '%1' and oilsampleinfo.planeid = '%2' and oilsampleinfo.planetype = '%3'").arg(departs[i]).arg(fName).arg((*it).second);
+                        QSqlQuery query2;
+                        QString sql2 = QString("select ferrographypicinfo.ferrographypicid from ferrographypicinfo join ferrographyinfo join oilsampleinfo on ferrographypicinfo.ferrographysheetid = ferrographyinfo.ferrographysheetid and ferrographyinfo.oilsampleid = oilsampleinfo.oilsampleid and oilsampleinfo.sampledepartid = '%1' and oilsampleinfo.planeid = '%2' and oilsampleinfo.planetype = '%3'").arg(departs[i]).arg(fName).arg((*it).second);
 
-                        query.prepare(sql);
-                        if(query.exec())
+                        query2.prepare(sql2);
+                        if(query2.exec())
                         {
-                            while(query.next())
+                            // image
+                            while(query2.next())
                             {
-                                QString fName = query.value(0).toString();
+                                QString fName = query2.value(0).toString();
                                 QImage image(Global::PathImage + fName + ".jpg");
 
-                                QStandardItem *item3 = new QStandardItem(fName + ".jpg");
+                                item3 = new QStandardItem(fName + ".jpg");
                                 item3->setIcon(QPixmap::fromImage(image));
                                 item2->appendRow(item3);
                             }
