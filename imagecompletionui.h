@@ -278,7 +278,7 @@ private: // methods
     void        showData();
     char*       getNewLogString();
 
-    bool        copyFiles(QString fromDir,QString toDir,bool convertIfExits = true);
+    bool        copyFiles(QString fromDir,QString toDir,bool convertIfExits = false);
     bool        importDB(const QString &path);
     bool        exportDB(const QString &path);
 

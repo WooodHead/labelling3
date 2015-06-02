@@ -568,6 +568,7 @@ void ImageViewer::mouseReleaseEvent(QMouseEvent *event)
 
                     _seg_during = double(end-start) / CLOCKS_PER_SEC;
                     IplImage* temp = new IplImage(res);
+
                     DELETEPTR(_result_save);
                     _result_save = IplImageToQImage(temp);
 

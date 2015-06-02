@@ -2006,7 +2006,7 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
     }
 
     QFileInfoList fileInfoList = sourceDir.entryInfoList();
-    qDebug()<<fileInfoList.length();
+//    qDebug()<<fileInfoList.length();
     // 遍历所有文件信息
     //    foreach(QFileInfo fileInfo, fileInfoList)
     for(int i = 0;i<fileInfoList.length();++i)
@@ -2016,7 +2016,7 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
         if(fileInfo.fileName() == "." || fileInfo.fileName() == "..")
             continue;
         // 数据库文件处理
-        qDebug() << fileInfo.fileName();
+//        qDebug() << fileInfo.fileName();
 //        if(fileInfo.fileName().split(".")[1] == "sql");
 
         // 当为目录时，递归的进行copy
@@ -2254,18 +2254,12 @@ void ImageCompletionUI::loadAllImagesAndShowInLeftWindow()
 
                 if(status == MOLI_LABELLED_STATUS_CHAR)
                 {
-                    if(-1 == in(imagePath, _dequeDone))
-                    {
-                        this->enDeque(imagePath, _dequeDone);
-                    }
+                    this->enDeque(imagePath, _dequeDone);
                     this->showThumbnailForLabelled(imagePath);
                 }
                 else
                 {
-                    if (-1 == in(imagePath, _dequeTodo))
-                    {
-                        this->enDeque(imagePath, _dequeTodo);
-                    }
+                    this->enDeque(imagePath, _dequeTodo);
                     this->showThumbnailForUnLabelled(imagePath);
                 }
             }
