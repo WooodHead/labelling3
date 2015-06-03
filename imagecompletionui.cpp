@@ -971,13 +971,18 @@ void ImageCompletionUI::showImagesInTree()
     QSqlQuery query;
     query.prepare("select * from equipmentinfo");
 
-    std::map<QString, QString> departMap;
+    std::multimap<QString, QString> departMap;
 
     if(query.exec())
     {
+        std::multimap<QString, QString>::iterator iter;
         while(query.next())
         {
-            departMap.insert(std::pair<QString, QString>(query.value(2).toString(), query.value(1).toString())); // depart -> plane-type
+            iter = departMap.find(query.value(2).toString());
+            if(iter == departMap.end() || iter->second != query.value(1).toString())
+            {
+                departMap.insert(std::pair<QString, QString>(query.value(2).toString(), query.value(1).toString())); // depart -> plane-type
+            }
         }
     }
 
