@@ -335,6 +335,8 @@ private slots:
     void        back();
     void        append();
     void        showAll();
+    void        clearAll();
+    void        removeImageSlot(QString);
 
     void        queryThumbnails(QStringList list);
     void        OnDoubleClickTreeView(QModelIndex);

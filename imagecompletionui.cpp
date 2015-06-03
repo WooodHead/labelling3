@@ -1237,7 +1237,7 @@ void	ImageCompletionUI::search()
     _advanceSearchDlg->show();
 }
 
-void	ImageCompletionUI::addtosql()
+void  ImageCompletionUI::addtosql()
 {
     //    class1.show();
     _advanceSearchDlg = new AdvanceSearchDlg(this,true);
@@ -1967,8 +1967,8 @@ QImage ImageCompletionUI::loadLabelledResult(QString file)
 
 void ImageCompletionUI::flush()
 {
-    flushLeftTree();
     showData();
+    flushLeftTree();
 }
 
 void ImageCompletionUI::flushLeft(QString strFilePath, QString label)
@@ -2693,6 +2693,48 @@ void ImageCompletionUI::showAll()
         }
     }
     db.close();
+}
+
+void ImageCompletionUI::clearAll()
+{
+    // bottomWindow
+    clearBottomWindow();
+
+    // leftWindow
+    while(_leftWindow.tableWidget->rowCount() > 0)
+    {
+        _leftWindow.tableWidget->removeRow(0);
+    }
+    _dequeTodo.clear();
+    _dequeDone.clear();
+
+    // leftTree
+    if(_treeModel)
+    {
+        _treeModel->removeRows(0, _treeModel->rowCount());
+    }
+}
+
+void ImageCompletionUI::removeImageSlot(QString path)
+{
+    int index;
+    std::deque<QString>::iterator iter = std::find(_dequeTodo.begin(), _dequeTodo.end(), path);
+    if(iter == _dequeTodo.end())
+    {
+        iter = std::find(_dequeDone.begin(), _dequeDone.end(), path);
+        if(iter != _dequeDone.end())
+        {
+            index = (int)(iter-_dequeTodo.begin()) + _dequeTodo.size();
+            _dequeDone.erase(iter);
+            _leftWindow.tableWidget->removeRow(index);
+        }
+    }
+    else
+    {
+        index = (int)(iter-_dequeTodo.begin());
+        _dequeTodo.erase(iter);
+        _leftWindow.tableWidget->removeRow(index);
+    }
 }
 
 void ImageCompletionUI::showThumbnailsInCentral(QStringList list)

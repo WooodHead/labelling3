@@ -21,7 +21,7 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent,bool flag) :
 
     if(!Global::createConnection(db))
     {
-        QMessageBox::warning(this,tr("数据库提示"),tr("不能链接数据库"),QMessageBox::Close);
+        QMessageBox::warning(this,tr("数据库提示"),tr("连接数据库失败!"),QMessageBox::Close);
         return;
     }
 
@@ -114,7 +114,9 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent,bool flag) :
 
     connect(this,SIGNAL(showqueryThumbnails(QStringList)),parent,SLOT(queryThumbnails(QStringList)));
 
-    connect(this,SIGNAL(flush()),parent,SLOT(flush()));
+    connect(this, SIGNAL(clearAll()), parent, SLOT(clearAll()));
+    connect(this, SIGNAL(flush()), parent, SLOT(flush()));
+    connect(this, SIGNAL(removeImageSignal(QString)), parent, SLOT(removeImageSlot(QString)));
 //    connect(this,SIGNAL(flushLeftTree()),parent,SLOT(flushLeftTree()));
 
     createTableNames();
@@ -1594,12 +1596,12 @@ QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap, QStri
 
 void AdvanceSearchDlg::query()
 {
-    ferrographysheetidList.clear();
-    ferrographypicidList.clear();
-    ferrographypicpathList.clear();
-    planeidList.clear();
-    movepartidList.clear();
-    oilsampleidList.clear();
+    if(!ferrographysheetidList.isEmpty()) ferrographysheetidList.clear();
+    if(!ferrographypicidList.isEmpty()) ferrographypicidList.clear();
+    if(!ferrographypicpathList.isEmpty()) ferrographypicpathList.clear();
+    if(!planeidList.isEmpty()) planeidList.clear();
+    if(!movepartidList.isEmpty()) movepartidList.clear();
+    if(!oilsampleidList.isEmpty()) oilsampleidList.clear();
 
     // 装备信息表
     QString eqmTableName = tableNames.value("EqmInfo");
@@ -5429,7 +5431,8 @@ void AdvanceSearchDlg::deletedata()
     case 0:
     {
         QItemSelectionModel *selections = ui->eqmTableView->selectionModel();
-        QModelIndexList selected = selections->selectedIndexes();
+//        QModelIndexList selected = selections->selectedIndexes();
+        QModelIndexList selected = selections->selectedRows();
         if(selected.isEmpty())
         {
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
@@ -5441,7 +5444,8 @@ void AdvanceSearchDlg::deletedata()
     case 1:
     {
         QItemSelectionModel *selections = ui->mpTableView->selectionModel();
-        QModelIndexList selected = selections->selectedIndexes();
+//        QModelIndexList selected = selections->selectedIndexes();
+        QModelIndexList selected = selections->selectedRows();
         if(selected.isEmpty())
         {
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
@@ -5453,7 +5457,8 @@ void AdvanceSearchDlg::deletedata()
     case 2:
     {
         QItemSelectionModel *selections = ui->mprTableView->selectionModel();
-        QModelIndexList selected = selections->selectedIndexes();
+//        QModelIndexList selected = selections->selectedIndexes();
+        QModelIndexList selected = selections->selectedRows();
         if(selected.isEmpty())
         {
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
@@ -5465,7 +5470,8 @@ void AdvanceSearchDlg::deletedata()
     case 3:
     {
         QItemSelectionModel *selections = ui->oiaTableView->selectionModel();
-        QModelIndexList selected = selections->selectedIndexes();
+//        QModelIndexList selected = selections->selectedIndexes();
+        QModelIndexList selected = selections->selectedRows();
         if(selected.isEmpty())
         {
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
@@ -5477,7 +5483,8 @@ void AdvanceSearchDlg::deletedata()
     case 4:
     {
         QItemSelectionModel *selections = ui->oisTableView->selectionModel();
-        QModelIndexList selected = selections->selectedIndexes();
+//        QModelIndexList selected = selections->selectedIndexes();
+        QModelIndexList selected = selections->selectedRows();
         if(selected.isEmpty())
         {
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
@@ -5489,7 +5496,8 @@ void AdvanceSearchDlg::deletedata()
     case 5:
     {
         QItemSelectionModel *selections = ui->fegTableView->selectionModel();
-        QModelIndexList selected = selections->selectedIndexes();
+//        QModelIndexList selected = selections->selectedIndexes();
+        QModelIndexList selected = selections->selectedRows();
         if(selected.isEmpty())
         {
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
@@ -5501,7 +5509,8 @@ void AdvanceSearchDlg::deletedata()
     case 6:
     {
         QItemSelectionModel *selections = ui->fegpTableView->selectionModel();
-        QModelIndexList selected = selections->selectedIndexes();
+//        QModelIndexList selected = selections->selectedIndexes();
+        QModelIndexList selected = selections->selectedRows();
         if(selected.isEmpty())
         {
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
@@ -5513,7 +5522,8 @@ void AdvanceSearchDlg::deletedata()
     case 7:
     {
         QItemSelectionModel *selections = ui->abmTableView->selectionModel();
-        QModelIndexList selected = selections->selectedIndexes();
+//        QModelIndexList selected = selections->selectedIndexes();
+        QModelIndexList selected = selections->selectedRows();
         if(selected.isEmpty())
         {
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
@@ -5547,7 +5557,8 @@ void AdvanceSearchDlg::deletedata()
         case 0:
         {
             QItemSelectionModel *selections = ui->eqmTableView->selectionModel();
-            QModelIndexList selected = selections->selectedIndexes();
+//            QModelIndexList selected = selections->selectedIndexes();
+            QModelIndexList selected = selections->selectedRows();
             if(selected.isEmpty())
             {
                 QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
@@ -5655,7 +5666,8 @@ void AdvanceSearchDlg::deletedata()
         case 1:
         {
             QItemSelectionModel *selections = ui->mpTableView->selectionModel();
-            QModelIndexList selected = selections->selectedIndexes();
+//            QModelIndexList selected = selections->selectedIndexes();
+            QModelIndexList selected = selections->selectedRows();
             if(selected.isEmpty())
             {
                 QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
@@ -5691,7 +5703,8 @@ void AdvanceSearchDlg::deletedata()
         case 2:
         {
             QItemSelectionModel *selections = ui->mprTableView->selectionModel();
-            QModelIndexList selected = selections->selectedIndexes();
+//            QModelIndexList selected = selections->selectedIndexes();
+            QModelIndexList selected = selections->selectedRows();
             if(selected.isEmpty())
             {
                 QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
@@ -5715,7 +5728,8 @@ void AdvanceSearchDlg::deletedata()
         case 3:
         {
             QItemSelectionModel *selections = ui->oiaTableView->selectionModel();
-            QModelIndexList selected = selections->selectedIndexes();
+//            QModelIndexList selected = selections->selectedIndexes();
+            QModelIndexList selected = selections->selectedRows();
             if(selected.isEmpty())
             {
                 QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
@@ -5739,7 +5753,8 @@ void AdvanceSearchDlg::deletedata()
         case 4:
         {
             QItemSelectionModel *selections = ui->oisTableView->selectionModel();
-            QModelIndexList selected = selections->selectedIndexes();
+//            QModelIndexList selected = selections->selectedIndexes();
+            QModelIndexList selected = selections->selectedRows();
             if(selected.isEmpty())
             {
                 QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
@@ -5805,7 +5820,8 @@ void AdvanceSearchDlg::deletedata()
         case 5:
         {
             QItemSelectionModel *selections = ui->fegTableView->selectionModel();
-            QModelIndexList selected = selections->selectedIndexes();
+//            QModelIndexList selected = selections->selectedIndexes();
+            QModelIndexList selected = selections->selectedRows();
             if(selected.isEmpty())
             {
                 QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
@@ -5855,7 +5871,8 @@ void AdvanceSearchDlg::deletedata()
         case 6:
         {
             QItemSelectionModel *selections = ui->fegpTableView->selectionModel();
-            QModelIndexList selected = selections->selectedIndexes();
+//            QModelIndexList selected = selections->selectedIndexes();
+            QModelIndexList selected = selections->selectedRows();
             if(selected.isEmpty())
             {
                 QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
@@ -5863,11 +5880,15 @@ void AdvanceSearchDlg::deletedata()
             }
             else
             {
+                QStringList pathList;
                 QStringList fegpidList;
                 QStringList abmidList;
-                foreach (QModelIndex index, selected) {
+                foreach (QModelIndex index, selected)
+                {
                     QString fegpid = _fegpInfoModel->record(index.row()).value("ferrographypicid").toString();
+                    QString path = _fegpInfoModel->record(index.row()).value("ferrographypicpath").toString();
                     fegpidList.append(fegpid);
+                    pathList.append(path);
 
                     QString sql;
                     sql.append("select  abrasiveid from abrasivemarkinfo where ferrographypicid = '");
@@ -5880,7 +5901,7 @@ void AdvanceSearchDlg::deletedata()
                     }
 
                 }
-                if(deletefromtable(fegpidList,"ferrographypicinfo")&&
+                if(deletefromtable(fegpidList,"ferrographypicinfo", pathList) &&
                         deletefromtable(abmidList,"abrasivemarkinfo"))
                     QMessageBox::warning(this,tr("提示"),tr("删除数据成功"),QMessageBox::Close);
                 else
@@ -5892,7 +5913,8 @@ void AdvanceSearchDlg::deletedata()
         case 7:
         {
             QItemSelectionModel *selections = ui->abmTableView->selectionModel();
-            QModelIndexList selected = selections->selectedIndexes();
+//            QModelIndexList selected = selections->selectedIndexes();
+            QModelIndexList selected = selections->selectedRows();
             if(selected.isEmpty())
             {
                 QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
@@ -5901,7 +5923,8 @@ void AdvanceSearchDlg::deletedata()
             else
             {
                 QStringList abmidList;
-                foreach (QModelIndex index, selected) {
+                foreach (QModelIndex index, selected)
+                {
                     QString abmid = _abmInfoModel->record(index.row()).value("abrasiveid").toString();
                     abmidList.append(abmid);
                 }
@@ -5922,7 +5945,7 @@ void AdvanceSearchDlg::deletedata()
 }
 
 
-bool AdvanceSearchDlg::deletefromtable(QStringList idList, QString tablename)
+bool AdvanceSearchDlg::deletefromtable(QStringList idList, QString tablename, QStringList pathList)
 {
     QSqlQuery query;
     if(tablename == "abrasivemarkinfo")
@@ -5998,18 +6021,38 @@ bool AdvanceSearchDlg::deletefromtable(QStringList idList, QString tablename)
             QString sql = "delete from ferrographyinfo where ferrographysheetid = '";
             sql.append(fegid);
             sql.append("'");
-            if(!query.exec(sql)) return false;
+
+            if(!query.exec(sql))
+            {
+                return false;
+            }
+
         }
         return true;
     }
     else if(tablename == "ferrographypicinfo")
     {
+        int i = 0;
         foreach (QString fegpid, idList)
         {
+            QString path;
             QString sql = "delete from ferrographypicinfo where ferrographypicid = '";
             sql.append(fegpid);
             sql.append("'");
-            if(!query.exec(sql)) return false;
+
+            if(!query.exec(sql))
+            {
+                return false;
+            }
+            else
+            {
+                // delete from left window
+                if(pathList.size() > i && !pathList[i].isEmpty())
+                {
+                    emit removeImageSignal(pathList[i]);
+                }
+            }
+            i++;
         }
         return true;
     }
@@ -6043,6 +6086,6 @@ void AdvanceSearchDlg::on_delAllButton_clicked()
         db.commit();
         this->query();
 
-        emit flush();
+        emit clearAll();
     }
 }

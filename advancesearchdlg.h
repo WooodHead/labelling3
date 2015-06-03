@@ -419,7 +419,7 @@ private:
      bool exportDB(const QStringList &tablenameList,const QString &path);
      bool importDB(const QSqlQueryModel &model);
 
-     bool deletefromtable(QStringList idList,QString tablename);
+     bool deletefromtable(QStringList idList,QString tablename, QStringList path = QStringList());
 
 private slots:
      void useproperty();
@@ -442,7 +442,9 @@ private slots:
 signals:
      void showqueryThumbnails(QStringList list);
      void flush();
+     void clearAll();
      void flushLeftTree();
+     void removeImageSignal(QString fegid);
 
 private:
     Ui::AdvanceSearchDlg *ui;
