@@ -114,16 +114,13 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent,bool flag) :
 
     connect(this,SIGNAL(showqueryThumbnails(QStringList)),parent,SLOT(queryThumbnails(QStringList)));
 
-    connect(this,SIGNAL(flushBottomData()),parent,SLOT(flush()));
+    connect(this,SIGNAL(flush()),parent,SLOT(flush()));
 //    connect(this,SIGNAL(flushLeftTree()),parent,SLOT(flushLeftTree()));
+
     createTableNames();
-
     createTableView();
-
     initCbBox();
-
     initpropertylistName();
-
     ui->conditionStackedWidget->setCurrentIndex(0);
 }
 
@@ -5651,7 +5648,7 @@ void AdvanceSearchDlg::deletedata()
                 else
                     QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
             }
-            delete selections;
+            //delete selections;
             break;
         }
             // mp
@@ -5688,8 +5685,7 @@ void AdvanceSearchDlg::deletedata()
                 else
                     QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
             }
-    //        QMessageBox::warning(this,tr("提示"),tr("mp"),QMessageBox::Close);
-            delete selections;
+            //delete selections;
             break;
         }
         case 2:
@@ -5713,8 +5709,7 @@ void AdvanceSearchDlg::deletedata()
                 else
                     QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
             }
-    //        QMessageBox::warning(this,tr("提示"),tr("mpr"),QMessageBox::Close);
-            delete selections;
+            //delete selections;
             break;
         }
         case 3:
@@ -5738,8 +5733,7 @@ void AdvanceSearchDlg::deletedata()
                 else
                     QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
             }
-    //        QMessageBox::warning(this,tr("提示"),tr("oia"),QMessageBox::Close);
-            delete selections;
+            //delete selections;
             break;
         }
         case 4:
@@ -5805,8 +5799,7 @@ void AdvanceSearchDlg::deletedata()
                 else
                     QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
             }
-    //        QMessageBox::warning(this,tr("提示"),tr("ois"),QMessageBox::Close);
-            delete selections;
+            // delete selections;
             break;
         }
         case 5:
@@ -5856,8 +5849,7 @@ void AdvanceSearchDlg::deletedata()
                 else
                     QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
             }
-    //        QMessageBox::warning(this,tr("提示"),tr("feg"),QMessageBox::Close);
-            delete selections;
+            // delete selections;
             break;
         }
         case 6:
@@ -5894,8 +5886,7 @@ void AdvanceSearchDlg::deletedata()
                 else
                     QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
             }
-    //        QMessageBox::warning(this,tr("提示"),tr("fegp"),QMessageBox::Close);
-            delete selections;
+            // delete selections;
             break;
         }
         case 7:
@@ -5919,15 +5910,14 @@ void AdvanceSearchDlg::deletedata()
                 else
                     QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
             }
-    //        QMessageBox::warning(this,tr("提示"),tr("abm"),QMessageBox::Close);
-            delete selections;
+            // delete selections;
             break;
         }
         }
         this->query();
 //        this->parent()->flushBottom();
-        emit flushBottomData();
-        emit flushLeftTree();
+        emit flush();
+//        emit flushLeftTree();
     }
 }
 
@@ -6053,6 +6043,6 @@ void AdvanceSearchDlg::on_delAllButton_clicked()
         db.commit();
         this->query();
 
-        emit flushBottomData();
+        emit flush();
     }
 }

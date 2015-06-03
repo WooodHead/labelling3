@@ -441,7 +441,7 @@ private slots:
 
 signals:
      void showqueryThumbnails(QStringList list);
-     void flushBottomData();
+     void flush();
      void flushLeftTree();
 
 private:
