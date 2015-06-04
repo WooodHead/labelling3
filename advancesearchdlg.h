@@ -40,6 +40,7 @@ public:
 
 private:
      bool inornot(QStringList List,QString elem);
+     QStringList getJoinList(QStringList list1,QStringList list2);
 
 private slots:
      void setpropertyName(QString propertyname);

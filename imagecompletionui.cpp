@@ -1058,7 +1058,7 @@ void ImageCompletionUI::showImagesInTree()
     _leftWindow._treeViewImages->setSelectionMode( QAbstractItemView::SingleSelection );
     _leftWindow._treeViewImages->show();
 
-    db.close();
+//    db.close();
 }
 
 void ImageCompletionUI::enDeque(const QString &elem, std::deque<QString> &d)
@@ -1389,7 +1389,7 @@ void ImageCompletionUI::showData()
         }
     }
 
-    db.close();
+//    db.close();
 }
 
 void ImageCompletionUI::updateBrushSize()
@@ -2237,7 +2237,7 @@ void ImageCompletionUI::loadMoliImage(QString moliId)
             }
         }
     }
-    db.close();
+//    db.close();
 }
 
 void ImageCompletionUI::loadAllImagesAndShowInLeftWindow()
