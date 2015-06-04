@@ -6213,7 +6213,8 @@ void AdvanceSearchDlg::deletedata()
                 QStringList fegidList;
                 QStringList fegpidList;
                 QStringList abmidList;
-                foreach (QModelIndex index, selected) {
+                foreach (QModelIndex index, selected)
+                {
                     QString fegid = _fegInfoModel->record(index.row()).value("ferrographysheetid").toString();
                     fegidList.append(fegid);
 
@@ -6227,8 +6228,8 @@ void AdvanceSearchDlg::deletedata()
                         fegpidList.append(query.value(0).toString());
                     }
 
-
-                    foreach (QString fegpid, fegpidList) {
+                    foreach (QString fegpid, fegpidList)
+                    {
                         sql.append("select  abrasiveid from abrasivemarkinfo where ferrographypicid = '");
                         sql.append(fegpid);
                         sql.append("'");
@@ -6239,6 +6240,7 @@ void AdvanceSearchDlg::deletedata()
                         }
                     }
                 }
+
                 if(deletefromtable(fegidList,"ferrographyinfo")&&
                         deletefromtable(fegpidList,"ferrographypicinfo")&&
                         deletefromtable(abmidList,"abrasivemarkinfo"))
@@ -6267,8 +6269,8 @@ void AdvanceSearchDlg::deletedata()
                 foreach (QModelIndex index, selected)
                 {
                     QString fegpid = _fegpInfoModel->record(index.row()).value("ferrographypicid").toString();
-                    QString path = _fegpInfoModel->record(index.row()).value("ferrographypicpath").toString();
                     fegpidList.append(fegpid);
+                    QString path = _fegpInfoModel->record(index.row()).value("ferrographypicpath").toString();
                     pathList.append(path);
 
                     QString sql;
@@ -6416,10 +6418,17 @@ bool AdvanceSearchDlg::deletefromtable(QStringList idList, QString tablename, QS
         int i = 0;
         foreach (QString fegpid, idList)
         {
-            QString path;
+            QString path = "";
             QString sql = "delete from ferrographypicinfo where ferrographypicid = '";
             sql.append(fegpid);
             sql.append("'");
+
+            QString sql2 = QString("select ferrographypicpath from ferrographypicinfo where ferrographypicid = '%1'").arg(fegpid);
+            QSqlQuery query2;
+            if(query2.exec(sql2) && query2.next())
+            {
+                path = query2.value(0).toString();
+            }
 
             if(!query.exec(sql))
             {
@@ -6428,9 +6437,9 @@ bool AdvanceSearchDlg::deletefromtable(QStringList idList, QString tablename, QS
             else
             {
                 // delete from left window
-                if(pathList.size() > i && !pathList[i].isEmpty())
+                if(!path.isEmpty())
                 {
-                    emit removeImageSignal(pathList[i]);
+                    emit removeImageSignal(path);
                 }
             }
             i++;
