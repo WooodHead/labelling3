@@ -1756,166 +1756,183 @@ void AdvanceSearchDlg::query()
         abmdelAction->setEnabled(true);
 
     // 反向关联查询
-    QString temp_ferrographypicid = " ferrographypicid IN (";
-    for(int i =0;i<_abmInfoModel->rowCount();++i)
+    if(_abmInfoModel->rowCount() != 0)
     {
-        if( i==0)
+        QString temp_ferrographypicid = " ferrographypicid IN (";
+        for(int i =0;i<_abmInfoModel->rowCount();++i)
+        {
+            if( i==0)
+                temp_ferrographypicid += "'";
+            else
+                temp_ferrographypicid += ",'";
+
+            temp_ferrographypicid +=_abmInfoModel->record(i).value("ferrographypicid").toString();
             temp_ferrographypicid += "'";
+        }
+//        if(_abmInfoModel->rowCount() == 0)
+//            temp_ferrographypicid += "''";
+        temp_ferrographypicid += ")";
+        fegpSql += " and ";
+        fegpSql += temp_ferrographypicid;
+        _fegpInfoModel->setQuery(fegpSql);
+        _fegpInfoModel->removeColumn(12);
+        setModelHeaderData("FegPInfo");
+        if(_fegpInfoModel->rowCount() == 0)
+            fegpdelAction->setEnabled(false);
         else
-            temp_ferrographypicid += ",'";
-
-        temp_ferrographypicid +=_abmInfoModel->record(i).value("ferrographypicid").toString();
-        temp_ferrographypicid += "'";
+            fegpdelAction->setEnabled(true);
+        qDebug()<<fegpSql;
     }
-    if(_abmInfoModel->rowCount() == 0)
-        temp_ferrographypicid += "''";
-    temp_ferrographypicid += ")";
 
-    fegpSql += " and ";
-    fegpSql += temp_ferrographypicid;
-    _fegpInfoModel->setQuery(fegpSql);
-    _fegpInfoModel->removeColumn(12);
-    setModelHeaderData("FegPInfo");
-    if(_fegpInfoModel->rowCount() == 0)
-        fegpdelAction->setEnabled(false);
-    else
-        fegpdelAction->setEnabled(true);
-    qDebug()<<fegpSql;
-    ferrographypicidList.clear();
-    ferrographypicpathList.clear();
-
-    QString temp_ferrographysheetid = "ferrographysheetid IN (";
-    for(int i = 0;i<_fegpInfoModel->rowCount();++i)
+    if(_fegpInfoModel->rowCount() != 0)
     {
-        if(i == 0)
+        ferrographypicidList.clear();
+        ferrographypicpathList.clear();
+
+        QString temp_ferrographysheetid = "ferrographysheetid IN (";
+        for(int i = 0;i<_fegpInfoModel->rowCount();++i)
+        {
+            if(i == 0)
+                temp_ferrographysheetid += "'";
+            else
+                temp_ferrographysheetid += ",'";
+            temp_ferrographysheetid += _fegpInfoModel->record(i).value("ferrographysheetid").toString();
             temp_ferrographysheetid += "'";
+
+            ferrographypicidList.append(_fegpInfoModel->record(i).value("ferrographypicid").toString());
+            ferrographypicpathList.append(_fegpInfoModel->record(i).value("ferrographypicpath").toString());
+        }
+//        if(_fegpInfoModel->rowCount() == 0)
+//            temp_ferrographysheetid += "''";
+        temp_ferrographysheetid += ")";
+        fegSql += " and ";
+        fegSql += temp_ferrographysheetid;
+        qDebug()<<fegSql;
+        _fegInfoModel->setQuery(fegSql);
+        setModelHeaderData("FegInfo");
+        if(_fegInfoModel->rowCount() == 0)
+            fegdelAction->setEnabled(false);
         else
-            temp_ferrographysheetid += ",'";
-        temp_ferrographysheetid += _fegpInfoModel->record(i).value("ferrographysheetid").toString();
-        temp_ferrographysheetid += "'";
-
-        ferrographypicidList.append(_fegpInfoModel->record(i).value("ferrographypicid").toString());
-        ferrographypicpathList.append(_fegpInfoModel->record(i).value("ferrographypicpath").toString());
+            fegdelAction->setEnabled(true);
     }
-    if(_fegpInfoModel->rowCount() == 0)
-        temp_ferrographysheetid += "''";
-    temp_ferrographysheetid += ")";
-    fegSql += " and ";
-    fegSql += temp_ferrographysheetid;
-    qDebug()<<fegSql;
-    _fegInfoModel->setQuery(fegSql);
-    setModelHeaderData("FegInfo");
-    if(_fegInfoModel->rowCount() == 0)
-        fegdelAction->setEnabled(false);
-    else
-        fegdelAction->setEnabled(true);
-    ferrographysheetidList.clear();
 
-    QString temp_oilsampleid = "oilsampleid IN (";
-    for(int i = 0;i<_fegInfoModel->rowCount();++i)
+    if(_fegInfoModel->rowCount() != 0 && _oiaInfoModel->rowCount() != 0)
     {
-        if(i == 0)
+        ferrographysheetidList.clear();
+
+        QString temp_oilsampleid = "oilsampleid IN (";
+        for(int i = 0;i<_fegInfoModel->rowCount();++i)
+        {
+            if(i == 0)
+                temp_oilsampleid += "'";
+            else
+                temp_oilsampleid += ",'";
+            temp_oilsampleid += _fegInfoModel->record(i).value("oilsampleid").toString();
             temp_oilsampleid += "'";
-        else
-            temp_oilsampleid += ",'";
-        temp_oilsampleid += _fegInfoModel->record(i).value("oilsampleid").toString();
-        temp_oilsampleid += "'";
 
-        ferrographysheetidList.append(_fegInfoModel->record(i).value("ferrographysheetid").toString());
-    }
+            ferrographysheetidList.append(_fegInfoModel->record(i).value("ferrographysheetid").toString());
+        }
 
-    for(int i =0;i<_oiaInfoModel->rowCount();++i)
-    {
-        if(i ==0 && _fegInfoModel->rowCount() == 0)
+        for(int i =0;i<_oiaInfoModel->rowCount();++i)
+        {
+            if(i ==0 && _fegInfoModel->rowCount() == 0)
+                temp_oilsampleid += "'";
+            else
+                temp_oilsampleid += ",'";
+            temp_oilsampleid += _oiaInfoModel->record(i).value("oilsampleid").toString();
             temp_oilsampleid += "'";
+        }
+//        if(_fegInfoModel->rowCount() == 0 && _oiaInfoModel->rowCount() == 0)
+//            temp_oilsampleid += "''";
+        temp_oilsampleid += ")";
+        oisSql += " and ";
+        oisSql += temp_oilsampleid;
+        qDebug()<<oiaSql;
+        _oisInfoModel->setQuery(oisSql);
+        setModelHeaderData("OisInfo");
+        if(_oisInfoModel->rowCount() == 0)
+            oisdelAction->setEnabled(false);
         else
-            temp_oilsampleid += ",'";
-        temp_oilsampleid += _oiaInfoModel->record(i).value("oilsampleid").toString();
-        temp_oilsampleid += "'";
+            oisdelAction->setEnabled(true);
     }
-    if(_fegInfoModel->rowCount() == 0 && _oiaInfoModel->rowCount() == 0)
-        temp_oilsampleid += "''";
 
-    temp_oilsampleid += ")";
-    oisSql += " and ";
-    oisSql += temp_oilsampleid;
-    qDebug()<<oiaSql;
-    _oisInfoModel->setQuery(oisSql);
-    setModelHeaderData("OisInfo");
-    if(_oisInfoModel->rowCount() == 0)
-        oisdelAction->setEnabled(false);
-    else
-        oisdelAction->setEnabled(true);
-
-    QString temp_movepartid = "movepartid IN (";
-    for(int i =0;i<_mprInfoModel->rowCount();++i)
+    if(_mprInfoModel->rowCount() != 0)
     {
-        if(i ==0)
+        QString temp_movepartid = "movepartid IN (";
+        for(int i =0;i<_mprInfoModel->rowCount();++i)
+        {
+            if(i ==0)
+                temp_movepartid += "'";
+            else
+                temp_movepartid += ",'";
+            temp_movepartid += _mprInfoModel->record(i).value("movepartid").toString();
             temp_movepartid += "'";
+        }
+//        if(_mprInfoModel->rowCount() == 0)
+//            temp_movepartid += "''";
+        temp_movepartid += ")";
+        mpSql += " and ";
+        mpSql += temp_movepartid;
+        qDebug()<<mpSql;
+        _mpInfoModel->setQuery(mpSql);
+        setModelHeaderData("MpInfo");
+        if(_mpInfoModel->rowCount() == 0)
+            mpdelAction->setEnabled(false);
         else
-            temp_movepartid += ",'";
-        temp_movepartid += _mprInfoModel->record(i).value("movepartid").toString();
-        temp_movepartid += "'";
+            mpdelAction->setEnabled(true);
     }
-    if(_mprInfoModel->rowCount() == 0)
-        temp_movepartid += "''";
-    temp_movepartid += ")";
-    mpSql += " and ";
-    mpSql += temp_movepartid;
-    qDebug()<<mpSql;
-    _mpInfoModel->setQuery(mpSql);
-    setModelHeaderData("MpInfo");
-    if(_mpInfoModel->rowCount() == 0)
-        mpdelAction->setEnabled(false);
-    else
-        mpdelAction->setEnabled(true);
-    movepartidList.clear();
-    QString temp_planeid = "planeid IN (";
-    for(int i = 0;i<_mpInfoModel->rowCount();++i)
+
+    if(_mpInfoModel->rowCount() != 0 && _oisInfoModel->rowCount() != 0)
     {
-        if(i==0)
+        movepartidList.clear();
+        QString temp_planeid = "planeid IN (";
+        for(int i = 0;i<_mpInfoModel->rowCount();++i)
+        {
+            if(i==0)
+                temp_planeid += "'";
+            else
+                temp_planeid += ",'";
+            temp_planeid += _mpInfoModel->record(i).value("planeid").toString();
             temp_planeid += "'";
-        else
-            temp_planeid += ",'";
-        temp_planeid += _mpInfoModel->record(i).value("planeid").toString();
-        temp_planeid += "'";
 
-        movepartidList.append(_mpInfoModel->record(i).value("movepartid").toString());
-    }
+            movepartidList.append(_mpInfoModel->record(i).value("movepartid").toString());
+        }
 
-    oilsampleidList.clear();
+        oilsampleidList.clear();
 
-    for(int i =0;i<_oisInfoModel->rowCount();++i)
-    {
-        if(i ==0 && _mpInfoModel->rowCount() == 0)
+        for(int i =0;i<_oisInfoModel->rowCount();++i)
+        {
+            if(i ==0 && _mpInfoModel->rowCount() == 0)
+                temp_planeid += "'";
+            else
+                temp_planeid += ",'";
+            temp_planeid += _oisInfoModel->record(i).value("planeid").toString();
             temp_planeid += "'";
-        else
-            temp_planeid += ",'";
-        temp_planeid += _oisInfoModel->record(i).value("planeid").toString();
-        temp_planeid += "'";
 
-        oilsampleidList.append(_oisInfoModel->record(i).value("oilsampleid").toString());
+            oilsampleidList.append(_oisInfoModel->record(i).value("oilsampleid").toString());
+        }
+//        if(_mpInfoModel->rowCount() ==0 && _oisInfoModel->rowCount() == 0)
+//            temp_planeid += "''";
+        temp_planeid += ")";
+        if(_eqmCdtMap.isEmpty())
+            eqmSql += " where ";
+        else
+            eqmSql += " and ";
+        eqmSql += temp_planeid;
+        qDebug()<<eqmSql;
+        _eqmInfoModel->setQuery(eqmSql);
+        setModelHeaderData("EqmInfo");
+        planeidList.clear();
+        for(int i =0;i<_eqmInfoModel->rowCount();++i)
+        {
+            planeidList.append(_eqmInfoModel->record(i).value("planeid").toString());
+        }
+        if(_eqmInfoModel->rowCount() == 0)
+            this->eqmdelAction->setEnabled(false);
+        else
+            this->eqmdelAction->setEnabled(true);
     }
-    if(_mpInfoModel->rowCount() ==0 && _oisInfoModel->rowCount() == 0)
-        temp_planeid += "''";
-    temp_planeid += ")";
-    if(_eqmCdtMap.isEmpty())
-        eqmSql += " where ";
-    else
-        eqmSql += " and ";
-    eqmSql += temp_planeid;
-    qDebug()<<eqmSql;
-    _eqmInfoModel->setQuery(eqmSql);
-    setModelHeaderData("EqmInfo");
-    planeidList.clear();
-    for(int i =0;i<_eqmInfoModel->rowCount();++i)
-    {
-        planeidList.append(_eqmInfoModel->record(i).value("planeid").toString());
-    }
-    if(_eqmInfoModel->rowCount() == 0)
-        this->eqmdelAction->setEnabled(false);
-    else
-        this->eqmdelAction->setEnabled(true);
+
 
     emit showqueryThumbnails(ferrographypicpathList);
 }
