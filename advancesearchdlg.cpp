@@ -1756,7 +1756,7 @@ void AdvanceSearchDlg::query()
         abmdelAction->setEnabled(true);
 
     // 反向关联查询
-    if(_abmInfoModel->rowCount() != 0)
+    if(!_abmCdtMap.isEmpty())
     {
         QString temp_ferrographypicid = " ferrographypicid IN (";
         for(int i =0;i<_abmInfoModel->rowCount();++i)
@@ -1816,7 +1816,7 @@ void AdvanceSearchDlg::query()
             fegdelAction->setEnabled(true);
     }
 
-    if(_fegInfoModel->rowCount() != 0 && _oiaInfoModel->rowCount() != 0)
+    if(_fegInfoModel->rowCount() != 0)
     {
         ferrographysheetidList.clear();
 
@@ -1832,78 +1832,80 @@ void AdvanceSearchDlg::query()
 
             ferrographysheetidList.append(_fegInfoModel->record(i).value("ferrographysheetid").toString());
         }
-
-        for(int i =0;i<_oiaInfoModel->rowCount();++i)
-        {
-            if(i ==0 && _fegInfoModel->rowCount() == 0)
-                temp_oilsampleid += "'";
-            else
-                temp_oilsampleid += ",'";
-            temp_oilsampleid += _oiaInfoModel->record(i).value("oilsampleid").toString();
-            temp_oilsampleid += "'";
-        }
 //        if(_fegInfoModel->rowCount() == 0 && _oiaInfoModel->rowCount() == 0)
 //            temp_oilsampleid += "''";
         temp_oilsampleid += ")";
         oisSql += " and ";
         oisSql += temp_oilsampleid;
-        qDebug()<<oiaSql;
+        qDebug()<<oisSql;
         _oisInfoModel->setQuery(oisSql);
         setModelHeaderData("OisInfo");
         if(_oisInfoModel->rowCount() == 0)
             oisdelAction->setEnabled(false);
         else
             oisdelAction->setEnabled(true);
-    }
 
-    if(_mprInfoModel->rowCount() != 0)
-    {
-        QString temp_movepartid = "movepartid IN (";
-        for(int i =0;i<_mprInfoModel->rowCount();++i)
-        {
-            if(i ==0)
-                temp_movepartid += "'";
-            else
-                temp_movepartid += ",'";
-            temp_movepartid += _mprInfoModel->record(i).value("movepartid").toString();
-            temp_movepartid += "'";
-        }
-//        if(_mprInfoModel->rowCount() == 0)
-//            temp_movepartid += "''";
-        temp_movepartid += ")";
-        mpSql += " and ";
-        mpSql += temp_movepartid;
-        qDebug()<<mpSql;
-        _mpInfoModel->setQuery(mpSql);
-        setModelHeaderData("MpInfo");
-        if(_mpInfoModel->rowCount() == 0)
-            mpdelAction->setEnabled(false);
+        oiaSql += " and ";
+        oiaSql += temp_oilsampleid;
+
+        _oiaInfoModel->setQuery(oiaSql);
+        setModelHeaderData("OiaInfo");
+        if(_oisInfoModel->rowCount() == 0)
+            oiadelAction->setEnabled(false);
         else
-            mpdelAction->setEnabled(true);
+            oiadelAction->setEnabled(true);
+
     }
 
-    if(_mpInfoModel->rowCount() != 0 && _oisInfoModel->rowCount() != 0)
+//    if(_mprInfoModel->rowCount() != 0)
+//    {
+//        QString temp_movepartid = "movepartid IN (";
+//        for(int i =0;i<_mprInfoModel->rowCount();++i)
+//        {
+//            if(i ==0)
+//                temp_movepartid += "'";
+//            else
+//                temp_movepartid += ",'";
+//            temp_movepartid += _mprInfoModel->record(i).value("movepartid").toString();
+//            temp_movepartid += "'";
+//        }
+////        if(_mprInfoModel->rowCount() == 0)
+////            temp_movepartid += "''";
+//        temp_movepartid += ")";
+//        mpSql += " and ";
+//        mpSql += temp_movepartid;
+//        qDebug()<<mpSql;
+//        _mpInfoModel->setQuery(mpSql);
+//        setModelHeaderData("MpInfo");
+//        if(_mpInfoModel->rowCount() == 0)
+//            mpdelAction->setEnabled(false);
+//        else
+//            mpdelAction->setEnabled(true);
+//    }
+
+    if(_oisInfoModel->rowCount() != 0)
     {
         movepartidList.clear();
         QString temp_planeid = "planeid IN (";
-        for(int i = 0;i<_mpInfoModel->rowCount();++i)
-        {
-            if(i==0)
-                temp_planeid += "'";
-            else
-                temp_planeid += ",'";
-            temp_planeid += _mpInfoModel->record(i).value("planeid").toString();
-            temp_planeid += "'";
-
-            movepartidList.append(_mpInfoModel->record(i).value("movepartid").toString());
-        }
+//        for(int i = 0;i<_mpInfoModel->rowCount();++i)
+//        {
+//            if(i==0)
+//                temp_planeid += "'";
+//            else
+//                temp_planeid += ",'";
+//            temp_planeid += _mpInfoModel->record(i).value("planeid").toString();
+//            temp_planeid += "'";
+//            movepartidList.append(_mpInfoModel->record(i).value("movepartid").toString());
+//        }
 
         oilsampleidList.clear();
 
         for(int i =0;i<_oisInfoModel->rowCount();++i)
         {
-            if(i ==0 && _mpInfoModel->rowCount() == 0)
+            if(i==0)
                 temp_planeid += "'";
+//            if(i ==0 && _mpInfoModel->rowCount() == 0)
+//                temp_planeid += "'";
             else
                 temp_planeid += ",'";
             temp_planeid += _oisInfoModel->record(i).value("planeid").toString();
@@ -1911,8 +1913,6 @@ void AdvanceSearchDlg::query()
 
             oilsampleidList.append(_oisInfoModel->record(i).value("oilsampleid").toString());
         }
-//        if(_mpInfoModel->rowCount() ==0 && _oisInfoModel->rowCount() == 0)
-//            temp_planeid += "''";
         temp_planeid += ")";
         if(_eqmCdtMap.isEmpty())
             eqmSql += " where ";
@@ -1931,11 +1931,38 @@ void AdvanceSearchDlg::query()
             this->eqmdelAction->setEnabled(false);
         else
             this->eqmdelAction->setEnabled(true);
+
+        // 动部件信息表
+        QString mpTableName = tableNames.value("MpInfo");
+        QString mpSql = generateSql(_mpCdtMap,mpTableName);
+        _mpInfoModel->setQuery(mpSql);
+        setModelHeaderData("MpInfo");
+        for(int i = 0;i<_mpInfoModel->rowCount();++i)
+        {
+            movepartidList.append(_mpInfoModel->record(i).value("movepartid").toString());
+        }
+        if(_mpInfoModel->rowCount() == 0)
+            mpdelAction->setEnabled(false);
+        else
+            mpdelAction->setEnabled(true);
+    //    qDebug()<<mpSql;
+
+        // 动部件维修信息表
+        QString mprTableName = tableNames.value("MprInfo");
+        QString mprSql = generateSql(_mprCdtMap,mprTableName);
+        _mprInfoModel->setQuery(mprSql);
+        setModelHeaderData("MprInfo");
+        if(_mprInfoModel->rowCount() == 0)
+            mprdelAction->setEnabled(false);
+        else
+            mprdelAction->setEnabled(true);
     }
+
 
 
     emit showqueryThumbnails(ferrographypicpathList);
 }
+
 
 bool AdvanceSearchDlg::inornot(QStringList List, QString elem)
 {
