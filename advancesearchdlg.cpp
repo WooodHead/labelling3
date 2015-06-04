@@ -1383,20 +1383,28 @@ QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap, QStri
         if(!planeidList.empty())
         {
             if(conditionMap.isEmpty())
-                sql.append(" where planeid = '");
+                sql.append(" where planeid in ");
             else
-                sql.append(" and (planeid = '");
+                sql.append(" and planeid in ");
             int i =0;
-            sql.append(planeidList[i]);
+            QString t_planeid = "('";
+            t_planeid += planeidList[i];
+            t_planeid += "'";
+//            sql.append(planeidList[i]);
             for(i =1;i<planeidList.length();++i)
             {
-                sql.append("' or planeid = '");
-                sql.append(planeidList[i]);
+                t_planeid += ",'";
+                t_planeid += planeidList[i];
+                t_planeid += "'";
+//                sql.append("' or planeid = '");
+//                sql.append(planeidList[i]);
             }
-            if(conditionMap.isEmpty())
-                sql.append("'");
-            else
-                sql.append("')");
+            t_planeid += ")";
+            sql.append(t_planeid);
+//            if(conditionMap.isEmpty())
+//                sql.append("'");
+//            else
+//                sql.append("')");
         }
         else
         {
@@ -1412,20 +1420,30 @@ QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap, QStri
         if(!movepartidList.empty())
         {
             if(conditionMap.isEmpty())
-                sql.append(" where movepartid = '");
+                sql.append(" where movepartid in ");
             else
-                sql.append(" and (movepartid= '");
+                sql.append(" and movepartid in ");
+            QString t_movepartid;
+
             int i =0;
-            sql.append(movepartidList[i]);
+            t_movepartid += "('";
+            t_movepartid += movepartidList[i];
+            t_movepartid += "'";
+//            sql.append(movepartidList[i]);
             for(i =1;i<movepartidList.length();++i)
             {
-                sql.append("' or movepartid = '");
-                sql.append(movepartidList[i]);
+                t_movepartid += ",'";
+                t_movepartid += movepartidList[i];
+                t_movepartid += "'";
+//                sql.append("' or movepartid = '");
+//                sql.append(movepartidList[i]);
             }
-            if(conditionMap.isEmpty())
-                sql.append("'");
-            else
-                sql.append("')");
+            t_movepartid += ")";
+            sql.append(t_movepartid);
+//            if(conditionMap.isEmpty())
+//                sql.append("'");
+//            else
+//                sql.append("')");
         }
         else
         {
@@ -1461,20 +1479,31 @@ QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap, QStri
         if(!oilsampleidList.empty())
         {
             if(conditionMap.isEmpty())
-                sql.append(" where oilsampleid = '");
+                sql.append(" where oilsampleid in ");
             else
-                sql.append(" and (oilsampleid= '");
+                sql.append(" and oilsampleid in ");
+
             int i =0;
-            sql.append(oilsampleidList[i]);
+            QString t_oilsampleid;
+            t_oilsampleid +="('";
+            t_oilsampleid += oilsampleidList[i];
+            t_oilsampleid +="'";
+
+//            sql.append(oilsampleidList[i]);
             for(i =1;i<oilsampleidList.length();++i)
             {
-                sql.append("' or oilsampleid = '");
-                sql.append(oilsampleidList[i]);
+                t_oilsampleid += ",'";
+                t_oilsampleid += oilsampleidList[i];
+                t_oilsampleid += "'";
+//                sql.append("' or oilsampleid = '");
+//                sql.append(oilsampleidList[i]);
             }
-            if(conditionMap.isEmpty())
-                sql.append("'");
-            else
-                sql.append("')");
+            t_oilsampleid += ")";
+            sql.append(t_oilsampleid);
+//            if(conditionMap.isEmpty())
+//                sql.append("'");
+//            else
+//                sql.append("')");
         }
         else
         {
@@ -1531,21 +1560,29 @@ QString AdvanceSearchDlg::generateSql(QMap<QString, QString> conditionMap, QStri
             if(!ferrographysheetidList.empty())
             {
                 if(conditionMap.isEmpty())
-                    sql.append(" where ferrographysheetid = '");
+                    sql.append(" where ferrographysheetid in ");
                 else
-                    sql.append(" and( ferrographysheetid = '");
+                    sql.append(" and ferrographysheetid in ");
+
+                QString t_ferrographysheetid;
                 int i =0;
-                sql.append(ferrographysheetidList[i]);
+                t_ferrographysheetid += "('";
+                t_ferrographysheetid += ferrographysheetidList[i];
+                t_ferrographysheetid += "'";
                 for(i =1;i<ferrographysheetidList.length();++i)
                 {
-
-                    sql.append("' or ferrographysheetid = '");
-                    sql.append(ferrographysheetidList[i]);
+                    t_ferrographysheetid += ",'";
+                    t_ferrographysheetid += ferrographysheetidList[i];
+                    t_ferrographysheetid += "'";
+//                    sql.append("' or ferrographysheetid = '");
+//                    sql.append(ferrographysheetidList[i]);
                 }
-                if(conditionMap.isEmpty())
-                    sql.append("'");
-                else
-                    sql.append("')");
+                t_ferrographysheetid += ")";
+                sql.append(t_ferrographysheetid);
+//                if(conditionMap.isEmpty())
+//                    sql.append("'");
+//                else
+//                    sql.append("')");
             }
             else
             {
@@ -1718,7 +1755,175 @@ void AdvanceSearchDlg::query()
     else
         abmdelAction->setEnabled(true);
 
+    // 反向关联查询
+    QString temp_ferrographypicid = " ferrographypicid IN (";
+    for(int i =0;i<_abmInfoModel->rowCount();++i)
+    {
+        if( i==0)
+            temp_ferrographypicid += "'";
+        else
+            temp_ferrographypicid += ",'";
+
+        temp_ferrographypicid +=_abmInfoModel->record(i).value("ferrographypicid").toString();
+        temp_ferrographypicid += "'";
+    }
+    if(_abmInfoModel->rowCount() == 0)
+        temp_ferrographypicid += "''";
+    temp_ferrographypicid += ")";
+
+    fegpSql += " and ";
+    fegpSql += temp_ferrographypicid;
+    _fegpInfoModel->setQuery(fegpSql);
+    _fegpInfoModel->removeColumn(12);
+    setModelHeaderData("FegPInfo");
+    if(_fegpInfoModel->rowCount() == 0)
+        fegpdelAction->setEnabled(false);
+    else
+        fegpdelAction->setEnabled(true);
+    qDebug()<<fegpSql;
+    ferrographypicidList.clear();
+    ferrographypicpathList.clear();
+
+    QString temp_ferrographysheetid = "ferrographysheetid IN (";
+    for(int i = 0;i<_fegpInfoModel->rowCount();++i)
+    {
+        if(i == 0)
+            temp_ferrographysheetid += "'";
+        else
+            temp_ferrographysheetid += ",'";
+        temp_ferrographysheetid += _fegpInfoModel->record(i).value("ferrographysheetid").toString();
+        temp_ferrographysheetid += "'";
+
+        ferrographypicidList.append(_fegpInfoModel->record(i).value("ferrographypicid").toString());
+        ferrographypicpathList.append(_fegpInfoModel->record(i).value("ferrographypicpath").toString());
+    }
+    if(_fegpInfoModel->rowCount() == 0)
+        temp_ferrographysheetid += "''";
+    temp_ferrographysheetid += ")";
+    fegSql += " and ";
+    fegSql += temp_ferrographysheetid;
+    qDebug()<<fegSql;
+    _fegInfoModel->setQuery(fegSql);
+    setModelHeaderData("FegInfo");
+    if(_fegInfoModel->rowCount() == 0)
+        fegdelAction->setEnabled(false);
+    else
+        fegdelAction->setEnabled(true);
+    ferrographysheetidList.clear();
+
+    QString temp_oilsampleid = "oilsampleid IN (";
+    for(int i = 0;i<_fegInfoModel->rowCount();++i)
+    {
+        if(i == 0)
+            temp_oilsampleid += "'";
+        else
+            temp_oilsampleid += ",'";
+        temp_oilsampleid += _fegInfoModel->record(i).value("oilsampleid").toString();
+        temp_oilsampleid += "'";
+
+        ferrographysheetidList.append(_fegInfoModel->record(i).value("ferrographysheetid").toString());
+    }
+
+    for(int i =0;i<_oiaInfoModel->rowCount();++i)
+    {
+        if(i ==0 && _fegInfoModel->rowCount() == 0)
+            temp_oilsampleid += "'";
+        else
+            temp_oilsampleid += ",'";
+        temp_oilsampleid += _oiaInfoModel->record(i).value("oilsampleid").toString();
+        temp_oilsampleid += "'";
+    }
+    if(_fegInfoModel->rowCount() == 0 && _oiaInfoModel->rowCount() == 0)
+        temp_oilsampleid += "''";
+
+    temp_oilsampleid += ")";
+    oisSql += " and ";
+    oisSql += temp_oilsampleid;
+    qDebug()<<oiaSql;
+    _oisInfoModel->setQuery(oisSql);
+    setModelHeaderData("OisInfo");
+    if(_oisInfoModel->rowCount() == 0)
+        oisdelAction->setEnabled(false);
+    else
+        oisdelAction->setEnabled(true);
+
+    QString temp_movepartid = "movepartid IN (";
+    for(int i =0;i<_mprInfoModel->rowCount();++i)
+    {
+        if(i ==0)
+            temp_movepartid += "'";
+        else
+            temp_movepartid += ",'";
+        temp_movepartid += _mprInfoModel->record(i).value("movepartid").toString();
+        temp_movepartid += "'";
+    }
+    if(_mprInfoModel->rowCount() == 0)
+        temp_movepartid += "''";
+    temp_movepartid += ")";
+    mpSql += " and ";
+    mpSql += temp_movepartid;
+    qDebug()<<mpSql;
+    _mpInfoModel->setQuery(mpSql);
+    setModelHeaderData("MpInfo");
+    if(_mpInfoModel->rowCount() == 0)
+        mpdelAction->setEnabled(false);
+    else
+        mpdelAction->setEnabled(true);
+    movepartidList.clear();
+    QString temp_planeid = "planeid IN (";
+    for(int i = 0;i<_mpInfoModel->rowCount();++i)
+    {
+        if(i==0)
+            temp_planeid += "'";
+        else
+            temp_planeid += ",'";
+        temp_planeid += _mpInfoModel->record(i).value("planeid").toString();
+        temp_planeid += "'";
+
+        movepartidList.append(_mpInfoModel->record(i).value("movepartid").toString());
+    }
+
+    oilsampleidList.clear();
+
+    for(int i =0;i<_oisInfoModel->rowCount();++i)
+    {
+        if(i ==0 && _mpInfoModel->rowCount() == 0)
+            temp_planeid += "'";
+        else
+            temp_planeid += ",'";
+        temp_planeid += _oisInfoModel->record(i).value("planeid").toString();
+        temp_planeid += "'";
+
+        oilsampleidList.append(_oisInfoModel->record(i).value("oilsampleid").toString());
+    }
+    if(_mpInfoModel->rowCount() ==0 && _oisInfoModel->rowCount() == 0)
+        temp_planeid += "''";
+    temp_planeid += ")";
+    eqmSql += " where ";
+    eqmSql += temp_planeid;
+    qDebug()<<eqmSql;
+    _eqmInfoModel->setQuery(eqmSql);
+    setModelHeaderData("EqmInfo");
+    planeidList.clear();
+    for(int i =0;i<_eqmInfoModel->rowCount();++i)
+    {
+        planeidList.append(_eqmInfoModel->record(i).value("planeid").toString());
+    }
+    if(_eqmInfoModel->rowCount() == 0)
+        this->eqmdelAction->setEnabled(false);
+    else
+        this->eqmdelAction->setEnabled(true);
+
     emit showqueryThumbnails(ferrographypicpathList);
+}
+
+bool AdvanceSearchDlg::inornot(QStringList List, QString elem)
+{
+    foreach (QString var, List) {
+        if(elem.compare(var) == 0)
+            return true;
+    }
+    return false;
 }
 
 void AdvanceSearchDlg::createListWidget()
@@ -1831,6 +2036,7 @@ void AdvanceSearchDlg::createTableView()
 
     // 磨粒标注信息表
     _abmInfoModel = new QSqlQueryModel;
+//    _abmInfoModel = new QSqlTableModel;
     ui->abmTableView->setModel(_abmInfoModel);
     ui->abmTableView->setSelectionBehavior(QTableView::SelectRows);
     if(!deleteflag)

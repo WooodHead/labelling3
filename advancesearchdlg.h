@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QSqlDatabase>
 #include <QSqlQueryModel>
+#include <QSqlTableModel>
 #include <QSqlQuery>
 #include <QStringList>
 #include <QMap>
@@ -17,6 +18,8 @@
 #include <QItemSelectionModel>
 #include <QModelIndexList>
 #include <QModelIndex>
+
+#include <vector>
 
 #include "propertynamedlg.h"
 #include "Global.h"
@@ -34,6 +37,9 @@ class AdvanceSearchDlg : public QDialog
 public:
      AdvanceSearchDlg(QWidget *parent = 0,bool flag = false);
     ~AdvanceSearchDlg();
+
+private:
+     bool inornot(QStringList List,QString elem);
 
 private slots:
      void setpropertyName(QString propertyname);
@@ -473,6 +479,7 @@ private:
     QMap<QString,QString> tableNames;
     QSqlQueryModel *_eqmInfoModel;
     QSqlQueryModel *_abmInfoModel;
+//    QSqlTableModel *_abmInfoModel;
     QSqlQueryModel *_fegInfoModel;
     QSqlQueryModel *_fegpInfoModel;
     QSqlQueryModel *_mpInfoModel;
