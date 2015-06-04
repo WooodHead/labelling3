@@ -1899,7 +1899,10 @@ void AdvanceSearchDlg::query()
     if(_mpInfoModel->rowCount() ==0 && _oisInfoModel->rowCount() == 0)
         temp_planeid += "''";
     temp_planeid += ")";
-    eqmSql += " where ";
+    if(_eqmCdtMap.isEmpty())
+        eqmSql += " where ";
+    else
+        eqmSql += " and ";
     eqmSql += temp_planeid;
     qDebug()<<eqmSql;
     _eqmInfoModel->setQuery(eqmSql);
