@@ -39,6 +39,7 @@ using namespace std;
 #include "ImagePropertiesEditor.h"
 #include "About.h"
 #include "CheckProperties.h"
+#include "TreeModel.h"
 
 #define THUMBNAILS_PER_ROW 6
 
@@ -192,7 +193,7 @@ private:
     int					  _brushSize;
     PaintTools			  *_brushTool;
 
-    QStandardItemModel    *_treeModel;
+//    QStandardItemModel    *_treeModel;
 
     QFormLayout           *_formLayout;
 
@@ -237,8 +238,6 @@ private slots:
 
     void    redo();
     void    undo();
-
-    void    cellDoubleClickedLeftWindow(int, int);
     
     void setExpPath(QString sourcePicPath,QString resultPicPath, QString maskPicPath, QString packgePath);
     void setImpPath(QString packgePath);
@@ -266,6 +265,8 @@ private:
     QString _impPackgePath;
 
     QString _strNextImage;
+
+    TreeModel _treeModel;
 
 private: // methods
 
@@ -347,6 +348,8 @@ private slots:
     void on__comboBoxLarger_currentIndexChanged(const QString &arg1);
     void on__spinBox_pixel_valueChanged(int arg1);
     void on__horizontalSliderScale_valueChanged(int value);
+
+    void listItemDoubleClicked(QListWidgetItem*);
 };
 
 #endif // IMAGECOMPLETIONUI_H
