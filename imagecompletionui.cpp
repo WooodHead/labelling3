@@ -348,7 +348,7 @@ void ImageCompletionUI::setupWidgets()
     _formLayout = new QFormLayout(_thumbnailWidget);
     _thumbnailScrollArea->setWidget(_thumbnailWidget);
 
-//    _thumbnailScrollArea->setLayout(_formLayout);
+    //    _thumbnailScrollArea->setLayout(_formLayout);
 
     _thumbnailScrollArea->setWidgetResizable(true);
     _thumbnailScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
@@ -614,12 +614,19 @@ void ImageCompletionUI::showContextMenu(QPoint pos)
     QSqlDatabase db;
     if(!_strCurrentImagePath.isEmpty() && Global::createConnection(db))
     {
-        QString sql = QString("select * from abrasivemarkinfo where abrasivepicpath = '%1'").arg(_strCurrentImagePath);
+        QString sql = QString("select count(*) from abrasivemarkinfo where abrasivepicpath = '%1'").arg(_strCurrentImagePath);
         QSqlQuery query;
         query.prepare(sql);
-        if(query.exec() && query.size() > 0)
+        if(query.exec() && query.next())
         {
-            checkMenu->setEnabled(true);
+            if(query.value(0).toInt() > 0)
+            {
+                checkMenu->setEnabled(true);
+            }
+            else
+            {
+                checkMenu->setEnabled(false);
+            }
         }
         else
         {
@@ -635,11 +642,11 @@ void ImageCompletionUI::showContextMenu(QPoint pos)
         checkMenu->setEnabled(false);
     }
 
-//    if(!_editImageViewer->getMask() || !_editImageViewer->getResultSave())
-//    {
-//        editMenu->setEnabled(false);
-//        checkMenu->setEnabled(false);
-//    }
+    //    if(!_editImageViewer->getMask() || !_editImageViewer->getResultSave())
+    //    {
+    //        editMenu->setEnabled(false);
+    //        checkMenu->setEnabled(false);
+    //    }
 
     // Menu 3
     QAction* backMenu = new QAction(tr("回退"), this);
@@ -1267,7 +1274,7 @@ void ImageCompletionUI::showData()
         }
     }
 
-//    db.close();
+    //    db.close();
 }
 
 void ImageCompletionUI::updateBrushSize()
@@ -1385,14 +1392,11 @@ void ImageCompletionUI::setEnlargementFactor(QString strFilePath)
     if(Global::createConnection(db))
     {
         QSqlQuery query;
-        QString sql = QString("select magnification from ferrographypicinfo where ferrographypicpath = '%1'").arg(strFilePath);
+        QString sql = QString("select magnification from ferrographypicinfo where ferrographypicpath = '%1' limit 1").arg(strFilePath);
 
-        if(query.exec(sql) )
+        if(query.exec(sql) && query.next() )
         {
-            if(query.next())
-            {
-                factor = query.value(0).toString();
-            }
+            factor = query.value(0).toString();
         }
         else
         {
@@ -1845,8 +1849,8 @@ QImage ImageCompletionUI::loadLabelledResult(QString file)
 
 void ImageCompletionUI::flush()
 {
-    showData();
     flushLeftTree();
+    showData();
 }
 
 void ImageCompletionUI::flushLeft(QString strFilePath, QString label)
@@ -1888,7 +1892,7 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
     }
 
     QFileInfoList fileInfoList = sourceDir.entryInfoList();
-//    qDebug()<<fileInfoList.length();
+    //    qDebug()<<fileInfoList.length();
     // 遍历所有文件信息
     //    foreach(QFileInfo fileInfo, fileInfoList)
     for(int i = 0;i<fileInfoList.length();++i)
@@ -1898,8 +1902,8 @@ bool ImageCompletionUI::copyFiles(QString fromDir, QString toDir, bool convertIf
         if(fileInfo.fileName() == "." || fileInfo.fileName() == "..")
             continue;
         // 数据库文件处理
-//        qDebug() << fileInfo.fileName();
-//        if(fileInfo.fileName().split(".")[1] == "sql");
+        //        qDebug() << fileInfo.fileName();
+        //        if(fileInfo.fileName().split(".")[1] == "sql");
 
         // 当为目录时，递归的进行copy
         if(fileInfo.isDir())
@@ -2031,15 +2035,9 @@ QString ImageCompletionUI::status(QString imagePath)
     QSqlQuery query;
     if( Global::createConnection(db) )
     {
-        if(query.exec(QString("select ferrographypicpath, imagesymbol from ferrographypicinfo")))
+        if(query.exec(QString("select imagesymbol from ferrographypicinfo where ferrographypicpath = '%1' limit 1").arg(imagePath)) && query.next())
         {
-            while(query.next())
-            {
-                if(imagePath == query.value(0).toString())
-                {
-                    return query.value(1).toString();
-                }
-            }
+            return query.value(0).toString();
         }
     }
     return QString();
@@ -2071,24 +2069,20 @@ void ImageCompletionUI::loadMoliImage(QString moliId)
     QSqlDatabase db;
     if(Global::createConnection(db))
     {
-        QString sql = QString("select abrasiveResultData from abrasivemarkinfo where abrasiveid = '%1'").arg(moliId);
+        QString sql = QString("select abrasiveResultData from abrasivemarkinfo where abrasiveid = '%1' limit 1").arg(moliId);
         QSqlQuery query;
         query.prepare(sql);
 
-        if(query.exec() && query.record().count() == 1)
+        if(query.exec() && query.next())
         {
-            if(query.next())
-            {
-                QByteArray arr = query.value(0).toByteArray();
-                QPixmap pixmap;
-                pixmap.loadFromData(arr);
-                QImage image = pixmap.toImage();
+            QByteArray arr = query.value(0).toByteArray();
+            QPixmap pixmap;
+            pixmap.loadFromData(arr);
+            QImage image = pixmap.toImage();
 
-                _editImageViewer->setImage(image);
-            }
+            _editImageViewer->setImage(image);
         }
     }
-//    db.close();
 }
 
 void ImageCompletionUI::loadAllImagesAndShowInLeftWindow()
@@ -2098,13 +2092,13 @@ void ImageCompletionUI::loadAllImagesAndShowInLeftWindow()
     QSqlQuery query;
     if( Global::createConnection(db) )
     {
-        if(query.exec(QString("select ferrographypicpath from ferrographypicinfo")))
+        if(query.exec(QString("select ferrographypicpath, imagesymbol from ferrographypicinfo")))
         {
             while(query.next())
             {
                 imagePath = query.value(0).toString();
 
-                QString status = this->status( imagePath );
+                QString status = query.value(1).toString();
 
                 if(status == MOLI_LABELLED_STATUS_CHAR)
                 {

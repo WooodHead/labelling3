@@ -63,7 +63,7 @@ void ImagePropertiesEditor::loadData()
     QSqlDatabase db;
     if(Global::createConnection(db))
     {
-        QString strSql = QString(" select * from %1 where %2 = '%3'").arg(tables[_tableIndex]).arg(keyFieldNames[_tableIndex]).arg(_primaryKeyValue);
+        QString strSql = QString(" select * from %1 where %2 = '%3' limit 1").arg(tables[_tableIndex]).arg(keyFieldNames[_tableIndex]).arg(_primaryKeyValue);
         QSqlQuery query;
         query.prepare(strSql);
 
