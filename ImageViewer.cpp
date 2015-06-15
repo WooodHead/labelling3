@@ -234,9 +234,7 @@ bool ImageViewer::saveLabelMap(const QString &fileName, const char *fileFormat)
 
 bool ImageViewer::saveLabelledResult(QString path, QString ext)
 {
-    if(!_srcOcvImage) return false;
-    if(!_displayImage) return false;
-    if(!_result_display) return false;
+    if(!_srcOcvImage || !_displayImage || !_result_display) return false;
 
     QString path1 = QString("%1_0.%2").arg(path).arg(ext);
     QString path2 = QString("%1_1.%2").arg(path).arg(ext);
@@ -245,16 +243,24 @@ bool ImageViewer::saveLabelledResult(QString path, QString ext)
     IplImage* scaled = cvCreateImage(cvSize(this->_orgWidth, this->_orgHeight), cv_result_display->depth, cv_result_display->nChannels);
     cvResize(cv_result_display, scaled, CV_INTER_CUBIC);
 
-    QImage* temp = IplImageToQImage(scaled);
-    bool ret1 = temp->save(path1, ext.toUtf8().constData());
-    DELETEPTR(temp);
+    int p[3];
+    p[0] = CV_IMWRITE_JPEG_QUALITY;
+    p[1] = 100;
+    p[2] = 0;
+
+    bool ret1 = cvSaveImage(path1.toStdString().c_str(), scaled, p);
+
+//    QImage* temp = IplImageToQImage(scaled);
+//    bool ret1 = temp->save(path1, ext.toUtf8().constData());
+//    DELETEPTR(temp);
 
     IplImage* cv_result_save = QImageToIplImage(*_result_save);
     cvResize(cv_result_save, scaled, CV_INTER_CUBIC);
 
-    temp = IplImageToQImage(scaled);
-    bool ret2 = temp->save(path2, ext.toUtf8().constData());
-    DELETEPTR(temp);
+    bool ret2 = cvSaveImage(path2.toStdString().c_str(), scaled, p);
+//    temp = IplImageToQImage(scaled);
+//    bool ret2 = temp->save(path2, ext.toUtf8().constData());
+//    DELETEPTR(temp);
 
     cvReleaseImage(&cv_result_display); cv_result_display = NULL;
     cvReleaseImage(&scaled); scaled = NULL;

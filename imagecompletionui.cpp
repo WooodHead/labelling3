@@ -983,12 +983,10 @@ int ImageCompletionUI::in(const QString& strFilePath, std::deque<QString> &d)
 
 void ImageCompletionUI::showThumbnail(QString file, QString status, int row)
 {
-    QImage temp = QImage(file);
-    QPixmap pixmap = QPixmap::fromImage(temp).scaled(120, 80);
+    QPixmap pixmap = QPixmap(file).scaled(120, 80);
     drawEnclosingRectangle(pixmap, color(status));
     QListWidgetItem *item = new QListWidgetItem(QIcon(pixmap), file);
     item->setSizeHint(QSize(120, 80));
-    item->setTextAlignment(Qt::AlignCenter);
 
     // small trick here
     QFont f;
@@ -1006,10 +1004,10 @@ void ImageCompletionUI::showThumbnailForLabelled(QString strFilePath)
 {
     if(strFilePath.isEmpty() || !QFile::exists(strFilePath) ) return;
 
-    int pos = this->in(strFilePath, _dequeDone);
+    int pos = in(strFilePath, _dequeDone);
     if(pos >= 0)
     {
-        this->showThumbnail(strFilePath, MOLI_LABELLED_STATUS_CHAR, pos + _dequeTodo.size());
+        showThumbnail(strFilePath, MOLI_LABELLED_STATUS_CHAR, pos + _dequeTodo.size());
     }
 }
 
@@ -1017,10 +1015,10 @@ void ImageCompletionUI::showThumbnailForUnLabelled(QString strFilePath)
 {
     if(strFilePath.isEmpty() || !QFile::exists(strFilePath) ) return;
 
-    int pos = this->in(strFilePath, _dequeTodo);
+    int pos = in(strFilePath, _dequeTodo);
     if(pos >= 0)
     {
-        this->showThumbnail(strFilePath, MOLI_UNLABELLED_STATUS_CHAR, pos);
+        showThumbnail(strFilePath, MOLI_UNLABELLED_STATUS_CHAR, pos);
     }
 }
 
@@ -1266,15 +1264,11 @@ void ImageCompletionUI::showData()
                         _bottomWindow.dBTableWidget_9->setItem(i, j, item); break;
                     }
                     }
-
-                    //                    DELETEPTR(item);
                 }
                 i++;
             }
         }
     }
-
-    //    db.close();
 }
 
 void ImageCompletionUI::updateBrushSize()
@@ -1517,6 +1511,8 @@ void ImageCompletionUI::updateLineThickness()
 
 void ImageCompletionUI::methodChangeTriggered(QAction *a)
 {
+    if(!_editImageViewer->getOCVImage()) return;
+
     a->setChecked(true);
 
     _editImageViewer->setPaintable(true);
@@ -1526,16 +1522,19 @@ void ImageCompletionUI::methodChangeTriggered(QAction *a)
     {
         _editImageViewer->setMethod(1);
         _editImageViewer->setLabelType(1);
+        setStrikeOptionsEnabled(false);
     }
     else if(a == _polygonAction)
     {
         _editImageViewer->setMethod(1);
         _editImageViewer->setLabelType(2);
+        setStrikeOptionsEnabled(false);
     }
     else if(a == _manualAction)
     {
         _editImageViewer->setMethod(2);
         _editImageViewer->setLabelType(2);
+        setStrikeOptionsEnabled(false);
     }
 }
 
@@ -1554,6 +1553,8 @@ char* ImageCompletionUI::getNewLogString()
 
 void ImageCompletionUI::strikeChangeTriggered(QAction *a)
 {
+    if(!_editImageViewer->getOCVImage()) return;
+
     a->setChecked(true);
 
     _editImageViewer->setPaintable(true);
@@ -2087,7 +2088,7 @@ void ImageCompletionUI::loadMoliImage(QString moliId)
 
 void ImageCompletionUI::loadAllImagesAndShowInLeftWindow()
 {
-    QString imagePath;
+    QString imagePath, status;
     QSqlDatabase db;
     QSqlQuery query;
     if( Global::createConnection(db) )
@@ -2098,8 +2099,7 @@ void ImageCompletionUI::loadAllImagesAndShowInLeftWindow()
             {
                 imagePath = query.value(0).toString();
 
-                QString status = query.value(1).toString();
-
+                status = query.value(1).toString();
                 if(status == MOLI_LABELLED_STATUS_CHAR)
                 {
                     this->enDeque(imagePath, _dequeDone);
@@ -2450,37 +2450,18 @@ void ImageCompletionUI::addSamplePoint()
 
 void ImageCompletionUI::deleteSamplePoint()
 {
-    int index = _bottomWindow.dataBaseTabWidget->currentIndex();
     QString primaryKeyValue = _bottomWindow.dBTableWidget_9->item(_bottomWindow.dBTableWidget_9->currentRow(), 0)->text();
 
     QSqlDatabase db;
     if(Global::createConnection(db))
     {
-        QString sql = QString("delete from sampleSummaryInfo where sampleId = '%1'").arg(primaryKeyValue);
+        QString sql = QString("delete from sampleSummaryInfo where sampleId = '%1' limit 1").arg(primaryKeyValue);
 
         QSqlQuery query;
         query.prepare(sql);
         if(query.exec())
         {
-            QString sql = QString("select * from sampleSummaryInfo");
-            query.prepare(sql);
-            bool ret = query.exec();
-            QSqlRecord rec = query.record();
-            if(ret)
-            {
-                while(_bottomWindow.dBTableWidget_9->rowCount() > 0) _bottomWindow.dBTableWidget_9->removeRow(0);
-
-                int i = 0;
-                while(query.next())
-                {
-                    _bottomWindow.dBTableWidget_9->insertRow(i);
-                    for(int j=0; j<rec.count(); j++)
-                    {
-                        _bottomWindow.dBTableWidget_9->setItem(i, j, new QTableWidgetItem(query.value(j).toString()));
-                    }
-                    i++;
-                }
-            }
+            _bottomWindow.dBTableWidget_9->removeRow(_bottomWindow.dBTableWidget_9->currentRow());
         }
     }
 }
@@ -2506,10 +2487,7 @@ void ImageCompletionUI::append()
     bool ok = _editImageViewer->openImage(_strCurrentImagePath);
     if(!ok)
     {
-        QMessageBox::warning(this,
-                             tr("提示"),
-                             tr("无法打开图像"),
-                             QMessageBox::Close);
+        QMessageBox::warning(this, tr("提示"), tr("无法打开图像"), QMessageBox::Close);
         return;
     }
 }

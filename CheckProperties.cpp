@@ -53,11 +53,11 @@ CheckProperties::~CheckProperties()
     delete ui;
 
     _db.close();
-    delete _model;
-    if(Global::Awesome)
+
+    if(_model)
     {
-        delete Global::Awesome;
-        Global::Awesome = 0;
+        delete _model;
+        _model = 0;
     }
 }
 
