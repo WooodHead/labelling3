@@ -1765,320 +1765,655 @@ void AdvanceSearchDlg::query()
     else
         abmdelAction->setEnabled(true);
 
-    // 反向关联查询
-    if(!_abmCdtMap.isEmpty())
+    // 反向（关联）查询
+    //
+    if(!_abmCdtMap.isEmpty() || !_eqmCdtMap.isEmpty() || !_mpCdtMap.isEmpty() || !_mprCdtMap.isEmpty() ||
+            !_oiaCdtMap.isEmpty() || !_oisCdtMap.isEmpty() || !_fegCdtMap.isEmpty() || !_fegpCdtMap.isEmpty()
+            )
     {
-        QString temp_ferrographypicid = " ferrographypicid IN (";
-        for(int i =0;i<_abmInfoModel->rowCount();++i)
+        QStringList temp_planeidListMp;
+        temp_planeidListMp.clear();
+        // 动部件分支
+        if(!_mprCdtMap.isEmpty())
         {
-            if( i==0)
-                temp_ferrographypicid += "'";
-            else
-                temp_ferrographypicid += ",'";
+            QString temp_movepartid = " movepartid IN (";
+            for(int i = 0;i<_mprInfoModel->rowCount();++i)
+            {
+                if(i==0)
+                    temp_movepartid += "'";
+                else
+                    temp_movepartid += ",'";
 
-            temp_ferrographypicid +=_abmInfoModel->record(i).value("ferrographypicid").toString();
-            temp_ferrographypicid += "'";
-        }
-        if(_abmInfoModel->rowCount() == 0)
-            temp_ferrographypicid += "''";
-        temp_ferrographypicid += ")";
-        fegpSql += " and ";
-        fegpSql += temp_ferrographypicid;
-        _fegpInfoModel->setQuery(fegpSql);
-        _fegpInfoModel->removeColumn(12);
-        setModelHeaderData("FegPInfo");
-        if(_fegpInfoModel->rowCount() == 0)
-            fegpdelAction->setEnabled(false);
-        else
-            fegpdelAction->setEnabled(true);
-        qDebug()<<fegpSql;
-    }
-
-//<<<<<<< HEAD
-//    if(_fegpInfoModel->rowCount() != 0 )
-//=======
-    if(_fegpInfoModel->rowCount() != 0 || (!_abmCdtMap.isEmpty() && _fegpInfoModel->rowCount() == 0))
-//>>>>>>> 1a9848056b85ed08b7fabbe251a6d2065835b5a8
-    {
-        ferrographypicidList.clear();
-        ferrographypicpathList.clear();
-
-        QString temp_ferrographysheetid = "ferrographysheetid IN (";
-        for(int i = 0;i<_fegpInfoModel->rowCount();++i)
-        {
-            if(i == 0)
-                temp_ferrographysheetid += "'";
-            else
-                temp_ferrographysheetid += ",'";
-            temp_ferrographysheetid += _fegpInfoModel->record(i).value("ferrographysheetid").toString();
-            temp_ferrographysheetid += "'";
-
-            ferrographypicidList.append(_fegpInfoModel->record(i).value("ferrographypicid").toString());
-            ferrographypicpathList.append(_fegpInfoModel->record(i).value("ferrographypicpath").toString());
-        }
-        if(_fegpInfoModel->rowCount() == 0)
-            temp_ferrographysheetid += "''";
-        temp_ferrographysheetid += ")";
-        fegSql += " and ";
-        fegSql += temp_ferrographysheetid;
-        qDebug()<<fegSql;
-        _fegInfoModel->setQuery(fegSql);
-        setModelHeaderData("FegInfo");
-        if(_fegInfoModel->rowCount() == 0)
-            fegdelAction->setEnabled(false);
-        else
-            fegdelAction->setEnabled(true);
-    }
-
-    if(_fegInfoModel->rowCount() != 0 || (!_abmCdtMap.isEmpty() && _fegInfoModel->rowCount() == 0))
-    {
-        ferrographysheetidList.clear();
-
-        QString temp_oilsampleid = "oilsampleid IN (";
-        for(int i = 0;i<_fegInfoModel->rowCount();++i)
-        {
-            if(i == 0)
-                temp_oilsampleid += "'";
-            else
-                temp_oilsampleid += ",'";
-            temp_oilsampleid += _fegInfoModel->record(i).value("oilsampleid").toString();
-            temp_oilsampleid += "'";
-
-            ferrographysheetidList.append(_fegInfoModel->record(i).value("ferrographysheetid").toString());
-        }
-        if(_fegInfoModel->rowCount() == 0)
-            temp_oilsampleid += "''";
-        temp_oilsampleid += ")";
-        oisSql += " and ";
-        oisSql += temp_oilsampleid;
-        qDebug()<<oisSql;
-        _oisInfoModel->setQuery(oisSql);
-        setModelHeaderData("OisInfo");
-        if(_oisInfoModel->rowCount() == 0)
-            oisdelAction->setEnabled(false);
-        else
-            oisdelAction->setEnabled(true);
-
-        oiaSql += " and ";
-        oiaSql += temp_oilsampleid;
-
-        _oiaInfoModel->setQuery(oiaSql);
-        setModelHeaderData("OiaInfo");
-        if(_oisInfoModel->rowCount() == 0)
-            oiadelAction->setEnabled(false);
-        else
-            oiadelAction->setEnabled(true);
-
-    }
-
-    if(_mprInfoModel->rowCount() != 0 ||(!_abmCdtMap.isEmpty() && _mprInfoModel->rowCount() == 0))
-    {
-        QString temp_movepartid = "movepartid IN (";
-        for(int i =0;i<_mprInfoModel->rowCount();++i)
-        {
-            if(i ==0)
+                temp_movepartid += _mprInfoModel->record(i).value("movepartid").toString();
                 temp_movepartid += "'";
+            }
+            if(_mprInfoModel->rowCount() == 0)
+                temp_movepartid += "''";
+            temp_movepartid += ")";
+            mpSql += " and ";
+            mpSql += temp_movepartid;
+            _mpInfoModel->setQuery(mpSql);
+            setModelHeaderData("MprInfo");
+            if(_mpInfoModel->rowCount() == 0)
+                mpdelAction->setEnabled(false);
             else
-                temp_movepartid += ",'";
-            temp_movepartid += _mprInfoModel->record(i).value("movepartid").toString();
-            temp_movepartid += "'";
+                mpdelAction->setEnabled(true);
+            qDebug()<<"mprcdt";
         }
-        if(_mprInfoModel->rowCount() == 0)
-            temp_movepartid += "''";
-        temp_movepartid += ")";
-        mpSql += " and ";
-        mpSql += temp_movepartid;
-        qDebug()<<mpSql;
-        _mpInfoModel->setQuery(mpSql);
-        setModelHeaderData("MpInfo");
-        if(_mpInfoModel->rowCount() == 0)
-            mpdelAction->setEnabled(false);
-        else
-            mpdelAction->setEnabled(true);
-    }
-
-    QStringList mpeqmidList;
-    if(_mpInfoModel->rowCount() != 0 || (!_abmCdtMap.isEmpty() && _mpInfoModel->rowCount() ==0))
-    {
-        for(int i =0;i<_mpInfoModel->rowCount();++i)
+        // 若该分支有其中一张表的条件被选中
+        if(!_mpCdtMap.isEmpty() || !_mprCdtMap.isEmpty())
         {
-            mpeqmidList.append(_mpInfoModel->record(i).value("planeid").toString());
-        }
-    }
+            qDebug()<<"mprcdt";
+            QString temp_planeid = " planeid IN (";
+            for(int i =0;i<_mpInfoModel->rowCount();++i)
+            {
+                if(i==0)
+                    temp_planeid += "'";
+                else
+                    temp_planeid += ",'";
 
-    QStringList oiseqmidList;
-    if(_oisInfoModel->rowCount() != 0 || (!_abmCdtMap.isEmpty() && _oisInfoModel->rowCount() == 0))
-    {
-//        movepartidList.clear();
-//        QString temp_planeid = "planeid IN (";
-//        for(int i = 0;i<_mpInfoModel->rowCount();++i)
-//        {
-//            if(i==0)
-//                temp_planeid += "'";
+                temp_planeidListMp.append(_mpInfoModel->record(i).value("planeid").toString());
+                temp_planeid += _mpInfoModel->record(i).value("planeid").toString();
+                temp_planeid += "'";
+            }
+            if(_mpInfoModel->rowCount() == 0)
+                temp_planeid += "''";
+            temp_planeid += ")";
+            QString temp_eqmSql = eqmSql;
+            if(_eqmCdtMap.isEmpty())
+                temp_eqmSql += " where ";
+            else
+                temp_eqmSql += " and ";
+            temp_eqmSql += temp_planeid;
+            _eqmInfoModel->setQuery(temp_eqmSql);
+            qDebug()<<temp_eqmSql;
+            setModelHeaderData("EqmInfo");
+            if(_eqmInfoModel->rowCount() == 0)
+            {
+                //若装备为空，则没有满足条件的信息
+                _mpInfoModel->clear();
+                setModelHeaderData("MpInfo");
+                _mprInfoModel->clear();
+                setModelHeaderData("MprInfo");
+                _oisInfoModel->clear();
+                setModelHeaderData("OisInfo");
+                _oiaInfoModel->clear();
+                setModelHeaderData("OiaInfo");
+                _fegInfoModel->clear();
+                setModelHeaderData("FegInfo");
+                _fegpInfoModel->clear();
+                setModelHeaderData("FegpInfo");
+                _abmInfoModel->clear();
+                setModelHeaderData("AbmInfo");
+                return;
+            }
+            else
+            {
+                //若不为空，则重新筛选一下另一侧分支
+                planeidList.clear();
+                for(int i =0;i<_eqmInfoModel->rowCount();++i)
+                {
+                    planeidList.append(_eqmInfoModel->record(i).value("planeid").toString());
+                }
+
+                // 重新查询    油样采集信息表
+                QString oisTableName = tableNames.value("OisInfo");
+                // 局部变量屏蔽全局变量
+                QString oisSql = generateSql(_oisCdtMap,oisTableName);
+                _oisInfoModel->setQuery(oisSql);
+                setModelHeaderData("OisInfo");
+                // 清空以前的记录
+                oilsampleidList.clear();
+                for(int i =0;i<_oisInfoModel->rowCount();++i)
+                {
+                    oilsampleidList.append(_oisInfoModel->record(i).value("oilsampleid").toString());
+                }
+                if(_oisInfoModel->rowCount() == 0)
+                    oisdelAction->setEnabled(false);
+                else
+                    oisdelAction->setEnabled(true);
+
+                // 重新查询     油样检测分析信息表
+                QString oiaTableName = tableNames.value("OiaInfo");
+                // 局部变量屏蔽全局变量
+                QString oiaSql = generateSql(_oiaCdtMap,oiaTableName);
+                _oiaInfoModel->setQuery(oiaSql);
+                setModelHeaderData("OiaInfo");
+                if(_oiaInfoModel->rowCount() == 0)
+                    oiadelAction->setEnabled(false);
+                else
+                    oiadelAction->setEnabled(true);
+
+                // 重新查询     铁谱质谱信息表
+                QString fegTableName = tableNames.value("FegInfo");
+                // 局部变量屏蔽全局变量
+                QString fegSql = generateSql(_fegCdtMap,fegTableName);
+                _fegInfoModel->setQuery(fegSql);
+                setModelHeaderData("FegInfo");
+                if(_fegInfoModel->rowCount() == 0)
+                    fegdelAction->setEnabled(false);
+                else
+                    fegdelAction->setEnabled(true);
+                //  清空以前的记录
+                ferrographysheetidList.clear();
+                for(int i = 0;i<_fegInfoModel->rowCount();++i)
+                {
+                    ferrographysheetidList.append(_fegInfoModel->record(i).value("ferrographysheetid").toString());
+                }
+
+                // 重新查询      铁谱图片采集信息表
+                QString fegpTableName = tableNames.value("FegPInfo");
+                // 局部变量屏蔽全局变量
+                QString fegpSql = generateSql(_fegpCdtMap,fegpTableName);
+                _fegpInfoModel->setQuery(fegpSql);
+                // 屏蔽没必要的显示列
+                _fegpInfoModel->removeColumn(12);
+                setModelHeaderData("FegPInfo");
+                if(_fegpInfoModel->rowCount() == 0)
+                    fegpdelAction->setEnabled(false);
+                else
+                    fegpdelAction->setEnabled(true);
+                // 清空以前记录
+                ferrographypicidList.clear();
+                ferrographypicpathList.clear();
+                for(int i = 0;i<_fegpInfoModel->rowCount();++i)
+                {
+                    ferrographypicidList.append(_fegpInfoModel->record(i).value("ferrographypicid").toString());
+                    ferrographypicpathList.append(_fegpInfoModel->record(i).value("ferrographypicpath").toString());
+                }
+
+                // 重新查询       磨粒标注信息表
+                QString abmTableName = tableNames.value("AbmInfo");
+                QString abmSql = generateSql(_abmCdtMap,abmTableName);
+                _abmInfoModel->setQuery(abmSql);
+                // 屏蔽一些没必要的列
+                for(int i=18;i<24;++i)
+                    _abmInfoModel->removeColumn(18);
+                setModelHeaderData("AbmInfo");
+                if(_abmInfoModel->rowCount() == 0)
+                    abmdelAction->setEnabled(false);
+                else
+                    abmdelAction->setEnabled(true);
+            }
+        }
+
+
+
+
+        QStringList temp_planeidListAm;
+        temp_planeidListAm.clear();
+        // 处理 磨粒标注分支
+        if(!_abmCdtMap.isEmpty())
+        {
+            QString temp_ferrographypicid = " ferrographypicid IN (";
+            for(int i =0;i<_abmInfoModel->rowCount();++i)
+            {
+                if( i==0)
+                    temp_ferrographypicid += "'";
+                else
+                    temp_ferrographypicid += ",'";
+
+                temp_ferrographypicid +=_abmInfoModel->record(i).value("ferrographypicid").toString();
+                temp_ferrographypicid += "'";
+            }
+            if(_abmInfoModel->rowCount() == 0)
+                temp_ferrographypicid += "''";
+            temp_ferrographypicid += ")";
+            fegpSql += " and ";
+            fegpSql += temp_ferrographypicid;
+            _fegpInfoModel->setQuery(fegpSql);
+            _fegpInfoModel->removeColumn(12);
+            setModelHeaderData("FegPInfo");
+            if(_fegpInfoModel->rowCount() == 0)
+                fegpdelAction->setEnabled(false);
+            else
+                fegpdelAction->setEnabled(true);
+            qDebug()<<fegpSql;
+        }
+        if(!_fegpCdtMap.isEmpty() || !_abmCdtMap.isEmpty())
+        {
+            // 清空以前的信息
+            ferrographypicidList.clear();
+            ferrographypicpathList.clear();
+
+            QString temp_ferrographysheetid = "ferrographysheetid IN (";
+            for(int i = 0;i<_fegpInfoModel->rowCount();++i)
+            {
+                if(i == 0)
+                    temp_ferrographysheetid += "'";
+                else
+                    temp_ferrographysheetid += ",'";
+
+                temp_ferrographysheetid += _fegpInfoModel->record(i).value("ferrographysheetid").toString();
+                temp_ferrographysheetid += "'";
+
+                ferrographypicidList.append(_fegpInfoModel->record(i).value("ferrographypicid").toString());
+                ferrographypicpathList.append(_fegpInfoModel->record(i).value("ferrographypicpath").toString());
+            }
+            if(_fegpInfoModel->rowCount() == 0)
+                temp_ferrographysheetid += "''";
+            temp_ferrographysheetid += ")";
+            fegSql += " and ";
+            fegSql += temp_ferrographysheetid;
+//            qDebug()<<fegSql;
+            _fegInfoModel->setQuery(fegSql);
+            setModelHeaderData("FegInfo");
+            if(_fegInfoModel->rowCount() == 0)
+                fegdelAction->setEnabled(false);
+            else
+                fegdelAction->setEnabled(true);
+        }
+
+        if(!_fegCdtMap.isEmpty() || !_fegpCdtMap.isEmpty() || !_abmCdtMap.isEmpty())
+        {
+            //清空以前的信息
+            ferrographysheetidList.clear();
+
+            QString temp_oilsampleid = "oilsampleid IN (";
+            for(int i = 0;i<_fegInfoModel->rowCount();++i)
+            {
+                if(i == 0)
+                    temp_oilsampleid += "'";
+                else
+                    temp_oilsampleid += ",'";
+
+                temp_oilsampleid += _fegInfoModel->record(i).value("oilsampleid").toString();
+                temp_oilsampleid += "'";
+
+                ferrographysheetidList.append(_fegInfoModel->record(i).value("ferrographysheetid").toString());
+            }
+            if(_fegInfoModel->rowCount() == 0)
+                temp_oilsampleid += "''";
+            temp_oilsampleid += ")";
+            oisSql += " and ";
+            oisSql += temp_oilsampleid;
+//            qDebug()<<oisSql;
+            _oisInfoModel->setQuery(oisSql);
+            setModelHeaderData("OisInfo");
+            if(_oisInfoModel->rowCount() == 0)
+                oisdelAction->setEnabled(false);
+            else
+                oisdelAction->setEnabled(true);
+            // 同时更新油样分析表，因为油样分析表与油样采集表具有相同的主键
+            oiaSql += " and ";
+            oiaSql += temp_oilsampleid;
+
+            _oiaInfoModel->setQuery(oiaSql);
+            setModelHeaderData("OiaInfo");
+            if(_oisInfoModel->rowCount() == 0)
+                oiadelAction->setEnabled(false);
+            else
+                oiadelAction->setEnabled(true);
+        }
+
+        if(!_oisCdtMap.isEmpty() || !_fegCdtMap.isEmpty() || !_fegpCdtMap.isEmpty() || !_abmCdtMap.isEmpty())
+        {
+            QString temp_planeid = "planeid IN(";
+            for(int i = 0;i<_oisInfoModel->rowCount();++i)
+            {
+                if(i == 0)
+                    temp_planeid += "'";
+                else
+                    temp_planeid += ",'";
+
+                temp_planeidListAm.append(_oisInfoModel->record(i).value("planeid").toString());
+                temp_planeid += _oisInfoModel->record(i).value("planeid").toString();
+                temp_planeid += "'";
+            }
+            if(_oisInfoModel->rowCount() == 0)
+                temp_planeid += "''";
+            temp_planeid += ")";
+            if(temp_planeidListMp.isEmpty())
+            {
+                // 没有满足条件的数据
+                if(_mpCdtMap.isEmpty() && _mprCdtMap.isEmpty())
+                {
+                    if(_eqmCdtMap.isEmpty())
+                        eqmSql += " where ";
+                    else
+                        eqmSql += " and ";
+                    eqmSql += temp_planeid;
+                    _eqmInfoModel->setQuery(eqmSql);
+                    setModelHeaderData("EqmInfo");
+                    if(_eqmInfoModel->rowCount() == 0)
+                        eqmdelAction->setEnabled(false);
+                    else
+                        eqmdelAction->setEnabled(true);
+
+                    planeidList.clear();
+                    for(int i =0;i<_eqmInfoModel->rowCount();++i)
+                        planeidList.append(_eqmInfoModel->record(i).value("planeid").toString());
+
+                    //重新查询   动部件信息表
+                    QString mpTableName = tableNames.value("MpInfo");
+                    QString mpSql = generateSql(_mpCdtMap,mpTableName);
+                    _mpInfoModel->setQuery(mpSql);
+                    setModelHeaderData("MpInfo");
+                    movepartidList.clear();
+                    for(int i = 0;i<_mpInfoModel->rowCount();++i)
+                    {
+                        movepartidList.append(_mpInfoModel->record(i).value("movepartid").toString());
+                    }
+                    if(_mpInfoModel->rowCount() == 0)
+                        mpdelAction->setEnabled(false);
+                    else
+                        mpdelAction->setEnabled(true);
+
+                    // 重新查询   动部件维修信息表
+                    QString mprTableName = tableNames.value("MprInfo");
+                    QString mprSql = generateSql(_mprCdtMap,mprTableName);
+                    _mprInfoModel->setQuery(mprSql);
+                    setModelHeaderData("MprInfo");
+                    if(_mprInfoModel->rowCount() == 0)
+                        mprdelAction->setEnabled(false);
+                    else
+                        mprdelAction->setEnabled(true);
+                }
+                else
+                {
+                    _mpInfoModel->clear();
+                    setModelHeaderData("MpInfo");
+                    _mprInfoModel->clear();
+                    setModelHeaderData("MprInfo");
+                    _oisInfoModel->clear();
+                    setModelHeaderData("OisInfo");
+                    _oiaInfoModel->clear();
+                    setModelHeaderData("OiaInfo");
+                    _fegInfoModel->clear();
+                    setModelHeaderData("FegInfo");
+                    _fegpInfoModel->clear();
+                    setModelHeaderData("FegpInfo");
+                    _abmInfoModel->clear();
+                    setModelHeaderData("AbmInfo");
+                    return;
+                }
+            }
+            else
+            {
+                QStringList teqmidlist = getJoinList(temp_planeidListAm,temp_planeidListMp);
+                if(teqmidlist.isEmpty())
+                {
+                    // 没有满足条件的数据
+                    _mpInfoModel->clear();
+                    setModelHeaderData("MpInfo");
+                    _mprInfoModel->clear();
+                    setModelHeaderData("MprInfo");
+                    _oisInfoModel->clear();
+                    setModelHeaderData("OisInfo");
+                    _oiaInfoModel->clear();
+                    setModelHeaderData("OiaInfo");
+                    _fegInfoModel->clear();
+                    setModelHeaderData("FegInfo");
+                    _fegpInfoModel->clear();
+                    setModelHeaderData("FegpInfo");
+                    _abmInfoModel->clear();
+                    setModelHeaderData("AbmInfo");
+                    return;
+                }
+                else
+                {
+                    // 有满足条件的数据
+                    QString t_planeid = "planeid IN (";
+                    for(int i=0;i<teqmidlist.size();++i)
+                    {
+                        if(i== 0)
+                            t_planeid += "'";
+                        else
+                            t_planeid += ",'";
+
+                        t_planeid += teqmidlist[i];
+                        t_planeid += "'";
+                    }
+                    t_planeid += ")";
+
+                    if(_eqmCdtMap.isEmpty())
+                        eqmSql += " where ";
+                    else
+                        eqmSql += " and ";
+                    eqmSql += temp_planeid;
+                    _eqmInfoModel->setQuery(eqmSql);
+                    setModelHeaderData("EqmInfo");
+                    if(_eqmInfoModel->rowCount() == 0)
+                        eqmdelAction->setEnabled(false);
+                    else
+                        eqmdelAction->setEnabled(true);
+                }
+                planeidList.clear();
+                for(int i =0;i<_eqmInfoModel->rowCount();++i)
+                    planeidList.append(_eqmInfoModel->record(i).value("planeid").toString());
+
+                //重新查询   动部件信息表
+                QString mpTableName = tableNames.value("MpInfo");
+                QString mpSql = generateSql(_mpCdtMap,mpTableName);
+                _mpInfoModel->setQuery(mpSql);
+                setModelHeaderData("MpInfo");
+                movepartidList.clear();
+                for(int i = 0;i<_mpInfoModel->rowCount();++i)
+                {
+                    movepartidList.append(_mpInfoModel->record(i).value("movepartid").toString());
+                }
+                if(_mpInfoModel->rowCount() == 0)
+                    mpdelAction->setEnabled(false);
+                else
+                    mpdelAction->setEnabled(true);
+
+                // 重新查询   动部件维修信息表
+                QString mprTableName = tableNames.value("MprInfo");
+                QString mprSql = generateSql(_mprCdtMap,mprTableName);
+                _mprInfoModel->setQuery(mprSql);
+                setModelHeaderData("MprInfo");
+                if(_mprInfoModel->rowCount() == 0)
+                    mprdelAction->setEnabled(false);
+                else
+                    mprdelAction->setEnabled(true);
+            }
+        }
+//            QString temp_movepartid = "movepartid IN (";
+//            for(int i =0;i<_mprInfoModel->rowCount();++i)
+//            {
+//                if(i ==0)
+//                    temp_movepartid += "'";
+//                else
+//                    temp_movepartid += ",'";
+//                temp_movepartid += _mprInfoModel->record(i).value("movepartid").toString();
+//                temp_movepartid += "'";
+//            }
+//            if(_mprInfoModel->rowCount() == 0)
+//                temp_movepartid += "''";
+//            temp_movepartid += ")";
+//            mpSql += " and ";
+//            mpSql += temp_movepartid;
+//            qDebug()<<mpSql;
+//            _mpInfoModel->setQuery(mpSql);
+//            setModelHeaderData("MpInfo");
+//            if(_mpInfoModel->rowCount() == 0)
+//                mpdelAction->setEnabled(false);
 //            else
-//                temp_planeid += ",'";
-//            temp_planeid += _mpInfoModel->record(i).value("planeid").toString();
-//            temp_planeid += "'";
-//            movepartidList.append(_mpInfoModel->record(i).value("movepartid").toString());
+//                mpdelAction->setEnabled(true);
 //        }
 
-        oilsampleidList.clear();
+//        QStringList mpeqmidList;
+//        if(_mpInfoModel->rowCount() != 0 || (!_abmCdtMap.isEmpty() && _mpInfoModel->rowCount() ==0))
+//        {
+//            for(int i =0;i<_mpInfoModel->rowCount();++i)
+//            {
+//                mpeqmidList.append(_mpInfoModel->record(i).value("planeid").toString());
+//            }
+//        }
 
-        for(int i =0;i<_oisInfoModel->rowCount();++i)
-        {
-            oiseqmidList.append(_oisInfoModel->record(i).value("planeid").toString());
-//            if(i==0)
+//        QStringList oiseqmidList;
+//        if(_oisInfoModel->rowCount() != 0 || (!_abmCdtMap.isEmpty() && _oisInfoModel->rowCount() == 0))
+//        {
+    //        movepartidList.clear();
+    //        QString temp_planeid = "planeid IN (";
+    //        for(int i = 0;i<_mpInfoModel->rowCount();++i)
+    //        {
+    //            if(i==0)
+    //                temp_planeid += "'";
+    //            else
+    //                temp_planeid += ",'";
+    //            temp_planeid += _mpInfoModel->record(i).value("planeid").toString();
+    //            temp_planeid += "'";
+    //            movepartidList.append(_mpInfoModel->record(i).value("movepartid").toString());
+    //        }
+
+//            oilsampleidList.clear();
+
+//            for(int i =0;i<_oisInfoModel->rowCount();++i)
+//            {
+//                oiseqmidList.append(_oisInfoModel->record(i).value("planeid").toString());
+    //            if(i==0)
+    //                temp_planeid += "'";
+    //            if(i ==0 && _mpInfoModel->rowCount() == 0)
+    //                temp_planeid += "'";
+    //            else
+    //                temp_planeid += ",'";
+    //            temp_planeid += _oisInfoModel->record(i).value("planeid").toString();
+    //            temp_planeid += "'";
+
+//                oilsampleidList.append(_oisInfoModel->record(i).value("oilsampleid").toString());
+//            }
+
+//            QStringList teqmidlist = getJoinList(oiseqmidList,mpeqmidList);
+//            QString temp_planeid = "planeid IN (";
+//            if(teqmidlist.isEmpty())
+//                temp_planeid += "''";
+//            for(int i=0;i<teqmidlist.size();++i)
+//            {
+//                if(i== 0)
+//                    temp_planeid += "'";
+//                else
+//                    temp_planeid += ",'";
+//                qDebug()<<teqmidlist[i];
+//                temp_planeid += teqmidlist[i];
 //                temp_planeid += "'";
-//            if(i ==0 && _mpInfoModel->rowCount() == 0)
-//                temp_planeid += "'";
+//            }
+//            temp_planeid += ")";
+//            if(_eqmCdtMap.isEmpty())
+//                eqmSql += " where ";
 //            else
-//                temp_planeid += ",'";
-//            temp_planeid += _oisInfoModel->record(i).value("planeid").toString();
-//            temp_planeid += "'";
+//                eqmSql += " and ";
+//            eqmSql += temp_planeid;
+//            qDebug()<<eqmSql;
+//            _eqmInfoModel->setQuery(eqmSql);
+//            setModelHeaderData("EqmInfo");
+//            planeidList.clear();
+//            for(int i =0;i<_eqmInfoModel->rowCount();++i)
+//            {
+//                planeidList.append(_eqmInfoModel->record(i).value("planeid").toString());
+//            }
+//            if(_eqmInfoModel->rowCount() == 0)
+//                this->eqmdelAction->setEnabled(false);
+//            else
+//                this->eqmdelAction->setEnabled(true);
 
-            oilsampleidList.append(_oisInfoModel->record(i).value("oilsampleid").toString());
-        }
+//             动部件信息表
+//            QString mpTableName = tableNames.value("MpInfo");
+//            QString mpSql = generateSql(_mpCdtMap,mpTableName);
+//            _mpInfoModel->setQuery(mpSql);
+//            setModelHeaderData("MpInfo");
+//            for(int i = 0;i<_mpInfoModel->rowCount();++i)
+//            {
+//                movepartidList.append(_mpInfoModel->record(i).value("movepartid").toString());
+//            }
+//            if(_mpInfoModel->rowCount() == 0)
+//                mpdelAction->setEnabled(false);
+//            else
+//                mpdelAction->setEnabled(true);
+        //    qDebug()<<mpSql;
 
-        QStringList teqmidlist = getJoinList(oiseqmidList,mpeqmidList);
-        QString temp_planeid = "planeid IN (";
-        if(teqmidlist.isEmpty())
-            temp_planeid += "''";
-        for(int i=0;i<teqmidlist.size();++i)
-        {
-            if(i== 0)
-                temp_planeid += "'";
-            else
-                temp_planeid += ",'";
-            qDebug()<<teqmidlist[i];
-            temp_planeid += teqmidlist[i];
-            temp_planeid += "'";
-        }
-        temp_planeid += ")";
-        if(_eqmCdtMap.isEmpty())
-            eqmSql += " where ";
-        else
-            eqmSql += " and ";
-        eqmSql += temp_planeid;
-        qDebug()<<eqmSql;
-        _eqmInfoModel->setQuery(eqmSql);
-        setModelHeaderData("EqmInfo");
-        planeidList.clear();
-        for(int i =0;i<_eqmInfoModel->rowCount();++i)
-        {
-            planeidList.append(_eqmInfoModel->record(i).value("planeid").toString());
-        }
-        if(_eqmInfoModel->rowCount() == 0)
-            this->eqmdelAction->setEnabled(false);
-        else
-            this->eqmdelAction->setEnabled(true);
+//            // 动部件维修信息表
+//            QString mprTableName = tableNames.value("MprInfo");
+//            QString mprSql = generateSql(_mprCdtMap,mprTableName);
+//            _mprInfoModel->setQuery(mprSql);
+//            setModelHeaderData("MprInfo");
+//            if(_mprInfoModel->rowCount() == 0)
+//                mprdelAction->setEnabled(false);
+//            else
+//                mprdelAction->setEnabled(true);
+        //    qDebug()<<mprSql;
 
-        // 动部件信息表
-        QString mpTableName = tableNames.value("MpInfo");
-        QString mpSql = generateSql(_mpCdtMap,mpTableName);
-        _mpInfoModel->setQuery(mpSql);
-        setModelHeaderData("MpInfo");
-        for(int i = 0;i<_mpInfoModel->rowCount();++i)
-        {
-            movepartidList.append(_mpInfoModel->record(i).value("movepartid").toString());
-        }
-        if(_mpInfoModel->rowCount() == 0)
-            mpdelAction->setEnabled(false);
-        else
-            mpdelAction->setEnabled(true);
-    //    qDebug()<<mpSql;
+//            // 油样采集信息表
+//            QString oisTableName = tableNames.value("OisInfo");
+//            QString oisSql = generateSql(_oisCdtMap,oisTableName);
+//            _oisInfoModel->setQuery(oisSql);
+//            setModelHeaderData("OisInfo");
+//            oilsampleidList.clear();
+//            for(int i =0;i<_oisInfoModel->rowCount();++i)
+//            {
+//                oilsampleidList.append(_oisInfoModel->record(i).value("oilsampleid").toString());
+//            }
+//            if(_oisInfoModel->rowCount() == 0)
+//                oisdelAction->setEnabled(false);
+//            else
+//                oisdelAction->setEnabled(true);
+                //    qDebug()<<oisSql;
 
-        // 动部件维修信息表
-        QString mprTableName = tableNames.value("MprInfo");
-        QString mprSql = generateSql(_mprCdtMap,mprTableName);
-        _mprInfoModel->setQuery(mprSql);
-        setModelHeaderData("MprInfo");
-        if(_mprInfoModel->rowCount() == 0)
-            mprdelAction->setEnabled(false);
-        else
-            mprdelAction->setEnabled(true);
-    //    qDebug()<<mprSql;
+//            // 油样检测分析信息表
+//            QString oiaTableName = tableNames.value("OiaInfo");
+//            QString oiaSql = generateSql(_oiaCdtMap,oiaTableName);
+//            _oiaInfoModel->setQuery(oiaSql);
+//            setModelHeaderData("OiaInfo");
+//            if(_oiaInfoModel->rowCount() == 0)
+//                oiadelAction->setEnabled(false);
+//            else
+//                oiadelAction->setEnabled(true);
+        //    qDebug()<<oiaSql;
 
-        // 油样采集信息表
-        QString oisTableName = tableNames.value("OisInfo");
-        QString oisSql = generateSql(_oisCdtMap,oisTableName);
-        _oisInfoModel->setQuery(oisSql);
-        setModelHeaderData("OisInfo");
-        oilsampleidList.clear();
-        for(int i =0;i<_oisInfoModel->rowCount();++i)
-        {
-            oilsampleidList.append(_oisInfoModel->record(i).value("oilsampleid").toString());
-        }
-        if(_oisInfoModel->rowCount() == 0)
-            oisdelAction->setEnabled(false);
-        else
-            oisdelAction->setEnabled(true);
-            //    qDebug()<<oisSql;
+            // 铁谱质谱信息表
+//            QString fegTableName = tableNames.value("FegInfo");
+//            QString fegSql = generateSql(_fegCdtMap,fegTableName);
+//            _fegInfoModel->setQuery(fegSql);
+//            setModelHeaderData("FegInfo");
+//        //    qDebug()<<fegSql;
+//            if(_fegInfoModel->rowCount() == 0)
+//                fegdelAction->setEnabled(false);
+//            else
+//                fegdelAction->setEnabled(true);
+//            ferrographysheetidList.clear();
+//            for(int i = 0;i<_fegInfoModel->rowCount();++i)
+//            {
+//                ferrographysheetidList.append(_fegInfoModel->record(i).value("ferrographysheetid").toString());
+//            }
 
-        // 油样检测分析信息表
-        QString oiaTableName = tableNames.value("OiaInfo");
-        QString oiaSql = generateSql(_oiaCdtMap,oiaTableName);
-        _oiaInfoModel->setQuery(oiaSql);
-        setModelHeaderData("OiaInfo");
-        if(_oiaInfoModel->rowCount() == 0)
-            oiadelAction->setEnabled(false);
-        else
-            oiadelAction->setEnabled(true);
-    //    qDebug()<<oiaSql;
+//            // 铁谱图片采集信息表
+//            QString fegpTableName = tableNames.value("FegPInfo");
+//            QString fegpSql = generateSql(_fegpCdtMap,fegpTableName);
+//            _fegpInfoModel->setQuery(fegpSql);
+//            _fegpInfoModel->removeColumn(12);
+//            setModelHeaderData("FegPInfo");
+//            if(_fegpInfoModel->rowCount() == 0)
+//                fegpdelAction->setEnabled(false);
+//            else
+//                fegpdelAction->setEnabled(true);
+        //    qDebug()<<fegpSql;
+//            ferrographypicidList.clear();
+//            ferrographypicpathList.clear();
+//            for(int i = 0;i<_fegpInfoModel->rowCount();++i)
+//            {
+//                ferrographypicidList.append(_fegpInfoModel->record(i).value("ferrographypicid").toString());
+//                ferrographypicpathList.append(_fegpInfoModel->record(i).value("ferrographypicpath").toString());
+//            }
 
-        // 铁谱质谱信息表
-        QString fegTableName = tableNames.value("FegInfo");
-        QString fegSql = generateSql(_fegCdtMap,fegTableName);
-        _fegInfoModel->setQuery(fegSql);
-        setModelHeaderData("FegInfo");
-    //    qDebug()<<fegSql;
-        if(_fegInfoModel->rowCount() == 0)
-            fegdelAction->setEnabled(false);
-        else
-            fegdelAction->setEnabled(true);
-        ferrographysheetidList.clear();
-        for(int i = 0;i<_fegInfoModel->rowCount();++i)
-        {
-            ferrographysheetidList.append(_fegInfoModel->record(i).value("ferrographysheetid").toString());
-        }
+//            // 磨粒标注信息表
+//            QString abmTableName = tableNames.value("AbmInfo");
+//            QString abmSql = generateSql(_abmCdtMap,abmTableName);
+//            _abmInfoModel->setQuery(abmSql);
+//            for(int i=18;i<24;++i)
+//                _abmInfoModel->removeColumn(18);
 
-        // 铁谱图片采集信息表
-        QString fegpTableName = tableNames.value("FegPInfo");
-        QString fegpSql = generateSql(_fegpCdtMap,fegpTableName);
-        _fegpInfoModel->setQuery(fegpSql);
-        _fegpInfoModel->removeColumn(12);
-        setModelHeaderData("FegPInfo");
-        if(_fegpInfoModel->rowCount() == 0)
-            fegpdelAction->setEnabled(false);
-        else
-            fegpdelAction->setEnabled(true);
-    //    qDebug()<<fegpSql;
-        ferrographypicidList.clear();
-        ferrographypicpathList.clear();
-        for(int i = 0;i<_fegpInfoModel->rowCount();++i)
-        {
-            ferrographypicidList.append(_fegpInfoModel->record(i).value("ferrographypicid").toString());
-            ferrographypicpathList.append(_fegpInfoModel->record(i).value("ferrographypicpath").toString());
-        }
+//            setModelHeaderData("AbmInfo");
+//        //    qDebug()<<abmSql;
+//            if(_abmInfoModel->rowCount() == 0)
+//                abmdelAction->setEnabled(false);
+//            else
+//                abmdelAction->setEnabled(true);
 
-        // 磨粒标注信息表
-        QString abmTableName = tableNames.value("AbmInfo");
-        QString abmSql = generateSql(_abmCdtMap,abmTableName);
-        _abmInfoModel->setQuery(abmSql);
-        for(int i=18;i<24;++i)
-            _abmInfoModel->removeColumn(18);
+//        }
 
-        setModelHeaderData("AbmInfo");
-    //    qDebug()<<abmSql;
-        if(_abmInfoModel->rowCount() == 0)
-            abmdelAction->setEnabled(false);
-        else
-            abmdelAction->setEnabled(true);
-
+        emit showqueryThumbnails(ferrographypicpathList);
     }
-
-
-
-    emit showqueryThumbnails(ferrographypicpathList);
+    // 所有条件均为空时，显示所有的数据。
 }
 
 QStringList AdvanceSearchDlg::getJoinList(QStringList list1, QStringList list2)
