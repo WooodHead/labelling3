@@ -26,7 +26,7 @@
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;查询&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tabImage">
       <property name="toolTip">
@@ -67,22 +67,13 @@
           </property>
           <layout class="QGridLayout" name="gridLayout_2">
            <item row="0" column="0">
-            <widget class="QTableWidget" name="tableWidget">
-             <column>
-              <property name="text">
-               <string>缩略图</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>铁谱图片路径</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>是否标注</string>
-              </property>
-             </column>
+            <widget class="QListWidget" name="_listWidget">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="horizontalScrollBarPolicy">
+              <enum>Qt::ScrollBarAsNeeded</enum>
+             </property>
             </widget>
            </item>
           </layout>
@@ -120,61 +111,14 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tabClass">
-      <attribute name="title">
-       <string>分类</string>
-      </attribute>
-      <widget class="QScrollArea" name="scrollAreaClass">
-       <property name="geometry">
-        <rect>
-         <x>-20</x>
-         <y>0</y>
-         <width>271</width>
-         <height>451</height>
-        </rect>
-       </property>
-       <property name="widgetResizable">
-        <bool>true</bool>
-       </property>
-       <widget class="QWidget" name="scrollAreaClassWidgetContents">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>269</width>
-          <height>449</height>
-         </rect>
-        </property>
-        <widget class="QTreeView" name="treeViewTabClass">
-         <property name="geometry">
-          <rect>
-           <x>-20</x>
-           <y>0</y>
-           <width>291</width>
-           <height>451</height>
-          </rect>
-         </property>
-         <property name="midLineWidth">
-          <number>1</number>
-         </property>
-         <property name="tabKeyNavigation">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </widget>
-      </widget>
-     </widget>
     </widget>
    </item>
   </layout>
  </widget>
  <tabstops>
-  <tabstop>tableWidget</tabstop>
   <tabstop>scrollAreaSearch</tabstop>
   <tabstop>scrollArea</tabstop>
   <tabstop>tabWidgetLeftWindow</tabstop>
-  <tabstop>scrollAreaClass</tabstop>
-  <tabstop>treeViewTabClass</tabstop>
  </tabstops>
  <resources/>
  <connections/>

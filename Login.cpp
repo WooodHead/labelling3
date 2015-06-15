@@ -49,8 +49,8 @@ Login::Login(QWidget *parent) :
     ui->_labelMainTitle->setAttribute(Qt::WA_TranslucentBackground);
     ui->_labelUserName->setAttribute(Qt::WA_TranslucentBackground);
     ui->_labelPasswd->setAttribute(Qt::WA_TranslucentBackground);
-//    ui->_icon->setAttribute(Qt::WA_TranslucentBackground);
-//    ui->_icon_2->setAttribute(Qt::WA_TranslucentBackground);
+    //    ui->_icon->setAttribute(Qt::WA_TranslucentBackground);
+    //    ui->_icon_2->setAttribute(Qt::WA_TranslucentBackground);
     ui->centralStackedWidget->setAttribute(Qt::WA_TranslucentBackground);
     ui->centralStackedWidgetPage1->setAttribute(Qt::WA_TranslucentBackground);
     ui->centralStackedWidgetPage2->setAttribute(Qt::WA_TranslucentBackground);
@@ -175,12 +175,10 @@ void Login::login()
         return;
     }
 
-    QString sql = "select * from user where name = ? and passwd = ?";
+    QString sql = QString("select * from user where name = '%1' and passwd = '%2' limit 1").arg(_username).arg(_passwd);
 
     QSqlQuery query;
     query.prepare(sql);
-    query.bindValue(0, _username);
-    query.bindValue(1, _passwd);
 
     if(query.exec())
     {
@@ -193,16 +191,13 @@ void Login::login()
             db.close();
             return;
         }
-        else
+        else if(query.next())
         {
-            if(query.next())
-            {
-                int no1 = query.record().indexOf("authority");
-                _authority = query.value(no1).toString();
+            int no1 = query.record().indexOf("authority");
+            _authority = query.value(no1).toString();
 
-                db.close();
-                return getDataForMainform();
-            }
+            db.close();
+            return getDataForMainform();
         }
     }
     else  {

@@ -1,6 +1,7 @@
 #include "MoliProperties.h"
 #include "ui_MoliProperties.h"
 
+#include <QPixmapCache>
 #include <opencv2/opencv.hpp>
 
 MoliProperties::MoliProperties(QWidget *parent) :
@@ -112,6 +113,8 @@ MoliProperties::~MoliProperties()
         delete Global::Awesome;
         Global::Awesome = 0;
     }
+
+    QPixmapCache::clear();
 }
 
 void MoliProperties::on_pushButton_2_clicked()
@@ -338,8 +341,6 @@ void MoliProperties::on_pushButton_clicked()
 
                 QMessageBox::information(this, tr("提示"), tr("保存成功!"), QMessageBox::Close);
                 close();
-
-//                emit next();
             }
         }
     }
@@ -384,31 +385,31 @@ void MoliProperties::showDlg(QString imagePath, const QImage* result, const QIma
         ui->_comboBoxMoliGivenInfo->setEditText(record.value("abrasivefaultinformationreflection").toString());
         ui->_comboBoxMoliTypical->setEditText(record.value("abrasivetypical").toString());
 
-        QPixmap image1, image2, image3;
-        image1.loadFromData(record.value("abrasivePictureData").toByteArray());
-        ui->_labelOriginalImage->setPixmap(image1);
+//        QPixmap image1, image2, image3;
+//        image1.loadFromData(record.value("abrasivePictureData").toByteArray());
+//        ui->_labelOriginalImage->setPixmap(image1);
 
         if(!_result.isNull())
         {
-            ui->_labelResultImage->setPixmap(QPixmap::fromImage(_result));
+//            ui->_labelResultImage->setPixmap(QPixmap::fromImage(_result));
             computeMoliInfo( imageScale, perimeter, maxHeight, maxWidth);
             ui->_editMoliLength->setText(QString::number(perimeter));
             ui->_editMoliSize->setText(QString("%1 x %2").arg(maxWidth).arg(maxHeight));
         }
         else
         {
-            image2.loadFromData(record.value("abrasiveResultData").toByteArray());
-            ui->_labelResultImage->setPixmap(image2);
+//            image2.loadFromData(record.value("abrasiveResultData").toByteArray());
+//            ui->_labelResultImage->setPixmap(image2);
         }
 
         if(!_mask.isNull())
         {
-            ui->_labelMaskImage->setPixmap(QPixmap::fromImage(_mask));
+//            ui->_labelMaskImage->setPixmap(QPixmap::fromImage(_mask));
         }
         else
         {
-            image3.loadFromData(record.value("abrasiveMaskData").toByteArray());
-            ui->_labelMaskImage->setPixmap(image3);
+//            image3.loadFromData(record.value("abrasiveMaskData").toByteArray());
+//            ui->_labelMaskImage->setPixmap(image3);
         }
 
         show();
@@ -427,10 +428,10 @@ void MoliProperties::showDlg(QString imagePath, const QImage* result, const QIma
             ui->_comboBoxMoliImageID->setEditText(record.value("ferrographypicid").toString());
             ui->_comboBoxMoliPianID->setEditText(record.value("ferrographysheetid").toString());
 
-            ui->_labelOriginalImage->setPixmap(QPixmap(imagePath));
+//            ui->_labelOriginalImage->setPixmap(QPixmap(imagePath));
 
-            if(result) ui->_labelResultImage->setPixmap(QPixmap::fromImage(_result));
-            if(mask) ui->_labelMaskImage->setPixmap(QPixmap::fromImage(_mask));
+//            if(result) ui->_labelResultImage->setPixmap(QPixmap::fromImage(_result));
+//            if(mask) ui->_labelMaskImage->setPixmap(QPixmap::fromImage(_mask));
 
             computeMoliInfo( imageScale, perimeter, maxHeight, maxWidth);
 

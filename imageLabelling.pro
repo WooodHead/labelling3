@@ -1,5 +1,7 @@
 QT += sql
 
+
+
 HEADERS += \
     ImageOperate.h \
     CImg.h \
@@ -26,7 +28,9 @@ HEADERS += \
     Util/def.h \
     ImagePropertiesEditor.h \
     About.h \
-    CheckProperties.h
+    CheckProperties.h \
+    TreeModel.h \
+    TreeItem.h
 
 
 SOURCES += \
@@ -53,7 +57,9 @@ SOURCES += \
     UserManagement.cpp \
     ImagePropertiesEditor.cpp \
     About.cpp \
-    CheckProperties.cpp
+    CheckProperties.cpp \
+    TreeModel.cpp \
+    TreeItem.cpp
 
 
 FORMS += \

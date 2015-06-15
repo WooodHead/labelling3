@@ -40,7 +40,7 @@
     <item row="7" column="4">
      <widget class="QLabel" name="_labelResultImage">
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#aa5500;&quot;&gt;未标注&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
     </item>
@@ -99,7 +99,7 @@
     <item row="7" column="5">
      <widget class="QLabel" name="label_131">
       <property name="text">
-       <string>掩码图像</string>
+       <string/>
       </property>
      </widget>
     </item>
@@ -171,7 +171,7 @@
     <item row="7" column="0" colspan="2">
      <widget class="QLabel" name="label_129">
       <property name="text">
-       <string>原始图像</string>
+       <string/>
       </property>
      </widget>
     </item>
@@ -185,7 +185,7 @@
     <item row="7" column="3">
      <widget class="QLabel" name="label_130">
       <property name="text">
-       <string>标注结果</string>
+       <string/>
       </property>
      </widget>
     </item>
@@ -199,7 +199,7 @@
     <item row="7" column="6">
      <widget class="QLabel" name="_labelMaskImage">
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#aa5500;&quot;&gt;未标注&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
     </item>

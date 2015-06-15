@@ -256,9 +256,9 @@ bool ImageViewer::saveLabelledResult(QString path, QString ext)
     bool ret2 = temp->save(path2, ext.toUtf8().constData());
     DELETEPTR(temp);
 
-    cvReleaseImage(&cv_result_display);
-    cvReleaseImage(&scaled);
-    cvReleaseImage(&cv_result_save);
+    cvReleaseImage(&cv_result_display); cv_result_display = NULL;
+    cvReleaseImage(&scaled); scaled = NULL;
+    cvReleaseImage(&cv_result_save); cv_result_save = NULL;
 
     return ret1 && ret2;
 }
@@ -857,9 +857,9 @@ void ImageViewer::drawAllMoli(QList<QByteArray> list)
         QImage* temp2 = IplImageToQImage(cv_target);
         temp = *temp2;
 
-        cvReleaseImage(&cv_image);
-        cvReleaseImage(&cv_target);
-        if(temp2) delete temp2;
+        cvReleaseImage(&cv_image); cv_image = NULL;
+        cvReleaseImage(&cv_target); cv_target = NULL;
+        if(temp2) { delete temp2; temp2 = NULL;}
 
         for(int h = 0; h < temp.height(); h++)
         {
@@ -980,7 +980,6 @@ void ImageViewer::polygonLabelling()
     DELETEPTR(_result_display);
     _result_display = setMaskMap(_ocvImage, temp);
     setImage(*_result_display);
-
 
     lastPos = QPoint(-1, -1);
     QApplication::restoreOverrideCursor();

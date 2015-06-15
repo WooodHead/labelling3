@@ -5,6 +5,9 @@
 #include <QTextCodec>
 #include <QDebug>
 #include <QImageReader>
+#include <QTreeView>
+
+#include "TreeModel.h"
 
 #include "imagecompletionui.h"
 #include "Login.h"
@@ -21,6 +24,7 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForLocale(codec);
     QTextCodec::setCodecForCStrings(codec);
     QTextCodec::setCodecForTr(codec);
+
 
     Global::initialize();
 
