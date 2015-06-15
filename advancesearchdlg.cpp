@@ -1784,7 +1784,7 @@ void AdvanceSearchDlg::query()
         qDebug()<<fegpSql;
     }
 
-    if(_fegpInfoModel->rowCount() != 0)
+    if(_fegpInfoModel->rowCount() != 0 )
     {
         ferrographypicidList.clear();
         ferrographypicpathList.clear();
