@@ -41,8 +41,6 @@ void ImagePropertiesEditor::showDlg()
     }
 
     exec();
-
-    db.close();
 }
 
 void ImagePropertiesEditor::initialize()
@@ -240,7 +238,6 @@ void ImagePropertiesEditor::on__buttonCancel_3_clicked()
 
 void ImagePropertiesEditor::on__buttonSave_3_clicked()
 {
-    QSqlRecord record;
     QString tables[] = {"equipmentinfo", "movepartinfo", "movepartrepairinfo", "oilsampleinfo", "oilanalyzeinfo", "ferrographyinfo", "ferrographypicinfo", "abrasivemarkinfo", "sampleSummaryInfo"};
 
     QSqlDatabase db;

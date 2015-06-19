@@ -28,6 +28,11 @@ void TreeModel::release()
         delete _rootItem;
         _rootItem=NULL;
     }
+    QList<QVariant> rootData;
+    rootData << tr("列表");
+    _rootItem = new TreeItem(rootData);
+
+    reset();
 }
 
 void TreeModel::updateData()

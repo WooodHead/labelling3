@@ -702,7 +702,10 @@ void ImageCompletionUI::checkProperties()
 
     _imageScale = _regionCompetitionDialog._spinBox_measure->value() * 1.0 / _regionCompetitionDialog._spinBox_pixel->value();
     _imageScale *= _editImageViewer->orgWidth() * _editImageViewer->orgHeight() * 1.0 / _editImageViewer->width() / _editImageViewer->height();
-    (new CheckProperties(this))->showDlg(_strCurrentImagePath, result, result2, mask, _imageScale );
+
+    CheckProperties *dlg = new CheckProperties(this);
+    dlg->showDlg(_strCurrentImagePath, result, result2, mask, _imageScale );
+    DELETEPTR(dlg);
 }
 
 void ImageCompletionUI::syncFilePathStr(QString strFilePath)
@@ -2541,6 +2544,10 @@ void ImageCompletionUI::clearAll()
 
     // leftTree
     _treeModel.release();
+
+    // central
+    close();
+    clearLayout(_formLayout);
 }
 
 void ImageCompletionUI::removeImageSlot(QString path)

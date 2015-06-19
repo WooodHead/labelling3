@@ -228,7 +228,6 @@ QStringList ImageProperties::getSamplePoint(QString fieldName, QString whereFiel
             if(!value.isEmpty() && !list.contains(value)) list << value;
         }
         model->deleteLater();
-        db.close();
     }
 
     return list;
