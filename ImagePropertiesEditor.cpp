@@ -36,9 +36,13 @@ void ImagePropertiesEditor::showDlg()
     }
 
     if(_primaryKeyValue == "NEW")
+    {
         ui->comboBox_88->setEnabled(true);
+    }
 
-    show();
+    exec();
+
+    db.close();
 }
 
 void ImagePropertiesEditor::initialize()

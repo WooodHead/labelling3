@@ -1,5 +1,6 @@
 #include "MoliProperties.h"
 #include "ui_MoliProperties.h"
+#include "def.h"
 
 #include <QPixmapCache>
 #include <opencv2/opencv.hpp>
@@ -28,9 +29,7 @@ MoliProperties::MoliProperties(QWidget *parent) :
 
     if(!Global::createConnection(_db))
     {
-        QMessageBox::critical(0, qApp->tr("提示"),
-                              qApp->tr("数据库连接失败!"),
-                              QMessageBox::Cancel);
+        QMessageBox::critical(0, tr("提示"), tr("数据库连接失败!"), QMessageBox::Cancel);
         return;
     }
 
@@ -107,13 +106,7 @@ MoliProperties::~MoliProperties()
     delete ui;
 
     _db.close();
-    delete _model;
-    if(Global::Awesome)
-    {
-        delete Global::Awesome;
-        Global::Awesome = 0;
-    }
-
+    DELETEPTR( _model);
     QPixmapCache::clear();
 }
 
@@ -412,7 +405,7 @@ void MoliProperties::showDlg(QString imagePath, const QImage* result, const QIma
 //            ui->_labelMaskImage->setPixmap(image3);
         }
 
-        show();
+        exec();
     }
     else
     {
@@ -438,7 +431,7 @@ void MoliProperties::showDlg(QString imagePath, const QImage* result, const QIma
             ui->_editMoliLength->setText(QString::number(perimeter));
             ui->_editMoliSize->setText(QString("%1 x %2").arg(maxWidth).arg(maxHeight));
 
-            show();
+            exec();
         }
         else
         {

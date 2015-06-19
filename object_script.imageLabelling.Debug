@@ -22,6 +22,9 @@ INPUT(
 ./debug\UserManagement.o
 ./debug\ImagePropertiesEditor.o
 ./debug\About.o
+./debug\CheckProperties.o
+./debug\TreeModel.o
+./debug\TreeItem.o
 ./debug\QtAwesome.o
 ./debug\moc_PaintTools.o
 ./debug\moc_ImageViewer.o
@@ -41,6 +44,8 @@ INPUT(
 ./debug\moc_advancesearchdlg.o
 ./debug\moc_ImagePropertiesEditor.o
 ./debug\moc_About.o
+./debug\moc_CheckProperties.o
+./debug\moc_TreeModel.o
 ./debug\moc_QtAwesome.o
 ./debug\qrc_ImageCompletion.o
 ./debug\qrc_QtAwesome.o
