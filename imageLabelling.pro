@@ -114,4 +114,5 @@ include(QtAwesome/QtAwesome.pri)
 
 QMAKE_CXXFLAGS += -Wno-unused-parameter
 QMAKE_CXXFLAGS += -Wno-unused-variable
+QMAKE_CXXFLAGS_RELEASE += -O2
 
