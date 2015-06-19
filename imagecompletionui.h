@@ -245,7 +245,7 @@ private slots:
 private:
     Searchdata          *searchdata1;
     AdvanceSearchDlg    *_advanceSearchDlg;
-    UserManagement      *userMangementDlg;
+    UserManagement      *_userMangementDlg;
     classification      class1;
 
     QString             _strCurrentImagePath;

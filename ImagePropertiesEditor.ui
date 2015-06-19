@@ -26,33 +26,69 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>8</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab_19">
     <attribute name="title">
      <string>装备信息</string>
     </attribute>
-    <widget class="QWidget" name="layoutWidget_10">
+    <widget class="QWidget" name="">
      <property name="geometry">
       <rect>
-       <x>0</x>
-       <y>30</y>
-       <width>562</width>
-       <height>62</height>
+       <x>3</x>
+       <y>37</y>
+       <width>529</width>
+       <height>48</height>
       </rect>
      </property>
-     <layout class="QGridLayout" name="gridLayout_19">
-      <item row="1" column="6">
-       <widget class="QLabel" name="label_245">
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_249">
         <property name="text">
-         <string>维修次数</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;机号&lt;/span&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="7">
-       <widget class="QLineEdit" name="_editServiceNumber_3"/>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="_comboBoxEquipPlaneID_3">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
-      <item row="0" column="6">
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_250">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;机型&lt;span style=&quot; color:#ff0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QComboBox" name="_comboBoxEquipPlaneType_3">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
        <widget class="QLabel" name="label_246">
         <property name="text">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;单位编号&lt;span style=&quot; color:#ff0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -60,70 +96,72 @@
        </widget>
       </item>
       <item row="0" column="5">
-       <widget class="QComboBox" name="_comboBoxEquipPlaneType_3">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="editable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="7">
        <widget class="QComboBox" name="_comboBoxEquipUnitID_3">
         <property name="enabled">
          <bool>false</bool>
         </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="editable">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="1" column="0" colspan="2">
+      <item row="1" column="0">
        <widget class="QLabel" name="label_247">
         <property name="text">
          <string>飞行小时数</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="5">
-       <widget class="QComboBox" name="_comboBoxEquipRuntime_3">
-        <property name="editable">
-         <bool>true</bool>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="_editEquipHours_3">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
        </widget>
       </item>
-      <item row="1" column="3" colspan="2">
+      <item row="1" column="2">
        <widget class="QLabel" name="label_248">
         <property name="text">
          <string>运行阶段</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
-       <widget class="QLineEdit" name="_editEquipHours_3"/>
-      </item>
-      <item row="0" column="2">
-       <widget class="QComboBox" name="_comboBoxEquipPlaneID_3">
-        <property name="enabled">
-         <bool>false</bool>
+      <item row="1" column="3">
+       <widget class="QComboBox" name="_comboBoxEquipRuntime_3">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
         <property name="editable">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="0" column="0" colspan="2">
-       <widget class="QLabel" name="label_249">
+      <item row="1" column="4">
+       <widget class="QLabel" name="label_245">
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;机号&lt;/span&gt;&lt;span style=&quot; color:#ff0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>维修次数</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="3" colspan="2">
-       <widget class="QLabel" name="label_250">
-        <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;机型&lt;span style=&quot; color:#ff0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <item row="1" column="5">
+       <widget class="QLineEdit" name="_editServiceNumber_3">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
        </widget>
       </item>

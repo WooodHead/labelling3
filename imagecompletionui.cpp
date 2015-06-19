@@ -686,7 +686,10 @@ void ImageCompletionUI::editProperties()
 
     _imageScale = _regionCompetitionDialog._spinBox_measure->value() * 1.0 / _regionCompetitionDialog._spinBox_pixel->value();
     _imageScale *= _editImageViewer->orgWidth() * _editImageViewer->orgHeight() * 1.0 / _editImageViewer->width() / _editImageViewer->height();
-    (new MoliProperties(this))->showDlg(_strCurrentImagePath, result, result2, mask, _imageScale );
+
+    MoliProperties* dlg = new MoliProperties(this);
+    dlg->showDlg(_strCurrentImagePath, result, result2, mask, _imageScale );
+    DELETEPTR(dlg);
 }
 
 void ImageCompletionUI::checkProperties()
@@ -804,7 +807,9 @@ void ImageCompletionUI::openImage(QString strFilePath)
                                                                      QMessageBox::Ok | QMessageBox::Cancel);
         if(QMessageBox::Ok == reply)
         {
-            (new ImageProperties(this))->showDlg( strFilePath );
+            ImageProperties* dlg = new ImageProperties(this);
+            dlg->showDlg(strFilePath);
+            DELETEPTR(dlg);
         }
         else
         {
@@ -1122,10 +1127,14 @@ void	ImageCompletionUI::search()
 
 void  ImageCompletionUI::addtosql()
 {
-    //    class1.show();
     _advanceSearchDlg = new AdvanceSearchDlg(this,true);
-    //    _advanceSearchDlg->setDeleteFlag(true);
-    _advanceSearchDlg->show();
+    _advanceSearchDlg->exec();
+
+    if(_advanceSearchDlg)
+    {
+        delete _advanceSearchDlg;
+        _advanceSearchDlg = 0;
+    }
 }
 
 void ImageCompletionUI::updateLog()
@@ -1143,10 +1152,7 @@ void ImageCompletionUI::updateLog()
     }
 
     // Maybe bug here
-    if(log_str)
-    {
-        DELETEPTR(log_str);
-    }
+    DELETEPTR(log_str);
 }
 
 void ImageCompletionUI::updateStatusBar()
@@ -1427,6 +1433,8 @@ void ImageCompletionUI::selectColor()
     QPixmap pixmap(30,30);
     pixmap.fill(_editImageViewer->getLineColor());
     _regionCompetitionDialog.labelCurrentColor->setPixmap(pixmap);
+
+    DELETEPTR(colorDlg);
 }
 
 void ImageCompletionUI::scaling()
@@ -1493,9 +1501,11 @@ void ImageCompletionUI::actionSliderReleased()
 
 void ImageCompletionUI::userManagement()
 {
-    userMangementDlg = new UserManagement(this);
-    userMangementDlg->setWindowFlags(userMangementDlg->windowFlags() & ~Qt::WindowMinimizeButtonHint &  ~Qt::WindowMaximizeButtonHint);
-    userMangementDlg->show();
+    _userMangementDlg = new UserManagement(this);
+    _userMangementDlg->setWindowFlags(_userMangementDlg->windowFlags() & ~Qt::WindowMinimizeButtonHint &  ~Qt::WindowMaximizeButtonHint);
+    _userMangementDlg->exec();
+
+    DELETEPTR(_userMangementDlg);
 }
 
 void ImageCompletionUI::updateLineThickness()
@@ -1981,7 +1991,7 @@ void ImageCompletionUI::importData()
             }
         }
     }
-    delete impdlg;
+    DELETEPTR(impdlg);
 }
 
 void ImageCompletionUI::exportData()
@@ -2012,7 +2022,7 @@ void ImageCompletionUI::exportData()
         else
             QMessageBox::warning(this,tr("批量数据导出提示"),tr("批量数据导出失败"),QMessageBox::Close);
     }
-    delete expDlg;
+    DELETEPTR(expDlg);
 }
 
 void ImageCompletionUI::setExpPath(QString sourcePicPath, QString resultPicPath, QString maskPicPath, QString packgePath)
@@ -2437,6 +2447,7 @@ void ImageCompletionUI::editImageProperties()
 
     ImagePropertiesEditor* d = new ImagePropertiesEditor(this, index, primaryKeyValue);
     d->showDlg();
+    DELETEPTR(d);
 }
 
 void ImageCompletionUI::addSamplePoint()
@@ -2446,6 +2457,7 @@ void ImageCompletionUI::addSamplePoint()
 
     ImagePropertiesEditor* d = new ImagePropertiesEditor(this, index, primaryKeyValue);
     d->showDlg();
+    DELETEPTR(d);
 }
 
 void ImageCompletionUI::deleteSamplePoint()
@@ -2464,6 +2476,7 @@ void ImageCompletionUI::deleteSamplePoint()
             _bottomWindow.dBTableWidget_9->removeRow(_bottomWindow.dBTableWidget_9->currentRow());
         }
     }
+    db.close();
 }
 
 void ImageCompletionUI::nextImage()
@@ -2674,8 +2687,9 @@ void ImageCompletionUI::on__spinBox_pixel_valueChanged(int arg1)
 
 void ImageCompletionUI::about()
 {
-
-    (new About)->show();
+    About* about = new About;
+    about->setAttribute(Qt::WA_DeleteOnClose, true);
+    about->show();
 }
 
 void ImageCompletionUI::showDoc(){}

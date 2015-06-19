@@ -213,7 +213,6 @@ QStringList ImageProperties::getItems(QSqlTableModel *model, QString fieldName)
 QStringList ImageProperties::getSamplePoint(QString fieldName, QString whereField, QString whereValue)
 {
     QStringList list;
-//    list << "";
     QSqlDatabase db;
     if(Global::createConnection(db))
     {
@@ -229,6 +228,7 @@ QStringList ImageProperties::getSamplePoint(QString fieldName, QString whereFiel
             if(!value.isEmpty() && !list.contains(value)) list << value;
         }
         model->deleteLater();
+        db.close();
     }
 
     return list;
@@ -598,18 +598,12 @@ bool ImageProperties::isValid(int index)
 
 void ImageProperties::showDlg(QString filename)
 {
-    show();
-
     ui->_editMoliPath->setText(filename);
     ui->_editMentalSamplePath->setText(filename);
 
     _originalImagePath = filename;
-//    QPixmap image;
-//    if(image.load(_originalImagePath))
-//    {
-//        ui->_labelOriginalImage_2->setPixmap(image);
-//        ui->_labelOriginalImage_2->setScaledContents(true);
-//    }
+
+    exec();
 }
 
 void ImageProperties::on__buttonSave_clicked()
@@ -919,6 +913,7 @@ void ImageProperties::on__buttonSave_clicked()
                         ui->_comboBoxMentalSampleImageID->setFocus();
                         return;
                     }
+                    DELETEPTR(dlg);
                 }
                 else if(r == QMessageBox::Cancel)
                 {

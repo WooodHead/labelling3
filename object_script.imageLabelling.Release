@@ -22,6 +22,9 @@ INPUT(
 ./release\UserManagement.o
 ./release\ImagePropertiesEditor.o
 ./release\About.o
+./release\CheckProperties.o
+./release\TreeModel.o
+./release\TreeItem.o
 ./release\QtAwesome.o
 ./release\moc_PaintTools.o
 ./release\moc_ImageViewer.o
@@ -41,6 +44,8 @@ INPUT(
 ./release\moc_advancesearchdlg.o
 ./release\moc_ImagePropertiesEditor.o
 ./release\moc_About.o
+./release\moc_CheckProperties.o
+./release\moc_TreeModel.o
 ./release\moc_QtAwesome.o
 ./release\qrc_ImageCompletion.o
 ./release\qrc_QtAwesome.o
