@@ -428,6 +428,15 @@ private:
 
      bool deletefromtable(QStringList idList,QString tablename, QStringList path = QStringList());
 
+     bool delete_eqm(QStringList eqmidList);    // delete equipment
+     bool delete_mp(QStringList mpidList);      // delete move part
+     bool delete_mpr(QStringList mpridList);    // delete move part repair
+     bool delete_ois(QStringList oisidList);    // delete oil sample
+     bool delete_oia(QStringList oiaidList);    // delete oil anaylize
+     bool delete_feg(QStringList fegidList);    // delete feg
+     bool delete_fegp(QStringList fegpidList);  // delete fegp
+     bool delete_abm(QStringList abmidList);     // delete abm
+
 private slots:
      void useproperty();
      void deleteproperty();

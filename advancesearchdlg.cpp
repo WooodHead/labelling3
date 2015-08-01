@@ -6151,116 +6151,108 @@ void AdvanceSearchDlg::deletedata()
     case 0:
     {
         QItemSelectionModel *selections = ui->eqmTableView->selectionModel();
-//        QModelIndexList selected = selections->selectedIndexes();
         QModelIndexList selected = selections->selectedRows();
         if(selected.isEmpty())
         {
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
-//        delete selections;
         break;
     }
+    // mp
     case 1:
     {
         QItemSelectionModel *selections = ui->mpTableView->selectionModel();
-//        QModelIndexList selected = selections->selectedIndexes();
         QModelIndexList selected = selections->selectedRows();
         if(selected.isEmpty())
         {
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
-//        delete selections;
         break;
     }
+    // mpr
     case 2:
     {
         QItemSelectionModel *selections = ui->mprTableView->selectionModel();
-//        QModelIndexList selected = selections->selectedIndexes();
         QModelIndexList selected = selections->selectedRows();
         if(selected.isEmpty())
         {
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
-//        delete selections;
         break;
     }
+    // oia
     case 3:
     {
         QItemSelectionModel *selections = ui->oiaTableView->selectionModel();
-//        QModelIndexList selected = selections->selectedIndexes();
         QModelIndexList selected = selections->selectedRows();
         if(selected.isEmpty())
         {
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
-//        delete selections;
         break;
     }
+    // ois
     case 4:
     {
         QItemSelectionModel *selections = ui->oisTableView->selectionModel();
-//        QModelIndexList selected = selections->selectedIndexes();
         QModelIndexList selected = selections->selectedRows();
         if(selected.isEmpty())
         {
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
-//        delete selections;
         break;
     }
+    // feg
     case 5:
     {
         QItemSelectionModel *selections = ui->fegTableView->selectionModel();
-//        QModelIndexList selected = selections->selectedIndexes();
         QModelIndexList selected = selections->selectedRows();
         if(selected.isEmpty())
         {
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
-//        delete selections;
         break;
     }
+    // fegp
     case 6:
     {
         QItemSelectionModel *selections = ui->fegpTableView->selectionModel();
-//        QModelIndexList selected = selections->selectedIndexes();
         QModelIndexList selected = selections->selectedRows();
         if(selected.isEmpty())
         {
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
-//        delete selections;
         break;
     }
+    // abm
     case 7:
     {
         QItemSelectionModel *selections = ui->abmTableView->selectionModel();
-//        QModelIndexList selected = selections->selectedIndexes();
         QModelIndexList selected = selections->selectedRows();
         if(selected.isEmpty())
         {
             QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
             return;
         }
-//        delete selections;
         break;
     }
     }
 
+    // get user reply
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(this, tr("QMessageBox::question()"), tr("是否删除当前选中记录及相关数据?"),
                                   QMessageBox::Yes | QMessageBox::Cancel);
 
     if(reply == QMessageBox::Yes)
     {
-//        int tabidx = ui->queryResultTabWidget->currentIndex();
+        // check database connection
         if(!this->db.isOpen())
         {
             if(!Global::createConnection(db))
@@ -6269,401 +6261,366 @@ void AdvanceSearchDlg::deletedata()
                 return;
             }
         }
-        QSqlQuery query;
 
+        // check select which table
         switch(tabidx)
         {
         // eqm
         case 0:
         {
             QItemSelectionModel *selections = ui->eqmTableView->selectionModel();
-//            QModelIndexList selected = selections->selectedIndexes();
             QModelIndexList selected = selections->selectedRows();
-            if(selected.isEmpty())
+
+            // store eqm id list
+            QStringList eqmidList;
+            foreach (QModelIndex index, selected)
             {
-                QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
-                return;
+                QString eqmid = _eqmInfoModel->record(index.row()).value("planeid").toString();
+                eqmidList.append(eqmid);
             }
+
+            // delete selections & relations
+            if(delete_eqm(eqmidList))
+                QMessageBox::warning(this,tr("提示"),tr("删除数据成功"),QMessageBox::Close);
             else
-            {
-                QStringList eqmidList;
-                QStringList mpidList;
-                QStringList mpridList;
-                QStringList oiaidList;
-                QStringList oisidList;
-                QStringList fegidList;
-                QStringList fegpidList;
-                QStringList abmidList;
-                foreach (QModelIndex index, selected)
-                {
-                    QString eqmid = _eqmInfoModel->record(index.row()).value("planeid").toString();
-                    eqmidList.append(eqmid);
-                    // movepart
-                    QString sql = "select movepartid from movepartinfo where planeid = '";
-                    sql.append(eqmid);
-                    sql.append("'");
-                    query.exec(sql);
-                    while(query.next())
-                    {
-                        mpidList.append(query.value(0).toString());
-                    }
-                    // oil sample
-                    sql = "select oilsampleid from oilsampleinfo where planeid = '";
-                    sql.append(eqmid);
-                    sql.append("'");
-                    query.exec(sql);
-                    while(query.next())
-                    {
-                        oisidList.append(query.value(0).toString());
-                    }
-                    // movepart repair
-                    foreach (QString mpid, mpidList)
-                    {
-                        sql = "select movepartrepairid from movepartrepairinfo where movepartid ='";
-                        sql.append(mpid);
-                        sql.append("'");
-                        query.exec(sql);
-                        while(query.next())
-                        {
-                            mpridList.append(query.value(0).toString());
-                        }
-                    }
-                    // oil analyze
-                    oiaidList = oisidList;
-                    // errographysheet
-                    foreach (QString oisid, oisidList)
-                    {
-                        sql = "select ferrographysheetid from ferrographyinfo where oilsampleid = '";
-                        sql.append(oisid);
-                        sql.append("'");
-                        query.exec(sql);
-                        while(query.next())
-                        {
-                            fegidList.append(query.value(0).toString());
-                        }
-                    }
-                    // ferrographypic
-                    foreach (QString fegid, fegidList)
-                    {
-                        sql = "select ferrographypicid from ferrographypicinfo where ferrographysheetid = '";
-                        sql.append(fegid);
-                        sql.append("'");
-                        query.exec(sql);
-                        while(query.next())
-                        {
-                            fegpidList.append(query.value(0).toString());
-                        }
-                    }
-                    // abrasive
-                    foreach (QString fegpid, fegpidList)
-                    {
-                        sql.append("select  abrasiveid from abrasivemarkinfo where ferrographypicid = '");
-                        sql.append(fegpid);
-                        sql.append("'");
-                        query.exec(sql);
-                        while(query.next())
-                        {
-                            abmidList.append(query.value(0).toString());
-                        }
-                    }
-                }
-                if(deletefromtable(eqmidList,"equipmentinfo")&&
-                        deletefromtable(mpidList,"movepartinfo")&&
-                        deletefromtable(mpridList,"movepartrepairinfo")&&
-                        deletefromtable(oisidList,"oilsampleinfo")&&
-                        deletefromtable(oiaidList,"oilanalyzeinfo")&&
-                        deletefromtable(fegidList,"ferrographyinfo")&&
-                        deletefromtable(fegpidList,"ferrographypicinfo")&&
-                        deletefromtable(abmidList,"abrasivemarkinfo"))
-                    QMessageBox::warning(this,tr("提示"),tr("删除数据成功"),QMessageBox::Close);
-                else
-                    QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
-            }
-            //delete selections;
+                QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
+
             break;
         }
-            // mp
+        // mp
         case 1:
         {
             QItemSelectionModel *selections = ui->mpTableView->selectionModel();
-//            QModelIndexList selected = selections->selectedIndexes();
             QModelIndexList selected = selections->selectedRows();
-            if(selected.isEmpty())
-            {
-                QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
-                return;
-            }
-            else
-            {
-                QStringList mpidList;
-                QStringList mpridList;
-                foreach (QModelIndex index, selected)
-                {
-                    QString mpid = _mpInfoModel->record(index.row()).value("movepartid").toString();
-                    mpidList.append(mpid);
 
-                    QString sql = "select movepartrepairid from movepartrepairinfo where movepartid = '";
-                    sql.append(mpid);
-                    sql.append("'");
-                    query.exec(sql);
-                    while(query.next())
-                    {
-                        mpridList.append(query.value(0).toString());
-                    }
-                }
-                if(deletefromtable(mpidList,"movepartinfo")&&
-                        deletefromtable(mpridList,"movepartrepairinfo"))
-                    QMessageBox::warning(this,tr("提示"),tr("删除数据成功"),QMessageBox::Close);
-                else
-                    QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
+            // store movepart id list
+            QStringList mpidList;
+            foreach (QModelIndex index, selected)
+            {
+                QString mpid = _mpInfoModel->record(index.row()).value("movepartid").toString();
+                mpidList.append(mpid);
             }
-            //delete selections;
+            // delete selections & relations
+            if(delete_mp(mpidList))
+                QMessageBox::warning(this,tr("提示"),tr("删除数据成功"),QMessageBox::Close);
+            else
+                QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
+
             break;
         }
+        // mpr
         case 2:
         {
             QItemSelectionModel *selections = ui->mprTableView->selectionModel();
-//            QModelIndexList selected = selections->selectedIndexes();
             QModelIndexList selected = selections->selectedRows();
-            if(selected.isEmpty())
+
+            // store movepart repair id list
+            QStringList mpridList;
+            foreach (QModelIndex index, selected)
             {
-                QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
-                return;
+                QString mprid = _mprInfoModel->record(index.row()).value("movepartrepairid").toString();
+                mpridList.append(mprid);
             }
+
+            // delete selections & relations
+            if(delete_mpr(mpridList))
+                QMessageBox::warning(this,tr("提示"),tr("删除数据成功"),QMessageBox::Close);
             else
-            {
-                QStringList mpridList;
-                foreach (QModelIndex index, selected) {
-                    QString mprid = _mprInfoModel->record(index.row()).value("movepartrepairid").toString();
-                    mpridList.append(mprid);
-                }
-                if(deletefromtable(mpridList,"movepartrepairinfo"))
-                    QMessageBox::warning(this,tr("提示"),tr("删除数据成功"),QMessageBox::Close);
-                else
-                    QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
-            }
-            //delete selections;
+                QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
+
             break;
         }
+        // oia
         case 3:
         {
             QItemSelectionModel *selections = ui->oiaTableView->selectionModel();
-//            QModelIndexList selected = selections->selectedIndexes();
             QModelIndexList selected = selections->selectedRows();
-            if(selected.isEmpty())
+
+            // store oil analysis id list
+            QStringList oiaidList;
+            foreach (QModelIndex index, selected)
             {
-                QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
-                return;
+                QString oiaid = _oiaInfoModel->record(index.row()).value("oilsampleid").toString();
+                oiaidList.append(oiaid);
             }
+
+            // delete selections & relations
+            if(delete_oia(oiaidList))
+                QMessageBox::warning(this,tr("提示"),tr("删除数据成功"),QMessageBox::Close);
             else
-            {
-                QStringList oiaidList;
-                foreach (QModelIndex index, selected) {
-                    QString oiaid = _oiaInfoModel->record(index.row()).value("oilsampleid").toString();
-                    oiaidList.append(oiaid);
-                }
-                if(deletefromtable(oiaidList,"oilanalyzeinfo"))
-                    QMessageBox::warning(this,tr("提示"),tr("删除数据成功"),QMessageBox::Close);
-                else
-                    QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
-            }
-            //delete selections;
+                QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
+
             break;
         }
+        // ois
         case 4:
         {
             QItemSelectionModel *selections = ui->oisTableView->selectionModel();
-//            QModelIndexList selected = selections->selectedIndexes();
             QModelIndexList selected = selections->selectedRows();
-            if(selected.isEmpty())
+
+            // store oil sample id list
+            QStringList oisidList;
+            foreach (QModelIndex index, selected)
             {
-                QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
-                return;
+                QString oisid = _oisInfoModel->record(index.row()).value("oilsampleid").toString();
+                oisidList.append(oisid);
             }
+            // delete selections & relations
+            if(delete_ois(oisidList))
+                QMessageBox::warning(this,tr("提示"),tr("删除数据成功"),QMessageBox::Close);
             else
-            {
-                QStringList oiaidList;
-                QStringList oisidList;
-                QStringList fegidList;
-                QStringList fegpidList;
-                QStringList abmidList;
-                foreach (QModelIndex index, selected) {
-                    QString oisid = _oisInfoModel->record(index.row()).value("oilsampleid").toString();
-                    oisidList.append(oisid);
-                    oiaidList.append(oisid);
+                QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
 
-                    QString sql;
-                    sql = "select ferrographysheetid from ferrographyinfo where oilsampleid = '";
-                    sql.append(oisid);
-                    sql.append("'");
-                    query.exec(sql);
-                    while(query.next())
-                    {
-                        fegidList.append(query.value(0).toString());
-                    }
-
-
-                    foreach (QString fegid, fegidList) {
-                        sql = "select ferrographypicid from ferrographypicinfo where ferrographysheetid = '";
-                        sql.append(fegid);
-                        sql.append("'");
-                        query.exec(sql);
-                        while(query.next())
-                        {
-                            fegpidList.append(query.value(0).toString());
-                        }
-                    }
-
-                    foreach (QString fegpid, fegpidList) {
-                        sql.append("select  abrasiveid from abrasivemarkinfo where ferrographypicid = '");
-                        sql.append(fegpid);
-                        sql.append("'");
-                        query.exec(sql);
-                        while(query.next())
-                        {
-                            abmidList.append(query.value(0).toString());
-                        }
-                    }
-                }
-                if(deletefromtable(oisidList,"oilsampleinfo")&&
-                        deletefromtable(oiaidList,"oilanalyzeinfo")&&
-                        deletefromtable(fegidList,"ferrographyinfo")&&
-                        deletefromtable(fegpidList,"ferrographypicinfo")&&
-                        deletefromtable(abmidList,"abrasivemarkinfo"))
-                    QMessageBox::warning(this,tr("提示"),tr("删除数据成功"),QMessageBox::Close);
-                else
-                    QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
-            }
-            // delete selections;
             break;
         }
+        // feg
         case 5:
         {
             QItemSelectionModel *selections = ui->fegTableView->selectionModel();
-//            QModelIndexList selected = selections->selectedIndexes();
             QModelIndexList selected = selections->selectedRows();
-            if(selected.isEmpty())
+
+            // store feg id list
+            QStringList fegidList;
+
+            foreach (QModelIndex index, selected)
             {
-                QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
-                return;
+                QString fegid = _fegInfoModel->record(index.row()).value("ferrographysheetid").toString();
+                fegidList.append(fegid);
             }
+
+            // delete selections & relations
+            if(delete_feg(fegidList))
+                QMessageBox::warning(this,tr("提示"),tr("删除数据成功"),QMessageBox::Close);
             else
-            {
-                QStringList fegidList;
-                QStringList fegpidList;
-                QStringList abmidList;
-                foreach (QModelIndex index, selected)
-                {
-                    QString fegid = _fegInfoModel->record(index.row()).value("ferrographysheetid").toString();
-                    fegidList.append(fegid);
+                QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
 
-                    QString sql;
-                    sql = "select ferrographypicid from ferrographypicinfo where ferrographysheetid = '";
-                    sql.append(fegid);
-                    sql.append("'");
-                    query.exec(sql);
-                    while(query.next())
-                    {
-                        fegpidList.append(query.value(0).toString());
-                    }
-
-                    foreach (QString fegpid, fegpidList)
-                    {
-                        sql.append("select  abrasiveid from abrasivemarkinfo where ferrographypicid = '");
-                        sql.append(fegpid);
-                        sql.append("'");
-                        query.exec(sql);
-                        while(query.next())
-                        {
-                            abmidList.append(query.value(0).toString());
-                        }
-                    }
-                }
-
-                if(deletefromtable(fegidList,"ferrographyinfo")&&
-                        deletefromtable(fegpidList,"ferrographypicinfo")&&
-                        deletefromtable(abmidList,"abrasivemarkinfo"))
-                    QMessageBox::warning(this,tr("提示"),tr("删除数据成功"),QMessageBox::Close);
-                else
-                    QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
-            }
-            // delete selections;
             break;
         }
+        // fegp
         case 6:
         {
             QItemSelectionModel *selections = ui->fegpTableView->selectionModel();
-//            QModelIndexList selected = selections->selectedIndexes();
             QModelIndexList selected = selections->selectedRows();
-            if(selected.isEmpty())
+
+            // store fegp id list & path list
+            QStringList pathList;
+            QStringList fegpidList;
+            foreach (QModelIndex index, selected)
             {
-                QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
-                return;
+                QString fegpid = _fegpInfoModel->record(index.row()).value("ferrographypicid").toString();
+                fegpidList.append(fegpid);
+                QString path = _fegpInfoModel->record(index.row()).value("ferrographypicpath").toString();
+                pathList.append(path);
             }
+
+            // delete selections & relations
+            if(delete_fegp(fegpidList))
+                QMessageBox::warning(this,tr("提示"),tr("删除数据成功"),QMessageBox::Close);
             else
-            {
-                QStringList pathList;
-                QStringList fegpidList;
-                QStringList abmidList;
-                foreach (QModelIndex index, selected)
-                {
-                    QString fegpid = _fegpInfoModel->record(index.row()).value("ferrographypicid").toString();
-                    fegpidList.append(fegpid);
-                    QString path = _fegpInfoModel->record(index.row()).value("ferrographypicpath").toString();
-                    pathList.append(path);
+                QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
 
-                    QString sql;
-                    sql.append("select  abrasiveid from abrasivemarkinfo where ferrographypicid = '");
-                    sql.append(fegpid);
-                    sql.append("'");
-                    query.exec(sql);
-                    while(query.next())
-                    {
-                        abmidList.append(query.value(0).toString());
-                    }
-
-                }
-                if(deletefromtable(fegpidList,"ferrographypicinfo", pathList) &&
-                        deletefromtable(abmidList,"abrasivemarkinfo"))
-                    QMessageBox::warning(this,tr("提示"),tr("删除数据成功"),QMessageBox::Close);
-                else
-                    QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
-            }
-            // delete selections;
             break;
         }
+        // abm
         case 7:
         {
             QItemSelectionModel *selections = ui->abmTableView->selectionModel();
-//            QModelIndexList selected = selections->selectedIndexes();
             QModelIndexList selected = selections->selectedRows();
-            if(selected.isEmpty())
+
+            // store abm id list
+            QStringList abmidList;
+            foreach (QModelIndex index, selected)
             {
-                QMessageBox::warning(this,tr("提示"),tr("未选中任何行"),QMessageBox::Close);
-                return;
+                QString abmid = _abmInfoModel->record(index.row()).value("abrasiveid").toString();
+                abmidList.append(abmid);
             }
+
+            // delete selections & relations
+            if(delete_abm(abmidList))
+                QMessageBox::warning(this,tr("提示"),tr("删除数据成功"),QMessageBox::Close);
             else
-            {
-                QStringList abmidList;
-                foreach (QModelIndex index, selected)
-                {
-                    QString abmid = _abmInfoModel->record(index.row()).value("abrasiveid").toString();
-                    abmidList.append(abmid);
-                }
-                if( deletefromtable(abmidList,"abrasivemarkinfo"))
-                    QMessageBox::warning(this,tr("提示"),tr("删除数据成功"),QMessageBox::Close);
-                else
-                    QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
-            }
-            // delete selections;
+                QMessageBox::warning(this,tr("提示"),tr("删除数据失败，请联系数据库管理员"),QMessageBox::Close);
+
             break;
         }
         }
+
+        // refresh search after delete
         this->query();
-//        this->parent()->flushBottom();
+
         emit flush();
-//        emit flushLeftTree();
     }
+}
+
+bool AdvanceSearchDlg::delete_eqm(QStringList eqmidList)
+{
+    QSqlQuery query;
+
+    QStringList mpidList;
+    QStringList oisidList;
+
+    // movepart & oil sample
+    foreach (QString eqmid, eqmidList)
+    {
+        // movepart
+        QString sql = "select movepartid from movepartinfo where planeid = '";
+        sql.append(eqmid);
+        sql.append("'");
+        query.exec(sql);
+        while(query.next())
+        {
+            mpidList.append(query.value(0).toString());
+        }
+        // oil sample
+        sql = "select oilsampleid from oilsampleinfo where planeid = '";
+        sql.append(eqmid);
+        sql.append("'");
+        query.exec(sql);
+        while(query.next())
+        {
+            oisidList.append(query.value(0).toString());
+        }
+    }
+
+    // delete data
+    if(delete_mp(mpidList) && delete_ois(oisidList) && deletefromtable(eqmidList,"equipmentinfo"))
+        return true;
+    else
+        return false;
+}
+
+bool AdvanceSearchDlg::delete_mp(QStringList mpidList)
+{
+    QSqlQuery query;
+
+    QStringList mpridList;
+    // movepart repair
+    foreach (QString mpid, mpidList)
+    {
+        QString sql = "select movepartrepairid from movepartrepairinfo where movepartid ='";
+        sql.append(mpid);
+        sql.append("'");
+        query.exec(sql);
+        while(query.next())
+        {
+            mpridList.append(query.value(0).toString());
+        }
+    }
+
+    // delete data
+    if(delete_mpr(mpridList) && deletefromtable(mpidList,"movepartinfo"))
+        return true;
+    else
+        return false;
+}
+
+bool AdvanceSearchDlg::delete_mpr(QStringList mpridList)
+{
+    // delete data
+    if(deletefromtable(mpridList,"movepartrepairinfo"))
+        return true;
+    else
+        return false;
+}
+
+bool AdvanceSearchDlg::delete_ois(QStringList oisidList)
+{
+    QSqlQuery query;
+
+    QStringList oiaidList;
+    QStringList fegidList;
+
+    // oia
+    oiaidList = oisidList;
+
+    // feg
+    foreach (QString oisid, oisidList)
+    {
+        QString sql = "select ferrographysheetid from ferrographyinfo where oilsampleid = '";
+        sql.append(oisid);
+        sql.append("'");
+        query.exec(sql);
+        while(query.next())
+        {
+            fegidList.append(query.value(0).toString());
+        }
+    }
+
+    // delete data
+    if(delete_oia(oiaidList) && delete_feg(fegidList) && deletefromtable(oisidList,"oilsampleinfo"))
+        return true;
+    else
+        return false;
+}
+
+bool AdvanceSearchDlg::delete_oia(QStringList oiaidList)
+{
+    // delete data
+    if(deletefromtable(oiaidList,"oilanalyzeinfo"))
+        return true;
+    else
+        return false;
+}
+
+bool AdvanceSearchDlg::delete_feg(QStringList fegidList)
+{
+    QSqlQuery query;
+
+    QStringList fegpidList;
+
+    // ferrographypic
+    foreach (QString fegid, fegidList)
+    {
+        QString sql = "select ferrographypicid from ferrographypicinfo where ferrographysheetid = '";
+        sql.append(fegid);
+        sql.append("'");
+        query.exec(sql);
+        while(query.next())
+        {
+            fegpidList.append(query.value(0).toString());
+        }
+    }
+
+    // delete data
+    if(delete_fegp(fegpidList) && deletefromtable(fegidList,"ferrographyinfo"))
+        return true;
+    else
+        return false;
+}
+
+bool AdvanceSearchDlg::delete_fegp(QStringList fegpidList)
+{
+    QSqlQuery query;
+
+    QStringList abmidList;
+
+    // abrasive
+    foreach (QString fegpid, fegpidList)
+    {
+        QString sql = ("select  abrasiveid from abrasivemarkinfo where ferrographypicid = '");
+        sql.append(fegpid);
+        sql.append("'");
+        query.exec(sql);
+        while(query.next())
+        {
+            abmidList.append(query.value(0).toString());
+        }
+    }
+
+    // delete data
+    if(delete_abm(abmidList) && deletefromtable(fegpidList,"ferrographypicinfo"))
+        return true;
+    else
+        return false;
+}
+
+bool AdvanceSearchDlg::delete_abm(QStringList abmidList)
+{
+    // delete data
+    if(deletefromtable(abmidList,"abrasivemarkinfo"))
+        return true;
+    else
+        return false;
 }
 
 
