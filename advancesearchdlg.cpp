@@ -6568,6 +6568,8 @@ bool AdvanceSearchDlg::delete_mp(QStringList mpidList)
 
 bool AdvanceSearchDlg::delete_mpr(QStringList mpridList)
 {
+    if(mpridList.empty())
+        return true;
     QSqlQuery query;
     // get mpids
     QStringList f_mpidList;
@@ -6618,6 +6620,8 @@ bool AdvanceSearchDlg::delete_mpr(QStringList mpridList)
 
 bool AdvanceSearchDlg::delete_ois(QStringList oisidList)
 {
+    if(oisidList.empty())
+        return true;
     QSqlQuery query;
     QSqlQuery query2;
 
@@ -6663,7 +6667,30 @@ bool AdvanceSearchDlg::delete_ois(QStringList oisidList)
 
     // delete data
     if(delete_oia(oiaidList) && delete_feg(fegidList) && deletefromtable(oisidList,"oilsampleinfo"))
-        return true;
+    {
+        foreach (QString eqmid, f_eqmidList) {
+            QString sql1 = "select count(*) from movepartinfo where planeid ='";
+            sql1.append(eqmid);
+            sql1.append("'");
+            query.exec(sql1);
+            QString sql2 = "select count(*) from oilsampleinfo where planeid ='";
+            sql2.append(eqmid);
+            sql2.append("'");
+            query2.exec(sql2);
+            if(query.next() && query2.next())
+            {
+                int tcount1 = query.value(0).toInt();
+                int tcount2 = query2.value(0).toInt();
+                if(tcount1> 0 || tcount2 > 0)
+                    f_eqmidList.removeOne(eqmid);
+            }
+        }
+        // delete father table
+        if(delete_eqm(f_eqmidList))
+            return true;
+        else
+            return false;
+    }
     else
         return false;
 }
