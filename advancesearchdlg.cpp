@@ -6574,7 +6574,7 @@ bool AdvanceSearchDlg::delete_mpr(QStringList mpridList)
     // get mpids
     QStringList f_mpidList;
     foreach (QString mprid, mpridList) {
-        QString sql = "select movepartid from  movepartrepairinfo where movepartid ='";
+        QString sql = "select movepartid from  movepartrepairinfo where movepartrepairid ='";
         sql.append(mprid);
         sql.append("'");
         query.exec(sql);
@@ -6631,9 +6631,9 @@ bool AdvanceSearchDlg::delete_ois(QStringList oisidList)
     QStringList f_eqmidList;
 
     // oia
-    oiaidList = oisidList;
+//    oiaidList = oisidList;
 
-    // feg
+    // feg & oia
     foreach (QString oisid, oisidList)
     {
         QString sql = "select ferrographysheetid from ferrographyinfo where oilsampleid = '";
@@ -6643,6 +6643,14 @@ bool AdvanceSearchDlg::delete_ois(QStringList oisidList)
         while(query.next())
         {
             fegidList.append(query.value(0).toString());
+        }
+        sql = "select oilsampleid from oilanalyzeinfo where oilsampleid = '";
+        sql.append(oisid);
+        sql.append("'");
+        query.exec(sql);
+        while(query.next())
+        {
+            oiaidList.append(query.value(0).toString());
         }
         // get ois id
         sql = "select planeid from oilsampleinfo where oilsampleid ='";
@@ -6697,9 +6705,32 @@ bool AdvanceSearchDlg::delete_ois(QStringList oisidList)
 
 bool AdvanceSearchDlg::delete_oia(QStringList oiaidList)
 {
+    if(oiaidList.empty())
+        return true;
+    QSqlQuery query;
+    // get ois id list
+    QStringList f_oisidList = oiaidList;
+
     // delete data
     if(deletefromtable(oiaidList,"oilanalyzeinfo"))
-        return true;
+    {
+        foreach (QString oisid, f_oisidList) {
+            QString sql = "select count(*) from ferrographyinfo where oilsampleid ='";
+            sql.append(oisid);
+            sql.append("'");
+            query.exec(sql);
+            if(query.next())
+            {
+                int tcount = query.value(0).toInt();
+                if(tcount > 0)
+                    f_oisidList.removeOne(oisid);
+            }
+        }
+        if(delete_ois(f_oisidList))
+            return true;
+        else
+            return false;
+    }
     else
         return false;
 }
