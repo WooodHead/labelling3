@@ -435,7 +435,7 @@ private:
      bool delete_oia(QStringList oiaidList);    // delete oil anaylize
      bool delete_feg(QStringList fegidList);    // delete feg
      bool delete_fegp(QStringList fegpidList);  // delete fegp
-     bool delete_abm(QStringList abmidList);     // delete abm
+     bool delete_abm(QStringList abmidList);    // delete abm
 
 private slots:
      void useproperty();

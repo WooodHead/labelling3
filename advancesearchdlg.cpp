@@ -6144,6 +6144,7 @@ void AdvanceSearchDlg::on_deleteDataButton_clicked()
 
 void AdvanceSearchDlg::deletedata()
 {
+    // select which table
     int tabidx = ui->queryResultTabWidget->currentIndex();
     switch(tabidx)
     {
@@ -6454,6 +6455,8 @@ void AdvanceSearchDlg::deletedata()
 
 bool AdvanceSearchDlg::delete_eqm(QStringList eqmidList)
 {
+    if(eqmidList.empty())
+        return true;
     QSqlQuery query;
 
     QStringList mpidList;
@@ -6491,9 +6494,13 @@ bool AdvanceSearchDlg::delete_eqm(QStringList eqmidList)
 
 bool AdvanceSearchDlg::delete_mp(QStringList mpidList)
 {
+    if(mpidList.empty())
+        return true;
     QSqlQuery query;
 
     QStringList mpridList;
+    // store eqm id list which is father table
+    QStringList f_eqmidList;
     // movepart repair
     foreach (QString mpid, mpidList)
     {
@@ -6505,11 +6512,44 @@ bool AdvanceSearchDlg::delete_mp(QStringList mpidList)
         {
             mpridList.append(query.value(0).toString());
         }
+        sql = "select planeid from movepartinfo where movepartid ='";
+        sql.append(mpid);
+        sql.append("'");
+        query.exec(sql);
+
+        // get eqm id
+        while(query.next())
+        {
+            QString t = query.value(0).toString();
+            foreach (QString tid, f_eqmidList) {
+                if(tid.compare(t) == 0)
+                    break;
+            }
+            f_eqmidList.append(t);
+        }
     }
 
     // delete data
     if(delete_mpr(mpridList) && deletefromtable(mpidList,"movepartinfo"))
-        return true;
+    {
+        foreach (QString eqmid, f_eqmidList) {
+            QString sql = "select count(*) from oilsampleinfo where planeid = '";
+            sql.append(eqmid);
+            sql.append("'");
+            query.exec(sql);
+            if(query.next())
+            {
+                int tcount = query.value(0).toInt();
+                if(tcount > 0)
+                    f_eqmidList.removeOne(eqmid);
+            }
+        }
+        // delete father table related records
+        if(delete_eqm(f_eqmidList))
+            return true;
+        else
+            return false;
+    }
     else
         return false;
 }
