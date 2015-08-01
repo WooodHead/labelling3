@@ -6497,6 +6497,7 @@ bool AdvanceSearchDlg::delete_mp(QStringList mpidList)
     if(mpidList.empty())
         return true;
     QSqlQuery query;
+    QSqlQuery query2;
 
     QStringList mpridList;
     // store eqm id list which is father table
@@ -6520,27 +6521,38 @@ bool AdvanceSearchDlg::delete_mp(QStringList mpidList)
         // get eqm id
         while(query.next())
         {
+            bool exsitflag = false;
             QString t = query.value(0).toString();
             foreach (QString tid, f_eqmidList) {
                 if(tid.compare(t) == 0)
+                {
+                    exsitflag = true;
                     break;
+                }
             }
-            f_eqmidList.append(t);
+            if(!exsitflag)
+                f_eqmidList.append(t);
         }
     }
 
     // delete data
     if(delete_mpr(mpridList) && deletefromtable(mpidList,"movepartinfo"))
     {
+        // check two relations
         foreach (QString eqmid, f_eqmidList) {
-            QString sql = "select count(*) from oilsampleinfo where planeid = '";
-            sql.append(eqmid);
-            sql.append("'");
-            query.exec(sql);
-            if(query.next())
+            QString sql1 = "select count(*) from oilsampleinfo where planeid = '";
+            sql1.append(eqmid);
+            sql1.append("'");
+            query.exec(sql1);
+            QString sql2 = "select count(*) from movepartinfo where planeid = '";
+            sql2.append(eqmid);
+            sql2.append("'");
+            query2.exec(sql2);
+            if(query.next() && query2.next())
             {
-                int tcount = query.value(0).toInt();
-                if(tcount > 0)
+                int tcount1 = query.value(0).toInt();
+                int tcount2 = query2.value(0).toInt();
+                if(tcount1 > 0 || tcount2 > 0)
                     f_eqmidList.removeOne(eqmid);
             }
         }
@@ -6556,9 +6568,50 @@ bool AdvanceSearchDlg::delete_mp(QStringList mpidList)
 
 bool AdvanceSearchDlg::delete_mpr(QStringList mpridList)
 {
+    QSqlQuery query;
+    // get mpids
+    QStringList f_mpidList;
+    foreach (QString mprid, mpridList) {
+        QString sql = "select movepartid from  movepartrepairinfo where movepartid ='";
+        sql.append(mprid);
+        sql.append("'");
+        query.exec(sql);
+        while(query.next())
+        {
+            bool exsitflag = false;
+            QString t = query.value(0).toString();
+            foreach (QString mpid, f_mpidList) {
+                if(mpid.compare(t) == 0)
+                {
+                    exsitflag = true;
+                    break;
+                }
+            }
+            if(!exsitflag)
+                f_mpidList.append(t);
+        }
+    }
     // delete data
     if(deletefromtable(mpridList,"movepartrepairinfo"))
-        return true;
+    {
+        foreach (QString mpid, f_mpidList) {
+           QString sql = "select count(*) from movepartrepairinfo where movepartid='";
+           sql.append(mpid);
+           sql.append("'");
+           query.exec(sql);
+           if(query.next())
+           {
+               int tcount = query.value(0).toInt();
+               if(tcount > 0)
+                   f_mpidList.removeOne(mpid);
+           }
+        }
+        // delete father table
+        if(delete_mp(f_mpidList))
+            return true;
+        else
+            return false;
+    }
     else
         return false;
 }
@@ -6566,9 +6619,12 @@ bool AdvanceSearchDlg::delete_mpr(QStringList mpridList)
 bool AdvanceSearchDlg::delete_ois(QStringList oisidList)
 {
     QSqlQuery query;
+    QSqlQuery query2;
 
     QStringList oiaidList;
     QStringList fegidList;
+    // store eqm id
+    QStringList f_eqmidList;
 
     // oia
     oiaidList = oisidList;
@@ -6583,6 +6639,25 @@ bool AdvanceSearchDlg::delete_ois(QStringList oisidList)
         while(query.next())
         {
             fegidList.append(query.value(0).toString());
+        }
+        // get ois id
+        sql = "select planeid from oilsampleinfo where oilsampleid ='";
+        sql.append(oisid);
+        sql.append("'");
+        query.exec(sql);
+        while(query.next())
+        {
+            bool exsitflag = false;
+            QString t = query.value(0).toString();
+            foreach (QString eqmid, f_eqmidList) {
+                if(eqmid.compare(t) == 0)
+                {
+                    exsitflag = true;
+                    break;
+                }
+            }
+            if(!exsitflag)
+                f_eqmidList.append(t);
         }
     }
 
