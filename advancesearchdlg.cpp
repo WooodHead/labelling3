@@ -6817,6 +6817,7 @@ bool AdvanceSearchDlg::delete_fegp(QStringList fegpidList)
     QSqlQuery query;
 
     QStringList abmidList;
+    QStringList f_fegidList;
 
     // abrasive
     foreach (QString fegpid, fegpidList)
@@ -6829,20 +6830,112 @@ bool AdvanceSearchDlg::delete_fegp(QStringList fegpidList)
         {
             abmidList.append(query.value(0).toString());
         }
+        // get feg id list
+        sql = "select ferrographysheetid from ferrographypicinfo where ferrographypicid ='";
+        sql.append(fegpid);
+        sql.append("'");
+        query.exec(sql);
+        while(query.next())
+        {
+            QString t = query.value(0).toString();
+            bool exsitflag = false;
+            foreach (QString fegid, f_fegidList) {
+                if(fegid.compare(t) == 0)
+                {
+                    exsitflag = true;
+                    break;
+                }
+            }
+            f_fegidList.append(t);
+        }
     }
 
     // delete data
     if(delete_abm(abmidList) && deletefromtable(fegpidList,"ferrographypicinfo"))
-        return true;
+    {
+        // check brother table
+        foreach (QString fegid, f_fegidList) {
+            QString sql = "select count(*) from ferrographypicinfo where ferrographysheetid='";
+            sql.append(fegid);
+            sql.append("'");
+            query.exec(sql);
+            if(query.next())
+            {
+                int tcount = query.value(0).toInt();
+                if(tcount > 0)
+                    f_fegidList.removeOne(fegid);
+            }
+        }
+        // delete father table
+        if(delete_feg(f_fegidList))
+            return true;
+        else
+            return false;
+    }
     else
         return false;
 }
 
 bool AdvanceSearchDlg::delete_abm(QStringList abmidList)
 {
+    // get fegp id list
+    QSqlQuery query;
+    QStringList f_fegpidList;
+    foreach (QString abmid, abmidList) {
+        QString sql = "select  ferrographypicid from abrasivemarkinfo where abrasiveid = '";
+        sql.append(abmid);
+        sql.append("'");
+        query.exec(sql);
+        while(query.next())
+        {
+            QString t = query.value(0).toString();
+            bool exsitflag = false;
+            foreach (QString fegpid, f_fegpidList) {
+                if(fegpid.compare(t)==0)
+                {
+                    exsitflag = true;
+                    break;
+                }
+            }
+            if(!exsitflag)
+                f_fegpidList.append(t);
+        }
+    }
     // delete data
     if(deletefromtable(abmidList,"abrasivemarkinfo"))
+    {
+        // delete operation file
+        foreach (QString abmid, abmidList) {
+            QDir delresult;
+            QString resultAbName_0 = Global::PathResult + abmid + "_0." + Global::ExtResult;
+            QString resultAbName_1 = Global::PathResult + abmid + "_1." + Global::ExtResult;
+            QString maskAbName = Global::PathMask + abmid + "." + Global::ExtMask;
+            delresult.remove(resultAbName_0);
+            delresult.remove(resultAbName_1);
+            delresult.remove(maskAbName);
+        }
+        // check brother
+        foreach (QString fegpid, f_fegpidList) {
+            QString sql = "select count(*) from  abrasivemarkinfo where  ferrographypicid ='";
+            sql.append(fegpid);
+            sql.append("'");
+            query.exec(sql);
+            if(query.next())
+            {
+                int tcount = query.value(0).toInt();
+                if(tcount > 0)
+                    f_fegpidList.removeOne(fegpid);
+            }
+        }
+        // update fegp
+        foreach (QString fegpid, f_fegpidList) {
+            QString sql = "update ferrographypicinfo set imagesymbol='N' where ferrographypicid='";
+            sql.append(fegpid);
+            sql.append("'");
+            query.exec(sql);
+        }
         return true;
+    }
     else
         return false;
 }
