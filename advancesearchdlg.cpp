@@ -6735,11 +6735,16 @@ bool AdvanceSearchDlg::delete_oia(QStringList oiaidList)
         return false;
 }
 
+
 bool AdvanceSearchDlg::delete_feg(QStringList fegidList)
 {
+    if(fegidList.empty())
+        return true;
     QSqlQuery query;
+    QSqlQuery query2;
 
     QStringList fegpidList;
+    QStringList f_oisidList;
 
     // ferrographypic
     foreach (QString fegid, fegidList)
@@ -6752,17 +6757,63 @@ bool AdvanceSearchDlg::delete_feg(QStringList fegidList)
         {
             fegpidList.append(query.value(0).toString());
         }
+        // get ois id list
+        sql = "select oilsampleid from ferrographyinfo where ferrographysheetid='";
+        sql.append(fegid);
+        sql.append("'");
+        query.exec(sql);
+        while(query.next())
+        {
+            QString t = query.value(0).toString();
+            bool exsitflag = false;
+            foreach (QString oisid, f_oisidList) {
+                if(oisid.compare(t) ==0)
+                {
+                    exsitflag = true;
+                    break;
+                }
+            }
+            if(!exsitflag)
+                f_oisidList.append(t);
+        }
     }
 
     // delete data
     if(delete_fegp(fegpidList) && deletefromtable(fegidList,"ferrographyinfo"))
-        return true;
+    {
+        // check two table
+        foreach (QString oisid, f_oisidList) {
+            QString sql1 = "select count(*) from  ferrographyinfo where  oilsampleid ='";
+            sql1.append(oisid);
+            sql1.append("'");
+            query.exec(sql1);
+            QString sql2 = "select count(*) from  oilanalyzeinfo where oilsampleid ='";
+            sql2.append(oisid);
+            sql2.append("'");
+            query2.exec(sql2);
+            if(query.next() && query2.next())
+            {
+                int tcount1 = query.value(0).toInt();
+                int tcount2 = query2.value(0).toInt();
+                if(tcount1 > 0 || tcount2 > 0)
+                    f_oisidList.removeOne(oisid);
+            }
+        }
+        // delete father table
+        if(delete_ois(f_oisidList))
+            return true;
+        else
+            return false;
+    }
     else
         return false;
 }
 
+
 bool AdvanceSearchDlg::delete_fegp(QStringList fegpidList)
 {
+    if(fegpidList.empty())
+        return true;
     QSqlQuery query;
 
     QStringList abmidList;
