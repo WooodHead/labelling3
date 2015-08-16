@@ -228,7 +228,6 @@ QStringList ImageProperties::getSamplePoint(QString fieldName, QString whereFiel
             if(!value.isEmpty() && !list.contains(value)) list << value;
         }
         model->deleteLater();
-        db.close();
     }
 
     return list;
@@ -455,12 +454,12 @@ bool ImageProperties::isValid(int index)
     }
     else if(index == 2)
     {
-        //        if(ui->_comboBoxMovepartServiceID->currentText().isEmpty())
-        //        {
-        //            ui->_tabWidget->setCurrentIndex(2);
-        //            QMessageBox::warning(this, tr("提示"), tr("动部件维修编号不能为空!"), QMessageBox::Close);
-        //            return false;
-        //        }
+        if(ui->_comboBoxMovepartServiceID->currentText().isEmpty())
+        {
+            ui->_tabWidget->setCurrentIndex(2);
+            QMessageBox::warning(this, tr("提示"), tr("动部件维修编号不能为空!"), QMessageBox::Close);
+            return false;
+        }
         //        if(ui->_comboBoxMovepartServiceMovepartID->currentText().isEmpty())
         //        {
         //            ui->_tabWidget->setCurrentIndex(2);
