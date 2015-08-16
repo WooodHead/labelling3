@@ -2006,18 +2006,20 @@ void ImageCompletionUI::exportData()
         QString resultPath = this->_expResultPicPath;
         QString maskPath = this->_expMaskPicPath;
         QString targetPath = this->_expPackgePath;
+
+        QString dateTime = QDateTime::currentDateTime().toString("yyyyMMddhhmmss");
 #ifdef Q_OS_WIN
-        QString sourcetargetPath = targetPath + QString::fromUtf8("/打包文件/原始图像文件");
-        QString resulttargetPath = targetPath + QString::fromUtf8("/打包文件/标记结果文件");
-        QString maskTargetPath = targetPath + QString::fromUtf8("/打包文件/掩码图像文件");
-        QString databackupFileName = targetPath + QString::fromUtf8("/打包文件/databackup.sql");
+        QString sourcetargetPath = targetPath + tr("/") + dateTime + QString::fromUtf8("/原始图像文件");
+        QString resulttargetPath = targetPath + tr("/") + dateTime + QString::fromUtf8("/标记结果文件");
+        QString maskTargetPath = targetPath + tr("/") + dateTime + QString::fromUtf8("/掩码图像文件");
+        QString databackupFileName = targetPath + tr("/") + dateTime + QString::fromUtf8("/databackup.sql");
 #endif
 
 #ifdef Q_OS_LINUX
-        QString sourcetargetPath = targetPath + tr("/打包文件/原始图像文件");
-        QString resulttargetPath = targetPath + tr("/打包文件/标记结果文件");
-        QString maskTargetPath = targetPath + tr("/打包文件/掩码图像文件");
-        QString databackupFileName = targetPath + tr("/打包文件/databackup.sql");
+        QString sourcetargetPath = targetPath + tr("/") + dateTime + tr("/原始图像文件");
+        QString resulttargetPath = targetPath + tr("/") + dateTime + tr("/标记结果文件");
+        QString maskTargetPath = targetPath + tr("/") + dateTime + tr("/掩码图像文件");
+        QString databackupFileName = targetPath + tr("/") + dateTime + tr("/databackup.sql");
 #endif
 
         if(copyFiles(sourcePath,sourcetargetPath) && copyFiles(resultPath,resulttargetPath) && copyFiles(maskPath, maskTargetPath) && exportDB(databackupFileName))
