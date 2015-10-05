@@ -129,29 +129,50 @@ AdvanceSearchDlg::AdvanceSearchDlg(QWidget *parent,bool flag) :
 AdvanceSearchDlg::~AdvanceSearchDlg()
 {
     delete ui;
-    delete this->_eqmInfoModel;
-    delete this->_mpInfoModel;
-    delete this->_mprInfoModel;
-    delete this->_oiaInfoModel;
-    delete this->_oisInfoModel;
-    delete this->_fegInfoModel;
-    delete this->_fegpInfoModel;
-    delete this->_abmInfoModel;
+    if(this->_eqmInfoModel)
+        delete this->_eqmInfoModel;
+    if(this->_mpInfoModel)
+        delete this->_mpInfoModel;
+    if(this->_mprInfoModel)
+        delete this->_mprInfoModel;
+    if(this->_oiaInfoModel)
+        delete this->_oiaInfoModel;
+    if(this->_oisInfoModel)
+        delete this->_oisInfoModel;
+    if(this->_fegInfoModel)
+        delete this->_fegInfoModel;
+    if(this->_fegpInfoModel)
+        delete this->_fegpInfoModel;
+    if(this->_abmInfoModel)
+        delete this->_abmInfoModel;
 
-    delete this->eqmdelAction;
-    delete this->mpdelAction;
-    delete this->mprdelAction;
-    delete this->oiadelAction;
-    delete this->oisdelAction;
-    delete this->fegdelAction;
-    delete this->fegpdelAction;
-    delete this->abmdelAction;
+    if(this->eqmdelAction)
+        delete this->eqmdelAction;
+    if(this->mpdelAction)
+        delete this->mpdelAction;
+    if(this->mprdelAction)
+        delete this->mprdelAction;
+    if(this->oiadelAction)
+        delete this->oiadelAction;
+    if(this->oisdelAction)
+        delete this->oisdelAction;
+    if(this->fegdelAction)
+        delete this->fegdelAction;
+    if(this->fegpdelAction)
+        delete this->fegpdelAction;
+    if(this->abmdelAction)
+        delete this->abmdelAction;
 
-    delete this->propertymodel;
-    delete this->usepropertyAction;
-    delete this->renameprtpertyAction;
-    delete this->deletepropertyAction;
-    db.close();
+    if(this->propertymodel)
+        delete this->propertymodel;
+    if(this->usepropertyAction)
+        delete this->usepropertyAction;
+    if(this->renameprtpertyAction)
+        delete this->renameprtpertyAction;
+    if(this->deletepropertyAction)
+        delete this->deletepropertyAction;
+    if(db.isOpen())
+        db.close();
 }
 
 
@@ -1221,7 +1242,7 @@ bool AdvanceSearchDlg::exportDB(const QStringList &tablenameList, const QString 
         }
     }
 
-    delete model;
+//    delete model;
     QFile file(path);
     file.open(QIODevice::WriteOnly|QIODevice::Truncate);
 
