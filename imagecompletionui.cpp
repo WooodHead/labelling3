@@ -2007,7 +2007,8 @@ void ImageCompletionUI::exportData()
         QString maskPath = this->_expMaskPicPath;
         QString targetPath = this->_expPackgePath;
 
-        QString dateTime = QDateTime::currentDateTime().toString("yyyyMMddhhmmss");
+//        QString dateTime = QDateTime::currentDateTime().toString("yyyyMMddhhmmss");
+        QString dateTime = QDateTime::currentDateTime().toString("yyyy-MM-dd hh：mm AP");
 #ifdef Q_OS_WIN
         QString sourcetargetPath = targetPath + tr("/") + dateTime + QString::fromUtf8("/原始图像文件");
         QString resulttargetPath = targetPath + tr("/") + dateTime + QString::fromUtf8("/标记结果文件");

@@ -3446,11 +3446,12 @@ void AdvanceSearchDlg::on_exportBtn_clicked()
         }
 
         QString packgepath = this->_expPackgePath;
+        QString dateTime = QDateTime::currentDateTime().toString("yyyy-MM-dd hh：mm AP");
 
-        QString sqlfilepath = packgepath + "/打包文件/databackup.sql";
-        QString sourceimgtopath = packgepath + "/打包文件/原始图像文件";
-        QString resultimgtopath = packgepath + "/打包文件/标记结果文件";
-        QString maskimgtopath = packgepath + "/打包文件/掩码图像文件";
+        QString sqlfilepath = packgepath + tr("/") + dateTime + QString::fromUtf8("/databackup.sql");
+        QString sourceimgtopath = packgepath + tr("/") + dateTime + QString::fromUtf8("/原始图像文件");
+        QString resultimgtopath = packgepath + tr("/") + dateTime + QString::fromUtf8("/标记结果文件");
+        QString maskimgtopath = packgepath + tr("/") + dateTime + QString::fromUtf8("/掩码图像文件");
         QString sourceimgfrompath = Global::PathImage;
         QString resultimgfrompath = Global::PathResult;
         QString maskimgfrompath = Global::PathMask;
